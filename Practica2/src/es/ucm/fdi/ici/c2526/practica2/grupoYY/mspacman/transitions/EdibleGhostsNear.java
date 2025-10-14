@@ -7,9 +7,9 @@ import pacman.game.Game;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 
-public class RunFromAllToRunFromOneTrasition implements Transition {
+public class EdibleGhostsNear implements Transition {
 
-	public RunFromAllToRunFromOneTrasition() {
+	public EdibleGhostsNear() {
 		
 	}
 
@@ -17,18 +17,14 @@ public class RunFromAllToRunFromOneTrasition implements Transition {
 	public boolean evaluate(Input in) {
 		MsPacManInput input = (MsPacManInput) in;
 		
-		boolean aux = false;
 		Game game = input.getGame();
 
 		for (GHOST ghost : GHOST.values()) {
-			if (!game.isGhostEdible(ghost) && game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghost), DM.PATH) <= input.getDangerDistance()) {
-				aux = true;
-			}
-			if (!game.isGhostEdible(ghost) && 	 game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghost), DM.PATH) <= input.getDangerDistance() && aux) {
-				return false;
+			if (game.isGhostEdible(ghost) && 2 * game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghost), game.getPacmanLastMoveMade(), DM.PATH) <= game.getGhostEdibleTime(ghost)) {
+				return true;
 			}
 		}
-		return aux;
+		return false;
 	}
 
 	@Override
