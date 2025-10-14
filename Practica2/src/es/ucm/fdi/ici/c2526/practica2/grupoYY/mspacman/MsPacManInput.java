@@ -16,7 +16,7 @@ import pacman.game.Game;
 
 public class MsPacManInput extends Input {
 
-		// Data gathered
+	// Data gathered
 	boolean finishLevel;
 	private Map<MOVE, Integer> moveToNode;
 	private Map<MOVE, Integer> moveToPoints;
@@ -30,9 +30,8 @@ public class MsPacManInput extends Input {
 
 	public MsPacManInput(Game game) {
 		super(game);
-		
+		reset();
 	}
-
 
 	private void reset() {
 		moveToPoints = new HashMap<>();
@@ -43,34 +42,34 @@ public class MsPacManInput extends Input {
 		ghostLastMove = new HashMap<>();
 		candidateMoves = new ArrayList<>();
 	}
-
-	// Gather all useful information
-	private void gatherData(Game game) {
-		reset();
+	
+	@Override
+	public void parseInput() {
 		finishLevel = game.getNumberOfActivePowerPills() == 0 ? true : false;
-		ghostEdible = getGhostEdible(game);
-		ghostLastMove = getGhostLastMove(game);
-		candidateMoves = getNextIntersections(game);
-		getNearestPPill(game);
+		setGhostEdible();
+		setGhostLastMove();
+		setNextIntersections();
+		setNearestPPill();
 	}
-
-	private void getNearestPPill(Game game) {
-		int[] ppills = game.getActivePowerPillsIndices();
-        closestPPill = -1; // no Ppill active
-        distanceToPPill = Double.MAX_VALUE;
-	    if (!(game.getNumberOfActivePowerPills() == 0)) {
-	        for (int pill : ppills) {
-	            double aux = game.getDistance(game.getPacmanCurrentNodeIndex(), pill, DM.PATH);
-	            if (aux < distanceToPPill) {
-	                closestPPill = pill;
-	                distanceToPPill = game.getDistance(game.getPacmanCurrentNodeIndex(), pill, DM.PATH);
-	            }
-	        }
-	    }
+	
+	private void setGhostEdible() {
+		for (GHOST g : GHOST.values()) {
+			if (game.isGhostEdible(g)) {
+				ghostEdible.put(g, true);
+			} else {
+				ghostEdible.put(g, false);
+			}
+		}
 	}
-
-	private List<MOVE> getNextIntersections(Game game) {
-		List<MOVE> candidateNodes = new ArrayList<>();
+	
+	private void setGhostLastMove() {
+		for (GHOST g : GHOST.values()) {
+			ghostLastMove.put(g, game.getGhostLastMoveMade(g));
+		}
+	}
+	
+	private void setNextIntersections() {
+		List<MOVE> cM = new ArrayList<>();
 		Set<Integer> auxSet = new HashSet<>();
 		int node = game.getPacmanCurrentNodeIndex();
 
@@ -99,8 +98,9 @@ public class MsPacManInput extends Input {
 				// NOT GOING OUR DIRECTION is in the way to the node
 				// OR IS EDIBLE BUT NOT REACHABLE
 				for (GHOST g : GHOST.values()) {
+					//TODO do it
 					if ((game.getGhostCurrentNodeIndex(g) == node && dirToMove != ghostLastMove.get(g))
-							&& (!ghostEdible.get(g) || ghostEdible.get(g) && !ghostReachable(game, g))) {
+							&& (!ghostEdible.get(g) || (ghostEdible.get(g) && !ghostReachable(g)))) {
 						ghostInPath = true;
 					}
 				}
@@ -119,43 +119,25 @@ public class MsPacManInput extends Input {
 				}
 				auxSet.add(node);
 			}
-			candidateNodes.add(m);
+			cM.add(m);
 			moveToGhost.put(m, ghostInPath);
 			moveToPoints.put(m, count);
 			moveToPpill.put(m, pPill);
 			moveToNode.put(m, node);
 		}
-
-		return candidateNodes;
-	}
-
-	private Map<GHOST, Boolean> getGhostEdible(Game game) {
-		Map<GHOST, Boolean> aux = new HashMap<GHOST, Boolean>();
-		for (GHOST g : GHOST.values()) {
-			if (game.isGhostEdible(g)) {
-				aux.put(g, true);
-			} else {
-				aux.put(g, false);
-			}
+		
+		candidateMoves = cM;
+		
+		if(candidateMoves.size() > 1) {
+			candidateMoves = filterData();
 		}
-
-		return aux;
 	}
-
-	private Map<GHOST, MOVE> getGhostLastMove(Game game) {
-		Map<GHOST, MOVE> aux = new HashMap<GHOST, MOVE>();
-		for (GHOST g : GHOST.values()) {
-			aux.put(g, game.getGhostLastMoveMade(g));
-		}
-
-		return aux;
-	}
-
-	private List<MOVE> filterData(Game game) {
+	
+	private List<MOVE> filterData() {
 		// Remove all nodes we are not reaching first
 		List<MOVE> aux = new ArrayList<>();
 		for (MOVE m : candidateMoves) {
-			if (!ghostReachUs(game, moveToNode.get(m))
+			if (!ghostReachUs(moveToNode.get(m))
 				&& !moveToGhost.get(game.getApproximateNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), moveToNode.get(m), game.getPacmanLastMoveMade(), DM.PATH))) {
 				aux.add(m);
 			}
@@ -163,10 +145,25 @@ public class MsPacManInput extends Input {
 
 		return aux;
 	}
+	
+	private void setNearestPPill() {
+		int[] ppills = game.getActivePowerPillsIndices();
+        closestPPill = -1; // no Ppill active
+        distanceToPPill = Double.MAX_VALUE;
+	    if (!(game.getNumberOfActivePowerPills() == 0)) {
+	        for (int pill : ppills) {
+	            double aux = game.getDistance(game.getPacmanCurrentNodeIndex(), pill, DM.PATH);
+	            if (aux < distanceToPPill) {
+	                closestPPill = pill;
+	                distanceToPPill = game.getDistance(game.getPacmanCurrentNodeIndex(), pill, DM.PATH);
+	            }
+	        }
+	    }
+	}
 
 	// We discard candidates when the ghost that is NOT EDIBLE, is CLOSER TO NODE
 	// and is MOVING IN THAT DIRECTION.
-	private Boolean ghostReachUs(Game game, int interNode) {
+	private Boolean ghostReachUs(int interNode) {
 		double pacmanToNode = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), interNode);
 		
 		for (GHOST g : GHOST.values()) {
@@ -178,56 +175,10 @@ public class MsPacManInput extends Input {
 
 		return false;
 	}
-
-	// Condition:
-	// If there are GHOSTS near us
-	// And that number is >= GHOSTS_IN_DISTANCE
-	private boolean amIMenaced(Game game) {
-	   //Estimation of the worst distance a ghost can be
-        try {
-            int time_left = Constants.EDIBLE_TIME;
-
-            for(GHOST ghost : GHOST.values()) {
-                if(game.getGhostLairTime(ghost) > 0) 
-                    continue;
-                double distanceToGhostPosition = game.getShortestPathDistance(closestPPill,
-                       game.getPacmanCurrentNodeIndex()) + 2 * game.getDistance(closestPPill, game.getGhostCurrentNodeIndex(ghost), DM.PATH);
-                if (time_left > distanceToGhostPosition) {
-                    time_left -= distanceToGhostPosition;
-                    for(GHOST g : GHOST.values()) {
-                        if(g == ghost || game.getGhostLairTime(ghost) > 0) 
-                            continue;
-                        double distanceToSecondGhostPosition = 2 * game.getShortestPathDistance(game.getGhostCurrentNodeIndex(g),
-                                game.getGhostCurrentNodeIndex(ghost));
-                        if (time_left > distanceToSecondGhostPosition) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        catch(Exception e) {
-
-        }
-        return false;
-    }
 	
-	// Conditions:
-	// At least one ghost has to be edible
-	// I am able to reach ghost(s)
-	// There is not another ghost in the way that can kill me
-	public boolean amIHunting(Game game) {
-		for (GHOST g : GHOST.values()) {
-			if (ghostEdible.get(g) && ghostReachable(game, g)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
+	//TODO: Refactor
 	// Speed of ghosts is halved
-	private boolean ghostReachable(Game game, GHOST ghost) {
+	private boolean ghostReachable(GHOST ghost) {
 		if(game.getGhostLairTime(ghost) > 0) {
 			return false;
 		}
@@ -241,10 +192,45 @@ public class MsPacManInput extends Input {
 		return game.getGhostEdibleTime(ghost) >= distanceToGhostPosition;
 	}
 	
-	@Override
-	public void parseInput() {
-		// does nothing.
+	// GETTERS // 
+	public boolean isFinishLevel() {
+		return finishLevel;
+	}
 
+	public Map<MOVE, Integer> getMoveToNode() {
+		return moveToNode;
+	}
+
+	public Map<MOVE, Integer> getMoveToPoints() {
+		return moveToPoints;
+	}
+
+	public Map<MOVE, Boolean> getMoveToPpill() {
+		return moveToPpill;
+	}
+
+	public Map<MOVE, Boolean> getMoveToGhost() {
+		return moveToGhost;
+	}
+
+	public Map<GHOST, Boolean> getGhostEdible() {
+		return ghostEdible;
+	}
+
+	public Map<GHOST, MOVE> getGhostLastMove() {
+		return ghostLastMove;
+	}
+
+	public List<MOVE> getCandidateMoves() {
+		return candidateMoves;
+	}
+
+	public int getClosestPPill() {
+		return closestPPill;
+	}
+
+	public double getDistanceToPPill() {
+		return distanceToPPill;
 	}
 
 }
