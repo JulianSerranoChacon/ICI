@@ -27,6 +27,11 @@ public class MsPacManInput extends Input {
 	private List<MOVE> candidateMoves;
 	private int closestPPill;
 	private double distanceToPPill;
+	private final double dangerDistance = 20; //tentative, subject to change 
+
+	public double getDangerDistance() {
+		return dangerDistance;
+	}
 
 	public MsPacManInput(Game game) {
 		super(game);
