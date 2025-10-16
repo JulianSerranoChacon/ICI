@@ -5,12 +5,33 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import es.ucm.fdi.ici.fsm.CompoundState;
-import es.ucm.fdi.ici.fsm.FSM;
 import es.ucm.fdi.ici.Input;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.MsPacManInput;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions.ChaseAction;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions.EatPpillAction;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions.GoToNearestPillAction;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions.GoToPpillAction;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions.GreedyPointsAction;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions.HideAction;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions.HideFromOneAction;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions.MorePillsSuicidaAction;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions.MoveAction;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions.PPillSuicidaAction;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions.RandomAction;
-import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.RandomTransition;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.EdibleGhostsNearTransition;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.GoToNearestPillToGreedyPathTransition;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.MenacedToEatPpillTransition;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.MultipleCandidatesPosibleTransition;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.NearDangerousGhostsTransition;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.NoCandidateMovesTransition;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.NoGhostsNearTransition;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.OnlyOneMovePossibleTransition;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.PPillSuicidaToPointsSuicidaTransition;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.PointsSuicidaToRandomTransition;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.RunFromAllToMenacedTransition;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.RunFromAllToRunFromOneTrasition;
+import es.ucm.fdi.ici.fsm.CompoundState;
+import es.ucm.fdi.ici.fsm.FSM;
 import es.ucm.fdi.ici.fsm.SimpleState;
 import es.ucm.fdi.ici.fsm.Transition;
 import es.ucm.fdi.ici.fsm.observers.GraphFSMObserver;
@@ -26,7 +47,7 @@ public class MsPacMan extends PacmanController {
 	FSM fsm;
 	
 	public MsPacMan() {
-		setName("MsPacMan XX");
+		setName("DumbMsPacMan");
 		
 		pi = new PacmanInfo();
     	fsm = new FSM("MsPacMan");
@@ -34,34 +55,102 @@ public class MsPacMan extends PacmanController {
     	GraphFSMObserver observer = new GraphFSMObserver(fsm.toString());
     	fsm.addObserver(observer);
     	
-    	SimpleState state1 = new SimpleState("state1", new RandomAction());
-    	SimpleState state2 = new SimpleState("state2", new RandomAction());
-    	SimpleState state3 = new SimpleState("state3", new RandomAction());
+    	//Compound states
+    	// SUICIDA STATE //
+    	FSM cfsSuicida = new FSM("Suicida");
+    	GraphFSMObserver c1observer = new GraphFSMObserver(cfsSuicida.toString());
+    	cfsSuicida.addObserver(c1observer);
     	
-    	Transition tran1 = new RandomTransition(.3);
-    	Transition tran2 = new RandomTransition(.2);
-    	Transition tran3 = new RandomTransition(.1);
-    	Transition tran4 = new RandomTransition(.01);
+    	//State declaration
+    	SimpleState suicida1 = new SimpleState("PPill suicida", new PPillSuicidaAction());
+    	SimpleState suicida2 = new SimpleState("Pills suicida", new MorePillsSuicidaAction(pi));
+    	SimpleState suicida3 = new SimpleState("cstate2", new RandomAction());
     	
-    	FSM cfsm1 = new FSM("Compound1");
-    	GraphFSMObserver c1observer = new GraphFSMObserver(cfsm1.toString());
-    	cfsm1.addObserver(c1observer);
+    	//Transition declaration
+    	Transition sTrans1 = new PPillSuicidaToPointsSuicidaTransition();
+    	Transition sTrans2 = new PointsSuicidaToRandomTransition();
     	
-    	SimpleState cstate1 = new SimpleState("cstate1", new RandomAction());
-    	SimpleState cstate2 = new SimpleState("cstate2", new RandomAction());
-    	Transition ctran1 = new RandomTransition(.35);
-    	Transition ctran2 = new RandomTransition(.25);
-    	cfsm1.add(cstate1, ctran1, cstate2);
-    	cfsm1.add(cstate2, ctran2, cstate1);
-    	cfsm1.ready(cstate1);
-    	CompoundState compound1 = new CompoundState("compound1", cfsm1);
+    	cfsSuicida.add(suicida1, sTrans1, suicida2);
+    	cfsSuicida.add(suicida2, sTrans2, suicida3);
+    	cfsSuicida.ready(suicida1);
+    	CompoundState suicida = new CompoundState("Suicida", cfsSuicida);
+    	// HIDE STATE //
+    	FSM cfsHide = new FSM("Hide");
+    	GraphFSMObserver c2observer = new GraphFSMObserver(cfsHide.toString());
+    	cfsHide.addObserver(c2observer);
     	
-    	fsm.add(state1, tran1, state2);
-    	fsm.add(state2, tran2, state3);
-    	fsm.add(state3, tran3, compound1);
-    	fsm.add(compound1, tran4, state1);
-
-    	fsm.ready(state1);
+    	//State declaration
+    	SimpleState hide1 = new SimpleState("Run away from everyone", new HideAction(pi));
+    	SimpleState hide2 = new SimpleState("Run away from one", new HideFromOneAction(pi));
+    	SimpleState hide3 = new SimpleState("Go to PPill", new GoToPpillAction(pi));
+    	SimpleState hide4 = new SimpleState("Eat PPill", new EatPpillAction(pi));
+    	
+    	//Transition declaration
+    	Transition hTrans1 = new RunFromAllToRunFromOneTrasition();
+    	Transition hTrans2 = new RunFromAllToMenacedTransition();
+    	Transition hTrans3 = new MenacedToEatPpillTransition();
+    	
+    	cfsHide.add(hide1, hTrans1, hide2);
+    	cfsHide.add(hide1, hTrans2, hide3);
+    	cfsHide.add(hide1, hTrans2, hide3);
+    	cfsHide.add(hide3, hTrans3, hide4);
+    	cfsHide.ready(hide1);
+    	CompoundState hide = new CompoundState("Hide", cfsHide);
+    	// GREEDY STATE //
+    	FSM cfsGreedy = new FSM("Greedy");
+    	GraphFSMObserver c3observer = new GraphFSMObserver(cfsGreedy.toString());
+    	cfsGreedy.addObserver(c3observer);
+    	
+    	//State declaration
+    	SimpleState greedy1 = new SimpleState("Go to near pill", new GoToNearestPillAction(pi));
+    	SimpleState greedy2 = new SimpleState("More points", new GreedyPointsAction(pi));
+    	
+    	//Transition declaration
+    	Transition gTrans1 = new GoToNearestPillToGreedyPathTransition();
+    	
+    	cfsGreedy.add(greedy1, gTrans1, greedy2);
+    	cfsGreedy.ready(greedy1);
+    	CompoundState greedy = new CompoundState("Greedy", cfsGreedy);
+    	
+    	// FSM //
+    	SimpleState move = new SimpleState("Move", new MoveAction(pi));
+    	SimpleState hunt = new SimpleState("Hunt", new ChaseAction(pi));
+    	
+    	Transition tran1 = new NoCandidateMovesTransition();
+    	Transition tran2 = new OnlyOneMovePossibleTransition();
+    	fsm.add(move, tran1, suicida);
+    	fsm.add(suicida, tran2, move);
+    	
+    	Transition tran3 = new MultipleCandidatesPosibleTransition();
+    	Transition tran4 = new OnlyOneMovePossibleTransition();
+    	fsm.add(move, tran3, hide);
+    	fsm.add(hide, tran4, move);
+    	
+    	Transition tran5 = new NoGhostsNearTransition();
+    	Transition tran6 = new OnlyOneMovePossibleTransition();
+    	fsm.add(move, tran5, greedy);
+    	fsm.add(greedy, tran6, move);
+    	
+    	Transition tran7 = new NoCandidateMovesTransition();
+    	fsm.add(hide, tran7, suicida);
+    	
+    	Transition tran8 = new NoGhostsNearTransition();
+    	Transition tran9 = new NearDangerousGhostsTransition();
+    	fsm.add(hide, tran8, greedy);
+    	fsm.add(greedy, tran9, hide);
+    	
+    	Transition tran10 = new NoCandidateMovesTransition();
+    	fsm.add(hunt, tran10, suicida);
+    	
+    	Transition tran11 = new EdibleGhostsNearTransition();
+    	Transition tran12 = new NearDangerousGhostsTransition();
+    	fsm.add(hide, tran11, hunt);
+    	fsm.add(hunt, tran12, hide);
+    	
+    	Transition tran13 = new NoGhostsNearTransition();
+    	fsm.add(hunt, tran13, greedy);
+    	
+    	fsm.ready(move);
     	
     	
     	JFrame frame = new JFrame();

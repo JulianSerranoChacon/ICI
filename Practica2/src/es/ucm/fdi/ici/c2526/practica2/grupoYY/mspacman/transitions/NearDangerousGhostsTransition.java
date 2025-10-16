@@ -7,9 +7,9 @@ import pacman.game.Game;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 
-public class NearDangerousGhosts implements Transition {
+public class NearDangerousGhostsTransition implements Transition {
 
-	public NearDangerousGhosts() {
+	public NearDangerousGhostsTransition() {
 		
 	}
 

@@ -3,20 +3,17 @@ package es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions;
 import es.ucm.fdi.ici.Input;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.MsPacManInput;
 import es.ucm.fdi.ici.fsm.Transition;
-import pacman.game.Game;
-import pacman.game.Constants.DM;
-import pacman.game.Constants.GHOST;
 
-public class NoGhostsNearTransition implements Transition {
+public class OnlyOneMovePossibleTransition implements Transition {
 
-	public NoGhostsNearTransition() {
+	public OnlyOneMovePossibleTransition() {
 		
 	}
 
 	@Override
 	public boolean evaluate(Input in) {
         MsPacManInput input = (MsPacManInput) in;
-        return input.getPossibleMoves().size() == 1;
+        return input.getCandidateMoves().size() == 1;
 	}
 
 	@Override
