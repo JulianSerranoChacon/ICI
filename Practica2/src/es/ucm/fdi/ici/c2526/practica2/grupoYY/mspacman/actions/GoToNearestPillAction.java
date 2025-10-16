@@ -1,34 +1,26 @@
 package es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions;
 
-import java.util.Map.Entry;
-
 import es.ucm.fdi.ici.Action;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.PacmanInfo;
+import pacman.game.Constants.DM;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
-public class MorePillsSuicidaAction implements Action {
-
+public class GoToNearestPillAction implements Action {
 	PacmanInfo pi;
 
-	public MorePillsSuicidaAction(PacmanInfo pi) {
+	public GoToNearestPillAction(PacmanInfo pi) {
 		this.pi = pi;
 	}
 	
 	@Override
 	public MOVE execute(Game game) {
-		for(Entry<MOVE, Boolean> m : pi.getMoveToPpill().entrySet()) {
-			if(m.getValue()) {
-				return m.getKey();
-			}
-		}
-		
-		return MOVE.NEUTRAL;
+		return game.getApproximateNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), pi.getClosestPPill(), game.getPacmanLastMoveMade(), DM.PATH);
 	}
 
 	@Override
 	public String getActionId() {
-		return "Go to pills suicida action";
+		return "Goes to nearest pill action";
 	}
 
 }
