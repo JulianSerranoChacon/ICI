@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import es.ucm.fdi.ici.Input;
-import pacman.game.Constants;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.PacmanInfo;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
@@ -16,7 +16,7 @@ import pacman.game.Game;
 
 public class MsPacManInput extends Input {
 
-	// Data gathered
+	// Data gathered TODO: Maybe erase this and have everything on pi
 	boolean finishLevel;
 	private Map<MOVE, Integer> moveToNode;
 	private Map<MOVE, Integer> moveToPoints;
@@ -28,13 +28,17 @@ public class MsPacManInput extends Input {
 	private int closestPPill;
 	private double distanceToPPill;
 	private final double dangerDistance = 20; //tentative, subject to change 
+	
+	//Info for actions
+	private PacmanInfo pi;
 
 	public double getDangerDistance() {
 		return dangerDistance;
 	}
 
-	public MsPacManInput(Game game) {
+	public MsPacManInput(Game game, PacmanInfo pi) {
 		super(game);
+		this.pi = pi;
 		reset();
 	}
 
@@ -55,8 +59,23 @@ public class MsPacManInput extends Input {
 		setGhostLastMove();
 		setNextIntersections();
 		setNearestPPill();
+		
+		fillInfo();
 	}
 	
+	private void fillInfo() {
+		pi.setCandidateMoves(candidateMoves);
+		pi.setClosestPPill(closestPPill);
+		pi.setDistanceToPPill(distanceToPPill);
+		pi.setFinishLevel(finishLevel);
+		pi.setGhostEdible(ghostEdible);
+		pi.setGhostLastMove(ghostLastMove);
+		pi.setMoveToGhost(moveToGhost);
+		pi.setMoveToNode(moveToNode);
+		pi.setMoveToPoints(moveToPoints);
+		pi.setMoveToPpill(moveToPpill);
+	}
+
 	private void setGhostEdible() {
 		for (GHOST g : GHOST.values()) {
 			if (game.isGhostEdible(g)) {

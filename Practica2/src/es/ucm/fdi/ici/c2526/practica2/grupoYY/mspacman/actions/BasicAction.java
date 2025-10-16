@@ -1,29 +1,21 @@
 package es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions;
 
-import java.util.Map.Entry;
-
 import es.ucm.fdi.ici.Action;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.PacmanInfo;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
-public class MorePillsSuicidaAction implements Action {
+public class BasicAction implements Action {
 
 	PacmanInfo pi;
 
-	public MorePillsSuicidaAction(PacmanInfo pi) {
+	public BasicAction(PacmanInfo pi) {
 		this.pi = pi;
 	}
 	
 	@Override
 	public MOVE execute(Game game) {
-		for(Entry<MOVE, Boolean> m : pi.getMoveToPpill().entrySet()) {
-			if(m.getValue()) {
-				return m.getKey();
-			}
-		}
-		
-		return MOVE.NEUTRAL;
+		return null;
 	}
 
 	@Override

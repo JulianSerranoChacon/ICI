@@ -7,9 +7,9 @@ import pacman.game.Game;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 
-public class EdibleGhostsNear implements Transition {
+public class EdibleGhostsNearTransition implements Transition {
 
-	public EdibleGhostsNear() {
+	public EdibleGhostsNearTransition() {
 		
 	}
 

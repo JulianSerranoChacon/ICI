@@ -22,11 +22,13 @@ import pacman.game.Game;
  * The Class NearestPillPacMan.
  */
 public class MsPacMan extends PacmanController {
-
+	PacmanInfo pi;
 	FSM fsm;
+	
 	public MsPacMan() {
 		setName("MsPacMan XX");
 		
+		pi = new PacmanInfo();
     	fsm = new FSM("MsPacMan");
     	
     	GraphFSMObserver observer = new GraphFSMObserver(fsm.toString());
@@ -85,7 +87,7 @@ public class MsPacMan extends PacmanController {
      */
     @Override
     public MOVE getMove(Game game, long timeDue) {
-    	Input in = new MsPacManInput(game); 
+    	Input in = new MsPacManInput(game, pi); 
     	return fsm.run(in);
     }
     
