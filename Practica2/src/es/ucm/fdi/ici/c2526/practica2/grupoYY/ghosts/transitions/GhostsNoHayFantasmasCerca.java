@@ -3,12 +3,14 @@ package es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions;
 import es.ucm.fdi.ici.Input;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.GhostsInput;
 import es.ucm.fdi.ici.fsm.Transition;
+import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 
-public class GhostsEdibleTransition2 implements Transition  {
+public class GhostsNoHayFantasmasCerca implements Transition  {
 
 	GHOST ghost;
-	public GhostsEdibleTransition2(GHOST ghost) {
+	int limit = 50;
+	public GhostsNoHayFantasmasCerca(GHOST ghost) {
 		super();
 		this.ghost = ghost;
 	}
@@ -18,18 +20,14 @@ public class GhostsEdibleTransition2 implements Transition  {
 	@Override
 	public boolean evaluate(Input in) {
 		GhostsInput input = (GhostsInput)in;
-		switch(ghost) {
-			case BLINKY:
-				return input.isBLINKYedible();
-			case INKY:
-				return input.isINKYedible();
-			case PINKY:
-				return input.isPINKYedible();
-			case SUE:
-				return input.isSUEedible();
-			default:
-				return false;
+		
+		for(GHOST otherGhost : GHOST.values()) {
+			if(otherGhost != ghost) {
+				if(in.getGame().getDistance(in.getGame().getGhostCurrentNodeIndex(otherGhost),
+						in.getGame().getGhostCurrentNodeIndex(ghost),DM.EUCLID) <limit) return false;
+			}
 		}
+		return true;
 	}
 
 
