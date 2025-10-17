@@ -8,17 +8,46 @@ import pacman.game.Game;
 
 public class RunSubOptimalAction implements Action {
 
+	//SI ESTO DEVUELVE UN CAMINO EN EL QUE HAY UN FANTASMA Y SE PODÍA IR POR OTRO (REFACTORIZAR)
     GHOST ghost;
+    MOVE[] possibleMoves;
 	public RunSubOptimalAction(GHOST ghost) {
 		this.ghost = ghost;
+		this.possibleMoves = MOVE.values();
 	}
 
 	@Override
 	public MOVE execute(Game game) {
         if (game.doesGhostRequireAction(ghost))        //if it requires an action
         {
-                return game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghost),
-                        game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH);
+        	
+        	//We take the best Move to flee of PacMan, this move can not be done because there is a Ghost there too
+              MOVE bestRunMove = game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghost),
+                      				game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH);
+              
+             
+              MOVE moveToReturn = MOVE.NEUTRAL; //Which move should return
+              double minDistance = 10000; //Save the farther distance of PacMan
+              
+              
+              //For every possible Move
+              for(MOVE mv : possibleMoves) {
+            	  
+            	  double distance = 0;
+            	  
+            	  //If it is not the bestMove (because there is a Ghost there, checks which move is the farthest of all to run away of PacMan
+            	  if(mv != bestRunMove) {
+            		  
+            		  distance = game.getDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), mv, DM.PATH);
+            		  
+            		  if(distance < minDistance) {
+            			  minDistance = distance;
+            			  moveToReturn = mv;
+            		  }
+            		  
+            	  }
+              }
+              return moveToReturn;
         }
             
         return MOVE.NEUTRAL;	
@@ -26,6 +55,6 @@ public class RunSubOptimalAction implements Action {
 
 	@Override
 	public String getActionId() {
-		return ghost+ "runsAway";
+		return ghost+ "RunSubOptimal";
 	}
 }

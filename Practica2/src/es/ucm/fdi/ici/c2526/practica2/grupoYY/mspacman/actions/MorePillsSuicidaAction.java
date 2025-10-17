@@ -17,13 +17,16 @@ public class MorePillsSuicidaAction implements Action {
 	
 	@Override
 	public MOVE execute(Game game) {
-		for(Entry<MOVE, Boolean> m : pi.getMoveToPpill().entrySet()) {
-			if(m.getValue()) {
-				return m.getKey();
+		int counter = 0;
+		MOVE bestMove = MOVE.NEUTRAL;
+		for (Entry<MOVE, Integer> pills : pi.getMoveToPoints().entrySet()) {
+			if (pills.getValue() > counter) {
+				bestMove = pills.getKey();
+				counter = pills.getValue();
 			}
 		}
-		
-		return MOVE.NEUTRAL;
+
+		return bestMove;
 	}
 
 	@Override
