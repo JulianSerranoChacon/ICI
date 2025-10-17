@@ -1,6 +1,7 @@
 package es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions;
 
 import es.ucm.fdi.ici.Action;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.GhostInfo;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
@@ -10,9 +11,11 @@ public class RunToEscuderoAction implements Action {
 
     GHOST ghost;
     GHOST[] allGhosts;
-	public RunToEscuderoAction(GHOST ghost) {
+    private GhostInfo info;
+	public RunToEscuderoAction(GHOST ghost,GhostInfo g) {
 		this.ghost = ghost;
 		this.allGhosts = GHOST.values();
+		this.info = g;
 	}
 
 	@Override
@@ -21,12 +24,12 @@ public class RunToEscuderoAction implements Action {
         {
         	
            GHOST shield = GHOST.BLINKY;
-           double minDistance = 10000;
+           int minDistance = 10000;
            for(GHOST actGhost : allGhosts) {
-        	   double distance = 0; 
+        	   int distance = 0; 
         	   if(!game.isGhostEdible(actGhost)) {
         		   
-        		   distance = game.getDistance(game.getGhostCurrentNodeIndex(this.ghost), game.getGhostCurrentNodeIndex(actGhost), DM.PATH);
+        		   distance = info.getDistanceFromGhostToGhost(this.ghost,actGhost);
         		   
         		   if(distance < minDistance) {
         			   minDistance = distance;
@@ -35,7 +38,8 @@ public class RunToEscuderoAction implements Action {
         	   }
            }
            
-           return game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(this.ghost), game.getGhostCurrentNodeIndex(shield), game.getGhostLastMoveMade(this.ghost), DM.PATH);
+           return game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(this.ghost),
+        		   game.getGhostCurrentNodeIndex(shield), game.getGhostLastMoveMade(this.ghost), DM.PATH);
         }
             
         return MOVE.NEUTRAL;	

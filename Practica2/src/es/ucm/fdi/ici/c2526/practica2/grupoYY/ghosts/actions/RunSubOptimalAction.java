@@ -1,6 +1,7 @@
 package es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions;
 
 import es.ucm.fdi.ici.Action;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.GhostInfo;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
@@ -11,9 +12,11 @@ public class RunSubOptimalAction implements Action {
 	//SI ESTO DEVUELVE UN CAMINO EN EL QUE HAY UN FANTASMA Y SE PODÍA IR POR OTRO (REFACTORIZAR)
     GHOST ghost;
     MOVE[] possibleMoves;
-	public RunSubOptimalAction(GHOST ghost) {
+    private GhostInfo info;
+	public RunSubOptimalAction(GHOST ghost,GhostInfo g) {
 		this.ghost = ghost;
 		this.possibleMoves = MOVE.values();
+		this.info = g;
 	}
 
 	@Override
@@ -38,8 +41,8 @@ public class RunSubOptimalAction implements Action {
             	  //If it is not the bestMove (because there is a Ghost there, checks which move is the farthest of all to run away of PacMan
             	  if(mv != bestRunMove) {
             		  
-            		  distance = game.getDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), mv, DM.PATH);
-            		  
+            		  distance = info.getDistanceFromGhostToPacman(ghost);
+ 
             		  if(distance < minDistance) {
             			  minDistance = distance;
             			  moveToReturn = mv;
