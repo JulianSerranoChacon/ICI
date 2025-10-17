@@ -5,7 +5,7 @@ import java.util.EnumMap;
 
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.GhostsInput;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions.ChaseAction;
-import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions.RunAwayAction;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions.RunOptimalAction;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsEdibleTransition;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsNotEdibleAndPacManFarPPill;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.PacManNearPPillTransition;
@@ -33,7 +33,7 @@ public class Ghosts extends GhostController {
 			fsm.addObserver(graphObserver);
 			
 			SimpleState chase = new SimpleState(new ChaseAction(ghost));
-			SimpleState runAway = new SimpleState(new RunAwayAction(ghost));
+			SimpleState runAway = new SimpleState(new RunOptimalAction(ghost));
 			
 			GhostsEdibleTransition edible = new GhostsEdibleTransition(ghost);
 			PacManNearPPillTransition near = new PacManNearPPillTransition();
