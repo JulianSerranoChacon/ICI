@@ -15,7 +15,7 @@ public class MoveAction implements Action {
 	
 	@Override
 	public MOVE execute(Game game) {
-		return pi.getCandidateMoves().getFirst();
+		return pi.getCandidateMoves().get(0);
 	}
 
 	@Override

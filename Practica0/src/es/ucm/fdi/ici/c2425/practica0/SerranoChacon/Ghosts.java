@@ -35,7 +35,7 @@ public final class Ghosts extends GhostController {
             				game.getPacmanCurrentNodeIndex(),game.getGhostLastMoveMade(ghostType),DM.EUCLID));
                 }
                 
-                float next = rnd.nextFloat(1);
+                float next = rnd.nextFloat();
                 
                 if(next >= 90)
                 	moves.put(ghostType,game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghostType),
