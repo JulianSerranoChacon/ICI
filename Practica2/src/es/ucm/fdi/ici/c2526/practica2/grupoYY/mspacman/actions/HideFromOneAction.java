@@ -15,7 +15,6 @@ public class HideFromOneAction implements Action {
 		this.pi = pi;
 	}
 	
-	//TODO: Do it
 	@Override
 	public MOVE execute(Game game) {
 		GHOST closestGhost = null;
