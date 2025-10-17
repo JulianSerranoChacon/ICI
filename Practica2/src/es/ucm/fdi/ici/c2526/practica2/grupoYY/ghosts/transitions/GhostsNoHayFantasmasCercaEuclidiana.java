@@ -6,11 +6,11 @@ import es.ucm.fdi.ici.fsm.Transition;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 
-public class GhostsNoHayFantasmasCerca implements Transition  {
+public class GhostsNoHayFantasmasCercaEuclidiana implements Transition  {
 
 	GHOST ghost;
 	int limit = 50;
-	public GhostsNoHayFantasmasCerca(GHOST ghost) {
+	public GhostsNoHayFantasmasCercaEuclidiana(GHOST ghost) {
 		super();
 		this.ghost = ghost;
 	}

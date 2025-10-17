@@ -20,6 +20,7 @@ import pacman.game.Game;
 public class Ghosts extends GhostController {
 
 	EnumMap<GHOST,FSM> fsms;
+	GhostInfo gi;
 	public Ghosts()
 	{
 		setName("Ghosts XX");
@@ -61,7 +62,7 @@ public class Ghosts extends GhostController {
 	public EnumMap<GHOST, MOVE> getMove(Game game, long timeDue) {
 		EnumMap<GHOST,MOVE> result = new EnumMap<GHOST,MOVE>(GHOST.class);
 		
-		GhostsInput in = new GhostsInput(game);
+		GhostsInput in = new myGhostsInput(game);
 		
 		for(GHOST ghost: GHOST.values())
 		{
