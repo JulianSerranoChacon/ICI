@@ -62,7 +62,7 @@ public class MsPacMan extends PacmanController {
     	cfsSuicida.addObserver(c1observer);
     	
     	//State declaration
-    	SimpleState suicida1 = new SimpleState("PPill suicida", new PPillSuicidaAction());
+    	SimpleState suicida1 = new SimpleState("PPill suicida", new PPillSuicidaAction(pi));
     	SimpleState suicida2 = new SimpleState("Pills suicida", new MorePillsSuicidaAction(pi));
     	SimpleState suicida3 = new SimpleState("cstate2", new RandomAction());
     	
@@ -91,7 +91,6 @@ public class MsPacMan extends PacmanController {
     	Transition hTrans3 = new MenacedToEatPpillTransition();
     	
     	cfsHide.add(hide1, hTrans1, hide2);
-    	cfsHide.add(hide1, hTrans2, hide3);
     	cfsHide.add(hide1, hTrans2, hide3);
     	cfsHide.add(hide3, hTrans3, hide4);
     	cfsHide.ready(hide1);

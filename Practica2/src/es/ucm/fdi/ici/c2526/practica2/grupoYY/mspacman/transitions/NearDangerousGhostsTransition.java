@@ -8,9 +8,15 @@ import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 
 public class NearDangerousGhostsTransition implements Transition {
+	
+	
+	
+	private int privateID;
+	private static int idcount = 0;
 
 	public NearDangerousGhostsTransition() {
-		
+		privateID = idcount;
+		idcount++;
 	}
 
 	@Override
@@ -29,6 +35,6 @@ public class NearDangerousGhostsTransition implements Transition {
 
 	@Override
 	public String toString() {
-		return String.format("Run from one ghost only");
+		return String.format("Run from one ghost only " + privateID);
 	}
 }

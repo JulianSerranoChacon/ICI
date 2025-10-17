@@ -5,9 +5,12 @@ import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.MsPacManInput;
 import es.ucm.fdi.ici.fsm.Transition;
 
 public class NoCandidateMovesTransition implements Transition {
-
+	private static int idcount= 0;
+	private int privateID;
+	
 	public NoCandidateMovesTransition() {
-		
+		privateID = idcount;
+		idcount++;
 	}
 
 	@Override
@@ -18,6 +21,6 @@ public class NoCandidateMovesTransition implements Transition {
 
 	@Override
 	public String toString() {
-		return String.format("We enter suicidal mode");
+		return String.format("We enter suicidal mode " + privateID);
 	}
 }

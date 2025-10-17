@@ -8,9 +8,13 @@ import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 
 public class NoGhostsNearTransition implements Transition {
+	
+	private int privateID;
+	private static int idcount = 0;
 
 	public NoGhostsNearTransition() {
-		
+		privateID = idcount;
+		idcount++;
 	}
 
 	@Override
@@ -30,6 +34,6 @@ public class NoGhostsNearTransition implements Transition {
 
 	@Override
 	public String toString() {
-		return String.format("there is no ghost close to pacman");
+		return String.format("there is no ghost close to pacman " + privateID);
 	}
 }

@@ -1,13 +1,17 @@
 package es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions;
 
 import es.ucm.fdi.ici.Input;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.MsPacMan;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.MsPacManInput;
 import es.ucm.fdi.ici.fsm.Transition;
 
 public class OnlyOneMovePossibleTransition implements Transition {
-
+	private static int idcount= 0;
+	private int privateID;
+	
 	public OnlyOneMovePossibleTransition() {
-		
+		privateID = idcount;
+		idcount++;
 	}
 
 	@Override
@@ -18,6 +22,6 @@ public class OnlyOneMovePossibleTransition implements Transition {
 
 	@Override
 	public String toString() {
-		return String.format("there is only one possible move");
+		return String.format("there is only one possible move"+ privateID);
 	}
 }
