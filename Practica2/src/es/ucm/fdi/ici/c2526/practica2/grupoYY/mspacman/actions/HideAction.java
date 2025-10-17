@@ -15,6 +15,9 @@ public class HideAction implements Action {
 	//TODO: Implement
 	@Override
 	public MOVE execute(Game game) {
+		for(MOVE m : pi.getCandidateMoves()) {
+			
+		}
 		return null;
 	}
 
