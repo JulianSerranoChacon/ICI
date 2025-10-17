@@ -6,10 +6,10 @@ import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
-public class RunAwayAction implements Action {
+public class RunToEscuderoAction implements Action {
 
     GHOST ghost;
-	public RunAwayAction(GHOST ghost) {
+	public RunToEscuderoAction(GHOST ghost) {
 		this.ghost = ghost;
 	}
 
