@@ -18,7 +18,12 @@ public class GreedyPointsAction implements Action {
 	@Override
 	public MOVE execute(Game game) {
 		int counter = 0;
-		MOVE bestMove = MOVE.NEUTRAL;
+		MOVE bestMove = pi.getCandidateMoves().get(0);
+		
+		if(pi.getMoveToPpill().containsKey(bestMove)) {
+			bestMove = pi.getCandidateMoves().get(1);
+		}
+		
 		for (Entry<MOVE, Integer> pills : pi.getMoveToPoints().entrySet()) {
 			if (pills.getValue() > counter 
 					&& !pi.getMoveToPpill().get(pills.getKey()) 

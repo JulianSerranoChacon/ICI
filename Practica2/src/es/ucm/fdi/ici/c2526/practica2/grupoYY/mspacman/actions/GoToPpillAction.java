@@ -23,7 +23,7 @@ public class GoToPpillAction implements Action {
 			}
 		}
 		
-		return MOVE.NEUTRAL;
+		return pi.getCandidateMoves().get(0);
 	}
 
 	@Override

@@ -17,7 +17,6 @@ public class HideAction implements Action {
 		this.pi = pi;
 	}
 	
-	//TODO: Implement
 	@Override
 	public MOVE execute(Game game) {
 		int nextIntersection = -1;
