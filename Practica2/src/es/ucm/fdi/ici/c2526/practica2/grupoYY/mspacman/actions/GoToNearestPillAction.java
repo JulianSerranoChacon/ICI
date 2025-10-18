@@ -22,7 +22,7 @@ public class GoToNearestPillAction implements Action {
 		Map<Double, Integer> distToPill = new HashMap<>();
 		PriorityQueue <Double> queue = new PriorityQueue<Double>();
 		for(int pill : game.getPillIndices()) {
-			if(game.isPillStillAvailable(pill)) {
+			if (game.isPillStillAvailable(pill)) {
 				queue.add(game.getDistance(game.getPacmanCurrentNodeIndex(), pill, DM.PATH));
 				distToPill.put(game.getDistance(game.getPacmanCurrentNodeIndex(), pill, DM.PATH), pill);
 			}

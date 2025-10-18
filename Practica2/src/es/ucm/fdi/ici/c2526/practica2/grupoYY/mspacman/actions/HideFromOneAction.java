@@ -28,9 +28,12 @@ public class HideFromOneAction implements Action {
 				closestDistance = distance;
 			}
 		}
-		
-		return game.getNextMoveAwayFromTarget(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(closestGhost),
+		MOVE candidateMove = game.getNextMoveAwayFromTarget(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(closestGhost),
 				game.getPacmanLastMoveMade(), DM.PATH);
+		if (pi.getCandidateMoves().contains(candidateMove) || pi.getCandidateMoves().size() == 0) {
+			return candidateMove;
+		}
+		return pi.getCandidateMoves().get(0);
 	}
 
 	@Override

@@ -34,7 +34,12 @@ public class HideAction implements Action {
 
 			}
 		}
-		return game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), bestIntersection, game.getPacmanLastMoveMade(), DM.PATH);
+
+		MOVE candidateMove = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), bestIntersection, game.getPacmanLastMoveMade(), DM.PATH);
+		if (pi.getCandidateMoves().contains(candidateMove) || pi.getCandidateMoves().size() == 0) {
+			return candidateMove;
+		}
+		return pi.getCandidateMoves().get(0);
 	}
 
 	private List<Integer> depht2Intersections(Game game, int intersection) {

@@ -9,6 +9,7 @@ import java.util.Set;
 
 import es.ucm.fdi.ici.Input;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.PacmanInfo;
+import pacman.game.Constants;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
@@ -28,7 +29,7 @@ public class MsPacManInput extends Input {
 	private int closestPPill;
 	private double distanceToPPill;
 	private final double dangerDistance = 20; //tentative, subject to change 
-	private final double hideDistance = 20; //tentative, subject to change 
+	private final double hideDistance = 30; //tentative, subject to change 
 	
 	//Info for actions
 	private PacmanInfo pi;
@@ -144,9 +145,9 @@ public class MsPacManInput extends Input {
 			}
 			cM.add(m);
 			moveToGhost.put(m, ghostInPath);
-			moveToPoints.put(m, count);
-			moveToPpill.put(m, pPill);
 			moveToNode.put(m, node);
+			moveToPpill.put(m, pPill);
+			if (count != 0) moveToPoints.put(m, count);
 		}
 		
 		candidateMoves = cM;
@@ -191,7 +192,7 @@ public class MsPacManInput extends Input {
 		
 		for (GHOST g : GHOST.values()) {
 			double ghostToNode = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(g), interNode);
-			if ( ghostToNode != -1 && pacmanToNode >= ghostToNode && !ghostEdible.get(g)) {
+			if ( ghostToNode != -1 && pacmanToNode >= ghostToNode - Constants.EAT_DISTANCE && !ghostEdible.get(g)) {
 				return true;
 			}
 		}

@@ -40,7 +40,7 @@ public class HuntAction implements Action {
 		for(GHOST g : GHOST.values()) {
 			MOVE candidateMove = game.getApproximateNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(g), game.getPacmanLastMoveMade(), DM.PATH);
 			if (!game.isGhostEdible(g) || game.getGhostLairTime(g) > 0 || !pi.getCandidateMoves().contains(candidateMove)) { continue; }
-			double timeToEatFirst = timeToPPill(game, pi.getClosestPPill()) + timeToEat(game, g);
+			double timeToEatFirst = timeToEat(game, g);
 			double timeLeft = Constants.EDIBLE_TIME;
 			timeLeft = timeLeft - timeToEatFirst;
 			if(timeLeft > 0) {
@@ -56,7 +56,11 @@ public class HuntAction implements Action {
 			}
 		}
 		MOVE candidateMove = game.getApproximateNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(objective), game.getPacmanLastMoveMade(), DM.PATH);
-		return candidateMove;
+		if (pi.getCandidateMoves().contains(candidateMove) || pi.getCandidateMoves().size() == 0) {
+			return candidateMove;
+		}
+
+		return pi.getCandidateMoves().get(0);
 	}
 
 
@@ -69,10 +73,6 @@ public class HuntAction implements Action {
 
 	private double timeToEat(Game game, GHOST ghost) {
 		return 2 * game.getShortestPathDistance(game.getPacManInitialNodeIndex(), game.getGhostCurrentNodeIndex(ghost), game.getPacmanLastMoveMade());
-	}
-
-	private double timeToPPill(Game game, int pPill) {
-		return 2 * game.getShortestPathDistance(game.getPacManInitialNodeIndex(), pPill, game.getPacmanLastMoveMade());
 	}
 
 	@Override
