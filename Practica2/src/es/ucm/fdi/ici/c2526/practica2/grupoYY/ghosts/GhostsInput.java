@@ -200,6 +200,7 @@ public class GhostsInput extends Input {
         	} 
         	index++;
     	}
+    	gi.setGhostClass(GhostClass);
     }
 	
 	@Override
