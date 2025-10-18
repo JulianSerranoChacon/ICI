@@ -113,7 +113,7 @@ public class MsPacManInput extends Input {
 				}
 
 				// Check if there is a power pill between the intersections
-				if (game.getPowerPillIndex(node) != -1) {
+				if (game.getPowerPillIndex(node) != -1 && game.isPowerPillStillAvailable(game.getPowerPillIndex(node))) {
 					pPill = true;
 				}
 
