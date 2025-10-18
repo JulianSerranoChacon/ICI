@@ -21,14 +21,16 @@ public class GhostInfo {
 		   RANDOM
 	   }
 	private Map<GHOST,GHOSTTYPE> GhostClass;
-	public Map<GHOST, GHOSTTYPE> getGhostClass() {
-		return GhostClass;
-	}
-
+	
 	public GhostInfo(){
 		reset();
 		shieldGhost = new HashMap<>();
 	}
+	
+	public Map<GHOST, GHOSTTYPE> getGhostClass() {
+		return GhostClass;
+	}
+	
 	public void setGhostClass(Map<GHOST, GHOSTTYPE> ghostClass) {
 		GhostClass = ghostClass;
 	}
@@ -39,8 +41,6 @@ public class GhostInfo {
 		DistanceFromGhostToGhost = new HashMap<>();
 		
 	}
-	
-	
 
 	public int getDistanceFromGhostToPacman(GHOST g) {
 		return distanceFromGhostToPacman.get(g);
