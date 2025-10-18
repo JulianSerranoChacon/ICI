@@ -7,19 +7,19 @@ import pacman.game.Game;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 
-public class NoGhostsNearTransition implements Transition {
+public class MoveToGreedyTransition implements Transition {
 	
 	private int privateID;
 	private static int idcount = 0;
 
-	public NoGhostsNearTransition() {
+	public MoveToGreedyTransition() {
 		privateID = idcount;
 		idcount++;
 	}
 
 	@Override
 	public boolean evaluate(Input in) {
-//        MsPacManInput input = (MsPacManInput) in;
+        MsPacManInput input = (MsPacManInput) in;
 //        Game game = input.getGame();
 //
 //        // if ghosts near return false;
@@ -29,6 +29,10 @@ public class NoGhostsNearTransition implements Transition {
 //                return false;
 //            }
 //        }
+		if(input.getCandidateMoves().size() <= 1) {
+			return false;
+		}
+		
         return true;
 	}
 

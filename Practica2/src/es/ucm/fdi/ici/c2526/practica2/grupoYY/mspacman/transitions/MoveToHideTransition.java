@@ -8,9 +8,9 @@ import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
 
-public class MultipleCandidatesPosibleTransition implements Transition {
+public class MoveToHideTransition implements Transition {
 
-	public MultipleCandidatesPosibleTransition() {
+	public MoveToHideTransition() {
 		
 	}
 
@@ -18,9 +18,15 @@ public class MultipleCandidatesPosibleTransition implements Transition {
 	public boolean evaluate(Input in) {
 		MsPacManInput input = (MsPacManInput) in;
 		Game game = input.getGame();
+		
+		if(input.getCandidateMoves().size() <= 1) {
+			return false;
+		}
+		
 		for(MOVE m : input.getCandidateMoves()) {
 			for(GHOST g : GHOST.values()) {
-				if(game.getDistance(game.getGhostCurrentNodeIndex(g), input.getMoveToNode().get(m), DM.EUCLID) <= input.getHideDistance()) {
+				if(game.getGhostLairTime(g) <= 0 && !game.isGhostEdible(g)
+						&& game.getDistance(game.getGhostCurrentNodeIndex(g), input.getMoveToNode().get(m), DM.EUCLID) <= input.getHideDistance()) {
 					return true;
 				}
 			}

@@ -23,7 +23,7 @@ public class NearDangerousGhostsTransition implements Transition {
 		Game game = input.getGame();
 
 		for (GHOST ghost : GHOST.values()) {
-			if (!game.isGhostEdible(ghost) && game.getDistance(game.getPacmanCurrentNodeIndex(),
+			if (!game.isGhostEdible(ghost) && game.getGhostLairTime(ghost) <= 0 && game.getDistance(game.getPacmanCurrentNodeIndex(),
 					game.getGhostCurrentNodeIndex(ghost), DM.PATH) <= input.getDangerDistance()) {
 				return true;
 			}
