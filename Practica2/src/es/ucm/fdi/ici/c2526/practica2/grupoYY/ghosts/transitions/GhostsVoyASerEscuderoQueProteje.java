@@ -52,7 +52,7 @@ public class GhostsVoyASerEscuderoQueProteje implements Transition  {
 
 	@Override
 	public String toString() {
-		return this.ghost+" edible";
+		return "Soy el escudero que proteje";
 	}
 
 	

@@ -119,7 +119,7 @@ public class Ghosts extends GhostController {
 			//FLEE CHANGES
 			//Orbit Changes
 			fsm.add(orbit, pacManCerca, runAway);
-			fsm.add(orbit, lejosParpadeo, chase);
+		//	fsm.add(orbit, lejosParpadeo, chase);
 			
 			//RunOptimal Changes
 			fsm.add(runAway, hayEscuderoHuida, runToEscudero);
@@ -129,12 +129,12 @@ public class Ghosts extends GhostController {
 			
 			//RunSubOptimal Changes
 			fsm.add(runSubOptimal, noFantCerca, runAway);
-			fsm.add(runSubOptimal, hayEscuderoHuida, runToEscudero);
-			fsm.add(runSubOptimal, lejosParpadeo, chase);
+		//	fsm.add(runSubOptimal, hayEscuderoHuida, runToEscudero);
+		//	fsm.add(runSubOptimal, lejosParpadeo, chase);
 
 			//RunToEscudero Changes
 			fsm.add(runToEscudero, paseAlEscudero, runAway);
-			fsm.add(runToEscudero, lejosParpadeo, chase);
+		//	fsm.add(runToEscudero, lejosParpadeo, chase);
 			
 			fsm.ready(chase);
 			

@@ -26,7 +26,7 @@ public class GhostsPacManHaComidoPP implements Transition  {
 
 	@Override
 	public String toString() {
-		return "Ghost is edible";
+		return "Comio PP";
 	}
 
 	

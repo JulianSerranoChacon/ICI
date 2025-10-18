@@ -55,7 +55,7 @@ public class GhostsPacManVaAPillarPP implements Transition  {
 
 	@Override
 	public String toString() {
-		return "Ghost is edible";
+		return "Va a pillar la PP";
 	}
 
 	

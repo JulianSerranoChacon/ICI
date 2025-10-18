@@ -34,7 +34,7 @@ public class GhostsNoHayFantasmasCercaEuclidiana implements Transition  {
 
 	@Override
 	public String toString() {
-		return "Ghost is edible";
+		return "No hay fantasma cerca Euclidiano";
 	}
 
 	

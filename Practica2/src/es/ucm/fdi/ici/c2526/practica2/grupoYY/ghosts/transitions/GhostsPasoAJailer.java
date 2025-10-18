@@ -29,7 +29,7 @@ public class GhostsPasoAJailer implements Transition  {
 
 	@Override
 	public String toString() {
-		return this.ghost+" edible";
+		return this.ghost+" Jailer";
 	}
 
 	

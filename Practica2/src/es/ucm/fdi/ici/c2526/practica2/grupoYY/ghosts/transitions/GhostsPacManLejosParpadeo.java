@@ -31,7 +31,7 @@ public class GhostsPacManLejosParpadeo implements Transition  {
 
 	@Override
 	public String toString() {
-		return "Ghost is edible";
+		return "I'm flicking and PacMan is Far" ;
 	}
 
 	

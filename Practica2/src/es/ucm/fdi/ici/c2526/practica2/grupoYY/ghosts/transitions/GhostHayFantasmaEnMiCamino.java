@@ -61,7 +61,7 @@ public class GhostHayFantasmaEnMiCamino implements Transition  {
 
 	@Override
 	public String toString() {
-		return "Ghost is edible";
+		return "Hay Fantasma en mi camino";
 	}
 
 	

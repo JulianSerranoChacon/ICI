@@ -33,7 +33,7 @@ public class GhostsHePasadoAlEscudero implements Transition  {
 
 	@Override
 	public String toString() {
-		return "Ghost is edible";
+		return "Pase al escudero";
 	}
 
 	
