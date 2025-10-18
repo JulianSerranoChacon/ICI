@@ -24,6 +24,7 @@ import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsNoFantasm
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsNoHayFantasmasCercaEuclidiana;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsNotEdibleAndPacManFarPPill;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPacmanEstaLejos;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPacmanEstaCerca;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPacManHaComidoPP;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPacManLejosParpadeo;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPacManVaAPillarPP;
@@ -97,13 +98,43 @@ public class Ghosts extends GhostController {
 			GhostsNoFantasmasCerca noFantCerca = new GhostsNoFantasmasCerca(ghost); 
 			GhostsNoHayFantasmasCercaEuclidiana noFantCercaEu = new GhostsNoHayFantasmasCercaEuclidiana(ghost);
 			GhostsPacmanEstaLejos pacManLejos = new GhostsPacmanEstaLejos(ghost);
+			GhostsPacmanEstaCerca pacManCerca = new GhostsPacmanEstaCerca(ghost);
 			GhostsSoyComestible soyComestible = new GhostsSoyComestible(ghost);
 		
 		
 			
+			//CHASE CHANGES
 			fsm.add(chase, edible, runAway);
 			fsm.add(chase, near, runAway);
 			fsm.add(runAway, toChaseTransition, chase);
+			
+			//TODO METER LOS CAMBIOS PARA LOS ESTADOS DE CAZAR
+			
+			//MIDDLE CHANGES
+			fsm.add(startRunning, comioPP, runAway);
+			//TODO METER EL ESTADO DE PASO PARA TODOS LOS ESTADOS DE CAZAR
+			
+		
+			
+			//FLEE CHANGES
+			//Orbit Changes
+			fsm.add(orbit, pacManCerca, runAway);
+			fsm.add(orbit, lejosParpadeo, chase);
+			
+			//RunOptimal Changes
+			fsm.add(runAway, hayEscuderoHuida, runToEscudero);
+			fsm.add(runAway, FantEnMiCaminoHuida, runSubOptimal);
+			fsm.add(runAway, pacManLejos, orbit);
+			fsm.add(runAway, lejosParpadeo, chase);
+			
+			//RunSubOptimal Changes
+			fsm.add(runSubOptimal, noFantCerca, runAway);
+			fsm.add(runSubOptimal, hayEscuderoHuida, runToEscudero);
+			fsm.add(runSubOptimal, lejosParpadeo, chase);
+
+			//RunToEscudero Changes
+			fsm.add(runToEscudero, paseAlEscudero, runAway);
+			fsm.add(runToEscudero, lejosParpadeo, chase);
 			
 			fsm.ready(chase);
 			
