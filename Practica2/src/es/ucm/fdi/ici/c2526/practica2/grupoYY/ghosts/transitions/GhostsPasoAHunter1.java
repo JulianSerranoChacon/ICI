@@ -6,34 +6,30 @@ import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.GhostsInput;
 import es.ucm.fdi.ici.fsm.Transition;
 import pacman.game.Constants.GHOST;
 
-public class GhostsHePasadoAlEscudero implements Transition  {
+public class GhostsPasoAHunter1 implements Transition  {
 
 	GHOST ghost;
 	GhostInfo gi;
-	int distanceFromShield = 999999;
-	public GhostsHePasadoAlEscudero(GHOST ghost,GhostInfo gi) {
+	public GhostsPasoAHunter1(GHOST ghost,gi) {
 		super();
 		this.ghost = ghost;
 		this.gi = gi;
 	}
 
-///WIP
+
 
 	@Override
 	public boolean evaluate(Input in) {
 		GhostsInput input = (GhostsInput)in;
-		if(gi.getMyShieldGhost(ghost)==ghost) return false;
-		else if (distanceFromShield >gi.getDistanceFromGhostToGhost(ghost, gi.getMyShieldGhost(ghost))){
-			distanceFromShield =gi.getDistanceFromGhostToGhost(ghost, gi.getMyShieldGhost(ghost));
-			return false;
-		}else return true;
+		return (gi.getMyGhostPriority(ghost) == 0);
+		}
 	}
 
 
 
 	@Override
 	public String toString() {
-		return "Ghost is edible";
+		return this.ghost+" edible";
 	}
 
 	
