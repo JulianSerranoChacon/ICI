@@ -21,10 +21,10 @@ import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions.RandomAction;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.EdibleGhostsNearTransition;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.GoToNearestPillToGreedyPathTransition;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.MenacedToEatPpillTransition;
-import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.MultipleCandidatesPosibleTransition;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.MoveToHideTransition;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.NearDangerousGhostsTransition;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.NoCandidateMovesTransition;
-import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.NoGhostsNearTransition;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.MoveToGreedyTransition;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.OnlyOneMovePossibleTransition;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.PPillSuicidaToPointsSuicidaTransition;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions.PointsSuicidaToRandomTransition;
@@ -120,12 +120,12 @@ public class MsPacMan extends PacmanController {
     	fsm.add(move, tran1, suicida);
     	fsm.add(suicida, tran2, move);
     	
-    	Transition tran3 = new MultipleCandidatesPosibleTransition();
+    	Transition tran3 = new MoveToHideTransition();
     	Transition tran4 = new OnlyOneMovePossibleTransition();
     	fsm.add(move, tran3, hide);
     	fsm.add(hide, tran4, move);
     	
-    	Transition tran5 = new NoGhostsNearTransition();
+    	Transition tran5 = new MoveToGreedyTransition();
     	Transition tran6 = new OnlyOneMovePossibleTransition();
     	fsm.add(move, tran5, greedy);
     	fsm.add(greedy, tran6, move);
@@ -133,7 +133,7 @@ public class MsPacMan extends PacmanController {
     	Transition tran7 = new NoCandidateMovesTransition();
     	fsm.add(hide, tran7, suicida);
     	
-    	Transition tran8 = new NoGhostsNearTransition();
+    	Transition tran8 = new MoveToGreedyTransition();
     	Transition tran9 = new NearDangerousGhostsTransition();
     	fsm.add(hide, tran8, greedy);
     	fsm.add(greedy, tran9, hide);
@@ -146,7 +146,7 @@ public class MsPacMan extends PacmanController {
     	fsm.add(hide, tran11, hunt);
     	fsm.add(hunt, tran12, hide);
     	
-    	Transition tran13 = new NoGhostsNearTransition();
+    	Transition tran13 = new MoveToGreedyTransition();
     	fsm.add(hunt, tran13, greedy);
     	
     	fsm.ready(greedy);
