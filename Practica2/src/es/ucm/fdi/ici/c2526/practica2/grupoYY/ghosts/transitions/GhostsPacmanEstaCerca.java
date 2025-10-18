@@ -22,7 +22,7 @@ public class GhostsPacmanEstaCerca implements Transition  {
 	public boolean evaluate(Input in) {
 		GhostsInput input = (GhostsInput)in;
 		int distance = in.getGame().getApproximateShortestPathDistance(in.getGame().getPacmanCurrentNodeIndex(), in.getGame().getGhostCurrentNodeIndex(ghost), in.getGame().getPacmanLastMoveMade());
-		return (distance>limit);
+		return (distance<limit);
 		
 	}
 
