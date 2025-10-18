@@ -7,13 +7,13 @@ import javax.swing.JPanel;
 
 import es.ucm.fdi.ici.Input;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.MsPacManInput;
-import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions.ChaseAction;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions.EatPpillAction;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions.GoToNearestPillAction;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions.GoToPpillAction;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions.GreedyPointsAction;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions.HideAction;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions.HideFromOneAction;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions.HuntAction;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions.MorePillsSuicidaAction;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions.MoveAction;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions.PPillSuicidaAction;
@@ -113,7 +113,7 @@ public class MsPacMan extends PacmanController {
     	
     	// FSM //
     	SimpleState move = new SimpleState("Move", new MoveAction(pi));
-    	SimpleState hunt = new SimpleState("Hunt", new ChaseAction(pi));
+    	SimpleState hunt = new SimpleState("Hunt", new HuntAction(pi));
     	
 		Transition tran14 = new EdibleGhostsNearTransition();
 		fsm.add(move, tran14, hunt);

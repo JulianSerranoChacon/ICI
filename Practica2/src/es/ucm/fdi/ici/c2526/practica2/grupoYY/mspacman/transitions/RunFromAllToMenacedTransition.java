@@ -26,7 +26,11 @@ public class RunFromAllToMenacedTransition implements Transition {
 		
 		//Estimation of the worst distance a ghost can be
         int time_left = Constants.EDIBLE_TIME;
-
+        
+        if(input.getMoveToPpill().size() == 0) {
+        	return false;
+        }
+        
         for(GHOST ghost : GHOST.values()) {
             if(game.getGhostLairTime(ghost) > 0) {
                 continue;
