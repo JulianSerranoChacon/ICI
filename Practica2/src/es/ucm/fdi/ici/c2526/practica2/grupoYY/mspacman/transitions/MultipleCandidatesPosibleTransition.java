@@ -3,6 +3,10 @@ package es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.transitions;
 import es.ucm.fdi.ici.Input;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.MsPacManInput;
 import es.ucm.fdi.ici.fsm.Transition;
+import pacman.game.Game;
+import pacman.game.Constants.DM;
+import pacman.game.Constants.GHOST;
+import pacman.game.Constants.MOVE;
 
 public class MultipleCandidatesPosibleTransition implements Transition {
 
@@ -13,7 +17,16 @@ public class MultipleCandidatesPosibleTransition implements Transition {
 	@Override
 	public boolean evaluate(Input in) {
 		MsPacManInput input = (MsPacManInput) in;
-		return input.getCandidateMoves().size() > 1;
+		Game game = input.getGame();
+		for(MOVE m : input.getCandidateMoves()) {
+			for(GHOST g : GHOST.values()) {
+				if(game.getDistance(game.getGhostCurrentNodeIndex(g), input.getMoveToNode().get(m), DM.EUCLID) <= input.getHideDistance()) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 
 	@Override
