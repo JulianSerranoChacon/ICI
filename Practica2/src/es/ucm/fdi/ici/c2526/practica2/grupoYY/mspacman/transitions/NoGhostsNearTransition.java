@@ -19,16 +19,16 @@ public class NoGhostsNearTransition implements Transition {
 
 	@Override
 	public boolean evaluate(Input in) {
-        MsPacManInput input = (MsPacManInput) in;
-        Game game = input.getGame();
-
-        // if ghosts near return false;
-		for (GHOST ghost : GHOST.values()) {
-            if (game.getDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH) <= input.getDangerDistance()){
-                return false;
-            }
-        }
-
+//        MsPacManInput input = (MsPacManInput) in;
+//        Game game = input.getGame();
+//
+//        // if ghosts near return false;
+//		for (GHOST ghost : GHOST.values()) {
+//            if (game.getDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH) <= input.getDangerDistance()
+//            		&& game.getGhostLairTime(ghost) != -1){
+//                return false;
+//            }
+//        }
         return true;
 	}
 

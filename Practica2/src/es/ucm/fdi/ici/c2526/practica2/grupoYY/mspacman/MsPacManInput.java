@@ -28,6 +28,7 @@ public class MsPacManInput extends Input {
 	private int closestPPill;
 	private double distanceToPPill;
 	private final double dangerDistance = 20; //tentative, subject to change 
+	private final double hideDistance = 7; //tentative, subject to change 
 	
 	//Info for actions
 	private PacmanInfo pi;
@@ -254,6 +255,10 @@ public class MsPacManInput extends Input {
 
 	public double getDistanceToPPill() {
 		return distanceToPPill;
+	}
+
+	public double getHideDistance() {
+		return hideDistance;
 	}
 
 }

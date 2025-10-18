@@ -24,7 +24,7 @@ public class RunFromAllToRunFromOneTrasition implements Transition {
 			if (!game.isGhostEdible(ghost) && game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghost), DM.PATH) <= input.getDangerDistance()) {
 				aux = true;
 			}
-			if (!game.isGhostEdible(ghost) && 	 game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghost), DM.PATH) <= input.getDangerDistance() && aux) {
+			if (!game.isGhostEdible(ghost) && game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghost), DM.PATH) <= input.getDangerDistance() && aux) {
 				return false;
 			}
 		}
