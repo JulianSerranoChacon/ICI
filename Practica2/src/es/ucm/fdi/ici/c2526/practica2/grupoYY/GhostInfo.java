@@ -25,6 +25,10 @@ public class GhostInfo {
 		return GhostClass;
 	}
 
+	public GhostInfo(){
+		reset();
+		shieldGhost = new HashMap<>();
+	}
 	public void setGhostClass(Map<GHOST, GHOSTTYPE> ghostClass) {
 		GhostClass = ghostClass;
 	}
@@ -36,10 +40,6 @@ public class GhostInfo {
 		
 	}
 	
-	GhostInfo(){
-		reset();
-		shieldGhost = new HashMap<>();
-	}
 	
 
 	public int getDistanceFromGhostToPacman(GHOST g) {
