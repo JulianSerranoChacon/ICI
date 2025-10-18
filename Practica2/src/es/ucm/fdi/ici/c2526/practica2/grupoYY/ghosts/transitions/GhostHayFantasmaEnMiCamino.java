@@ -47,14 +47,14 @@ public class GhostHayFantasmaEnMiCamino implements Transition  {
 				}
 			}
 		}
-		
+		bool flag = false;
 		for(GHOST otherGhost : GHOST.values()) {
 			if(otherGhost != ghost) {
-				//in.getGame().getPat
+				flag = visitNode .containsKey(in.getGame().getGhostCurrentNodeIndex(otherGhost));
 				
 			}
 		}
-		return true;
+		return flag;
 	}
 
 
