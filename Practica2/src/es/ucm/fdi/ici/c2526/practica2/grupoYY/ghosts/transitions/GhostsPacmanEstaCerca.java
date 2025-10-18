@@ -1,0 +1,38 @@
+package es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions;
+
+import es.ucm.fdi.ici.Input;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.GhostsInput;
+import es.ucm.fdi.ici.fsm.Transition;
+import pacman.game.Constants.DM;
+import pacman.game.Constants.GHOST;
+
+public class GhostsPacmanEstaCerca implements Transition  {
+
+	GHOST ghost;
+	int limit = 200;
+	public GhostsPacmanEstaCerca(GHOST ghost) {
+		super();
+		this.ghost = ghost;
+		
+	}
+
+
+
+	@Override
+	public boolean evaluate(Input in) {
+		GhostsInput input = (GhostsInput)in;
+		int distance = in.getGame().getApproximateShortestPathDistance(in.getGame().getPacmanCurrentNodeIndex(), in.getGame().getGhostCurrentNodeIndex(ghost), in.getGame().getPacmanLastMoveMade());
+		return (distance<limit);
+		
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "Ghost is edible";
+	}
+
+	
+	
+}
