@@ -25,32 +25,32 @@ public class RunFromAllToMenacedTransition implements Transition {
 		closestPPill = input.getClosestPPill();
 		
 		//Estimation of the worst distance a ghost can be
-        try {
-            int time_left = Constants.EDIBLE_TIME;
+        int time_left = Constants.EDIBLE_TIME;
 
-            for(GHOST ghost : GHOST.values()) {
-                if(game.getGhostLairTime(ghost) > 0) 
-                    continue;
-                double distanceToGhostPosition = game.getShortestPathDistance(closestPPill,
-                       game.getPacmanCurrentNodeIndex()) + 2 * game.getDistance(closestPPill, game.getGhostCurrentNodeIndex(ghost), DM.PATH);
-                if (time_left > distanceToGhostPosition) {
-                    time_left -= distanceToGhostPosition;
-                    for(GHOST g : GHOST.values()) {
-                        if(g == ghost || game.getGhostLairTime(ghost) > 0) 
-                            continue;
-                        double distanceToSecondGhostPosition = 2 * game.getShortestPathDistance(game.getGhostCurrentNodeIndex(g),
-                                game.getGhostCurrentNodeIndex(ghost));
-                        if (time_left > distanceToSecondGhostPosition) {
-                            return true;
-                        }
+        for(GHOST ghost : GHOST.values()) {
+            if(game.getGhostLairTime(ghost) > 0) {
+                continue;
+            }
+            
+            double distanceToGhostPosition = game.getShortestPathDistance(closestPPill,
+                   game.getPacmanCurrentNodeIndex()) + 2 * game.getDistance(closestPPill, game.getGhostCurrentNodeIndex(ghost), DM.PATH);
+            
+            if (time_left > distanceToGhostPosition) {
+                time_left -= distanceToGhostPosition;
+                
+                for(GHOST g : GHOST.values()) {
+                    if(g == ghost || game.getGhostLairTime(ghost) > 0) 
+                        continue;
+                    double distanceToSecondGhostPosition = 2 * game.getShortestPathDistance(game.getGhostCurrentNodeIndex(g),
+                            game.getGhostCurrentNodeIndex(ghost));
+                    if (time_left > distanceToSecondGhostPosition) {
+                        return true;
                     }
                 }
+                
             }
         }
-        catch(Exception e) {
 
-        }
-        
         return false;
 	}
 

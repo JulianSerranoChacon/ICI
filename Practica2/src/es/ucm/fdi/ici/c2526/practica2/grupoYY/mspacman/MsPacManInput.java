@@ -39,7 +39,7 @@ public class MsPacManInput extends Input {
 	public MsPacManInput(Game game, PacmanInfo pi) {
 		super(game);
 		this.pi = pi;
-		reset();
+		fillInfo();
 	}
 
 	private void reset() {
@@ -54,13 +54,12 @@ public class MsPacManInput extends Input {
 	
 	@Override
 	public void parseInput() {
+		reset();
 		finishLevel = game.getNumberOfActivePowerPills() == 0 ? true : false;
 		setGhostEdible();
 		setGhostLastMove();
 		setNextIntersections();
 		setNearestPPill();
-		
-		fillInfo();
 	}
 	
 	private void fillInfo() {

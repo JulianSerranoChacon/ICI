@@ -39,13 +39,22 @@ public class HideAction implements Action {
 	}
 
 	private List<Integer> depht2Intersections(Game game, int intersection) {
-		List<Integer> nextIntersections = new ArrayList<>();
+		List<Integer> nextIntersections = new ArrayList<>(); 
+		int prevStep = intersection;
 		for (int i : game.getNeighbouringNodes(intersection)) {
+			int aux[];
 			while (!game.isJunction(i)) {
-				i = game.getNeighbouringNodes(i, game.getNextMoveAwayFromTarget(i, intersection, DM.PATH))[0];
+				aux = game.getNeighbouringNodes(i);
+				int c = 0;
+				while (aux[c] == prevStep) {
+					c++;
+				}
+				prevStep = i;
+				i = aux[c];
 			}
 
 			if (i != game.getPacmanCurrentNodeIndex()) {
+
 				nextIntersections.add(i);
 			}
 		}

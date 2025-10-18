@@ -62,7 +62,7 @@ public class MsPacMan extends PacmanController {
     	cfsSuicida.addObserver(c1observer);
     	
     	//State declaration
-    	SimpleState suicida1 = new SimpleState("PPill suicida", new PPillSuicidaAction());
+    	SimpleState suicida1 = new SimpleState("PPill suicida", new PPillSuicidaAction(pi));
     	SimpleState suicida2 = new SimpleState("Pills suicida", new MorePillsSuicidaAction(pi));
     	SimpleState suicida3 = new SimpleState("cstate2", new RandomAction());
     	
@@ -91,7 +91,6 @@ public class MsPacMan extends PacmanController {
     	Transition hTrans3 = new MenacedToEatPpillTransition();
     	
     	cfsHide.add(hide1, hTrans1, hide2);
-    	cfsHide.add(hide1, hTrans2, hide3);
     	cfsHide.add(hide1, hTrans2, hide3);
     	cfsHide.add(hide3, hTrans3, hide4);
     	cfsHide.ready(hide1);
@@ -150,7 +149,7 @@ public class MsPacMan extends PacmanController {
     	Transition tran13 = new NoGhostsNearTransition();
     	fsm.add(hunt, tran13, greedy);
     	
-    	fsm.ready(move);
+    	fsm.ready(greedy);
     	
     	
     	JFrame frame = new JFrame();
@@ -158,6 +157,8 @@ public class MsPacMan extends PacmanController {
     	main.setLayout(new BorderLayout());
     	main.add(observer.getAsPanel(true, null), BorderLayout.CENTER);
     	main.add(c1observer.getAsPanel(true, null), BorderLayout.SOUTH);
+    	main.add(c2observer.getAsPanel(true, null), BorderLayout.EAST);
+    	main.add(c3observer.getAsPanel(true, null), BorderLayout.WEST);
     	frame.getContentPane().add(main);
     	frame.pack();
     	frame.setVisible(true);

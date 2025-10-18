@@ -45,7 +45,7 @@ public class ExecutorTest {
                 .build();
 
         //PacmanController pacMan = new pacman.controllers.HumanController.HumanController(new pacman.controllers.HumanController.KeyBoardInput());
-        PacmanController pacMan = new es.ucm.fdi.ici.c2223.practica1.grupo06.MsPacMan();
+        PacmanController pacMan = new es.ucm.fdi.ici.c2526.practica2.grupoYY.MsPacMan();
         GhostController ghosts = new es.ucm.fdi.ici.c2425.practica1.grupo08.Ghosts();
         
         System.out.println( 
