@@ -141,6 +141,7 @@ public class Ghosts extends GhostController {
 			graphObserver.showInFrame(new Dimension(300,200));
 			
 			fsms.put(ghost, fsm);
+			
 		}
 	}
 	

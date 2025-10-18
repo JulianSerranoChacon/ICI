@@ -1,4 +1,4 @@
-package es.ucm.fdi.ici.c2526.practica1.grupoH;
+package es.ucm.fdi.ici.c2526.practica1.GrupoH;
 
 import pacman.controllers.PacmanController;
 import pacman.game.Constants.DM;
