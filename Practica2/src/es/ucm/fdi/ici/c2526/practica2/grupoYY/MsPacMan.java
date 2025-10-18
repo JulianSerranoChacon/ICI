@@ -142,7 +142,9 @@ public class MsPacMan extends PacmanController {
     	fsm.add(greedy, tran9, hide);
     	
     	Transition tran10 = new NoCandidateMovesTransition();
+		Transition tran15 = new OnlyOneMovePossibleTransition();
     	fsm.add(hunt, tran10, suicida);
+		fsm.add(hunt, tran15, move);
     	
     	Transition tran11 = new EdibleGhostsNearTransition();
     	Transition tran12 = new NearDangerousGhostsTransition();
