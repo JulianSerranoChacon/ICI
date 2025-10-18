@@ -1,6 +1,7 @@
 package es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions;
 
 import es.ucm.fdi.ici.Action;
+import pacman.game.Constants;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
@@ -9,13 +10,15 @@ import pacman.game.Game;
 public class OrbitateAction implements Action {
 
     GHOST ghost;
+    int edibaleTime;
     int orbitDistance; //TODO Need to evaluate the perfect distance where pac-Man can not eat us this distance variates depends of edible time
     MOVE[] possibleMoves;
     double[] distancesMoves;
     
 	public OrbitateAction(GHOST ghost) {
 		this.ghost = ghost;
-		this.orbitDistance = 80; //Parpadeo Act / Parpadeo Max
+		this.edibaleTime = Constants.EDIBLE_TIME;
+		this.orbitDistance = 80; 
 		this.possibleMoves = MOVE.values();
 		this.distancesMoves = new double[4];
 	}
@@ -24,6 +27,10 @@ public class OrbitateAction implements Action {
 	public MOVE execute(Game game) {
         if (game.doesGhostRequireAction(ghost))        //if it requires an action
         {
+           //Checks the new value of the limit distance
+           this.orbitDistance = game.getGhostEdibleTime(this.ghost)/this.edibaleTime;
+           System.out.println("CUAL ES MI DISTANCIA DE ORBITA? " + this.orbitDistance);
+           
            //We take the closer intersection distance from our actual spot and checks if we move there if we are in danger or not
            for(int i = 0; i < possibleMoves.length; ++i) {
         	   

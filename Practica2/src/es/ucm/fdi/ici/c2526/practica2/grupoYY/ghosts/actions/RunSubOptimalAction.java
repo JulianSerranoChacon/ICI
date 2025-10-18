@@ -12,13 +12,12 @@ public class RunSubOptimalAction implements Action {
 	//SI ESTO DEVUELVE UN CAMINO EN EL QUE HAY UN FANTASMA Y SE PODÍA IR POR OTRO (REFACTORIZAR)
     GHOST ghost;
     MOVE[] possibleMoves;
-    private GhostInfo info;
-	public RunSubOptimalAction(GHOST ghost,GhostInfo g) {
+	public RunSubOptimalAction(GHOST ghost) {
 		this.ghost = ghost;
 		this.possibleMoves = MOVE.values();
-		this.info = g;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public MOVE execute(Game game) {
         if (game.doesGhostRequireAction(ghost))        //if it requires an action
@@ -30,7 +29,7 @@ public class RunSubOptimalAction implements Action {
               
              
               MOVE moveToReturn = MOVE.NEUTRAL; //Which move should return
-              double minDistance = 10000; //Save the farther distance of PacMan
+              double maxDistance = 0; //Save the farther distance through PacMan
               
               
               //For every possible Move
@@ -38,13 +37,13 @@ public class RunSubOptimalAction implements Action {
             	  
             	  double distance = 0;
             	  
-            	  //If it is not the bestMove (because there is a Ghost there, checks which move is the farthest of all to run away of PacMan
+            	  //If it is not the bestMove (because there is a Ghost there), checks which move is the farthest of all to run away of PacMan
             	  if(mv != bestRunMove) {
             		  
-            		  distance = info.getDistanceFromGhostToPacman(ghost);
+            		  distance = game.getApproximateShortestPathDistance(game.getGhostCurrentNodeIndex(this.ghost), game.getPacmanCurrentNodeIndex(), mv);
  
-            		  if(distance < minDistance) {
-            			  minDistance = distance;
+            		  if(distance > maxDistance) {
+            			  maxDistance = distance;
             			  moveToReturn = mv;
             		  }
             		  
