@@ -24,9 +24,10 @@ public class EdibleGhostsNearTransition implements Transition {
 		Game game = input.getGame();
 
 		for (GHOST ghost : GHOST.values()) {
-			if (game.isGhostEdible(ghost) && 2 * game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghost), game.getPacmanLastMoveMade(), DM.PATH) <= game.getGhostEdibleTime(ghost)) {
+			if (game.isGhostEdible(ghost)) return true;
+			/* if (game.isGhostEdible(ghost) && 2 * game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghost), game.getPacmanLastMoveMade(), DM.PATH) <= game.getGhostEdibleTime(ghost)) {
 				return true;
-			}
+			} */
 		}
 		return false;
 	}

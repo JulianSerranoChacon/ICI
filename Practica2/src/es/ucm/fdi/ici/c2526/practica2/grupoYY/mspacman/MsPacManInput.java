@@ -108,7 +108,7 @@ public class MsPacManInput extends Input {
 			while (!game.isJunction(node)) {
 
 				// Gather number of pills between our node and the node searching
-				if (game.getPillIndex(node) != -1) {
+				if (game.getPillIndex(node) != -1 && game.isPillStillAvailable(game.getPillIndex(node))) {
 					count++;
 				}
 
