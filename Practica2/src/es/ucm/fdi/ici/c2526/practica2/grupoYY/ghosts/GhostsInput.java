@@ -7,8 +7,10 @@ import java.util.TreeMap;
 
 import es.ucm.fdi.ici.Input;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.GhostInfo;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.GhostInfo.GHOSTTYPE;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
+import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
 public class GhostsInput extends Input {
@@ -25,8 +27,9 @@ public class GhostsInput extends Input {
 	private Map<GHOST,Integer> distanceFromPacmanToGhost;
 	private Map<GHOST,Map<GHOST,Integer>> distanceFromGhostToGhost;
 	private Map<GHOST,GHOST> shieldGhost;
-	private List<GHOST> ghostPriority;
+	private Map<GHOST,GHOSTTYPE> GhostClass;
 	
+	 public boolean[] behaviourChanged; 
 	private GhostInfo gi;
 	
 	public GhostsInput(Game game,GhostInfo gi) {
@@ -65,13 +68,140 @@ public class GhostsInput extends Input {
 		}
 	}
 	
+	  public void swapBehaviour(int indexA, int indexB) {
+	    	GHOSTTYPE aux = GhostClass.get(indexA);
+	    	GhostClass.remove(indexA);
+	    	GhostClass.put(GHOST.values()[indexA], GhostClass.get(indexB));
+	    	GhostClass.remove(indexB);
+	    	GhostClass.put(GHOST.values()[indexB], aux);
+	    }
 	private void parseGhostPriority() {
-		TreeMap<Integer,GHOST>auxMap = new TreeMap<>();
-		distanceFromGhostToPacman.forEach((key,element) -> auxMap.put(element, key));
-		auxMap.forEach((key,element)-> ghostPriority.add(element));
-		
-		this.gi.setGhostPriority(ghostPriority);
-	}
+		behaviourChanged = new boolean[4];
+  	    behaviourChanged[0] = false;
+  	    behaviourChanged[1] = false;
+  	    behaviourChanged[2] = false;
+  	    behaviourChanged[3] = false;
+    	int index = 0; //Index for all the ghosts
+    	
+    	//Change the behavior of every ghost if is necessary
+    	for(GHOST g : GHOST.values()) {	
+    		
+    		if(behaviourChanged[index] == false) {
+    			//if the ghost is the HUNTER1
+            	if(GhostClass.get(g) == GHOSTTYPE.HUNTER1) {	
+            		
+            		int i = 0; //Index to find the HunterGhost
+            		int distance = 0;
+            		int minDistance = 1000000000;
+            		int closerGhostIndex = 0;
+            		
+                	for (GHOST ghostType : GHOST.values()) {
+                		if(!game.isGhostEdible(ghostType) && game.getGhostLairTime(ghostType) <= 0 && behaviourChanged[i] == false) {
+                			if(i == index) {
+                				distance = Math.abs(game.getPacmanCurrentNodeIndex() - game.getGhostCurrentNodeIndex(ghostType));
+                			}
+                			else if(minDistance > Math.abs(game.getPacmanCurrentNodeIndex() - game.getGhostCurrentNodeIndex(ghostType))) {
+                				minDistance = Math.abs(game.getPacmanCurrentNodeIndex() - game.getGhostCurrentNodeIndex(ghostType));
+                				closerGhostIndex = i;
+                			}
+                		}
+            			i++;
+                	}
+                	
+                
+                	//Si distancia del cazador fantasma a PacMan > distancia de otro fantasma a PacMan Añade el comportamiento de ese otro fantasma a aux
+                	if(distance > minDistance) {
+                		swapBehaviour(index,closerGhostIndex);
+                		index--;
+                		behaviourChanged[closerGhostIndex] = true;
+          
+                	}
+        		}
+        		else if(GhostClass.get(g) == GHOSTTYPE.HUNTER2) {
+        			
+            		int i = 0; //Index to find the HunterGhost2
+            		int distance = 0;
+            		int minDistance = 1000000000;
+            		int closerGhostIndex = 0;
+            		
+                	for (GHOST ghostType : GHOST.values()) {
+                		if(!game.isGhostEdible(ghostType) && game.getGhostLairTime(ghostType) <= 0 && behaviourChanged[i] == false) {
+                			if(i == index) {
+                				distance = Math.abs(game.getPacmanCurrentNodeIndex() - game.getGhostCurrentNodeIndex(ghostType));
+                			}
+                			else if(GhostClass.get(g) != GHOSTTYPE.HUNTER1 && minDistance > Math.abs(game.getPacmanCurrentNodeIndex() - game.getGhostCurrentNodeIndex(ghostType))) {
+                				minDistance = Math.abs(game.getPacmanCurrentNodeIndex() - game.getGhostCurrentNodeIndex(ghostType));
+                				closerGhostIndex = i;
+                			}
+                		}
+            			i++;
+                	}
+                	
+                	//Si distancia del cazador fantasma a PacMan > distancia de otro fantasma a PacMan Añade el comportamiento de ese otro fantasma a aux
+                	if(distance > minDistance) {
+                		swapBehaviour(index,closerGhostIndex);
+                		index--;
+                		behaviourChanged[closerGhostIndex] = true;
+                	}
+        		}
+        		else if(GhostClass.get(g) == GHOSTTYPE.JAILER) {
+        			
+        			int i = 0; //Index to find the HunterGhost2
+            		int minDistance = 1000000000;
+            		int closerGhostIndex = 0;
+            		GHOST actJailer = GHOST.PINKY;
+            		
+            		
+        	    	GHOST FleePacManGhost = GHOST.BLINKY;
+        	    	
+        	    	//We search the closest Ghost and the Jailer Ghost
+        	    	for (GHOST ghostType : GHOST.values()) {
+        	    		if(GhostClass.get(g) == GHOSTTYPE.HUNTER1) {
+        	    			FleePacManGhost = ghostType;
+        	    		}
+        	    		else if(GhostClass.get(g) == GHOSTTYPE.JAILER) {
+        	    			actJailer = ghostType;
+        	    		}
+        	    		++i;
+        	    	}
+        	    	
+        	    	
+        	    	//If jailer is not in prision
+        	    	if(!game.isGhostEdible(actJailer) && game.getGhostLairTime(actJailer) <= 0 && behaviourChanged[index] == false) {
+        	    		
+        	    		//We get the Move of Pac-Man
+        	    		MOVE bestPacManMove = game.getNextMoveAwayFromTarget(game.getPacmanCurrentNodeIndex(),game.getGhostCurrentNodeIndex(FleePacManGhost),DM.PATH);
+        	    		
+        	    		//We calculated the future intersection where PacMan
+        	    		int[] futureNodeMove = game.getNeighbouringNodes(game.getPacmanCurrentNodeIndex());
+        	    		
+        	    		while(futureNodeMove.length <= 1) {
+        	    			futureNodeMove = game.getNeighbouringNodes(futureNodeMove[0]);
+        	    		}
+        	    	
+       
+        	    		i = 0;
+        	    		for(GHOST ghostType: GHOST.values()) {
+        	    			if(minDistance > Math.abs(futureNodeMove[0]  - game.getGhostCurrentNodeIndex(ghostType))) {
+        	    				minDistance = Math.abs(game.getPacmanCurrentNodeIndex() - game.getGhostCurrentNodeIndex(ghostType));
+        	    				closerGhostIndex = i;
+        	    			}
+        	    		 i++;
+        	    		}
+        	    	
+        	    		//Si distancia del jailer al camino de huida de PacMan > distancia de otro fantasma a dicho camino Añade el comportamiento de ese otro fantasma a aux
+        	    		if(futureNodeMove[0] > minDistance) {
+        	    			swapBehaviour(index,closerGhostIndex);
+        	    			index--;
+        	    			behaviourChanged[closerGhostIndex] = true;
+        	    		}
+        	    	}
+        	    }	 	
+        	} 
+        	index++;
+    	}
+    }
+	
 	@Override
 	public void parseInput() {
 		this.BLINKYedible = game.isGhostEdible(GHOST.BLINKY);

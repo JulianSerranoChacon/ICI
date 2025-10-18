@@ -14,12 +14,26 @@ public class GhostInfo {
 	private Map<GHOST,Integer> distanceFromPacmanToGhost;
 	private Map<GHOST,Map<GHOST,Integer>> DistanceFromGhostToGhost;
 	private Map<GHOST,GHOST> shieldGhost;
-	private List<GHOST> ghostPriority;
+	public enum GHOSTTYPE{
+		   HUNTER1,
+		   HUNTER2,
+		   JAILER,
+		   RANDOM
+	   }
+	private Map<GHOST,GHOSTTYPE> GhostClass;
+	public Map<GHOST, GHOSTTYPE> getGhostClass() {
+		return GhostClass;
+	}
+
+	public void setGhostClass(Map<GHOST, GHOSTTYPE> ghostClass) {
+		GhostClass = ghostClass;
+	}
+
 	public void reset() {
 		distanceFromGhostToPacman = new HashMap<>();
 		distanceFromPacmanToGhost = new HashMap<>();
 		DistanceFromGhostToGhost = new HashMap<>();
-		ghostPriority = new LinkedList<>();
+		
 	}
 	
 	GhostInfo(){
@@ -27,9 +41,7 @@ public class GhostInfo {
 		shieldGhost = new HashMap<>();
 	}
 	
-	public int getMyGhostPriority(GHOST g) {
-		return ghostPriority.indexOf(g);
-	}
+
 	public int getDistanceFromGhostToPacman(GHOST g) {
 		return distanceFromGhostToPacman.get(g);
 	}
@@ -42,8 +54,8 @@ public class GhostInfo {
 	public GHOST getMyShieldGhost(GHOST g) {
 		return shieldGhost.get(g);
 	}
-	public void setMyShieldGhost(List<GHOST> l) {
-		ghostPriority = l;
+	public void setMyShieldGhost(Map<GHOST,GHOST> s) {
+		shieldGhost = s;
 	}
 	public void setFromGhostToPacMan(Map<GHOST,Integer> m) {
 		distanceFromGhostToPacman = m;
@@ -56,8 +68,8 @@ public class GhostInfo {
 		DistanceFromGhostToGhost = distanceFromGhostToGhost;
 	}
 	
-	public void setGhostPriority(List<GHOST> ghostPriority) {
-		this.ghostPriority = ghostPriority;
+	public GHOSTTYPE getMyGhostPriority(GHOST g) {
+		return GhostClass.get(g);
 	}
 
 	
