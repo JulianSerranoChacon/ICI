@@ -115,6 +115,9 @@ public class MsPacMan extends PacmanController {
     	SimpleState move = new SimpleState("Move", new MoveAction(pi));
     	SimpleState hunt = new SimpleState("Hunt", new ChaseAction(pi));
     	
+		Transition tran14 = new EdibleGhostsNearTransition();
+		fsm.add(move, tran14, hunt);
+		
     	Transition tran1 = new NoCandidateMovesTransition();
     	Transition tran2 = new OnlyOneMovePossibleTransition();
     	fsm.add(move, tran1, suicida);
@@ -148,6 +151,7 @@ public class MsPacMan extends PacmanController {
     	
     	Transition tran13 = new MoveToGreedyTransition();
     	fsm.add(hunt, tran13, greedy);
+
     	
     	fsm.ready(greedy);
     	
