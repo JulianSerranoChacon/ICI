@@ -14,7 +14,7 @@ import java.util.LinkedList;
 public class GhostHayFantasmaEnMiCamino implements Transition  {
 
 	GHOST ghost;
-	int limit = 50; //cpmene los hyuevos pPOR IMPLEMENTAR
+	int limit = 50; 
 	Hashtable visitNode = new Hashtable();
 	public GhostHayFantasmaEnMiCamino(GHOST ghost) {
 		super();
@@ -47,7 +47,7 @@ public class GhostHayFantasmaEnMiCamino implements Transition  {
 				}
 			}
 		}
-		bool flag = false;
+		boolean flag = false;
 		for(GHOST otherGhost : GHOST.values()) {
 			if(otherGhost != ghost) {
 				flag = visitNode .containsKey(in.getGame().getGhostCurrentNodeIndex(otherGhost));

@@ -10,7 +10,7 @@ public class GhostsPasoAJailer implements Transition  {
 
 	GHOST ghost;
 	GhostInfo gi;
-	public GhostsPasoAJailer(GHOST ghost,gi) {
+	public GhostsPasoAJailer(GHOST ghost,GhostInfo gi) {
 		super();
 		this.ghost = ghost;
 		this.gi = gi;
@@ -23,7 +23,6 @@ public class GhostsPasoAJailer implements Transition  {
 		GhostsInput input = (GhostsInput)in;
 		return (gi.getMyGhostPriority(ghost) == 2);
 		}
-	}
 
 
 

@@ -10,7 +10,7 @@ public class GhostsPasoARandom implements Transition  {
 
 	GHOST ghost;
 	GhostInfo gi;
-	public GhostsPasoARandom(GHOST ghost,gi) {
+	public GhostsPasoARandom(GHOST ghost,GhostInfo gi) {
 		super();
 		this.ghost = ghost;
 		this.gi = gi;
@@ -23,7 +23,6 @@ public class GhostsPasoARandom implements Transition  {
 		GhostsInput input = (GhostsInput)in;
 		return (gi.getMyGhostPriority(ghost) == 3);
 		}
-	}
 
 
 

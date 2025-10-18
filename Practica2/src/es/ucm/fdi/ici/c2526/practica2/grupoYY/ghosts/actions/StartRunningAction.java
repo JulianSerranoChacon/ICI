@@ -6,11 +6,11 @@ import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
-public class StartRunning implements Action {
+public class StartRunningAction implements Action {
 
 	GHOST ghost;
 	MOVE[] possibleMoves;
-	public StartRunning(GHOST ghost) {
+	public StartRunningAction(GHOST ghost) {
 		this.ghost = ghost;
 		this.possibleMoves = MOVE.values();
 	}
