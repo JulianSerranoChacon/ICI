@@ -33,6 +33,6 @@ public class HuntToGreedyTransition implements Transition {
 
 	@Override
 	public String toString() {
-		return String.format("there is no ghost close to pacman " + privateID);
+		return String.format("there is no ghost close to pacman" + privateID);
 	}
 }

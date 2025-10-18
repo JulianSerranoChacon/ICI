@@ -122,7 +122,6 @@ public class MsPacManInput extends Input {
 				// NOT GOING OUR DIRECTION is in the way to the node
 				// OR IS EDIBLE BUT NOT REACHABLE
 				for (GHOST g : GHOST.values()) {
-					//TODO do it
 					if ((game.getGhostCurrentNodeIndex(g) == node && dirToMove != ghostLastMove.get(g))
 							&& (!ghostEdible.get(g) || (ghostEdible.get(g) && !ghostReachable(g)))) {
 						ghostInPath = true;

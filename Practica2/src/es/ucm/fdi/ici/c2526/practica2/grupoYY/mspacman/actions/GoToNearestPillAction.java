@@ -21,9 +21,11 @@ public class GoToNearestPillAction implements Action {
 	public MOVE execute(Game game) {
 		Map<Double, Integer> distToPill = new HashMap<>();
 		PriorityQueue <Double> queue = new PriorityQueue<Double>();
-		for(int pill : game.getActivePillsIndices()) {
-			queue.add(game.getDistance(game.getPacmanCurrentNodeIndex(), pill, DM.PATH));
-			distToPill.put(game.getDistance(game.getPacmanCurrentNodeIndex(), pill, DM.PATH), pill);
+		for(int pill : game.getPillIndices()) {
+			if(game.isPillStillAvailable(pill)) {
+				queue.add(game.getDistance(game.getPacmanCurrentNodeIndex(), pill, DM.PATH));
+				distToPill.put(game.getDistance(game.getPacmanCurrentNodeIndex(), pill, DM.PATH), pill);
+			}
 		}
 		
 		//We go through the pills trying to see what is the first one that is easier to reach and does not kill us
