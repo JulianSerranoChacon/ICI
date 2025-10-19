@@ -22,7 +22,7 @@ public class GhostsNoFantasmasCerca implements Transition  {
 		for(GHOST otherGhost : GHOST.values()) {
 			if(otherGhost != ghost) {
 				//revisa que el fantasma no sea comestible y que su direccion es puesta a la de este fantasma
-				if(limit>in.getGame().getApproximateShortestPathDistance(in.getGame().getGhostCurrentNodeIndex(otherGhost), 
+				if(limit>in.getGame().getShortestPathDistance(in.getGame().getGhostCurrentNodeIndex(otherGhost), 
 						in.getGame().getGhostCurrentNodeIndex(ghost), in.getGame().getGhostLastMoveMade(otherGhost) )) 
 					return false;
 			}
