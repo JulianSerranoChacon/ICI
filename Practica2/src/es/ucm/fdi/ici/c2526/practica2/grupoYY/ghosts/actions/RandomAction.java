@@ -21,6 +21,10 @@ public class RandomAction implements Action{
 
 	@Override
 	public MOVE execute(Game game) {
+
+		if(!game.doesGhostRequireAction(ghost))
+			return MOVE.NEUTRAL;
+		
 		int rand = rnd.nextInt(0,100);
     	if(rand < 33) {
     		return game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(),DM.PATH);
