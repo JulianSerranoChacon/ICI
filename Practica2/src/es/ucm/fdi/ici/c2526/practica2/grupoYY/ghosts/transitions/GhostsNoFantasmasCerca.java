@@ -4,6 +4,7 @@ import es.ucm.fdi.ici.Input;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.GhostsInput;
 import es.ucm.fdi.ici.fsm.Transition;
 import pacman.game.Constants.GHOST;
+import pacman.game.Game;
 
 public class GhostsNoFantasmasCerca implements Transition  {
 
@@ -20,10 +21,9 @@ public class GhostsNoFantasmasCerca implements Transition  {
 	public boolean evaluate(Input in) {
 		GhostsInput input = (GhostsInput)in;
 		for(GHOST otherGhost : GHOST.values()) {
-			if(otherGhost != ghost) {
+			if(otherGhost != ghost && input.getGame().getGhostLairTime(otherGhost) <= 0) {
 				//revisa que el fantasma no sea comestible y que su direccion es puesta a la de este fantasma
-				if(limit>in.getGame().getShortestPathDistance(in.getGame().getGhostCurrentNodeIndex(otherGhost), 
-						in.getGame().getGhostCurrentNodeIndex(ghost), in.getGame().getGhostLastMoveMade(otherGhost) )) 
+				if(limit>in.getGame().getShortestPathDistance(in.getGame().getGhostCurrentNodeIndex(otherGhost),in.getGame().getGhostCurrentNodeIndex(ghost))) 
 					return false;
 			}
 		}

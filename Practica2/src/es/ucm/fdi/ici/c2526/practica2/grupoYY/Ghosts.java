@@ -147,8 +147,8 @@ public class Ghosts extends GhostController {
 			
 			//RunTransitions
 			GhostHayFantasmaEnMiCamino FantEnMiCaminoHuida = new GhostHayFantasmaEnMiCamino(ghost);
-			GhostsHayEscudero hayEscuderoHuida0 = new GhostsHayEscudero(ghost,0);
-			GhostsHayEscudero hayEscuderoHuida1 = new GhostsHayEscudero(ghost,1);
+			GhostsHayEscudero hayEscuderoHuida0 = new GhostsHayEscudero(ghost,gi,0);
+			GhostsHayEscudero hayEscuderoHuida1 = new GhostsHayEscudero(ghost,gi,1);
 			GhostsHePasadoAlEscudero paseAlEscudero = new GhostsHePasadoAlEscudero(ghost,gi);
 			GhostsNoFantasmasCerca noFantCerca = new GhostsNoFantasmasCerca(ghost); 
 			GhostsNoHayFantasmasCercaEuclidiana noFantCercaEu = new GhostsNoHayFantasmasCercaEuclidiana(ghost);
