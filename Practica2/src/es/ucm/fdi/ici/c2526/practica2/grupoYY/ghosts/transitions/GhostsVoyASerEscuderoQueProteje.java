@@ -34,7 +34,8 @@ public class GhostsVoyASerEscuderoQueProteje implements Transition  {
 					}
 				}
 			}
-	
+		
+		if(!in.getGame().isGhostEdible(nearToPacMan)) return false;
 		if(ghost == nearToPacMan) {
 			return false;
 		}
