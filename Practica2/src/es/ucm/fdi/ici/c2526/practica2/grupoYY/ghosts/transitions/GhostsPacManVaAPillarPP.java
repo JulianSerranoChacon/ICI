@@ -20,32 +20,48 @@ public class GhostsPacManVaAPillarPP implements Transition  {
 	public boolean evaluate(Input in) {
 		
 		GhostsInput input = (GhostsInput)in;
-		if(in.getGame().getActivePowerPillsIndices().length == 0) return false;
+		if(in.getGame().getActivePowerPillsIndices().length == 0) {
+			return false;		
+		}
 		boolean flag = false;
 		int nearestGhost = 99999;
 		int nearestPP = 99999;
 		int nearestPPindex = 0;
+		
+		for(int node : in.getGame().getActivePowerPillsIndices()) {
+			int distance = in.getGame().getShortestPathDistance(in.getGame().getPacmanCurrentNodeIndex(), node, in.getGame().getPacmanLastMoveMade());
+			if(distance<nearestPP) {
+				nearestPP = distance;
+				nearestPPindex = node;
+			}
+		}
+		
 		for(GHOST otherGhost : GHOST.values()) {
-			int distance = in.getGame().getApproximateShortestPathDistance( in.getGame().getGhostCurrentNodeIndex(ghost),in.getGame().getPacmanCurrentNodeIndex(), in.getGame().getGhostLastMoveMade(otherGhost));
+			int distance = in.getGame().getShortestPathDistance( in.getGame().getGhostCurrentNodeIndex(ghost),nearestPPindex, in.getGame().getGhostLastMoveMade(otherGhost));
 			if(distance<nearestGhost) nearestGhost = distance;
 			}
 		
-		for(int node : in.getGame().getActivePowerPillsIndices()) {
-			int distance = in.getGame().getApproximateShortestPathDistance(in.getGame().getPacmanCurrentNodeIndex(), node, in.getGame().getPacmanLastMoveMade());
-			if(distance<nearestPP) nearestPP = distance;
-		}
-		if(nearestGhost<nearestPP) return false;
+	
+		
+		if(in.getGame().isJunction(in.getGame().getPacmanCurrentNodeIndex())) { return false;}
+		if(nearestGhost<nearestPP)  {return false;}
 		else {
 			
 			
     		//MOVE bestPacManMove = in.getGame().getNextMoveAwayFromTarget(in.getGame().getPacmanCurrentNodeIndex(),in.getGame().getGhostCurrentNodeIndex(FleePacManGhost),DM.PATH);
-			int[] futureNodesPath  = in.getGame().getApproximateShortestPath(in.getGame().getPacmanCurrentNodeIndex(), nearestPPindex, in.getGame().getPacmanLastMoveMade());
+			int[] futureNodesPath  = in.getGame().getShortestPath(in.getGame().getPacmanCurrentNodeIndex(), nearestPPindex, in.getGame().getPacmanLastMoveMade());
     		for(int i : futureNodesPath) {
-    			if(in.getGame().getNeighbouringNodes(i).length>2) return false;
+    			//System.out.println(in.getGame().getNeighbouringNodes(i).length);
+    			if(in.getGame().isJunction(i)) { 
+    				
+    				return false;
+    				}
     		}
 			
 		}
-		return false;
+		
+		
+		return true;
 	}
 
 

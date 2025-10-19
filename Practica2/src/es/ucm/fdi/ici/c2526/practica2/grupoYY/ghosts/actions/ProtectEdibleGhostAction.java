@@ -39,7 +39,8 @@ public class ProtectEdibleGhostAction implements Action {
         		   }
         	   }
            }
-           
+           //asigna escudero en caso de no existir este 
+           if(info.getMyShieldGhost(ghost) == ghost) info.setaShieldGhost(ghost, edible);
            //Return the best move to get to the edible ghost 
            return game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(this.ghost),
         		   game.getGhostCurrentNodeIndex(edible), game.getGhostLastMoveMade(this.ghost), DM.PATH);
