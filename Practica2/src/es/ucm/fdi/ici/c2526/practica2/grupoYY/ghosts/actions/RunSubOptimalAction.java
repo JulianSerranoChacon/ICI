@@ -41,7 +41,7 @@ public class RunSubOptimalAction implements Action {
             	  if(mv != bestRunMove) {
             		  
             		  distance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(this.ghost), game.getPacmanCurrentNodeIndex(), mv);
-            		  System.out.println( "SUB ÓPTIMA " + index + " "+ distance);
+            		  //System.out.println( "SUB ÓPTIMA " + index + " "+ distance);
             		  if(distance > maxDistance) {
             			  maxDistance = distance;
             			  moveToReturn = mv;
