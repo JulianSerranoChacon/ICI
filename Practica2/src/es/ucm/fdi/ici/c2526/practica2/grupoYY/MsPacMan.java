@@ -48,7 +48,7 @@ public class MsPacMan extends PacmanController {
 	FSM fsm;
 	
 	public MsPacMan() {
-		setName("DumbMsPacMan");
+		setName("PapiPacMan");
 		
 		pi = new PacmanInfo();
     	fsm = new FSM("MsPacMan");
