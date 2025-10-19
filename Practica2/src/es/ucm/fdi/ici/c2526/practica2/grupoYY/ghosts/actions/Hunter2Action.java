@@ -23,32 +23,39 @@ public class Hunter2Action implements Action  {
 		if(!game.doesGhostRequireAction(ghost))
 			return MOVE.NEUTRAL;
 		
-		MOVE bestMove = game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(),DM.PATH);;
+		MOVE bestMove = game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(),DM.PATH);
 		MOVE moveToReturn = MOVE.NEUTRAL;  
 		double minDistance = 10000000;
 		MOVE[] possibleMoves = game.getPossibleMoves(game.getGhostCurrentNodeIndex(ghost), game.getGhostLastMoveMade(ghost));
-
+		GHOST hunter1 = null;
+	    boolean isHunterInMyWay = false;
+		
 		double distanceBetweenHunters = 0;
 		int index = 0;
 
-			for (GHOST ghostType : GHOST.values()) {
-				if(gI.getMyGhostPriority(ghostType) == GHOSTTYPE.HUNTER1) {
-					distanceBetweenHunters = game.getDistance(game.getGhostCurrentNodeIndex(ghost), game.getGhostCurrentNodeIndex(ghostType), DM.PATH);
-					break;
-				}
+		for (GHOST ghostType : GHOST.values()) {
+			if(gI.getMyGhostPriority(ghostType) == GHOSTTYPE.HUNTER1) {
+				distanceBetweenHunters = game.getDistance(game.getGhostCurrentNodeIndex(ghost), game.getGhostCurrentNodeIndex(ghostType), DM.PATH);
+				hunter1 = ghostType;
+				break;
 			}
+		}
+			
+		int[] path = game.getShortestPath(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex());
+    	for(int i: path) {
+    		if(i == game.getGhostCurrentNodeIndex(hunter1)) {
+    	    	//GameView.addPoints(game, Color.red, path);
+    			isHunterInMyWay = true;
+    			break;
+    		}
+    	}
+    	if(isHunterInMyWay)
+    		return bestMove;
 
 		for(int i = 0; i < possibleMoves.length; ++i) {
 			//If both hunters are to close the second hunter must not take the closest Move to PacMan
-			if(distanceBetweenHunters < DistanceGhosts && possibleMoves[i] != bestMove) {
-				if(minDistance > game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), possibleMoves[i])) {
-					minDistance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), possibleMoves[i]);
-					moveToReturn = possibleMoves[i];
-				}
-			}
-			// else follow Pac-Man
-			else {
-				if(minDistance > game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), possibleMoves[i])) {
+			if(possibleMoves[i] != bestMove) {
+				if(minDistance > game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(),possibleMoves[i])) {
 					minDistance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), possibleMoves[i]);
 					moveToReturn = possibleMoves[i];
 				}

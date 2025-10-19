@@ -39,6 +39,8 @@ public final class Ghosts extends GhostController {
 	   behaviourChanged[1] = false;
 	   behaviourChanged[2] = false;
 	   behaviourChanged[3] = false;
+	   
+	   setName("Fantasmicos");
    }
     @Override
     public EnumMap<GHOST, MOVE> getMove(Game game, long timeDue) {
