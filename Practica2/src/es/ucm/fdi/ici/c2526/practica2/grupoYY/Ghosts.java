@@ -132,9 +132,9 @@ public class Ghosts extends GhostController {
 			
 			//DefiendoAlComestible
 			cfsChase.add(protectTheEdible, noHayComibles0, hunter1);
-			cfsChase.add(protectTheEdible, noHayComibles1, hunter2);
+			/*cfsChase.add(protectTheEdible, noHayComibles1, hunter2);
 			cfsChase.add(protectTheEdible, noHayComibles2, jailer);
-			cfsChase.add(protectTheEdible, noHayComibles3, random);
+			cfsChase.add(protectTheEdible, noHayComibles3, random);*/
 			
 			cfsChase.ready(hunter1);
 			

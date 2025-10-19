@@ -110,6 +110,18 @@ public class GhostsInput extends Input {
     	}
     	
     	minDistance = 100000;
+    	//Sacar Segundo Fantasma Cercano
+       	for (GHOST ghostType : GHOST.values()) {
+    		if(!game.isGhostEdible(ghostType) && game.getGhostLairTime(ghostType) <= 0 && ghostType != closerGhostToPacMan) {
+    			distance = Math.abs(game.getPacmanCurrentNodeIndex() - game.getGhostCurrentNodeIndex(ghostType));
+    			if(distance < minDistance) {
+    				minDistance = distance;
+    				secondCloserGhost = ghostType;
+    			}
+    		}
+    	}	
+    	
+    	minDistance = 100000;
     	//Sacar jailer
     	//We calculated the future intersection where PacMan
 		int[] futureNodeMove = game.getNeighbouringNodes(game.getPacmanCurrentNodeIndex());
@@ -119,27 +131,12 @@ public class GhostsInput extends Input {
 		}
 
        	for (GHOST ghostType : GHOST.values()) {
-    		if(!game.isGhostEdible(ghostType) && game.getGhostLairTime(ghostType) <= 0 && ghostType != closerGhostToPacMan) {
+    		if(!game.isGhostEdible(ghostType) && game.getGhostLairTime(ghostType) <= 0 && ghostType != closerGhostToPacMan &&
+    				ghostType != secondCloserGhost) {
     			distance = Math.abs(futureNodeMove[0]  - game.getGhostCurrentNodeIndex(ghostType));
       			if( minDistance > distance) {
     				minDistance = distance;
     				jailerGhost = ghostType;
-    			}
-    			if(ghostType != closerGhostToPacMan && ghostType != jailerGhost && distance < minDistance) {
-    				minDistance = distance;
-    				secondCloserGhost = ghostType;
-    			}
-    		}
-    	}
-    	
-    	minDistance = 100000;
-    	//Sacar Segundo Fantasma Cercano
-       	for (GHOST ghostType : GHOST.values()) {
-    		if(!game.isGhostEdible(ghostType) && game.getGhostLairTime(ghostType) <= 0 && ghostType != closerGhostToPacMan && ghostType != jailerGhost) {
-    			distance = Math.abs(game.getPacmanCurrentNodeIndex() - game.getGhostCurrentNodeIndex(ghostType));
-    			if(distance < minDistance) {
-    				minDistance = distance;
-    				secondCloserGhost = ghostType;
     			}
     		}
     	}
