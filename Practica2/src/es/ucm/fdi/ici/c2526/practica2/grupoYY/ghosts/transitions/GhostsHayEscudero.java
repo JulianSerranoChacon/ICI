@@ -8,12 +8,17 @@ import pacman.game.Constants.GHOST;
 public class GhostsHayEscudero implements Transition  {
 
 	GHOST ghost;
+	int references; 
 	public GhostsHayEscudero(GHOST ghost) {
 		super();
 		this.ghost = ghost;
+		this.references = 0;
 	}
 
 
+	public void addReference() {
+		this.references++;
+	}
 
 	@Override
 	public boolean evaluate(Input in) {
@@ -33,7 +38,7 @@ public class GhostsHayEscudero implements Transition  {
 
 	@Override
 	public String toString() {
-		return "Hay escudero";
+		return "Hay escudero " + this.references;
 	}
 
 	

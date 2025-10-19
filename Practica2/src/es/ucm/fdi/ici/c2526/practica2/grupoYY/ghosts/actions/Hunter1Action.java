@@ -8,10 +8,17 @@ import pacman.game.Constants.MOVE;
 
 public class Hunter1Action implements Action {
     GHOST ghost;
+    int references;
 	public Hunter1Action( GHOST ghost) {
 		this.ghost = ghost;
+		this.references = 0;
 	}
 
+
+	public void addReference() {
+		this.references++;
+	}
+	
 	@Override
 	public MOVE execute(Game game) {
         if (game.doesGhostRequireAction(ghost))        //if it requires an action
@@ -26,6 +33,6 @@ public class Hunter1Action implements Action {
 
 	@Override
 	public String getActionId() {
-		return ghost + "Hunter1";
+		return ghost + "Hunter1 " + this.references;
 	}
 }

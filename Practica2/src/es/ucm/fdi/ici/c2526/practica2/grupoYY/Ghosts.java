@@ -1,7 +1,11 @@
 package es.ucm.fdi.ici.c2526.practica2.grupoYY;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.EnumMap;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 //General
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.GhostsInput;
@@ -89,33 +93,53 @@ public class Ghosts extends GhostController {
 			
 			//Hunter1
 			cfsChase.add(hunter1, hunter2Trans, hunter2);
+			hunter2Trans.addReference();
 			cfsChase.add(hunter1, jailerTrans, jailer);
+			jailerTrans.addReference(); //To avoid the Singleton exception
 			cfsChase.add(hunter1, randomTrans, random);
+			randomTrans.addReference();
 			cfsChase.add(hunter1, escuderoQueProteje, protectTheEdible);
+			escuderoQueProteje.addReference();
 			
 			//Hunter2
 			cfsChase.add(hunter2, hunter1Trans, hunter1);
+			hunter1Trans.addReference();
 			cfsChase.add(hunter2, jailerTrans, jailer);
+			jailerTrans.addReference(); //To avoid the Singleton exception
 			cfsChase.add(hunter2, randomTrans, random);
+			randomTrans.addReference();
 			cfsChase.add(hunter2, escuderoQueProteje, protectTheEdible);
+			escuderoQueProteje.addReference();
 			
 			//Jailer
 			cfsChase.add(jailer, hunter1Trans, hunter1);
+			hunter1Trans.addReference();
 			cfsChase.add(jailer, hunter2Trans, hunter2);
+			hunter2Trans.addReference();
 			cfsChase.add(jailer, randomTrans, random);
+			randomTrans.addReference();
 			cfsChase.add(jailer, escuderoQueProteje, protectTheEdible);
+			escuderoQueProteje.addReference();
 			
 			//Random
 			cfsChase.add(random, hunter1Trans, hunter1);
+			hunter1Trans.addReference();
 			cfsChase.add(random, hunter2Trans, hunter2);
+			hunter2Trans.addReference();
 			cfsChase.add(random, jailerTrans, jailer);
+			jailerTrans.addReference(); //To avoid the Singleton exception
 			cfsChase.add(random, escuderoQueProteje, protectTheEdible);
+			escuderoQueProteje.addReference();
 			
 			//DefiendoAlComestible
 			cfsChase.add(protectTheEdible, hunter1Trans, hunter1);
+			hunter1Trans.addReference();
 			cfsChase.add(protectTheEdible, hunter2Trans, hunter2);
+			hunter2Trans.addReference();
 			cfsChase.add(protectTheEdible, jailerTrans, jailer);
+			jailerTrans.addReference(); //To avoid the Singleton exception
 			cfsChase.add(protectTheEdible, randomTrans, random);
+			randomTrans.addReference();
 			
 			cfsChase.ready(hunter1);
 			
@@ -147,12 +171,14 @@ public class Ghosts extends GhostController {
 			
 			//RunOptimal Changes
 			cfsRun.add(runAway, hayEscuderoHuida, runToEscudero);
+			hayEscuderoHuida.addReference();
 			cfsRun.add(runAway, FantEnMiCaminoHuida, runSubOptimal);
 			cfsRun.add(runAway, pacManLejos, orbit);
 		
 			//RunSubOptimal Changes
 			cfsRun.add(runSubOptimal, noFantCerca, runAway);
 			cfsRun.add(runSubOptimal, hayEscuderoHuida, runToEscudero);
+			hayEscuderoHuida.addReference();
 		
 			//RunToEscudero Changes
 			cfsRun.add(runToEscudero, paseAlEscudero, runAway);
@@ -174,9 +200,19 @@ public class Ghosts extends GhostController {
 			fsm.add(huida,lejosParpadeo, persecucion);
 			fsm.ready(persecucion);
 			
-			
-			
+			//RENDER
+			JFrame frame = new JFrame();
+	    	JPanel main = new JPanel();
+	    	main.setLayout(new BorderLayout());
+	    	main.add(RunObserver.getAsPanel(true, null), BorderLayout.EAST);
+	    	main.add(ChaseObserver.getAsPanel(true, null), BorderLayout.WEST);
+	    	frame.getContentPane().add(main);
+	    	frame.pack();
+	    	frame.setVisible(true);
 			graphObserver.showInFrame(new Dimension(300,200));
+			
+			
+			
 			
 			fsms.put(ghost, fsm);
 			

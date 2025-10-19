@@ -11,14 +11,18 @@ public class GhostsPasoAJailer implements Transition  {
 
 	GHOST ghost;
 	GhostInfo gi;
+	int references;
 	public GhostsPasoAJailer(GHOST ghost,GhostInfo gi) {
 		super();
 		this.ghost = ghost;
 		this.gi = gi;
+		this.references = 0;
 	}
 
 
-
+	public void addReference() {
+		this.references++;
+	}
 	@Override
 	public boolean evaluate(Input in) {
 		GhostsInput input = (GhostsInput)in;
@@ -29,7 +33,7 @@ public class GhostsPasoAJailer implements Transition  {
 
 	@Override
 	public String toString() {
-		return this.ghost+" Jailer";
+		return this.ghost+" Jailer " + this.references;
 	}
 
 	

@@ -12,13 +12,17 @@ public class GhostsVoyASerEscuderoQueProteje implements Transition  {
 	GHOST ghost;
 	GhostInfo gi;
 	int minDistance = 200;
+	int references;
 	public GhostsVoyASerEscuderoQueProteje(GHOST ghost,GhostInfo gi) {
 		super();
 		this.ghost = ghost;
 		this.gi = gi;
+		this.references = 0;
 	}
 
-
+	public void addReference() {
+		this.references++;
+	}
 
 	@Override
 	public boolean evaluate(Input in) {
@@ -53,7 +57,7 @@ public class GhostsVoyASerEscuderoQueProteje implements Transition  {
 
 	@Override
 	public String toString() {
-		return "Soy el escudero que proteje";
+		return "Soy el escudero que proteje " + this.references;
 	}
 
 	

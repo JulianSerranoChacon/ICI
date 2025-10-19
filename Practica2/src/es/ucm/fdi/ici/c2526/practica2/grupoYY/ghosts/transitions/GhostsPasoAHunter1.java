@@ -11,13 +11,17 @@ public class GhostsPasoAHunter1 implements Transition  {
 
 	GHOST ghost;
 	GhostInfo gi;
+	int references;
 	public GhostsPasoAHunter1(GHOST ghost,GhostInfo gi) {
 		super();
 		this.ghost = ghost;
 		this.gi = gi;
+		this.references++;
 	}
 
-
+	public void addReference() {
+		this.references++;
+	}
 
 	@Override
 	public boolean evaluate(Input in) {
@@ -29,7 +33,7 @@ public class GhostsPasoAHunter1 implements Transition  {
 
 	@Override
 	public String toString() {
-		return this.ghost+" Hunter1";
+		return this.ghost+" Hunter1 " + this.references;
 	}
 
 	

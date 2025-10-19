@@ -11,13 +11,17 @@ public class GhostsPasoARandom implements Transition  {
 
 	GHOST ghost;
 	GhostInfo gi;
+	int references;
 	public GhostsPasoARandom(GHOST ghost,GhostInfo gi) {
 		super();
 		this.ghost = ghost;
 		this.gi = gi;
+		this.references = 0;
 	}
 
-
+	public void addReference() {
+		this.references++;
+	}
 
 	@Override
 	public boolean evaluate(Input in) {
@@ -29,7 +33,7 @@ public class GhostsPasoARandom implements Transition  {
 
 	@Override
 	public String toString() {
-		return this.ghost+" Random";
+		return this.ghost+" Random " + this.references;
 	}
 
 	
