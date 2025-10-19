@@ -32,9 +32,16 @@ public class GhostsInput extends Input {
 	 public boolean[] behaviourChanged; 
 	private GhostInfo gi;
 	
-	public GhostsInput(Game game,GhostInfo gi) {
+	public GhostsInput(Game game,GhostInfo g) {
 		super(game);
-		this.gi = gi;
+		gi = g;
+		fillInfo();
+	}
+	private void fillInfo() {
+		gi.setFromPacmanToGhost(distanceFromPacmanToGhost);
+		gi.setDistanceFromGhostToGhost(distanceFromGhostToGhost);
+		gi.setGhostClass(GhostClass);
+		gi.setFromGhostToPacMan(distanceFromGhostToPacman);
 	}
 	private void parseDistanceFromGhostToPacman() {
 		distanceFromGhostToPacman = new HashMap<>();
@@ -42,29 +49,34 @@ public class GhostsInput extends Input {
 			int auxDistance = game.getApproximateShortestPathDistance(game.getGhostCurrentNodeIndex(g) , game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(g));
 			distanceFromGhostToPacman.put(g, auxDistance);
 		}
-		this.gi.setFromGhostToPacMan(distanceFromGhostToPacman);
+		
 	}
 	
 	private void parseFromPacManToGhost() {
 		distanceFromPacmanToGhost = new HashMap<>();
 		
 		for(GHOST g : GHOST.values()) {
-			int auxDistance = game.getApproximateShortestPathDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(g),game.getPacmanLastMoveMade());
+		if(game.getGhostLairTime(g)==0) {	int auxDistance = game.getApproximateShortestPathDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(g),game.getPacmanLastMoveMade());
 			distanceFromPacmanToGhost.put(g, auxDistance);
+			}
 		}
-		this.gi.setFromPacmanToGhost(distanceFromPacmanToGhost);
+		
 	}
 	
 	private void parseDistanceGhostToGhost() {
 		distanceFromGhostToGhost= new HashMap<>();
 		for(GHOST g : GHOST.values()) {
-			Map<GHOST,Integer> auxMap = new HashMap<>();
-			for(GHOST otherghost : GHOST.values()) {
-				int auxdistance = game.getApproximateShortestPathDistance( game.getGhostCurrentNodeIndex(g), game.getGhostCurrentNodeIndex(otherghost),game.getGhostLastMoveMade(g));
-				auxMap.put(otherghost, auxdistance);
-			}
+			if(game.getGhostLairTime(g)==0) {
+				Map<GHOST,Integer> auxMap = new HashMap<>();
+				for(GHOST otherghost : GHOST.values()) {
+					if(game.getGhostLairTime(otherghost)==0){ 	
+						int auxdistance = game.getApproximateShortestPathDistance( game.getGhostCurrentNodeIndex(g), game.getGhostCurrentNodeIndex(otherghost),game.getGhostLastMoveMade(g));
+						auxMap.put(otherghost, auxdistance);
+					}
+				}
 			distanceFromGhostToGhost.put(g, auxMap);
-			this.gi.setDistanceFromGhostToGhost(distanceFromGhostToGhost);
+			
+			}
 		}
 	}
 	
@@ -76,6 +88,7 @@ public class GhostsInput extends Input {
 	    	GhostClass.put(GHOST.values()[indexB], aux);
 	    }
 	private void parseGhostPriority() {
+		GhostClass = new HashMap<>();
 		behaviourChanged = new boolean[4];
   	    behaviourChanged[0] = false;
   	    behaviourChanged[1] = false;
@@ -200,7 +213,6 @@ public class GhostsInput extends Input {
         	} 
         	index++;
     	}
-    	gi.setGhostClass(GhostClass);
     }
 	
 	@Override

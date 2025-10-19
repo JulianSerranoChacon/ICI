@@ -25,6 +25,7 @@ public class GhostInfo {
 	public GhostInfo(){
 		reset();
 		shieldGhost = new HashMap<>();
+		 System.out.println("gi se crea");
 	}
 	
 	public Map<GHOST, GHOSTTYPE> getGhostClass() {
