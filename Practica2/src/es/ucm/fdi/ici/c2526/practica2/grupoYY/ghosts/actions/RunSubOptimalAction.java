@@ -22,7 +22,7 @@ public class RunSubOptimalAction implements Action {
 	public MOVE execute(Game game) {
         if (game.doesGhostRequireAction(ghost))        //if it requires an action
         {
-        	
+        	this.possibleMoves = game.getPossibleMoves(game.getGhostCurrentNodeIndex(this.ghost));
         	//We take the best Move to flee of PacMan, this move can not be done because there is a Ghost there too
               MOVE bestRunMove = game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghost),
                       				game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH);
@@ -31,7 +31,7 @@ public class RunSubOptimalAction implements Action {
               MOVE moveToReturn = MOVE.NEUTRAL; //Which move should return
               double maxDistance = 0; //Save the farther distance through PacMan
               
-              
+              int index = 0;
               //For every possible Move
               for(MOVE mv : possibleMoves) {
             	  
@@ -41,12 +41,12 @@ public class RunSubOptimalAction implements Action {
             	  if(mv != bestRunMove) {
             		  
             		  distance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(this.ghost), game.getPacmanCurrentNodeIndex(), mv);
- 
+            		  System.out.println( "SUB ÓPTIMA " + index + " "+ distance);
             		  if(distance > maxDistance) {
             			  maxDistance = distance;
             			  moveToReturn = mv;
             		  }
-            		  
+            		  index++;
             	  }
               }
               if(maxDistance == 0) return bestRunMove;

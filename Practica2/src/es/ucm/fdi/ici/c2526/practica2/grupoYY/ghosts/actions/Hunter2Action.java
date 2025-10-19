@@ -57,14 +57,14 @@ public class Hunter2Action implements Action  {
 		for(int i = 0; i < possibleMoves.length; ++i) {
 			//If both hunters are to close the second hunter must not take the closest Move to PacMan
 			if(distanceBetweenHunters < DistanceGhosts && possibleMoves[i] != bestMove) {
-    			if(minDistance > game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), possibleMoves[i])) {
+    			if(minDistance > game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), possibleMoves[i].opposite())) {
     				minDistance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), possibleMoves[i]);
     				moveToReturn = possibleMoves[i];
     			}
     		}
     		// else follow Pac-Man
     		else {
-    			if(minDistance > game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), possibleMoves[i])) {
+    			if(minDistance > game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), possibleMoves[i].opposite())) {
     				minDistance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), possibleMoves[i]);
     				moveToReturn = possibleMoves[i];
     				}
