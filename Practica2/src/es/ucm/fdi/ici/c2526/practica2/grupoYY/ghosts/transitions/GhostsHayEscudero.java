@@ -31,9 +31,9 @@ public class GhostsHayEscudero implements Transition  {
 		if(distance >= this.limit) return false;
 		
 		//Recorro todos los fantasmas buscando al no comestible más cercano y que no tenga a PacMan en medio
-		boolean flag = true;
+		
 		for(GHOST otherGhost : GHOST.values()) {
-			flag = true;
+			boolean flag = true;
 			if(in.getGame().getGhostLairTime(this.ghost) <= 0 && otherGhost != ghost && !in.getGame().isGhostEdible(otherGhost) && in.getGame().getGhostLairTime(otherGhost) <= 0) {
 				
 				//Encuentro la distancia de mi yo comestible a mi posible escudero

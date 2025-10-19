@@ -39,7 +39,7 @@ import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPasoAJail
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPasoARandom;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsSoyComestible;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsVoyASerEscuderoQueProteje;
-import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsYaNoHayComibles;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsSeHanComidoAMiEdible;
 import es.ucm.fdi.ici.fsm.CompoundState;
 //State Machine
 import es.ucm.fdi.ici.fsm.FSM;
@@ -100,7 +100,7 @@ public class Ghosts extends GhostController {
 			GhostsPasoARandom randomTrans2 = new GhostsPasoARandom(ghost,gi,2);
 			GhostsVoyASerEscuderoQueProteje escuderoQueProteje2 = new GhostsVoyASerEscuderoQueProteje(ghost,gi,2);
 			
-			GhostsYaNoHayComibles noHayComibles = new GhostsYaNoHayComibles(ghost,gi);
+			GhostsSeHanComidoAMiEdible noTengoEdible = new GhostsSeHanComidoAMiEdible(ghost,gi);
 			GhostsVoyASerEscuderoQueProteje escuderoQueProteje3 = new GhostsVoyASerEscuderoQueProteje(ghost,gi,3);
 			
 			//Hunter1
@@ -128,7 +128,7 @@ public class Ghosts extends GhostController {
 			cfsChase.add(random, escuderoQueProteje3, protectTheEdible);
 			
 			//DefiendoAlComestible
-			cfsChase.add(protectTheEdible, noHayComibles, hunter1);
+			cfsChase.add(protectTheEdible, noTengoEdible, hunter1);
 			
 			cfsChase.ready(hunter1);
 			
