@@ -29,8 +29,7 @@ public class GhostHayFantasmaEnMiCamino implements Transition  {
 		//System.out.println(" entro ");
 		if(in.getGame().getGhostLairTime(ghost)!=0) return false;
 		int mghostNode = in.getGame().getGhostCurrentNodeIndex(ghost);
-		int[] futureNodeMove = in.getGame().getNeighbouringNodes(mghostNode);
-		MOVE mghostMove = in.getGame().getGhostLastMoveMade(ghost);
+		int[] futureNodeMove = in.getGame().getNeighbouringNodes(mghostNode, in.getGame().getGhostLastMoveMade(ghost));
 		LinkedList<Integer> colaNodos = new LinkedList<Integer>();
 		colaNodos.add(futureNodeMove[0]);
 		visitNode.put(futureNodeMove[0], 1);
@@ -45,7 +44,7 @@ public class GhostHayFantasmaEnMiCamino implements Transition  {
 				//System.out.println(visitNode.contains(a));
 				if(!visitNode.containsKey(a)) {
 					colaNodos.add(a);
-					//System.out.println(a);
+					
 					visitNode.put(a, visitNode.get(aux)+1);
 					}
 				}
@@ -55,10 +54,14 @@ public class GhostHayFantasmaEnMiCamino implements Transition  {
 		boolean flag = false;
 		for(GHOST otherGhost : GHOST.values()) {
 			if(otherGhost != ghost) {
-				if(in.getGame().getGhostLairTime(otherGhost)!=0)flag = visitNode .containsKey(in.getGame().getGhostCurrentNodeIndex(otherGhost));
+				
+				if(in.getGame().getGhostLairTime(otherGhost)==0&&!flag&&!in.getGame().isGhostEdible(otherGhost))
+					flag = visitNode.containsKey(in.getGame().getGhostCurrentNodeIndex(otherGhost));
+				
 				
 			}
 		}
+		System.out.println(flag);
 		return flag;
 	}
 
