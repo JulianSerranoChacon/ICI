@@ -10,12 +10,10 @@ public class GhostsYaNoHayComibles implements Transition  {
 
 	GHOST ghost;
 	GhostInfo gi;
-	int references;
-	public GhostsYaNoHayComibles(GHOST ghost,GhostInfo g,int ref) {
+	public GhostsYaNoHayComibles(GHOST ghost,GhostInfo g) {
 		super();
 		this.ghost = ghost;
 		gi = g;
-		this.references = ref;
 	}
 
 ///WIP
@@ -29,7 +27,7 @@ public class GhostsYaNoHayComibles implements Transition  {
 	}
 	@Override
 	public String toString() {
-		return "Vuelvo a por PacMan " + this.references;
+		return "Vuelvo a por PacMan ";
 	}
 
 	
