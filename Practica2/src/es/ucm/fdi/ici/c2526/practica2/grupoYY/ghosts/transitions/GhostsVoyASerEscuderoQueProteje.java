@@ -11,7 +11,7 @@ public class GhostsVoyASerEscuderoQueProteje implements Transition  {
 
 	GHOST ghost;
 	GhostInfo gi;
-	int minDistance = 200;
+	int minDistance = 75;
 	int references;
 	public GhostsVoyASerEscuderoQueProteje(GHOST ghost,GhostInfo gi,int ref) {
 		super();
