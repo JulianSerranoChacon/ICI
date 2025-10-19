@@ -27,7 +27,7 @@ public class OrbitateAction implements Action {
         {
            //Checks the new value of the limit distance
            this.orbitDistance = (game.getGhostEdibleTime(this.ghost)/2) + 1; //Initial distance is 101 because 100 is the limit when pacMan can eat us before die so in the end when edible time is 0 the limit will be 1
-           System.out.println("CUAL ES MI DISTANCIA DE ORBITA? " + this.orbitDistance);
+           //System.out.println("CUAL ES MI DISTANCIA DE ORBITA? " + this.orbitDistance);
            
            //We take the closer intersection distance from our actual spot and checks if we move there if we are in danger or not
            for(int i = 0; i < possibleMoves.length; ++i) {
@@ -37,9 +37,9 @@ public class OrbitateAction implements Action {
           		//We search for the closest node intersection
         		while(futureNodeMove.length <= 1) {
         			futureNodeMove = game.getNeighbouringNodes(futureNodeMove[0]);
-        			System.out.println("SOY ORBITA Y BUSCO MIS VECINOS");
+        			//System.out.println("SOY ORBITA Y BUSCO MIS VECINOS");
         		}
-        		System.out.println(futureNodeMove[0]);
+        		//System.out.println(futureNodeMove[0]);
         		if(futureNodeMove != null) {
             		//Calculate the future distance between that intersection and PacMan when the ghost arrives there
              	   double distanceBetweenIntersectionsGhosts =  game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), futureNodeMove[0], possibleMoves[i]); //Distance from Ghost to there (is PacMan move / 2)
