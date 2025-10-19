@@ -35,10 +35,11 @@ public class GhostHayFantasmaEnMiCamino implements Transition  {
 		colaNodos.add(futureNodeMove[0]);
 		visitNode.put(futureNodeMove[0], 1);
 		visitNode.put(mghostNode, 0);
-		while(!colaNodos.isEmpty()) {
+		boolean inter = false;
+		while(!inter) {
 			int aux = colaNodos.getFirst();
 			colaNodos.remove(0);
-			if(visitNode.get(aux) <limit) {
+			if(!in.getGame().isJunction(aux)) {
 			futureNodeMove = in.getGame().getNeighbouringNodes(aux);
 			for(int a : futureNodeMove) {
 				//System.out.println(visitNode.contains(a));
@@ -46,9 +47,10 @@ public class GhostHayFantasmaEnMiCamino implements Transition  {
 					colaNodos.add(a);
 					//System.out.println(a);
 					visitNode.put(a, visitNode.get(aux)+1);
-				}
+					}
 				}
 			}
+			else inter = true;
 		}
 		boolean flag = false;
 		for(GHOST otherGhost : GHOST.values()) {
