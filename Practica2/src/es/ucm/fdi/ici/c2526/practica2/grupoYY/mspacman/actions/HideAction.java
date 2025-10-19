@@ -22,14 +22,17 @@ public class HideAction implements Action {
 		int nextIntersection = -1;
 		double bestMean = Integer.MIN_VALUE;
 		int bestIntersection = -1;
+		double bestDistanceToIntersection = Double.MAX_VALUE;
 		for(MOVE m : pi.getCandidateMoves()) {
 			nextIntersection = pi.getMoveToNode().get(m);
+			double distanceToIntersection = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), nextIntersection, game.getPacmanLastMoveMade());
 			List<Integer> depth2 = depht2Intersections(game, nextIntersection);
 			for (Integer i : depth2) {
 				double mean = meanDistance(game, i);
-				if (mean > bestMean) {
+				if (bestIntersection != i && mean > bestMean || bestIntersection == i && distanceToIntersection < bestDistanceToIntersection) {
 					bestMean = mean;
 					bestIntersection = i;
+					bestDistanceToIntersection = distanceToIntersection;
 				}
 
 			}

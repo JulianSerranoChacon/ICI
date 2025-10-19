@@ -21,6 +21,8 @@ public class GoToNearestPillAction implements Action {
 	public MOVE execute(Game game) {
 		Map<Double, Integer> distToPill = new HashMap<>();
 		PriorityQueue <Double> queue = new PriorityQueue<Double>();
+		
+		//We create the priority queue where the distance in relation to Pacman is the priority
 		for(int pill : game.getPillIndices()) {
 			if (game.isPillStillAvailable(pill)) {
 				queue.add(game.getDistance(game.getPacmanCurrentNodeIndex(), pill, DM.PATH));
@@ -38,9 +40,10 @@ public class GoToNearestPillAction implements Action {
 			}
 		}
 		
-		return game.getApproximateNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), pi.getClosestPPill(), game.getPacmanLastMoveMade(), DM.PATH);
+		//If no pill seems appeling, we play safe
+		return pi.getCandidateMoves().get(0);
 	}
-
+	
 	@Override
 	public String getActionId() {
 		return "Goes to nearest pill action";
