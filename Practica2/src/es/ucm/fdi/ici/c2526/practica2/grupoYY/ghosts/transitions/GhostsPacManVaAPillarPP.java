@@ -39,15 +39,11 @@ public class GhostsPacManVaAPillarPP implements Transition  {
 			
 			
     		//MOVE bestPacManMove = in.getGame().getNextMoveAwayFromTarget(in.getGame().getPacmanCurrentNodeIndex(),in.getGame().getGhostCurrentNodeIndex(FleePacManGhost),DM.PATH);
-    		
-    		int[] futureNodeMove = in.getGame().getNeighbouringNodes(in.getGame().getPacmanCurrentNodeIndex());
-			int i = 0;
-    		while(futureNodeMove.length <= 1 &&i<nearestPP) {
-    			
-    			futureNodeMove = in.getGame().getNeighbouringNodes(futureNodeMove[0]);
-    			if(futureNodeMove[0] == nearestPP) return true;
-    				i++;
+			int[] futureNodesPath  = in.getGame().getApproximateShortestPath(in.getGame().getPacmanCurrentNodeIndex(), nearestPPindex, in.getGame().getPacmanLastMoveMade());
+    		for(int i : futureNodesPath) {
+    			if(in.getGame().getNeighbouringNodes(i).length>2) return false;
     		}
+			
 		}
 		return false;
 	}

@@ -33,7 +33,7 @@ public class GhostsVoyASerEscuderoQueProteje implements Transition  {
 					}
 				}
 			}
-		System.out.println("ASDASSADSAAS " + ghost + " "  + nearToPacMan);
+	
 		if(ghost== nearToPacMan) {
 			return false;
 		}
