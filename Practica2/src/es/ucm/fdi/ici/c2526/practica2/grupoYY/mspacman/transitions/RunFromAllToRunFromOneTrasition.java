@@ -19,7 +19,8 @@ public class RunFromAllToRunFromOneTrasition implements Transition {
 		
 		boolean aux = false;
 		Game game = input.getGame();
-
+		
+		//If we find two or more ghosts under the danger distance, then we are running away from all.		
 		for (GHOST ghost : GHOST.values()) {
 			if (!game.isGhostEdible(ghost) && game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghost), DM.PATH) <= input.getDangerDistance()) {
 				aux = true;

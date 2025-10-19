@@ -9,7 +9,8 @@ public class PointsSuicidaToRandomTransition implements Transition {
 	public PointsSuicidaToRandomTransition() {
 		
 	}
-
+	
+	//If there is no pills near we return true.
 	@Override
 	public boolean evaluate(Input in) {
 		MsPacManInput input = (MsPacManInput) in;

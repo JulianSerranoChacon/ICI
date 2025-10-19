@@ -12,7 +12,8 @@ public class NoCandidateMovesTransition implements Transition {
 		privateID = idcount;
 		idcount++;
 	}
-
+	
+	//If there are no possible moves, we return true.
 	@Override
 	public boolean evaluate(Input in) {
 		MsPacManInput input = (MsPacManInput) in;

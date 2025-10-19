@@ -12,7 +12,8 @@ public class OnlyOneMovePossibleTransition implements Transition {
 		privateID = idcount;
 		idcount++;
 	}
-
+	
+	//if there is only one possible move, we return true.
 	@Override
 	public boolean evaluate(Input in) {
         MsPacManInput input = (MsPacManInput) in;

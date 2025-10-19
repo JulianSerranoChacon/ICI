@@ -12,51 +12,55 @@ public class MenacedToEatPpillTransition implements Transition {
 	
 	private Game game;
 	private int closestPPill;
+	private static final double DIST_MARGIN = -10;
 	
 	public MenacedToEatPpillTransition() {
 		
 	}
 	
-	//Check if menaced, then if it is possible
-	//TODO:Refactor pleaseee
+	//Check if menaced, then if it is possible to eat ppill
 	@Override
 	public boolean evaluate(Input in) {
 		MsPacManInput input = (MsPacManInput) in;
-		
 		game = input.getGame();
 		closestPPill = input.getClosestPPill();
 		
-		if(input.getMoveToPpill().size() != 0) {
-			//Estimation of the worst distance a ghost can be
-	        try {
-	            int time_left = Constants.EDIBLE_TIME;
-	
-	            for(GHOST ghost : GHOST.values()) {
-	                if(game.getGhostLairTime(ghost) > 0) 
-	                    continue;
-	                double distanceToGhostPosition = game.getShortestPathDistance(closestPPill,
-	                       game.getPacmanCurrentNodeIndex()) + 2 * game.getDistance(closestPPill, game.getGhostCurrentNodeIndex(ghost), DM.PATH);
-	                if (time_left > distanceToGhostPosition) {
-	                    time_left -= distanceToGhostPosition;
-	                    for(GHOST g : GHOST.values()) {
-	                        if(g == ghost || game.getGhostLairTime(ghost) > 0) 
-	                            continue;
-	                        double distanceToSecondGhostPosition = 2 * game.getShortestPathDistance(game.getGhostCurrentNodeIndex(g),
-	                                game.getGhostCurrentNodeIndex(ghost));
-	                        if (time_left > distanceToSecondGhostPosition) {
-	                            return true;
-	                        }
-	                    }
-	                }
-	            }
-	        }
-	        catch(Exception e) {
-	
-	        }
+		if(closestPPill == -1) {
+			return false;
 		}
+		
+        for(GHOST ghost : GHOST.values()) {
+        	//Ghost can not be in the lair
+            if(game.getGhostLairTime(ghost) > 0) continue; 
+            
+            //Estimation of the time left after eating first ghost.
+            double time_left = Constants.EDIBLE_TIME - distanceToGhostPosition(game, ghost);
+            
+            //We try to find if we can have a double kill approximately.
+            for(GHOST g : GHOST.values()) {
+                if(g == ghost || game.getGhostLairTime(g) > 0)  continue;
+                
+                double dist2 = time_left - distanceTo2GhostPosition(game, g);
+                
+                if (dist2 > DIST_MARGIN) return input.getMoveToPpill().size() > 0;
+            }       
+        }
+		
 		
 		return false;
 	}
+	
+	//Pessimistic estimation of the worst distance a ghost can be
+	private double distanceToGhostPosition(Game game, GHOST ghost) {
+		return game.getShortestPathDistance(closestPPill,
+                game.getPacmanCurrentNodeIndex()) + 2 * game.getDistance(closestPPill, game.getGhostCurrentNodeIndex(ghost), DM.PATH);
+	}
+	
+	//Pessimistic estimation of the worst distance a second ghost can be
+		private double distanceTo2GhostPosition(Game game, GHOST ghost) {
+			return 2 * game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost),
+                    game.getGhostCurrentNodeIndex(ghost));
+		}
 
 	@Override
 	public String toString() {

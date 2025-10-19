@@ -15,15 +15,16 @@ public class NearDangerousGhostsTransition implements Transition {
 		privateID = idcount;
 		idcount++;
 	}
-
+	
+	//If there are ghost near us, return true.
 	@Override
 	public boolean evaluate(Input in) {
 		MsPacManInput input = (MsPacManInput) in;
-
 		Game game = input.getGame();
 
 		for (GHOST ghost : GHOST.values()) {
-			if (!game.isGhostEdible(ghost) && game.getGhostLairTime(ghost) <= 0 && game.getDistance(game.getPacmanCurrentNodeIndex(),
+			if (!game.isGhostEdible(ghost) && game.getGhostLairTime(ghost) <= 0 
+					&& game.getDistance(game.getPacmanCurrentNodeIndex(),
 					game.getGhostCurrentNodeIndex(ghost), DM.PATH) <= input.getDangerDistance()) {
 				return true;
 			}
