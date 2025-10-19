@@ -61,7 +61,7 @@ public class GhostHayFantasmaEnMiCamino implements Transition  {
 				
 			}
 		}
-		System.out.println(flag);
+		//System.out.println(flag);
 		return flag;
 	}
 
