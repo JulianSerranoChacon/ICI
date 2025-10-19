@@ -22,8 +22,8 @@ public class GhostsYaNoHayComibles implements Transition  {
 	public boolean evaluate(Input in) {
 		GhostsInput input = (GhostsInput)in;
 
-		for(GHOST g : GHOST.values()) if (in.getGame().isGhostEdible(g)) return true;
-		return false;
+		for(GHOST g : GHOST.values()) if (g!=ghost &&in.getGame().isGhostEdible(g)) return false;
+		return true;
 	}
 	@Override
 	public String toString() {
