@@ -36,7 +36,7 @@ public class GhostHayFantasmaEnMiCamino implements Transition  {
 		visitNode.put(futureNodeMove[0], 1);
 		visitNode.put(mghostNode, 0);
 		boolean inter = false;
-		while(!inter) {
+		while(!inter&&!colaNodos.isEmpty()) {
 			int aux = colaNodos.getFirst();
 			colaNodos.remove(0);
 			if(!in.getGame().isJunction(aux)) {
