@@ -25,7 +25,7 @@ public class GhostInfo {
 	public GhostInfo(){
 		reset();
 		shieldGhost = new HashMap<>();
-		 System.out.println("gi se crea");
+		 
 	}
 	
 	public Map<GHOST, GHOSTTYPE> getGhostClass() {
@@ -50,7 +50,11 @@ public class GhostInfo {
 		return distanceFromPacmanToGhost.get(g);
 	}
 	public int getDistanceFromGhostToGhost(GHOST myGhost,GHOST otherGhost) {
-		return DistanceFromGhostToGhost.get(myGhost).get(otherGhost);
+
+		if(DistanceFromGhostToGhost.containsKey(myGhost)) {
+			if (DistanceFromGhostToGhost.get(myGhost).containsKey(otherGhost)) return DistanceFromGhostToGhost.get(myGhost).get(otherGhost);
+		}
+		 return 999999;
 	}
 	public GHOST getMyShieldGhost(GHOST g) {
 		return shieldGhost.get(g);

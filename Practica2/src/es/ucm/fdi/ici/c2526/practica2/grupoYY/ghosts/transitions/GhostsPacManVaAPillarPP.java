@@ -18,6 +18,7 @@ public class GhostsPacManVaAPillarPP implements Transition  {
 
 	@Override
 	public boolean evaluate(Input in) {
+		
 		GhostsInput input = (GhostsInput)in;
 		if(in.getGame().getActivePowerPillsIndices().length == 0) return false;
 		boolean flag = false;

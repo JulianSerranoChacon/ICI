@@ -21,6 +21,7 @@ public class GhostsPacmanEstaCerca implements Transition  {
 	@Override
 	public boolean evaluate(Input in) {
 		GhostsInput input = (GhostsInput)in;
+		if(in.getGame().getGhostLairTime(ghost) !=0 ) return false;
 		int distance = in.getGame().getApproximateShortestPathDistance(in.getGame().getPacmanCurrentNodeIndex(), in.getGame().getGhostCurrentNodeIndex(ghost), in.getGame().getPacmanLastMoveMade());
 		return (distance<limit);
 		

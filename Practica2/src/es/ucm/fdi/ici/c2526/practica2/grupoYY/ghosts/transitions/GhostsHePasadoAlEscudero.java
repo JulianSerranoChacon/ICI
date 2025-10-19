@@ -11,10 +11,10 @@ public class GhostsHePasadoAlEscudero implements Transition  {
 	GHOST ghost;
 	GhostInfo gi;
 	int distanceFromShield = 999999;
-	public GhostsHePasadoAlEscudero(GHOST ghost,GhostInfo gi) {
+	public GhostsHePasadoAlEscudero(GHOST ghost,GhostInfo g) {
 		super();
 		this.ghost = ghost;
-		this.gi = gi;
+		gi = g;
 	}
 
 ///WIP
@@ -22,7 +22,8 @@ public class GhostsHePasadoAlEscudero implements Transition  {
 	@Override
 	public boolean evaluate(Input in) {
 		GhostsInput input = (GhostsInput)in;
-		if(gi.getMyShieldGhost(ghost)==ghost) return false;
+		if(gi.getMyShieldGhost(ghost)==ghost&&in.getGame().getGhostLairTime(ghost)==0
+				&&in.getGame().getGhostLairTime(gi.getMyShieldGhost(ghost))==0) return false;
 		else if (distanceFromShield >gi.getDistanceFromGhostToGhost(ghost, gi.getMyShieldGhost(ghost))){
 			distanceFromShield =gi.getDistanceFromGhostToGhost(ghost, gi.getMyShieldGhost(ghost));
 			return false;

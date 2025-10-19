@@ -15,7 +15,7 @@ public class GhostHayFantasmaEnMiCamino implements Transition  {
 
 	GHOST ghost;
 	int limit = 50; 
-	Hashtable visitNode = new Hashtable();
+	Hashtable<Integer, Integer> visitNode = new Hashtable();
 	public GhostHayFantasmaEnMiCamino(GHOST ghost) {
 		super();
 		this.ghost = ghost;
@@ -26,7 +26,8 @@ public class GhostHayFantasmaEnMiCamino implements Transition  {
 	@Override
 	public boolean evaluate(Input in) {
 		GhostsInput input = (GhostsInput)in;
-		
+		//System.out.println(" entro ");
+		if(in.getGame().getGhostLairTime(ghost)!=0) return false;
 		int mghostNode = in.getGame().getGhostCurrentNodeIndex(ghost);
 		int[] futureNodeMove = in.getGame().getNeighbouringNodes(mghostNode);
 		MOVE mghostMove = in.getGame().getGhostLastMoveMade(ghost);
@@ -37,12 +38,14 @@ public class GhostHayFantasmaEnMiCamino implements Transition  {
 		while(!colaNodos.isEmpty()) {
 			int aux = colaNodos.getFirst();
 			colaNodos.remove(0);
-			if((Integer)visitNode.get(aux) <limit) {
+			if(visitNode.get(aux) <limit) {
 			futureNodeMove = in.getGame().getNeighbouringNodes(aux);
 			for(int a : futureNodeMove) {
-				if(!visitNode.contains(a)) {
+				//System.out.println(visitNode.contains(a));
+				if(!visitNode.containsKey(a)) {
 					colaNodos.add(a);
-					visitNode.put(a, (Integer)visitNode.get(aux)+1);
+					//System.out.println(a);
+					visitNode.put(a, visitNode.get(aux)+1);
 				}
 				}
 			}
@@ -50,7 +53,7 @@ public class GhostHayFantasmaEnMiCamino implements Transition  {
 		boolean flag = false;
 		for(GHOST otherGhost : GHOST.values()) {
 			if(otherGhost != ghost) {
-				flag = visitNode .containsKey(in.getGame().getGhostCurrentNodeIndex(otherGhost));
+				if(in.getGame().getGhostLairTime(otherGhost)!=0)flag = visitNode .containsKey(in.getGame().getGhostCurrentNodeIndex(otherGhost));
 				
 			}
 		}
