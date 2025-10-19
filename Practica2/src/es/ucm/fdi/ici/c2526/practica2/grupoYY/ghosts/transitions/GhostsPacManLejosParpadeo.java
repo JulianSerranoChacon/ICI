@@ -20,7 +20,8 @@ public class GhostsPacManLejosParpadeo implements Transition  {
 	@Override
 	public boolean evaluate(Input in) {
 		GhostsInput input = (GhostsInput)in;
-		int distance = in.getGame().getApproximateShortestPathDistance(in.getGame().getPacmanCurrentNodeIndex(), in.getGame().getGhostCurrentNodeIndex(ghost), in.getGame().getPacmanLastMoveMade());
+		if(in.getGame().getGhostLairTime(ghost)!=0) return false;
+		int distance = in.getGame().getShortestPathDistance(in.getGame().getPacmanCurrentNodeIndex(), in.getGame().getGhostCurrentNodeIndex(ghost), in.getGame().getPacmanLastMoveMade());
 		
 		return ((in.getGame().getGhostEdibleTime(ghost)<limitTime)&& (distance> limitDistance));
 				

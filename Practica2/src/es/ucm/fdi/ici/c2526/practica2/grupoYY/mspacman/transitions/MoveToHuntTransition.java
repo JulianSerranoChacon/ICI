@@ -33,6 +33,6 @@ public class MoveToHuntTransition implements Transition {
 
 	@Override
 	public String toString() {
-		return String.format("Run from one ghost only " + privateID);
+		return String.format("Move to hunt" + privateID);
 	}
 }

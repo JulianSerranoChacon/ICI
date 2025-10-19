@@ -9,7 +9,8 @@ public class PPillSuicidaToPointsSuicidaTransition implements Transition {
 	public PPillSuicidaToPointsSuicidaTransition() {
 		
 	}
-
+	
+	//If we are trapped and there is no PPill we return true.
 	@Override
 	public boolean evaluate(Input in) {
 		MsPacManInput input = (MsPacManInput) in;

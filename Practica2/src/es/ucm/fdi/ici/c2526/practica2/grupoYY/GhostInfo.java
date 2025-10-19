@@ -23,8 +23,9 @@ public class GhostInfo {
 	private Map<GHOST,GHOSTTYPE> GhostClass;
 	
 	public GhostInfo(){
+	
+	
 		reset();
-		shieldGhost = new HashMap<>();
 		 
 	}
 	
@@ -40,6 +41,8 @@ public class GhostInfo {
 		distanceFromGhostToPacman = new HashMap<>();
 		distanceFromPacmanToGhost = new HashMap<>();
 		DistanceFromGhostToGhost = new HashMap<>();
+		shieldGhost = new HashMap<>();
+		for(GHOST g : GHOST.values())  shieldGhost.put(g, g);
 		
 	}
 
@@ -57,10 +60,15 @@ public class GhostInfo {
 		 return 999999;
 	}
 	public GHOST getMyShieldGhost(GHOST g) {
+		if(shieldGhost.size()== 0) return g;
 		return shieldGhost.get(g);
 	}
 	public void setMyShieldGhost(Map<GHOST,GHOST> s) {
 		shieldGhost = s;
+	}
+	public void setaShieldGhost(GHOST g,GHOST toProtect) {
+		shieldGhost.remove(g);
+		shieldGhost.put(g, toProtect);
 	}
 	public void setFromGhostToPacMan(Map<GHOST,Integer> m) {
 		distanceFromGhostToPacman = m;
