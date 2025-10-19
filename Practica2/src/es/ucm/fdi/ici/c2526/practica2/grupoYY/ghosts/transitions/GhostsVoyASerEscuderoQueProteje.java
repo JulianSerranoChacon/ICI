@@ -26,21 +26,23 @@ public class GhostsVoyASerEscuderoQueProteje implements Transition  {
 		GHOST nearToPacMan = ghost;
 		int nearDistance = 999999;
 		for(GHOST otherGhost : GHOST.values()) {
-			if(otherGhost != ghost&&in.getGame().isGhostEdible(otherGhost)) {
-				if(gi.getDistanceFromPacmanToGhost(otherGhost)<nearDistance) {
-					nearDistance = gi.getDistanceFromPacmanToGhost(otherGhost);
+			if(otherGhost != ghost && in.getGame().isGhostEdible(otherGhost)) {
+				int distance = gi.getDistanceFromPacmanToGhost(otherGhost);
+				if(distance < nearDistance) {
+					nearDistance = distance;
 					nearToPacMan = otherGhost;
 					}
 				}
 			}
 	
-		if(ghost== nearToPacMan) {
+		if(ghost == nearToPacMan) {
 			return false;
 		}
+		
 		GHOST nearToGhost = ghost;
 		int nearDistanceToGhost = gi.getDistanceFromGhostToGhost(ghost,nearToPacMan);
 		for(GHOST otherGhost : GHOST.values()) {
-			if(otherGhost != ghost&&!in.getGame().isGhostEdible(otherGhost)&&otherGhost != nearToPacMan) {
+			if(otherGhost != ghost&&!in.getGame().isGhostEdible(otherGhost)) {
 				if(gi.getDistanceFromGhostToGhost(otherGhost,nearToPacMan)<nearDistanceToGhost) {
 					nearDistanceToGhost = gi.getDistanceFromPacmanToGhost(otherGhost);
 					nearToGhost = otherGhost;

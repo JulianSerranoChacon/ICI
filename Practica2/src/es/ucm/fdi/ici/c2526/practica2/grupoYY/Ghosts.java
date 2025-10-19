@@ -100,10 +100,7 @@ public class Ghosts extends GhostController {
 			GhostsPasoARandom randomTrans2 = new GhostsPasoARandom(ghost,gi,2);
 			GhostsVoyASerEscuderoQueProteje escuderoQueProteje2 = new GhostsVoyASerEscuderoQueProteje(ghost,gi,2);
 			
-			GhostsYaNoHayComibles noHayComibles0 = new GhostsYaNoHayComibles(ghost,gi,0);
-			GhostsYaNoHayComibles noHayComibles1 = new GhostsYaNoHayComibles(ghost,gi,1);
-			GhostsYaNoHayComibles noHayComibles2 = new GhostsYaNoHayComibles(ghost,gi,2);
-			GhostsYaNoHayComibles noHayComibles3 = new GhostsYaNoHayComibles(ghost,gi,3);
+			GhostsYaNoHayComibles noHayComibles = new GhostsYaNoHayComibles(ghost,gi);
 			GhostsVoyASerEscuderoQueProteje escuderoQueProteje3 = new GhostsVoyASerEscuderoQueProteje(ghost,gi,3);
 			
 			//Hunter1
@@ -131,10 +128,7 @@ public class Ghosts extends GhostController {
 			cfsChase.add(random, escuderoQueProteje3, protectTheEdible);
 			
 			//DefiendoAlComestible
-			cfsChase.add(protectTheEdible, noHayComibles0, hunter1);
-			cfsChase.add(protectTheEdible, noHayComibles1, hunter2);
-			cfsChase.add(protectTheEdible, noHayComibles2, jailer);
-			cfsChase.add(protectTheEdible, noHayComibles3, random);
+			cfsChase.add(protectTheEdible, noHayComibles, hunter1);
 			
 			cfsChase.ready(hunter1);
 			

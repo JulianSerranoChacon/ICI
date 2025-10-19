@@ -51,6 +51,6 @@ public class ProtectEdibleGhostAction implements Action {
 
 	@Override
 	public String getActionId() {
-		return ghost+ "runToEscudero";
+		return ghost+ "runToTheEdible";
 	}
 }

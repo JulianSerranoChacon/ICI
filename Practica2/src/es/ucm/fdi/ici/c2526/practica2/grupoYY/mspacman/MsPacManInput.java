@@ -28,7 +28,7 @@ public class MsPacManInput extends Input {
 	private List<MOVE> candidateMoves;
 	private int closestPPill;
 	private double distanceToPPill;
-	private final double dangerDistance = 20; //tentative, subject to change 
+	private final double dangerDistance = 30; //tentative, subject to change 
 	private final double hideDistance = 30; //tentative, subject to change 
 	
 	//Info for actions
@@ -200,7 +200,6 @@ public class MsPacManInput extends Input {
 		return false;
 	}
 	
-	//TODO: Refactor
 	// Speed of ghosts is halved
 	private boolean ghostReachable(GHOST ghost) {
 		if(game.getGhostLairTime(ghost) > 0) {
