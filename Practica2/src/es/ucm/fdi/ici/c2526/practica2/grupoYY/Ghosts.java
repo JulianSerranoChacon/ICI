@@ -193,7 +193,7 @@ public class Ghosts extends GhostController {
 	    	JPanel main = new JPanel();
 	    	main.setLayout(new BorderLayout());
 	    	main.add(RunObserver.getAsPanel(true, null), BorderLayout.EAST);
-	    	main.add(ChaseObserver.getAsPanel(true, null), BorderLayout.WEST);
+	    //	main.add(ChaseObserver.getAsPanel(true, null), BorderLayout.WEST);
 	    	frame.getContentPane().add(main);
 	    	frame.pack();
 	    	frame.setVisible(true);
