@@ -26,12 +26,12 @@ public class GhostsPacManVaAPillarPP implements Transition  {
 		int nearestPP = 99999;
 		int nearestPPindex = 0;
 		for(GHOST otherGhost : GHOST.values()) {
-			int distance = in.getGame().getApproximateShortestPathDistance( in.getGame().getGhostCurrentNodeIndex(ghost),in.getGame().getPacmanCurrentNodeIndex(), in.getGame().getGhostLastMoveMade(otherGhost));
+			int distance = in.getGame().getShortestPathDistance( in.getGame().getGhostCurrentNodeIndex(ghost),in.getGame().getPacmanCurrentNodeIndex(), in.getGame().getGhostLastMoveMade(otherGhost));
 			if(distance<nearestGhost) nearestGhost = distance;
 			}
 		
 		for(int node : in.getGame().getActivePowerPillsIndices()) {
-			int distance = in.getGame().getApproximateShortestPathDistance(in.getGame().getPacmanCurrentNodeIndex(), node, in.getGame().getPacmanLastMoveMade());
+			int distance = in.getGame().getShortestPathDistance(in.getGame().getPacmanCurrentNodeIndex(), node, in.getGame().getPacmanLastMoveMade());
 			if(distance<nearestPP) nearestPP = distance;
 		}
 		if(nearestGhost<nearestPP) return false;
@@ -39,7 +39,7 @@ public class GhostsPacManVaAPillarPP implements Transition  {
 			
 			
     		//MOVE bestPacManMove = in.getGame().getNextMoveAwayFromTarget(in.getGame().getPacmanCurrentNodeIndex(),in.getGame().getGhostCurrentNodeIndex(FleePacManGhost),DM.PATH);
-			int[] futureNodesPath  = in.getGame().getApproximateShortestPath(in.getGame().getPacmanCurrentNodeIndex(), nearestPPindex, in.getGame().getPacmanLastMoveMade());
+			int[] futureNodesPath  = in.getGame().getShortestPath(in.getGame().getPacmanCurrentNodeIndex(), nearestPPindex, in.getGame().getPacmanLastMoveMade());
     		for(int i : futureNodesPath) {
     			if(in.getGame().getNeighbouringNodes(i).length>2) return false;
     		}
