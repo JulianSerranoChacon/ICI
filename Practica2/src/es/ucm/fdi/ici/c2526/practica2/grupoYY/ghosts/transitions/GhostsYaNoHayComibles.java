@@ -21,9 +21,9 @@ public class GhostsYaNoHayComibles implements Transition  {
 	@Override
 	public boolean evaluate(Input in) {
 		GhostsInput input = (GhostsInput)in;
-		if(in.getGame().getGhostLairTime(ghost)!=0) return false;
-		
-		return in.getGame().isGhostEdible(gi.getMyShieldGhost(ghost));
+
+		for(GHOST g : GHOST.values()) if (in.getGame().isGhostEdible(g)) return true;
+		return false;
 	}
 	@Override
 	public String toString() {
