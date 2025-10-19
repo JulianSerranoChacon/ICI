@@ -40,7 +40,7 @@ public class RunSubOptimalAction implements Action {
             	  //If it is not the bestMove (because there is a Ghost there), checks which move is the farthest of all to run away of PacMan
             	  if(mv != bestRunMove) {
             		  
-            		  distance = game.getApproximateShortestPathDistance(game.getGhostCurrentNodeIndex(this.ghost), game.getPacmanCurrentNodeIndex(), mv);
+            		  distance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(this.ghost), game.getPacmanCurrentNodeIndex(), mv);
  
             		  if(distance > maxDistance) {
             			  maxDistance = distance;
@@ -49,9 +49,10 @@ public class RunSubOptimalAction implements Action {
             		  
             	  }
               }
+              if(maxDistance == 0) return bestRunMove;
               return moveToReturn;
         }
-            
+ 
         return MOVE.NEUTRAL;	
 	}
 

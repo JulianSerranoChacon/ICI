@@ -10,19 +10,19 @@ public class ExecutorTest {
     public static void main(String[] args) {
         Executor executor = new Executor.Builder()
                 .setTickLimit(4000)
-                .setVisual(false)
+                .setVisual(true)
                 .setScaleFactor(2.5)
                 .build();
 
         PacmanController pacMan = new MsPacMan();
         GhostController ghosts = new Ghosts();
-        
-        Stats stats[] = executor.runExperiment(pacMan, ghosts, 1000, "triaje 1");//last parameter defines speed
+        executor.runGame(pacMan, ghosts, 30);
+       /* Stats stats[] = executor.runExperiment(pacMan, ghosts, 1000, "triaje 1");//last parameter defines speed
         for (Stats stat : stats) {
             System.out.println( 
                 stat.toString()
             );     
-        }
+        }*/
     }
 	
 }

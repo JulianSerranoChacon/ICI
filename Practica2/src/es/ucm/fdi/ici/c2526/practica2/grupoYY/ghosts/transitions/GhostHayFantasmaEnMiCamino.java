@@ -26,7 +26,6 @@ public class GhostHayFantasmaEnMiCamino implements Transition  {
 	@Override
 	public boolean evaluate(Input in) {
 		GhostsInput input = (GhostsInput)in;
-		//System.out.println(" entro ");
 		if(in.getGame().getGhostLairTime(ghost)!=0) return false;
 		int mghostNode = in.getGame().getGhostCurrentNodeIndex(ghost);
 		int[] futureNodeMove = in.getGame().getNeighbouringNodes(mghostNode, in.getGame().getGhostLastMoveMade(ghost));
@@ -55,7 +54,7 @@ public class GhostHayFantasmaEnMiCamino implements Transition  {
 		for(GHOST otherGhost : GHOST.values()) {
 			if(otherGhost != ghost) {
 				
-				if(in.getGame().getGhostLairTime(otherGhost)==0&&!flag&&!in.getGame().isGhostEdible(otherGhost))
+				if(in.getGame().getGhostLairTime(otherGhost)==0&&!flag&& in.getGame().isGhostEdible(otherGhost))
 					flag = visitNode.containsKey(in.getGame().getGhostCurrentNodeIndex(otherGhost));
 				
 				
