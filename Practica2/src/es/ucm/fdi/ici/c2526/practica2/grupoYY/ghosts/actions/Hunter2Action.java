@@ -20,6 +20,9 @@ public class Hunter2Action implements Action  {
 
 	@Override
 	public MOVE execute(Game game) {
+		if(!game.doesGhostRequireAction(ghost))
+			return MOVE.NEUTRAL;
+		
 		MOVE bestMove = game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(),DM.PATH);;
 		MOVE moveToReturn = MOVE.NEUTRAL;  
 		double minDistance = 10000000;

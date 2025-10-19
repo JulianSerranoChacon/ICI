@@ -17,7 +17,10 @@ public class JailerAction implements Action{
 	}
 
 	@Override
-	public MOVE execute(Game game) {    	
+	public MOVE execute(Game game) {    
+
+		if(!game.doesGhostRequireAction(ghost))
+			return MOVE.NEUTRAL;
 
     	MOVE moveToReturn = MOVE.NEUTRAL;
 
