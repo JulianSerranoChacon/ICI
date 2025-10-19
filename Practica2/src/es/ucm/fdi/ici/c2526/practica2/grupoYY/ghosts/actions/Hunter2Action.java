@@ -54,11 +54,6 @@ public class Hunter2Action implements Action  {
     	if(!isHunterInMyWay)
     		return bestMove;*/
 		
-		if(game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(hunter1), 
-				game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(hunter1), DM.PATH) == bestMove.opposite())
-			return bestMove;
-		
-		
 		for(int i = 0; i < possibleMoves.length; ++i) {
 			//If both hunters are to close the second hunter must not take the closest Move to PacMan
 			if(distanceBetweenHunters < DistanceGhosts && possibleMoves[i] != bestMove) {
