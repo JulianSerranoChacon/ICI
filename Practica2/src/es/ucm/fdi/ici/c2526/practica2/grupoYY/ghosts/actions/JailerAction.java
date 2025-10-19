@@ -18,17 +18,9 @@ public class JailerAction implements Action{
 
 	@Override
 	public MOVE execute(Game game) {    	
-    	int index = 0;
-    	MOVE bestPacManMove = MOVE.NEUTRAL;
+
     	MOVE moveToReturn = MOVE.NEUTRAL;
-    	GHOST FleePacManGhost = GHOST.BLINKY;
-    	for (GHOST ghostType : GHOST.values()) {
-    		if(gI.getMyGhostPriority(ghostType) == GHOSTTYPE.HUNTER1) {
-    			FleePacManGhost = ghostType;
-    		}
-    		++index;
-    	}
-    	bestPacManMove = game.getApproximateNextMoveAwayFromTarget(game.getPacmanCurrentNodeIndex(),game.getGhostCurrentNodeIndex(FleePacManGhost),game.getPacmanLastMoveMade(),DM.PATH);
+
    		int[] futureNodeMove = game.getNeighbouringNodes(game.getPacmanCurrentNodeIndex());
 		
 		while(futureNodeMove.length <= 1) {

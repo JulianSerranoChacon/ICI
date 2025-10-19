@@ -33,6 +33,7 @@ public class GhostsVoyASerEscuderoQueProteje implements Transition  {
 					}
 				}
 			}
+		System.out.println("ASDASSADSAAS " + ghost + " "  + nearToPacMan);
 		if(ghost== nearToPacMan) {
 			return false;
 		}
@@ -40,7 +41,7 @@ public class GhostsVoyASerEscuderoQueProteje implements Transition  {
 		int nearDistanceToGhost = gi.getDistanceFromGhostToGhost(ghost,nearToPacMan);
 		for(GHOST otherGhost : GHOST.values()) {
 			if(otherGhost != ghost&&!in.getGame().isGhostEdible(otherGhost)&&otherGhost != nearToPacMan) {
-				if(gi.getDistanceFromGhostToGhost(otherGhost,nearToPacMan)<nearDistance) {
+				if(gi.getDistanceFromGhostToGhost(otherGhost,nearToPacMan)<nearDistanceToGhost) {
 					nearDistanceToGhost = gi.getDistanceFromPacmanToGhost(otherGhost);
 					nearToGhost = otherGhost;
 					}

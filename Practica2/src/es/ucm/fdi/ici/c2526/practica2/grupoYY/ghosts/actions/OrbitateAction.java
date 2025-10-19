@@ -38,7 +38,7 @@ public class OrbitateAction implements Action {
           		//We search for the closest node intersection
         		while(futureNodeMove.length <= 1) {
         			futureNodeMove = game.getNeighbouringNodes(futureNodeMove[0]);
-        		//if(futureNodeMove == null) break; Si se peta
+        		if(futureNodeMove == null) break; 
         			System.out.println("SOY ORBITA Y BUSCO MIS VECINOS"); //Por saber si entra ya que futureNodeMove esta en una interseccion al principio entonces a lo mejor no entra en este while lo que sería liada
         		}
         		

@@ -8,6 +8,10 @@ import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.GhostsInput;
 
 //Actions
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions.ChaseAction;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions.Hunter1Action;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions.Hunter2Action;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions.JailerAction;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions.RandomAction;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions.RunOptimalAction;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions.RunSubOptimalAction;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions.OrbitateAction;
@@ -35,7 +39,7 @@ import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPasoARand
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsSoyComestible;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsVoyASerEscuderoQueProteje;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.PacManNearPPillTransition;
-
+import es.ucm.fdi.ici.fsm.CompoundState;
 //State Machine
 import es.ucm.fdi.ici.fsm.FSM;
 import es.ucm.fdi.ici.fsm.SimpleState;
@@ -63,27 +67,64 @@ public class Ghosts extends GhostController {
 			GraphFSMObserver graphObserver = new GraphFSMObserver(ghost.name());
 			fsm.addObserver(graphObserver);
 			
+			//CompoundStates
+			//CHASE STATE
+			FSM cfsChase = new FSM(ghost.name() + "CHASE");
+			GraphFSMObserver ChaseObserver = new GraphFSMObserver(cfsChase.toString());
+			cfsChase.addObserver(ChaseObserver);
+			
 			//ChaseStates
-			SimpleState chase = new SimpleState(new ChaseAction(ghost));
+			SimpleState hunter1 = new SimpleState(new Hunter1Action(ghost));
+			SimpleState hunter2 = new SimpleState(new Hunter2Action(ghost,gi));
+			SimpleState jailer = new SimpleState(new JailerAction(ghost,gi));
+			SimpleState random = new SimpleState(new RandomAction(ghost,gi));
 			SimpleState protectTheEdible = new SimpleState(new ProtectEdibleGhostAction(ghost,gi));
 			
 			//ChaseTransitions
-			GhostsPasoAHunter1 hunter1 = new GhostsPasoAHunter1(ghost,gi);
-			GhostsPasoAHunter2 hunter2 = new GhostsPasoAHunter2(ghost,gi);
-			GhostsPasoAJailer jailer = new GhostsPasoAJailer(ghost,gi);
-			GhostsPasoARandom random = new GhostsPasoARandom(ghost,gi);
-			GhostsNotEdibleAndPacManFarPPill toChaseTransition = new GhostsNotEdibleAndPacManFarPPill(ghost);
+			GhostsPasoAHunter1 hunter1Trans = new GhostsPasoAHunter1(ghost,gi);
+			GhostsPasoAHunter2 hunter2Trans = new GhostsPasoAHunter2(ghost,gi);
+			GhostsPasoAJailer jailerTrans = new GhostsPasoAJailer(ghost,gi);
+			GhostsPasoARandom randomTrans = new GhostsPasoARandom(ghost,gi);
 			GhostsVoyASerEscuderoQueProteje escuderoQueProteje = new GhostsVoyASerEscuderoQueProteje(ghost,gi);
 			
-			//MiddleStates
-			SimpleState startRunning = new SimpleState(new StartRunningAction(ghost));
+			//Hunter1
+			cfsChase.add(hunter1, hunter2Trans, hunter2);
+			cfsChase.add(hunter1, jailerTrans, jailer);
+			cfsChase.add(hunter1, randomTrans, random);
+			cfsChase.add(hunter1, escuderoQueProteje, protectTheEdible);
 			
-			//MiddleTransitions
-			PacManNearPPillTransition near = new PacManNearPPillTransition();
-			GhostsEdibleTransition edible = new GhostsEdibleTransition(ghost);
-			GhostsPacManHaComidoPP comioPP = new GhostsPacManHaComidoPP(ghost);
-			GhostsPacManLejosParpadeo lejosParpadeo = new GhostsPacManLejosParpadeo(ghost);
-			GhostsPacManVaAPillarPP VaAPillarLaPP = new GhostsPacManVaAPillarPP(ghost);
+			//Hunter2
+			cfsChase.add(hunter2, hunter1Trans, hunter1);
+			cfsChase.add(hunter2, jailerTrans, jailer);
+			cfsChase.add(hunter2, randomTrans, random);
+			cfsChase.add(hunter2, escuderoQueProteje, protectTheEdible);
+			
+			//Jailer
+			cfsChase.add(jailer, hunter1Trans, hunter1);
+			cfsChase.add(jailer, hunter2Trans, hunter2);
+			cfsChase.add(jailer, randomTrans, random);
+			cfsChase.add(jailer, escuderoQueProteje, protectTheEdible);
+			
+			//Random
+			cfsChase.add(random, hunter1Trans, hunter1);
+			cfsChase.add(random, hunter2Trans, hunter2);
+			cfsChase.add(random, jailerTrans, jailer);
+			cfsChase.add(random, escuderoQueProteje, protectTheEdible);
+			
+			//DefiendoAlComestible
+			cfsChase.add(protectTheEdible, hunter1Trans, hunter1);
+			cfsChase.add(protectTheEdible, hunter2Trans, hunter2);
+			cfsChase.add(protectTheEdible, jailerTrans, jailer);
+			cfsChase.add(protectTheEdible, randomTrans, random);
+			
+			cfsChase.ready(hunter1);
+			
+			CompoundState persecucion = new CompoundState("PERSECUCION", cfsChase);
+			
+			//RUNNING STATE
+			FSM cfsRun = new FSM(ghost.name() + "RUN");
+			GraphFSMObserver RunObserver = new GraphFSMObserver(cfsRun.toString());
+			cfsRun.addObserver(RunObserver);
 			
 			//RunStates
 			SimpleState runAway = new SimpleState(new RunOptimalAction(ghost));
@@ -100,43 +141,40 @@ public class Ghosts extends GhostController {
 			GhostsPacmanEstaLejos pacManLejos = new GhostsPacmanEstaLejos(ghost);
 			GhostsPacmanEstaCerca pacManCerca = new GhostsPacmanEstaCerca(ghost);
 			GhostsSoyComestible soyComestible = new GhostsSoyComestible(ghost);
-		
-		
 			
-			//CHASE CHANGES
-			fsm.add(chase, edible, runAway);
-			fsm.add(chase, near, runAway);
-			fsm.add(runAway, toChaseTransition, chase);
-			
-			//TODO METER LOS CAMBIOS PARA LOS ESTADOS DE CAZAR
-			
-			//MIDDLE CHANGES
-			fsm.add(startRunning, comioPP, runAway);
-			//TODO METER EL ESTADO DE PASO PARA TODOS LOS ESTADOS DE CAZAR
-			
-		
-			
-			//FLEE CHANGES
 			//Orbit Changes
-			fsm.add(orbit, pacManCerca, runAway);
-		//	fsm.add(orbit, lejosParpadeo, chase);
+			cfsRun.add(orbit, pacManCerca, runAway);
 			
 			//RunOptimal Changes
-			fsm.add(runAway, hayEscuderoHuida, runToEscudero);
-			fsm.add(runAway, FantEnMiCaminoHuida, runSubOptimal);
-			fsm.add(runAway, pacManLejos, orbit);
-			fsm.add(runAway, lejosParpadeo, chase);
-			
+			cfsRun.add(runAway, hayEscuderoHuida, runToEscudero);
+			cfsRun.add(runAway, FantEnMiCaminoHuida, runSubOptimal);
+			cfsRun.add(runAway, pacManLejos, orbit);
+		
 			//RunSubOptimal Changes
-			fsm.add(runSubOptimal, noFantCerca, runAway);
-		//	fsm.add(runSubOptimal, hayEscuderoHuida, runToEscudero);
-		//	fsm.add(runSubOptimal, lejosParpadeo, chase);
-
+			cfsRun.add(runSubOptimal, noFantCerca, runAway);
+			cfsRun.add(runSubOptimal, hayEscuderoHuida, runToEscudero);
+		
 			//RunToEscudero Changes
-			fsm.add(runToEscudero, paseAlEscudero, runAway);
-		//	fsm.add(runToEscudero, lejosParpadeo, chase);
+			cfsRun.add(runToEscudero, paseAlEscudero, runAway);
+
+			cfsRun.ready(runAway);
+			CompoundState huida = new CompoundState("HUIDA", cfsRun);
 			
-			fsm.ready(chase);
+			
+			//FSM
+			//Actions
+			SimpleState startRunning = new SimpleState(new StartRunningAction(ghost));
+			//Transitions
+			GhostsPacManLejosParpadeo lejosParpadeo = new GhostsPacManLejosParpadeo(ghost);
+			GhostsPacManHaComidoPP comioPP = new GhostsPacManHaComidoPP(ghost);
+			GhostsPacManVaAPillarPP VaAPillarLaPP = new GhostsPacManVaAPillarPP(ghost);
+			//FSM CHANGES
+			fsm.add(persecucion, VaAPillarLaPP, startRunning);
+			fsm.add(startRunning, comioPP, huida);
+			fsm.add(huida,lejosParpadeo, persecucion);
+			fsm.ready(persecucion);
+			
+			
 			
 			graphObserver.showInFrame(new Dimension(300,200));
 			
