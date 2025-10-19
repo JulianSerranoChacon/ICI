@@ -13,15 +13,11 @@ public class GhostsVoyASerEscuderoQueProteje implements Transition  {
 	GhostInfo gi;
 	int minDistance = 200;
 	int references;
-	public GhostsVoyASerEscuderoQueProteje(GHOST ghost,GhostInfo gi) {
+	public GhostsVoyASerEscuderoQueProteje(GHOST ghost,GhostInfo gi,int ref) {
 		super();
 		this.ghost = ghost;
 		this.gi = gi;
-		this.references = 0;
-	}
-
-	public void addReference() {
-		this.references++;
+		this.references = ref;
 	}
 
 	@Override

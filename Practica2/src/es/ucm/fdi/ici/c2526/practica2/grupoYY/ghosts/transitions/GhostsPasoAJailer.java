@@ -12,17 +12,14 @@ public class GhostsPasoAJailer implements Transition  {
 	GHOST ghost;
 	GhostInfo gi;
 	int references;
-	public GhostsPasoAJailer(GHOST ghost,GhostInfo gi) {
+	public GhostsPasoAJailer(GHOST ghost,GhostInfo gi,int ref) {
 		super();
 		this.ghost = ghost;
 		this.gi = gi;
-		this.references = 0;
+		this.references = ref;
 	}
 
 
-	public void addReference() {
-		this.references++;
-	}
 	@Override
 	public boolean evaluate(Input in) {
 		GhostsInput input = (GhostsInput)in;

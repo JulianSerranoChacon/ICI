@@ -12,16 +12,13 @@ public class GhostsPasoAHunter1 implements Transition  {
 	GHOST ghost;
 	GhostInfo gi;
 	int references;
-	public GhostsPasoAHunter1(GHOST ghost,GhostInfo gi) {
+	public GhostsPasoAHunter1(GHOST ghost,GhostInfo gi,int ref) {
 		super();
 		this.ghost = ghost;
 		this.gi = gi;
-		this.references++;
+		this.references = ref;
 	}
 
-	public void addReference() {
-		this.references++;
-	}
 
 	@Override
 	public boolean evaluate(Input in) {

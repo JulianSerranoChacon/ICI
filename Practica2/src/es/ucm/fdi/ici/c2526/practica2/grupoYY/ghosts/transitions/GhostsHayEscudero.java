@@ -9,15 +9,10 @@ public class GhostsHayEscudero implements Transition  {
 
 	GHOST ghost;
 	int references; 
-	public GhostsHayEscudero(GHOST ghost) {
+	public GhostsHayEscudero(GHOST ghost,int ref) {
 		super();
 		this.ghost = ghost;
-		this.references = 0;
-	}
-
-
-	public void addReference() {
-		this.references++;
+		this.references = ref;
 	}
 
 	@Override

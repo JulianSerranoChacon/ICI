@@ -85,61 +85,59 @@ public class Ghosts extends GhostController {
 			SimpleState protectTheEdible = new SimpleState(new ProtectEdibleGhostAction(ghost,gi));
 			
 			//ChaseTransitions
-			GhostsPasoAHunter1 hunter1Trans = new GhostsPasoAHunter1(ghost,gi);
-			GhostsPasoAHunter2 hunter2Trans = new GhostsPasoAHunter2(ghost,gi);
-			GhostsPasoAJailer jailerTrans = new GhostsPasoAJailer(ghost,gi);
-			GhostsPasoARandom randomTrans = new GhostsPasoARandom(ghost,gi);
-			GhostsVoyASerEscuderoQueProteje escuderoQueProteje = new GhostsVoyASerEscuderoQueProteje(ghost,gi);
+			GhostsPasoAHunter1 hunter1Trans0 = new GhostsPasoAHunter1(ghost,gi,0);
+			GhostsPasoAHunter2 hunter2Trans0 = new GhostsPasoAHunter2(ghost,gi,0);
+			GhostsPasoAJailer jailerTrans0 = new GhostsPasoAJailer(ghost,gi,0);
+			GhostsPasoARandom randomTrans0 = new GhostsPasoARandom(ghost,gi,0);
+			GhostsVoyASerEscuderoQueProteje escuderoQueProteje0 = new GhostsVoyASerEscuderoQueProteje(ghost,gi,0);
+			
+			GhostsPasoAHunter1 hunter1Trans1 = new GhostsPasoAHunter1(ghost,gi,1);
+			GhostsPasoAHunter2 hunter2Trans1 = new GhostsPasoAHunter2(ghost,gi,1);
+			GhostsPasoAJailer jailerTrans1 = new GhostsPasoAJailer(ghost,gi,1);
+			GhostsPasoARandom randomTrans1 = new GhostsPasoARandom(ghost,gi,1);
+			GhostsVoyASerEscuderoQueProteje escuderoQueProteje1 = new GhostsVoyASerEscuderoQueProteje(ghost,gi,1);
+			
+			GhostsPasoAHunter1 hunter1Trans2 = new GhostsPasoAHunter1(ghost,gi,2);
+			GhostsPasoAHunter2 hunter2Trans2 = new GhostsPasoAHunter2(ghost,gi,2);
+			GhostsPasoAJailer jailerTrans2 = new GhostsPasoAJailer(ghost,gi,2);
+			GhostsPasoARandom randomTrans2 = new GhostsPasoARandom(ghost,gi,2);
+			GhostsVoyASerEscuderoQueProteje escuderoQueProteje2 = new GhostsVoyASerEscuderoQueProteje(ghost,gi,2);
+			
+			GhostsPasoAHunter1 hunter1Trans3 = new GhostsPasoAHunter1(ghost,gi,3);
+			GhostsPasoAHunter2 hunter2Trans3 = new GhostsPasoAHunter2(ghost,gi,3);
+			GhostsPasoAJailer jailerTrans3 = new GhostsPasoAJailer(ghost,gi,3);
+			GhostsPasoARandom randomTrans3 = new GhostsPasoARandom(ghost,gi,3);
+			GhostsVoyASerEscuderoQueProteje escuderoQueProteje3 = new GhostsVoyASerEscuderoQueProteje(ghost,gi,3);
 			
 			//Hunter1
-			cfsChase.add(hunter1, hunter2Trans, hunter2);
-			hunter2Trans.addReference();
-			cfsChase.add(hunter1, jailerTrans, jailer);
-			jailerTrans.addReference(); //To avoid the Singleton exception
-			cfsChase.add(hunter1, randomTrans, random);
-			randomTrans.addReference();
-			cfsChase.add(hunter1, escuderoQueProteje, protectTheEdible);
-			escuderoQueProteje.addReference();
+			cfsChase.add(hunter1, hunter2Trans0, hunter2);
+			cfsChase.add(hunter1, jailerTrans0, jailer);
+			cfsChase.add(hunter1, randomTrans0, random);
+			cfsChase.add(hunter1, escuderoQueProteje0, protectTheEdible);
 			
 			//Hunter2
-			cfsChase.add(hunter2, hunter1Trans, hunter1);
-			hunter1Trans.addReference();
-			cfsChase.add(hunter2, jailerTrans, jailer);
-			jailerTrans.addReference(); //To avoid the Singleton exception
-			cfsChase.add(hunter2, randomTrans, random);
-			randomTrans.addReference();
-			cfsChase.add(hunter2, escuderoQueProteje, protectTheEdible);
-			escuderoQueProteje.addReference();
+			cfsChase.add(hunter2, hunter1Trans0, hunter1);
+			cfsChase.add(hunter2, jailerTrans1, jailer);
+			cfsChase.add(hunter2, randomTrans1, random);
+			cfsChase.add(hunter2, escuderoQueProteje1, protectTheEdible);
 			
 			//Jailer
-			cfsChase.add(jailer, hunter1Trans, hunter1);
-			hunter1Trans.addReference();
-			cfsChase.add(jailer, hunter2Trans, hunter2);
-			hunter2Trans.addReference();
-			cfsChase.add(jailer, randomTrans, random);
-			randomTrans.addReference();
-			cfsChase.add(jailer, escuderoQueProteje, protectTheEdible);
-			escuderoQueProteje.addReference();
+			cfsChase.add(jailer, hunter1Trans1, hunter1);
+			cfsChase.add(jailer, hunter2Trans1, hunter2);
+			cfsChase.add(jailer, randomTrans2, random);
+			cfsChase.add(jailer, escuderoQueProteje2, protectTheEdible);
 			
 			//Random
-			cfsChase.add(random, hunter1Trans, hunter1);
-			hunter1Trans.addReference();
-			cfsChase.add(random, hunter2Trans, hunter2);
-			hunter2Trans.addReference();
-			cfsChase.add(random, jailerTrans, jailer);
-			jailerTrans.addReference(); //To avoid the Singleton exception
-			cfsChase.add(random, escuderoQueProteje, protectTheEdible);
-			escuderoQueProteje.addReference();
+			cfsChase.add(random, hunter1Trans2, hunter1);
+			cfsChase.add(random, hunter2Trans2, hunter2);
+			cfsChase.add(random, jailerTrans2, jailer);
+			cfsChase.add(random, escuderoQueProteje3, protectTheEdible);
 			
 			//DefiendoAlComestible
-			cfsChase.add(protectTheEdible, hunter1Trans, hunter1);
-			hunter1Trans.addReference();
-			cfsChase.add(protectTheEdible, hunter2Trans, hunter2);
-			hunter2Trans.addReference();
-			cfsChase.add(protectTheEdible, jailerTrans, jailer);
-			jailerTrans.addReference(); //To avoid the Singleton exception
-			cfsChase.add(protectTheEdible, randomTrans, random);
-			randomTrans.addReference();
+			cfsChase.add(protectTheEdible, hunter1Trans3, hunter1);
+			cfsChase.add(protectTheEdible, hunter2Trans3, hunter2);
+			cfsChase.add(protectTheEdible, jailerTrans3, jailer);
+			cfsChase.add(protectTheEdible, randomTrans3, random);
 			
 			cfsChase.ready(hunter1);
 			
@@ -158,7 +156,8 @@ public class Ghosts extends GhostController {
 			
 			//RunTransitions
 			GhostHayFantasmaEnMiCamino FantEnMiCaminoHuida = new GhostHayFantasmaEnMiCamino(ghost);
-			GhostsHayEscudero hayEscuderoHuida = new GhostsHayEscudero(ghost);
+			GhostsHayEscudero hayEscuderoHuida0 = new GhostsHayEscudero(ghost,0);
+			GhostsHayEscudero hayEscuderoHuida1 = new GhostsHayEscudero(ghost,1);
 			GhostsHePasadoAlEscudero paseAlEscudero = new GhostsHePasadoAlEscudero(ghost,gi);
 			GhostsNoFantasmasCerca noFantCerca = new GhostsNoFantasmasCerca(ghost); 
 			GhostsNoHayFantasmasCercaEuclidiana noFantCercaEu = new GhostsNoHayFantasmasCercaEuclidiana(ghost);
@@ -170,15 +169,13 @@ public class Ghosts extends GhostController {
 			cfsRun.add(orbit, pacManCerca, runAway);
 			
 			//RunOptimal Changes
-			cfsRun.add(runAway, hayEscuderoHuida, runToEscudero);
-			hayEscuderoHuida.addReference();
+			cfsRun.add(runAway, hayEscuderoHuida0, runToEscudero);
 			cfsRun.add(runAway, FantEnMiCaminoHuida, runSubOptimal);
 			cfsRun.add(runAway, pacManLejos, orbit);
 		
 			//RunSubOptimal Changes
 			cfsRun.add(runSubOptimal, noFantCerca, runAway);
-			cfsRun.add(runSubOptimal, hayEscuderoHuida, runToEscudero);
-			hayEscuderoHuida.addReference();
+			cfsRun.add(runSubOptimal, hayEscuderoHuida1, runToEscudero);
 		
 			//RunToEscudero Changes
 			cfsRun.add(runToEscudero, paseAlEscudero, runAway);
