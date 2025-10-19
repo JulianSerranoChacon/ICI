@@ -200,7 +200,6 @@ public class MsPacManInput extends Input {
 		return false;
 	}
 	
-	//TODO: Refactor
 	// Speed of ghosts is halved
 	private boolean ghostReachable(GHOST ghost) {
 		if(game.getGhostLairTime(ghost) > 0) {
