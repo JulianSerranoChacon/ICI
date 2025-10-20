@@ -6,7 +6,7 @@ import es.ucm.fdi.ici.fsm.Transition;
 
 public class PacManNearPPillTransition implements Transition {
 
-	public static double thresold = 30;
+	public static double thresold = 40;
 	
 	public PacManNearPPillTransition() {
 		super();

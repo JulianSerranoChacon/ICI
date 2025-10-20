@@ -1,5 +1,6 @@
 package es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,19 +111,6 @@ public class GhostsInput extends Input {
     			}
     		}
     	}
-       	
-    	minDistance = 100000;
-    	//Sacar Segundo Fantasma Cercano
-       	for (GHOST ghostType : GHOST.values()) {
-    		if(!game.isGhostEdible(ghostType) && game.getGhostLairTime(ghostType) <= 0 && ghostType != closerGhostToPacMan) {
-    			distance = Math.abs(game.getPacmanCurrentNodeIndex() - game.getGhostCurrentNodeIndex(ghostType));
-    			if(distance < minDistance) {
-    				minDistance = distance;
-    				secondCloserGhost = ghostType;
-    				asignados[1] = true;
-    			}
-    		}
-    	}	
     	
     	minDistance = 100000;
     	//Sacar jailer
@@ -140,15 +128,31 @@ public class GhostsInput extends Input {
     			}
     			distance = Math.abs(futureNodeMove[0]  - game.getGhostCurrentNodeIndex(ghostType));
       			if( minDistance > distance) {
-      				if(GhostClass.get(ghostType) == GHOSTTYPE.HUNTER2) {
-      					asignados[1] = false;
-      				}
+
     				minDistance = distance;
     				jailerGhost = ghostType;
     				asignados[2] = true;
     			}
     		}
     	}
+       	
+    	minDistance = 100000;
+    	//Sacar Segundo Fantasma Cercano
+       	for (GHOST ghostType : GHOST.values()) {
+    		if(!game.isGhostEdible(ghostType) && game.getGhostLairTime(ghostType) <= 0 && ghostType != closerGhostToPacMan) {
+    			distance = Math.abs(game.getPacmanCurrentNodeIndex() - game.getGhostCurrentNodeIndex(ghostType));
+    			if(distance < minDistance) {
+      				if(GhostClass.get(ghostType) == GHOSTTYPE.JAILER) {
+      					asignados[2] = false;
+      				}
+    				minDistance = distance;
+    				secondCloserGhost = ghostType;
+    				asignados[1] = true;
+    			}
+    		}
+    	}	
+    	
+    
 
     
     	
@@ -189,10 +193,13 @@ public class GhostsInput extends Input {
 	
 		int pacman = game.getPacmanCurrentNodeIndex();
 		this.minPacmanDistancePPill = Double.MAX_VALUE;
-		for(int ppill: game.getPowerPillIndices()) {
-			double distance = game.getDistance(pacman, ppill, DM.PATH);
+		for(int ppill: game.getActivePowerPillsIndices()) {
+			double distance = 0;
+			game.getNumberOfActivePills();
+			distance = game.getDistance(pacman, ppill, DM.PATH);
 			this.minPacmanDistancePPill = Math.min(distance, this.minPacmanDistancePPill);
 		}
+	
 		parseDistanceFromGhostToPacman();
 		parseFromPacManToGhost();
 		parseDistanceGhostToGhost();

@@ -54,7 +54,7 @@ public class GhostHayFantasmaEnMiCamino implements Transition  {
 		for(GHOST otherGhost : GHOST.values()) {
 			if(otherGhost != ghost) {
 				
-				if(in.getGame().getGhostLairTime(otherGhost)==0&&!flag&& in.getGame().isGhostEdible(otherGhost))
+				if(in.getGame().getGhostLairTime(otherGhost)==0&&!flag&& !in.getGame().isGhostEdible(otherGhost))
 					flag = visitNode.containsKey(in.getGame().getGhostCurrentNodeIndex(otherGhost));
 				
 				

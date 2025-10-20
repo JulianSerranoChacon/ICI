@@ -24,6 +24,7 @@ import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions.StartRunningAction;
 
 //Transitions
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostHayFantasmaEnMiCamino;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsEdibleTransition;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsHayEscudero;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsHePasadoAlEscudero;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsNoFantasmasCerca;
@@ -32,13 +33,14 @@ import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPacmanEst
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPacmanEstaCerca;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPacManHaComidoPP;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPacManLejosParpadeo;
-import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPacManVaAPillarPP;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPacManNoVaAPillarPP;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPasoAHunter1;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPasoAHunter2;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPasoAJailer;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPasoARandom;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsSoyComestible;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsVoyASerEscuderoQueProteje;
+import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.PacManNearPPillTransition;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsSeHanComidoAMiEdible;
 import es.ucm.fdi.ici.fsm.CompoundState;
 //State Machine
@@ -141,7 +143,7 @@ public class Ghosts extends GhostController {
 			
 			//RunStates
 			SimpleState runAway = new SimpleState(new RunOptimalAction(ghost));
-			SimpleState runSubOptimal = new SimpleState(new RunSubOptimalAction(ghost));
+			//SimpleState runSubOptimal = new SimpleState(new RunSubOptimalAction(ghost));
 			SimpleState orbit = new SimpleState(new OrbitateAction(ghost));
 			SimpleState runToEscudero = new SimpleState(new RunToEscuderoAction(ghost,gi));
 			
@@ -154,19 +156,15 @@ public class Ghosts extends GhostController {
 			GhostsNoHayFantasmasCercaEuclidiana noFantCercaEu = new GhostsNoHayFantasmasCercaEuclidiana(ghost);
 			GhostsPacmanEstaLejos pacManLejos = new GhostsPacmanEstaLejos(ghost);
 			GhostsPacmanEstaCerca pacManCerca = new GhostsPacmanEstaCerca(ghost);
-			GhostsSoyComestible soyComestible = new GhostsSoyComestible(ghost);
 			
 			//Orbit Changes
 			cfsRun.add(orbit, pacManCerca, runAway);
 			
 			//RunOptimal Changes
 			cfsRun.add(runAway, hayEscuderoHuida0, runToEscudero);
-			cfsRun.add(runAway, FantEnMiCaminoHuida, runSubOptimal);
+
 			cfsRun.add(runAway, pacManLejos, orbit);
 		
-			//RunSubOptimal Changes
-			cfsRun.add(runSubOptimal, noFantCerca, runAway);
-			cfsRun.add(runSubOptimal, hayEscuderoHuida1, runToEscudero);
 		
 			//RunToEscudero Changes
 			cfsRun.add(runToEscudero, paseAlEscudero, runAway);
@@ -181,11 +179,15 @@ public class Ghosts extends GhostController {
 			//Transitions
 			GhostsPacManLejosParpadeo lejosParpadeo = new GhostsPacManLejosParpadeo(ghost);
 			GhostsPacManHaComidoPP comioPP = new GhostsPacManHaComidoPP(ghost);
-			GhostsPacManVaAPillarPP VaAPillarLaPP = new GhostsPacManVaAPillarPP(ghost);
+			PacManNearPPillTransition CrecadePP = new PacManNearPPillTransition();
+			GhostsPacManNoVaAPillarPP NoVaAPillarPP = new GhostsPacManNoVaAPillarPP(ghost);
+			GhostsEdibleTransition isGhostEdible = new GhostsEdibleTransition(ghost);
 			//FSM CHANGES
-			fsm.add(persecucion, VaAPillarLaPP, startRunning);
+			fsm.add(persecucion, CrecadePP, startRunning);
+			fsm.add(startRunning, NoVaAPillarPP, persecucion);
 			fsm.add(startRunning, comioPP, huida);
 			fsm.add(huida,lejosParpadeo, persecucion);
+			fsm.add(persecucion,isGhostEdible, huida);
 			fsm.ready(persecucion);
 			
 			//RENDER

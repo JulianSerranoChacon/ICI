@@ -24,7 +24,11 @@ public class GhostsSeHanComidoAMiEdible implements Transition  {
 
 		boolean flag = input.getGame().isGhostEdible(gi.getMyShieldGhost(this.ghost));
 		gi.setaShieldGhost(this.ghost, this.ghost);
-		return flag;
+		boolean noComestibles = false;
+		for(GHOST g : GHOST.values()) {
+			if(input.getGame().isGhostEdible(g)) noComestibles = true;
+		}
+		return flag && noComestibles;
 	}
 	@Override
 	public String toString() {

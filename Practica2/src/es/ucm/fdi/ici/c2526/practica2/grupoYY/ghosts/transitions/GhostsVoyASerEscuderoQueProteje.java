@@ -25,6 +25,7 @@ public class GhostsVoyASerEscuderoQueProteje implements Transition  {
 		GhostsInput input = (GhostsInput)in;
 		GHOST nearToPacMan = ghost;
 		int nearDistance = 999999;
+		
 		for(GHOST otherGhost : GHOST.values()) {
 			if(otherGhost != ghost && in.getGame().isGhostEdible(otherGhost)) {
 				int distance = gi.getDistanceFromPacmanToGhost(otherGhost);

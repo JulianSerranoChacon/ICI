@@ -5,11 +5,11 @@ import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.GhostsInput;
 import es.ucm.fdi.ici.fsm.Transition;
 import pacman.game.Constants.GHOST;
 
-public class GhostsPacManVaAPillarPP implements Transition  {
+public class GhostsPacManNoVaAPillarPP implements Transition  {
 
 	GHOST ghost;
 	int distanceFromShield = 999999;
-	public GhostsPacManVaAPillarPP(GHOST ghost) {
+	public GhostsPacManNoVaAPillarPP(GHOST ghost) {
 		super();
 		this.ghost = ghost;
 	}
@@ -21,7 +21,7 @@ public class GhostsPacManVaAPillarPP implements Transition  {
 		
 		GhostsInput input = (GhostsInput)in;
 		if(in.getGame().getActivePowerPillsIndices().length == 0) {
-			return false;		
+			return true;		
 		}
 		boolean flag = false;
 		int nearestGhost = 99999;
@@ -43,8 +43,8 @@ public class GhostsPacManVaAPillarPP implements Transition  {
 		
 	
 		
-		if(in.getGame().isJunction(in.getGame().getPacmanCurrentNodeIndex())) { return false;}
-		if(nearestGhost<nearestPP)  {return false;}
+		if(in.getGame().isJunction(in.getGame().getPacmanCurrentNodeIndex())) { return true;}
+		if(nearestGhost<nearestPP)  {return true;}
 		else {
 			
 			
@@ -54,21 +54,21 @@ public class GhostsPacManVaAPillarPP implements Transition  {
     			//System.out.println(in.getGame().getNeighbouringNodes(i).length);
     			if(in.getGame().isJunction(i)) { 
     				
-    				return false;
+    				return true;
     				}
     		}
 			
 		}
 		
 		
-		return true;
+		return false;
 	}
 
 
 
 	@Override
 	public String toString() {
-		return "Va a pillar la PP";
+		return "No va a pillar la PP";
 	}
 
 	
