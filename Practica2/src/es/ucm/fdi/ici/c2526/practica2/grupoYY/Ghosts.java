@@ -16,19 +16,15 @@ import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions.Hunter2Action;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions.JailerAction;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions.RandomAction;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions.RunOptimalAction;
-import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions.RunSubOptimalAction;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions.OrbitateAction;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions.ProtectEdibleGhostAction;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions.RunToEscuderoAction;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.actions.StartRunningAction;
 
 //Transitions
-import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostHayFantasmaEnMiCamino;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsEdibleTransition;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsHayEscudero;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsHePasadoAlEscudero;
-import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsNoFantasmasCerca;
-import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsNoHayFantasmasCercaEuclidiana;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPacmanEstaLejos;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPacmanEstaCerca;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPacManHaComidoPP;
@@ -38,7 +34,6 @@ import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPasoAHunt
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPasoAHunter2;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPasoAJailer;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsPasoARandom;
-import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsSoyComestible;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsVoyASerEscuderoQueProteje;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.PacManNearPPillTransition;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.transitions.GhostsSeHanComidoAMiEdible;
@@ -148,12 +143,8 @@ public class Ghosts extends GhostController {
 			SimpleState runToEscudero = new SimpleState(new RunToEscuderoAction(ghost,gi));
 			
 			//RunTransitions
-			GhostHayFantasmaEnMiCamino FantEnMiCaminoHuida = new GhostHayFantasmaEnMiCamino(ghost);
-			GhostsHayEscudero hayEscuderoHuida0 = new GhostsHayEscudero(ghost,gi,0);
-			GhostsHayEscudero hayEscuderoHuida1 = new GhostsHayEscudero(ghost,gi,1);
+			GhostsHayEscudero hayEscuderoHuida = new GhostsHayEscudero(ghost,gi);
 			GhostsHePasadoAlEscudero paseAlEscudero = new GhostsHePasadoAlEscudero(ghost,gi);
-			GhostsNoFantasmasCerca noFantCerca = new GhostsNoFantasmasCerca(ghost); 
-			GhostsNoHayFantasmasCercaEuclidiana noFantCercaEu = new GhostsNoHayFantasmasCercaEuclidiana(ghost);
 			GhostsPacmanEstaLejos pacManLejos = new GhostsPacmanEstaLejos(ghost);
 			GhostsPacmanEstaCerca pacManCerca = new GhostsPacmanEstaCerca(ghost);
 			
@@ -161,7 +152,7 @@ public class Ghosts extends GhostController {
 			cfsRun.add(orbit, pacManCerca, runAway);
 			
 			//RunOptimal Changes
-			cfsRun.add(runAway, hayEscuderoHuida0, runToEscudero);
+			cfsRun.add(runAway, hayEscuderoHuida, runToEscudero);
 
 			cfsRun.add(runAway, pacManLejos, orbit);
 		

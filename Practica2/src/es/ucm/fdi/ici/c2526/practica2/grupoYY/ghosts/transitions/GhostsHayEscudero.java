@@ -11,14 +11,12 @@ import pacman.game.Constants.GHOST;
 public class GhostsHayEscudero implements Transition  {
 
 	GHOST ghost;
-	int references; 
 	GhostInfo g;
 	int limit;
-	public GhostsHayEscudero(GHOST ghost,GhostInfo g,int ref) {
+	public GhostsHayEscudero(GHOST ghost,GhostInfo g) {
 		super();
 		this.ghost = ghost;
 		this.g = g;
-		this.references = ref;
 		this.limit = 100;
 	}
 
@@ -62,7 +60,7 @@ public class GhostsHayEscudero implements Transition  {
 
 	@Override
 	public String toString() {
-		return "Hay escudero " + this.references;
+		return "Hay escudero ";
 	}
 
 	
