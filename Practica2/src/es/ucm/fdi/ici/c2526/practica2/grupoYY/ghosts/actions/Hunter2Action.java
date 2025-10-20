@@ -13,7 +13,7 @@ import java.awt.Color;
 public class Hunter2Action implements Action  {
     GHOST ghost;
     GhostInfo gI;
-    private int DistanceGhosts = 150; //Limit distance between Ghosts in the same road
+    private int DistanceGhosts = 90; //Limit distance between Ghosts in the same road
     
 	public Hunter2Action( GHOST ghost, GhostInfo gi) {
 		this.ghost = ghost;
