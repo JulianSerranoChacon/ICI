@@ -26,7 +26,7 @@ public class OrbitateAction implements Action {
         if (game.doesGhostRequireAction(ghost))        //if it requires an action
         {
            //Checks the new value of the limit distance
-           this.orbitDistance = (game.getGhostEdibleTime(this.ghost)/2) + 1; //Initial distance is 101 because 100 is the limit when pacMan can eat us before die so in the end when edible time is 0 the limit will be 1
+           this.orbitDistance = (game.getGhostEdibleTime(this.ghost)*2) + 1; //Initial distance is 101 because 100 is the limit when pacMan can eat us before die so in the end when edible time is 0 the limit will be 1
            //System.out.println("CUAL ES MI DISTANCIA DE ORBITA? " + this.orbitDistance);
            
            //We take the closer intersection distance from our actual spot and checks if we move there if we are in danger or not
