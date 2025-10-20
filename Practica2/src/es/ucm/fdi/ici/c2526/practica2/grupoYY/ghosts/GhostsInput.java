@@ -91,9 +91,10 @@ public class GhostsInput extends Input {
     	
 		GhostClass = new HashMap<>();
     	GHOST closerGhostToPacMan = GHOST.BLINKY;
-		GHOST jailerGhost = GHOST.BLINKY;;
-		GHOST secondCloserGhost = GHOST.BLINKY;;
+		GHOST jailerGhost = GHOST.BLINKY;
+		GHOST secondCloserGhost = GHOST.BLINKY;
 
+		boolean[] asignados = new boolean[4];
 		int distance = 0;
 		int minDistance = 100000;
 
@@ -105,10 +106,11 @@ public class GhostsInput extends Input {
     			 if(distance < minDistance) {
     				minDistance = distance;
     				closerGhostToPacMan = ghostType;
+    				asignados[0] = true;
     			}
     		}
     	}
-    	
+       	
     	minDistance = 100000;
     	//Sacar Segundo Fantasma Cercano
        	for (GHOST ghostType : GHOST.values()) {
@@ -117,6 +119,7 @@ public class GhostsInput extends Input {
     			if(distance < minDistance) {
     				minDistance = distance;
     				secondCloserGhost = ghostType;
+    				asignados[1] = true;
     			}
     		}
     	}	
@@ -131,29 +134,48 @@ public class GhostsInput extends Input {
 		}
 
        	for (GHOST ghostType : GHOST.values()) {
-    		if(!game.isGhostEdible(ghostType) && game.getGhostLairTime(ghostType) <= 0 && ghostType != closerGhostToPacMan &&
-    				ghostType != secondCloserGhost) {
+    		if(!game.isGhostEdible(ghostType) && game.getGhostLairTime(ghostType) <= 0 && ghostType != closerGhostToPacMan) {
+    			if(Math.abs(game.getGhostCurrentNodeIndex(ghostType) - game.getGhostCurrentNodeIndex(closerGhostToPacMan)) <= 5) {
+    				break;
+    			}
     			distance = Math.abs(futureNodeMove[0]  - game.getGhostCurrentNodeIndex(ghostType));
       			if( minDistance > distance) {
+      				if(GhostClass.get(ghostType) == GHOSTTYPE.HUNTER2) {
+      					asignados[1] = false;
+      				}
     				minDistance = distance;
     				jailerGhost = ghostType;
+    				asignados[2] = true;
     			}
     		}
     	}
+
+    
     	
     	//Change the behavior of every ghost if is necessary
     	for(GHOST g : GHOST.values()) {	
-    		if(g == closerGhostToPacMan) {
+    		if(asignados[0] && g == closerGhostToPacMan) {
     			GhostClass.put(g, GHOSTTYPE.HUNTER1);
     		}
-    		else if(g == jailerGhost) {
+    		else if(asignados[2] && g == jailerGhost) {
     			GhostClass.put(g, GHOSTTYPE.JAILER);
     		}
-    		else if(g == secondCloserGhost) {
+    		else if(asignados[1] && g == secondCloserGhost) {
     			GhostClass.put(g, GHOSTTYPE.HUNTER2);
     		}
     		else {
-    			GhostClass.put(g, GHOSTTYPE.RANDOM);
+    			if(asignados[1] == false) {
+    				GhostClass.put(g, GHOSTTYPE.HUNTER2);
+    				asignados[1] = true; 
+    			}
+    			else if(asignados[2] == false) {
+    				GhostClass.put(g, GHOSTTYPE.JAILER);
+    				asignados[2] = true; 
+    			}
+    			else if(asignados[3] == false){
+    				asignados[3] = true;
+        			GhostClass.put(g, GHOSTTYPE.RANDOM);
+    			}
     		}
     	}
     }

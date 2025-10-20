@@ -25,6 +25,7 @@ public class GhostHayFantasmaEnMiCamino implements Transition  {
 
 	@Override
 	public boolean evaluate(Input in) {
+		//Debería comprobar la distancia de PacMan a este fantasma (Si no me puede pillar por la huida óptima tiro por ahí, si no tiro por la otra
 		GhostsInput input = (GhostsInput)in;
 		if(in.getGame().getGhostLairTime(ghost)!=0) return false;
 		int mghostNode = in.getGame().getGhostCurrentNodeIndex(ghost);
@@ -40,7 +41,6 @@ public class GhostHayFantasmaEnMiCamino implements Transition  {
 			if(!in.getGame().isJunction(aux)) {
 			futureNodeMove = in.getGame().getNeighbouringNodes(aux);
 			for(int a : futureNodeMove) {
-				//System.out.println(visitNode.contains(a));
 				if(!visitNode.containsKey(a)) {
 					colaNodos.add(a);
 					
@@ -54,13 +54,12 @@ public class GhostHayFantasmaEnMiCamino implements Transition  {
 		for(GHOST otherGhost : GHOST.values()) {
 			if(otherGhost != ghost) {
 				
-				if(in.getGame().getGhostLairTime(otherGhost)==0&&!flag&& !in.getGame().isGhostEdible(otherGhost))
+				if(in.getGame().getGhostLairTime(otherGhost)==0&&!flag&& in.getGame().isGhostEdible(otherGhost))
 					flag = visitNode.containsKey(in.getGame().getGhostCurrentNodeIndex(otherGhost));
 				
 				
 			}
 		}
-		//System.out.println(flag);
 		return flag;
 	}
 

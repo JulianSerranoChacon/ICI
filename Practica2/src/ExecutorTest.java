@@ -16,8 +16,8 @@ public class ExecutorTest {
 
         PacmanController pacMan = new MsPacMan();
         GhostController ghosts = new Ghosts();
-        
-        Stats stats[] = executor.runExperiment(pacMan, ghosts, 5000, "triaje 1");//last parameter defines speed
+       // executor.runGame(pacMan,ghosts,30);
+       Stats stats[] = executor.runExperiment(pacMan, ghosts, 500, "triaje 1");//last parameter defines speed
         for (Stats stat : stats) {
             System.out.println( 
                 stat.toString()
