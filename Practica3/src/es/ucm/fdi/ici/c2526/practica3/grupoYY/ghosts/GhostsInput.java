@@ -125,20 +125,20 @@ public class GhostsInput extends RulesInput {
 			facts.add(String.format("(BLINKY (ghostRole %d))", 
 					this.GhostClass.get(GHOST.BLINKY)));			
 		}
-
+		
 		if(Objects.isNull(this.GhostClass.get(GHOST.BLINKY))) {
-			facts.add(String.format("(INKY (ghostRole %d))", 
-					this.GhostClass.get(GHOST.INKY)));
+		facts.add(String.format("(INKY (ghostRole %d))", 
+				this.GhostClass.get(GHOST.INKY)));
 		}
-
+		
 		if(Objects.isNull(this.GhostClass.get(GHOST.BLINKY))) {
-			facts.add(String.format("(PINKY (ghostRole %d))", 
-					this.GhostClass.get(GHOST.PINKY)));
+		facts.add(String.format("(PINKY (ghostRole %d))", 
+				this.GhostClass.get(GHOST.PINKY)));
 		}
-
+		
 		if(Objects.isNull(this.GhostClass.get(GHOST.BLINKY))) {
-			facts.add(String.format("(SUE (ghostRole %d))", 
-					this.GhostClass.get(GHOST.SUE)));
+		facts.add(String.format("(SUE (ghostRole %d))", 
+				this.GhostClass.get(GHOST.SUE)));
 		}					
 		
 		return facts;
