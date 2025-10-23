@@ -5,8 +5,8 @@ import java.util.EnumMap;
 import java.util.HashMap;
 
 import es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts.GhostsInput;
-import es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts.actions.ChaseAction;
-import es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts.actions.RunAwayAction;
+import es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts.actions.BasicAction1;
+import es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts.actions.BasicAction2;
 import es.ucm.fdi.ici.rules.RuleEngine;
 import es.ucm.fdi.ici.rules.RulesAction;
 import es.ucm.fdi.ici.rules.RulesInput;
@@ -29,14 +29,14 @@ public class Ghosts  extends GhostController  {
 		
 		map = new HashMap<String,RulesAction>();
 		//Fill Actions
-		RulesAction BLINKYchases = new ChaseAction(GHOST.BLINKY);
-		RulesAction INKYchases = new ChaseAction(GHOST.INKY);
-		RulesAction PINKYchases = new ChaseAction(GHOST.PINKY);
-		RulesAction SUEchases = new ChaseAction(GHOST.SUE);
-		RulesAction BLINKYrunsAway = new RunAwayAction(GHOST.BLINKY);
-		RulesAction INKYrunsAway = new RunAwayAction(GHOST.INKY);
-		RulesAction PINKYrunsAway = new RunAwayAction(GHOST.PINKY);
-		RulesAction SUErunsAway = new RunAwayAction(GHOST.SUE);
+		RulesAction BLINKYchases = new BasicAction1(GHOST.BLINKY);
+		RulesAction INKYchases = new BasicAction1(GHOST.INKY);
+		RulesAction PINKYchases = new BasicAction1(GHOST.PINKY);
+		RulesAction SUEchases = new BasicAction1(GHOST.SUE);
+		RulesAction BLINKYrunsAway = new BasicAction2(GHOST.BLINKY);
+		RulesAction INKYrunsAway = new BasicAction2(GHOST.INKY);
+		RulesAction PINKYrunsAway = new BasicAction2(GHOST.PINKY);
+		RulesAction SUErunsAway = new BasicAction2(GHOST.SUE);
 		
 		map.put("BLINKYchases", BLINKYchases);
 		map.put("INKYchases", INKYchases);

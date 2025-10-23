@@ -7,10 +7,10 @@ import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
-public class ChaseAction implements RulesAction {
+public class RunOptimalAction implements RulesAction {
 
     GHOST ghost;
-	public ChaseAction( GHOST ghost) {
+	public RunOptimalAction(GHOST ghost) {
 		this.ghost = ghost;
 	}
 
@@ -18,23 +18,22 @@ public class ChaseAction implements RulesAction {
 	public MOVE execute(Game game) {
         if (game.doesGhostRequireAction(ghost))        //if it requires an action
         {
-                return game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost),
+                return game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghost),
                         game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH);
         }
-        return MOVE.NEUTRAL;
+            
+        return MOVE.NEUTRAL;	
 	}
 
 	@Override
 	public void parseFact(Fact actionFact) {
-		// Nothing to parse
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public String getActionId() {
-		return ghost + "chases";
+		return ghost+ "runsOptimal";
 	}
-
-	
 
 }

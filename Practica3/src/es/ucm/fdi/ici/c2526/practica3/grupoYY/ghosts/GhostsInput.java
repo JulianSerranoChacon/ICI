@@ -92,52 +92,52 @@ public class GhostsInput extends RulesInput {
 		
 		//ADD DISTANCE FROM GHOST TO GHOST //
 		//BLINKY
-		facts.add(String.format("(BLINKY (distanceToINKY %d))", 
+		facts.add(String.format("(BLINKY (BLINKYdistanceToINKY %d))", 
 				this.distanceFromGhostToGhost.get(GHOST.BLINKY).get(GHOST.INKY)));
-		facts.add(String.format("(BLINKY (distanceToPINKY %d))", 
+		facts.add(String.format("(BLINKY (BLINKYdistanceToPINKY %d))", 
 				this.distanceFromGhostToGhost.get(GHOST.BLINKY).get(GHOST.PINKY)));
-		facts.add(String.format("(BLINKY (distanceToSUE %d))", 
+		facts.add(String.format("(BLINKY (BLINKYdistanceToSUE %d))", 
 				this.distanceFromGhostToGhost.get(GHOST.BLINKY).get(GHOST.SUE)));
 		//INKY
-		facts.add(String.format("(INKY (distanceToBLINKY %d))", 
+		facts.add(String.format("(INKY (INKYdistanceToBLINKY %d))", 
 				this.distanceFromGhostToGhost.get(GHOST.INKY).get(GHOST.BLINKY)));
-		facts.add(String.format("(INKY (distanceToPINKY %d))", 
+		facts.add(String.format("(INKY (INKYdistanceToPINKY %d))", 
 				this.distanceFromGhostToGhost.get(GHOST.INKY).get(GHOST.PINKY)));
-		facts.add(String.format("(INKY (distanceToSUE %d))", 
+		facts.add(String.format("(INKY (INKYdistanceToSUE %d))", 
 				this.distanceFromGhostToGhost.get(GHOST.INKY).get(GHOST.SUE)));
 		//PINKY
-		facts.add(String.format("(PINKY (distanceToBLINKY %d))", 
+		facts.add(String.format("(PINKY (PINKYdistanceToBLINKY %d))", 
 				this.distanceFromGhostToGhost.get(GHOST.PINKY).get(GHOST.BLINKY)));
-		facts.add(String.format("(PINKY (distanceToINKY %d))", 
+		facts.add(String.format("(PINKY (PINKYdistanceToINKY %d))", 
 				this.distanceFromGhostToGhost.get(GHOST.PINKY).get(GHOST.INKY)));
-		facts.add(String.format("(PINKY (distanceToSUE %d))", 
+		facts.add(String.format("(PINKY (PINKYdistanceToSUE %d))", 
 				this.distanceFromGhostToGhost.get(GHOST.PINKY).get(GHOST.SUE)));
 		//SUE
-		facts.add(String.format("(SUE (distanceToBLINKY %d))", 
+		facts.add(String.format("(SUE (SUEdistanceToBLINKY %d))", 
 				this.distanceFromGhostToGhost.get(GHOST.SUE).get(GHOST.BLINKY)));
-		facts.add(String.format("(SUE (distanceToINKY %d))", 
+		facts.add(String.format("(SUE (SUEdistanceToINKY %d))", 
 				this.distanceFromGhostToGhost.get(GHOST.SUE).get(GHOST.INKY)));
-		facts.add(String.format("(SUE (distanceToPINKY %d))", 
+		facts.add(String.format("(SUE (SUEdistanceToPINKY %d))", 
 				this.distanceFromGhostToGhost.get(GHOST.SUE).get(GHOST.PINKY)));
 		
 		//  GHOST ROLES   //
 		if(Objects.isNull(this.GhostClass.get(GHOST.BLINKY))) {
-			facts.add(String.format("(BLINKY (ghostRole %d))", 
+			facts.add(String.format("(BLINKY (BLINKYghostRole %d))", 
 					this.GhostClass.get(GHOST.BLINKY)));			
 		}
 		
-		if(Objects.isNull(this.GhostClass.get(GHOST.BLINKY))) {
-		facts.add(String.format("(INKY (ghostRole %d))", 
+		if(Objects.isNull(this.GhostClass.get(GHOST.INKY))) {
+		facts.add(String.format("(INKY (INKYghostRole %d))", 
 				this.GhostClass.get(GHOST.INKY)));
 		}
 		
-		if(Objects.isNull(this.GhostClass.get(GHOST.BLINKY))) {
-		facts.add(String.format("(PINKY (ghostRole %d))", 
+		if(Objects.isNull(this.GhostClass.get(GHOST.PINKY))) {
+		facts.add(String.format("(PINKY (PINKYghostRole %d))", 
 				this.GhostClass.get(GHOST.PINKY)));
 		}
 		
-		if(Objects.isNull(this.GhostClass.get(GHOST.BLINKY))) {
-		facts.add(String.format("(SUE (ghostRole %d))", 
+		if(Objects.isNull(this.GhostClass.get(GHOST.SUE))) {
+		facts.add(String.format("(SUE (SUEghostRole %d))", 
 				this.GhostClass.get(GHOST.SUE)));
 		}					
 		

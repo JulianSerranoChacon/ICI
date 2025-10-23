@@ -9,12 +9,12 @@ import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
-public class RunAwayAction implements RulesAction {
+public class BasicAction2 implements RulesAction {
 
     GHOST ghost;
     enum STRATEGY {RANDOM, CORNER, JAIL};
     STRATEGY runAwayStrategy; 
-	public RunAwayAction(GHOST ghost) {
+	public BasicAction2(GHOST ghost) {
 		this.ghost = ghost;
 	}
 
