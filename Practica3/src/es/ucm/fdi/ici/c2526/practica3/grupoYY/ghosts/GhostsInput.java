@@ -121,26 +121,47 @@ public class GhostsInput extends RulesInput {
 				this.distanceFromGhostToGhost.get(GHOST.SUE).get(GHOST.PINKY)));
 		
 		//  GHOST ROLES   //
-		if(Objects.isNull(this.GhostClass.get(GHOST.BLINKY))) {
-			facts.add(String.format("(BLINKY (BLINKYghostRole %d))", 
+		if(!Objects.isNull(this.shieldGhost.get(GHOST.BLINKY))) {
+			facts.add(String.format("(BLINKY (BLINKYcovers %d))", 
 					this.GhostClass.get(GHOST.BLINKY)));			
 		}
 		
-		if(Objects.isNull(this.GhostClass.get(GHOST.INKY))) {
-		facts.add(String.format("(INKY (INKYghostRole %d))", 
+		if(!Objects.isNull(this.GhostClass.get(GHOST.INKY))) {
+		facts.add(String.format("(INKY (INKYcovers %d))", 
 				this.GhostClass.get(GHOST.INKY)));
 		}
 		
-		if(Objects.isNull(this.GhostClass.get(GHOST.PINKY))) {
-		facts.add(String.format("(PINKY (PINKYghostRole %d))", 
+		if(!Objects.isNull(this.GhostClass.get(GHOST.PINKY))) {
+		facts.add(String.format("(PINKY (PINKYcovers %d))", 
 				this.GhostClass.get(GHOST.PINKY)));
 		}
 		
-		if(Objects.isNull(this.GhostClass.get(GHOST.SUE))) {
-		facts.add(String.format("(SUE (SUEghostRole %d))", 
+		if(!Objects.isNull(this.GhostClass.get(GHOST.SUE))) {
+		facts.add(String.format("(SUE (SUEcovers %d))", 
 				this.GhostClass.get(GHOST.SUE)));
 		}					
 		
+		// SHIELD GHOST //
+		
+		if(!Objects.isNull(this.shieldGhost.get(GHOST.BLINKY))) {
+			facts.add(String.format("(BLINKY (BLINKYcovers %d))", 
+					this.shieldGhost.get(GHOST.BLINKY)));			
+		}
+		
+		if(!Objects.isNull(this.shieldGhost.get(GHOST.INKY))) {
+		facts.add(String.format("(INKY (INKYcovers %d))", 
+				this.shieldGhost.get(GHOST.INKY)));
+		}
+		
+		if(!Objects.isNull(this.shieldGhost.get(GHOST.PINKY))) {
+		facts.add(String.format("(PINKY (PINKYcovers %d))", 
+				this.shieldGhost.get(GHOST.PINKY)));
+		}
+		
+		if(!Objects.isNull(this.shieldGhost.get(GHOST.SUE))) {
+		facts.add(String.format("(SUE (SUEcovers %d))", 
+				this.shieldGhost.get(GHOST.SUE)));
+		}					
 		return facts;
 	}
 	
