@@ -1,0 +1,53 @@
+package es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.PriorityQueue;
+
+import es.ucm.fdi.ici.Action;
+import pacman.game.Constants.DM;
+import pacman.game.Constants.MOVE;
+import pacman.game.Game;
+
+public class GoToNearestPillAction implements Action {
+	
+
+	public GoToNearestPillAction() {
+
+	}
+	
+	@Override
+	public MOVE execute(Game game) {
+		/*
+		Map<Double, Integer> distToPill = new HashMap<>();
+		PriorityQueue <Double> queue = new PriorityQueue<Double>();
+		
+		//We create the priority queue where the distance in relation to Pacman is the priority
+		for(int pill : game.getPillIndices()) {
+			if (game.isPillStillAvailable(pill)) {
+				queue.add(game.getDistance(game.getPacmanCurrentNodeIndex(), pill, DM.PATH));
+				distToPill.put(game.getDistance(game.getPacmanCurrentNodeIndex(), pill, DM.PATH), pill);
+			}
+		}
+		
+		//We go through the pills trying to see what is the first one that is easier to reach and does not kill us
+		while(!queue.isEmpty()) {
+			double aux = queue.poll();
+			for (MOVE m : pi.getCandidateMoves()) {
+				if (game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), distToPill.get(aux), game.getPacmanLastMoveMade(), DM.PATH) == m) {
+					return m;
+				}
+			}
+		}
+		
+		//If no pill seems appeling, we play safe
+		return pi.getCandidateMoves().get(0);*/
+		return MOVE.NEUTRAL;
+	}
+	
+	@Override
+	public String getActionId() {
+		return "Goes to nearest pill action";
+	}
+
+}
