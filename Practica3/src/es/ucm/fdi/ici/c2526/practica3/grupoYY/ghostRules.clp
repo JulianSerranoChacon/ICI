@@ -14,7 +14,7 @@
 (deftemplate MSPACMAN 
     (slot mindistancePPill (type NUMBER)) )
     
-;; DEFINITION OF THE ACTION FACT --> IS ALL IN THE PERSPECTIVE OF BLINKY, WE WILL ADAPT TO OTHER GHOSTS ;;
+;; DEFINITION OF THE ACTION FACT (ALSO A DATA_TYPE lol) --> IS ALL IN THE PERSPECTIVE OF BLINKY, WE WILL ADAPT TO OTHER GHOSTS ;;
 
 ;; Basic action
 (deftemplate ACTION
@@ -31,7 +31,7 @@
 	(slot id) (slot info (default "")) (slot priority (type NUMBER) )
 	(slot hunter1Id (type SYMBOL))
 
-;; RULES OF ALL GHOSTS ;;
+;; RULES OF ALL GHOSTS --> IS ALL IN THE PERSPECTIVE OF BLINKY, WE WILL ADAPT TO OTHER GHOSTS ;;
 
 ;; Basic rules
 (defrule BLINKYrunsAwayMSPACMANclosePPill

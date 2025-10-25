@@ -33,10 +33,7 @@ public class JailerAction implements RulesAction{
 	}
 	
 	@Override
-	public void parseFact(Fact actionFact) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void parseFact(Fact actionFact) {}
 
 	@Override
 	public String getActionId() {
