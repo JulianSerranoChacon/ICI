@@ -9,15 +9,8 @@ import pacman.game.Game;
 
 public class Hunter1Action implements RulesAction {
     GHOST ghost;
-    int references;
+
 	public Hunter1Action( GHOST ghost) {
-		this.ghost = ghost;
-		this.references = 0;
-	}
-
-
-	public void addReference() {
-		this.references++;
 	}
 	
 	@Override
@@ -33,14 +26,11 @@ public class Hunter1Action implements RulesAction {
 	}
 
 	@Override
-	public void parseFact(Fact actionFact) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void parseFact(Fact actionFact) {}
 	
 	@Override
 	public String getActionId() {
-		return ghost + "Hunter1 " + this.references;
+		return ghost + "Hunter1 ";
 	}
 
 
