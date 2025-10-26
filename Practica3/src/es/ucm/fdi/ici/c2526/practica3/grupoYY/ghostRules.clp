@@ -44,6 +44,21 @@
 (deftemplate PacmanToSUE
 	(slot distanceTo (type FLOAT)))    
 
+	;;  ADD DISTANCE FROM GHOST TO NEXT PACMAN INTERSECTION ;;
+
+(deftemplate BLINKYToIntersection
+	(slot distanceTo (type FLOAT)))   
+   
+(deftemplate INKYToIntersection
+	(slot distanceTo (type FLOAT)))   
+  
+(deftemplate PINKYToIntersection
+	(slot distanceTo (type FLOAT)))   
+	
+(deftemplate SUEToIntersection
+	(slot distanceTo (type FLOAT)))    
+
+
 ;; DISTANCE FROM GHOST TO GHOST ;;
 
 ;;BLINKY
@@ -160,6 +175,39 @@
 	(assert (ACTION (id BLINKYchases) (info "No comestible --> perseguir")  (priority 10) ))
 )	
 
-(defrule BLINKYpacmanNear 
-	(BLINKY	
-	
+;;(defrule BLINKYpacmanNear 
+;;	(BLINKY	
+(defrule BLINKYNearestToMsPacman
+  (BLINKYtoPacman (distanceTo ?blinkyDistance)) ; Hecho para la distancia de Blinky
+  (PINKYtoPacman (distanceTo ?pinkyDistance))   ; Hecho para la distancia de Pinky
+  (INKYtoPacman (distanceTo ?inkyDistance))     ; Hecho para la distancia de Inky
+  (SUEtoPacman (distanceTo ?sueDistance))       ; Hecho para la distancia de Sue
+  (test (<= ?blinkyDistance ?pinkyDistance))
+  (test (<= ?blinkyDistance ?inkyDistance))
+  (test (<= ?blinkyDistance ?sueDistance))
+	=> 
+	(assert (ACTION (id Hunter1) (info "Soy cazador1")  (priority 11) ))
+)
+
+(defrule BLINKYSecondNearestToMsPacman
+  (BLINKYtoPacman (distanceTo ?blinkyDistance)) ; Hecho para la distancia de Blinky
+  (PINKYtoPacman (distanceTo ?pinkyDistance))   ; Hecho para la distancia de Pinky
+  (INKYtoPacman (distanceTo ?inkyDistance))     ; Hecho para la distancia de Inky
+  (SUEtoPacman (distanceTo ?sueDistance))       ; Hecho para la distancia de Sue
+  (test (<= ?blinkyDistance ?pinkyDistance))
+  (test (<= ?blinkyDistance ?inkyDistance))
+  (test (<= ?blinkyDistance ?sueDistance))
+  =>
+  (assert (ACTION (id Hunter2) (info "Soy Hunter2") (priority 12)))
+)
+(defrule BLINKYNearestToIntersection
+  (BLINKYToIntersection (distanceTo ?blinkyDistance)) ; Hecho para la distancia de Blinky
+  (PINKYToIntersection (distanceTo ?pinkyDistance))   ; Hecho para la distancia de Pinky
+  (INKYToIntersection (distanceTo ?inkyDistance))     ; Hecho para la distancia de Inky
+  (SUEToIntersection (distanceTo ?sueDistance))       ; Hecho para la distancia de Sue
+  (test (<= ?blinkyDistance ?pinkyDistance))
+  (test (<= ?blinkyDistance ?inkyDistance))
+  (test (<= ?blinkyDistance ?sueDistance))
+	=> 
+	(assert (ACTION (id JailerAction) (info "Soy Jailer")  (priority 11) ))
+)

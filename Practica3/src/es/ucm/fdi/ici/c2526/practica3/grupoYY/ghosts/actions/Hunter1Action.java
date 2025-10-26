@@ -30,7 +30,7 @@ public class Hunter1Action implements RulesAction {
 	
 	@Override
 	public String getActionId() {
-		return ghost + "Hunter1 ";
+		return ghost + "Hunter1";
 	}
 
 
