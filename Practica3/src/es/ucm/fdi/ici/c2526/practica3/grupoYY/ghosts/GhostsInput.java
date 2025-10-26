@@ -62,10 +62,10 @@ public class GhostsInput extends RulesInput {
 	public Collection<String> getFacts() {
 		Vector<String> facts = new Vector<String>();
 		//ADD EDIBLE FACTS //
-		facts.add(String.format("(BLINKY (edible %s))", this.BLINKYedible));
-		facts.add(String.format("(INKY (edible %s))", this.INKYedible));
-		facts.add(String.format("(PINKY (edible %s))", this.PINKYedible));
-		facts.add(String.format("(SUE (edible %s))", this.SUEedible));
+//		facts.add(String.format("(BLINKY (edible %s))", this.BLINKYedible));
+//		facts.add(String.format("(INKY (edible %s))", this.INKYedible));
+//		facts.add(String.format("(PINKY (edible %s))", this.PINKYedible));
+//		facts.add(String.format("(SUE (edible %s))", this.SUEedible));
 		facts.add(String.format("(MSPACMAN (mindistancePPill %d))", 
 								(int)this.minPacmanDistancePPill));
 		
@@ -162,6 +162,26 @@ public class GhostsInput extends RulesInput {
 				this.shieldGhost.get(GHOST.SUE)));
 		}
 		
+		// EDIBLE TIME // 
+		facts.add(String.format("(BLINKYedible (edibleTime %d))", 
+				this.game.getGhostEdibleTime(GHOST.BLINKY)));
+		facts.add(String.format("(INKYedible (edibleTime %d))", 
+				this.game.getGhostEdibleTime(GHOST.INKY)));
+		facts.add(String.format("(PINKYedible (edibleTime %d))", 
+				this.game.getGhostEdibleTime(GHOST.PINKY)));
+		facts.add(String.format("(SUEedible (edibleTime %d))", 
+				this.game.getGhostEdibleTime(GHOST.SUE)));
+		
+		// EDIBLE TIME // 
+		facts.add(String.format("(BLINKYlair (lairTime %d))", 
+				this.game.getGhostEdibleTime(GHOST.BLINKY)));
+		facts.add(String.format("(INKYlair (lairTime %d))", 
+				this.game.getGhostEdibleTime(GHOST.INKY)));
+		facts.add(String.format("(PINKYlair (lairTime %d))", 
+				this.game.getGhostEdibleTime(GHOST.PINKY)));
+		facts.add(String.format("(SUElair (lairTime %d))", 
+				this.game.getGhostEdibleTime(GHOST.SUE)));
+				
 		return facts;
 	}
 	

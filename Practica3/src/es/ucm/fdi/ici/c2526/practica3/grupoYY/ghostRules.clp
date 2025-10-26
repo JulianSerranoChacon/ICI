@@ -1,15 +1,15 @@
 ;; DEFINITION OF DATA TYPES ;;
-(deftemplate BLINKY
-	(slot edible (type SYMBOL)))
+;;(deftemplate BLINKY
+;;	(slot edible (type SYMBOL)))
 	
-(deftemplate INKY
-	(slot edible (type SYMBOL)))
+;;(deftemplate INKY
+;;	(slot edible (type SYMBOL)))
 	
-(deftemplate PINKY
-	(slot edible (type SYMBOL)))
+;;(deftemplate PINKY
+;;	(slot edible (type SYMBOL)))
 
-(deftemplate SUE
-	(slot edible (type SYMBOL)))
+;;(deftemplate SUE
+;;	(slot edible (type SYMBOL)))
 	
 (deftemplate MSPACMAN 
     (slot mindistancePPill (type NUMBER)) )
@@ -128,6 +128,34 @@
 	
 (deftemplate SUEcovers
 	(slot covers (type SYMBOL))) 
+	
+;; EDIBLE TIME GHOST ;;
+
+(deftemplate BLINKYedible
+	(slot edibleTime (type NUMBER))) 
+
+(deftemplate INKYedible
+	(slot edibleTime (type NUMBER))) 
+	
+(deftemplate PINKYedible
+	(slot edibleTime (type NUMBER))) 
+	
+(deftemplate SUEedible
+	(slot edibleTime (type NUMBER))) 
+	
+;; EDIBLE TIME GHOST ;;
+
+(deftemplate BLINKYlair
+	(slot lairTime (type NUMBER))) 
+
+(deftemplate INKYlair
+	(slot lairTime (type NUMBER))) 
+	
+(deftemplate PINKYlair
+	(slot lairTime (type NUMBER))) 
+	
+(deftemplate SUElair
+	(slot lairTime (type NUMBER))) 
  
 ;; DEFINITION OF THE ACTION FACT (ALSO A DATA_TYPE lol) --> IS ALL IN THE PERSPECTIVE OF BLINKY, WE WILL ADAPT TO OTHER GHOSTS ;;
 
@@ -138,13 +166,13 @@
 ) 
 
 ;; Hunter1 ACTION
-(deftemplate ACTION
-	(slot id) (slot info (default "")) (slot priority (type NUMBER)) 
+(deftemplate Hunter1ACTION
+	(slot id) (slot info (default "")) (slot priority (type NUMBER)))
 
 ;; Hunter2 ACTION --> I just need to know the ghost hunter 1, not the entire map
-(deftemplate ACTION
+(deftemplate Hunter2ACTION
 	(slot id) (slot info (default "")) (slot priority (type NUMBER) )
-	(slot hunter1Id (type SYMBOL))
+	(slot hunter1Id (type SYMBOL)))
 
 ;; RULES OF ALL GHOSTS --> IS ALL IN THE PERSPECTIVE OF BLINKY, WE WILL ADAPT TO OTHER GHOSTS ;;
 
@@ -210,4 +238,36 @@
   (test (<= ?blinkyDistance ?sueDistance))
 	=> 
 	(assert (ACTION (id JailerAction) (info "Soy Jailer")  (priority 11) ))
+)
+
+;; NEW RULES ;;
+
+(defrule BLINKYpacmanFarAway
+   (PacmanToBLINKY (distanceTo ?d))
+   (BLINKYlair (lairTime ?t))
+   (BLINKYedible (edibleTime ?e))
+   (test (or (!= ?t 0) (> ?d (+ (/ ?e 2) 1))))  ;; far away if distance > (edibleTime/2 + 1)
+=>
+   (assert
+      (ACTION 
+         (id BLINKYOrbit)
+         (info "BLINKY far away and edible")
+         (priority 10) 		;;Reassign priority
+      )
+   )
+)
+
+(defrule BLINKYpacmanNear
+   (PacmanToBLINKY (distanceTo ?d))
+   (BLINKYlair (lairTime ?t))
+   (BLINKYedible (edibleTime ?e))
+   (test (or (== ?t 0) (< ?d 200)))  ;; near if distance < 200
+=>
+   (assert
+      (ACTION 
+         (id BLINKYOrbit)
+         (info "BLINKY near and edible")
+         (priority 10) 		;;Reassign priority
+      )
+   )
 )
