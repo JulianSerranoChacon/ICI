@@ -31,7 +31,7 @@ public class MsPacManInput extends RulesInput {
 	private double distanceToPPill;
 	private final double dangerDistance = 30; //tentative, subject to change 
 	private final double hideDistance = 30; //tentative, subject to change 
-	
+	private boolean hayFantasmasCerca;
 
 	public double getDangerDistance() {
 		return dangerDistance;
@@ -72,7 +72,26 @@ public class MsPacManInput extends RulesInput {
 	@Override
 	public Collection<String> getFacts(){
 		Vector<String> facts = new Vector<String>();
-
+		
+		facts.add(String.format("(MSPACMAN (mindistancePPill %d))", 
+				distanceToPPill));
+		facts.add(String.format("(MSPACMAN (hayFantasmasCerca %s))", 
+				hayFantasmasCerca));
+		facts.add(String.format("(MSPACMAN (soloUnaInterseccionPosible %s))", 
+				candidateMoves.size() > 1));
+		facts.add(String.format("(MSPACMAN (variosCaminos %d))", 
+				candidateMoves.size()));
+		facts.add(String.format("(MSPACMAN (quedanPPils %s))", 
+						game.getNumberOfActivePowerPills() > 0));
+		//TODO: cambiar esto por un booleano
+		facts.add(String.format("(MSPACMAN (estoyCercaDePpil %s))", 
+				false));
+		//TODO: cambiar esto por un booleano
+				facts.add(String.format("(MSPACMAN (hayFantasmasCercaDePpil %s))", 
+						false));		
+		//TODO: cambiar esto por un numero real
+		facts.add(String.format("(MSPACMAN (tiempoDesdePpil %d))", 
+						0));
 		return facts;
 	}
 	

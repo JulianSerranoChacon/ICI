@@ -12,7 +12,19 @@
 	(slot edible (type SYMBOL)))
 	
 (deftemplate MSPACMAN 
-    (slot mindistancePPill (type NUMBER)) )
+    (slot mindistancePPill (type NUMBER)) 
+	(slot hayFantasmasCerca (type SYMBOL))
+	(slot soloUnaInterseccionPosible (type SYMBOL))
+	(slot variosCaminos (type NUMBER))
+	(slot quedanPPils (type SYMBOL))
+	(slot estoyCercaDePpil (type SYMBOL))
+	(slot hayFantasmasCercaDePpil(type SYMBOL))
+	(slot tiempoDesdePpil (type NUMBER))
+	(slot distanceToBLINKY (type NUMBER))
+	(slot distanceToINKY (type NUMBER))
+	(slot distanceToPINKY (type NUMBER))
+	(slot distanceToSUE (type NUMBER))
+	)
     
 ;DEFINITION OF THE ACTION FACT
 (deftemplate ACTION
