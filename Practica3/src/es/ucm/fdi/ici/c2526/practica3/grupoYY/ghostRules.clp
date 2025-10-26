@@ -13,7 +13,107 @@
 	
 (deftemplate MSPACMAN 
     (slot mindistancePPill (type NUMBER)) )
-    
+ 
+;;NEW DATA TYPES
+
+;;  ADD DISTANCE FROM GHOST TO PACMAN ;;
+
+(deftemplate BLINKYtoPacman
+	(slot distanceTo (type FLOAT)))   ;;I dont know if this should be float
+   
+(deftemplate INKYtoPacman
+	(slot distanceTo (type FLOAT)))   ;;I dont know if this should be float   
+  
+(deftemplate PINKYtoPacman
+	(slot distanceTo (type FLOAT)))   ;;I dont know if this should be float
+	
+(deftemplate SUEtoPacman
+	(slot distanceTo (type FLOAT)))   ;;I dont know if this should be float  
+
+;;  ADD DISTANCE FROM PACMAN TO GHOST ;;
+
+(deftemplate PacmanToBLINKY
+	(slot distanceTo (type FLOAT)))   
+   
+(deftemplate PacmanToINKY
+	(slot distanceTo (type FLOAT)))   
+  
+(deftemplate PacmanToPINKY
+	(slot distanceTo (type FLOAT)))   
+	
+(deftemplate PacmanToSUE
+	(slot distanceTo (type FLOAT)))    
+
+;; DISTANCE FROM GHOST TO GHOST ;;
+
+;;BLINKY
+(deftemplate BLINKYToINKY
+	(slot distanceTo (type FLOAT)))    
+
+(deftemplate BLINKYToPINKY
+	(slot distanceTo (type FLOAT)))  
+	
+(deftemplate BLINKYToSUE
+	(slot distanceTo (type FLOAT)))  
+
+;;INKY	
+(deftemplate INKYToBLINKY
+	(slot distanceTo (type FLOAT)))    
+
+(deftemplate INKYToPINKY
+	(slot distanceTo (type FLOAT)))  
+	
+(deftemplate INKYToSUE
+	(slot distanceTo (type FLOAT)))  
+
+;;PINKY
+(deftemplate PINKYToBLINKY
+	(slot distanceTo (type FLOAT)))    
+
+(deftemplate PINKYToINKY
+	(slot distanceTo (type FLOAT)))  
+	
+(deftemplate PINKYToSUE
+	(slot distanceTo (type FLOAT)))  
+
+;;SUE
+(deftemplate SUEToBLINKY
+	(slot distanceTo (type FLOAT)))    
+
+(deftemplate SUEToINKY
+	(slot distanceTo (type FLOAT)))  
+	
+(deftemplate SUEToPINKY
+	(slot distanceTo (type FLOAT)))  
+
+;; GHOST ROLES ;;
+
+(deftemplate BLINKYrole
+	(slot role (type SYMBOL)))  
+
+(deftemplate INKYrole
+	(slot role (type SYMBOL))) 
+
+(deftemplate PINKYrole
+	(slot role (type SYMBOL))) 
+
+(deftemplate SUErole
+	(slot role (type SYMBOL))) 
+
+;; SHIELD GHOST ;;
+
+(deftemplate BLINKYcovers
+	(slot covers (type SYMBOL))) 
+
+(deftemplate INKYcovers
+	(slot covers (type SYMBOL))) 
+	
+(deftemplate PINKYcovers
+	(slot covers (type SYMBOL))) 
+	
+(deftemplate SUEcovers
+	(slot covers (type SYMBOL))) 
+ 
 ;; DEFINITION OF THE ACTION FACT (ALSO A DATA_TYPE lol) --> IS ALL IN THE PERSPECTIVE OF BLINKY, WE WILL ADAPT TO OTHER GHOSTS ;;
 
 ;; Basic action
@@ -59,5 +159,7 @@
 	=> 
 	(assert (ACTION (id BLINKYchases) (info "No comestible --> perseguir")  (priority 10) ))
 )	
-	
+
+(defrule BLINKYpacmanNear 
+	(BLINKY	
 	

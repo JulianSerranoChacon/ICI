@@ -17,17 +17,20 @@ public class GhostsHePasadoAlEscudero implements Transition  {
 		gi = g;
 	}
 
-///WIP
-
 	@Override
 	public boolean evaluate(Input in) {
-		GhostsInput input = (GhostsInput)in;
-		if(gi.getMyShieldGhost(ghost)==ghost&&in.getGame().getGhostLairTime(ghost)==0
-				&&in.getGame().getGhostLairTime(gi.getMyShieldGhost(ghost))==0) return false;
+		if(gi.getMyShieldGhost(ghost)==ghost && in.getGame().getGhostLairTime(ghost)==0
+				&&in.getGame().getGhostLairTime(gi.getMyShieldGhost(ghost))==0) {
+			return false;
+		}
 		else if (distanceFromShield >gi.getDistanceFromGhostToGhost(ghost, gi.getMyShieldGhost(ghost))){
 			distanceFromShield =gi.getDistanceFromGhostToGhost(ghost, gi.getMyShieldGhost(ghost));
 			return false;
-		}else return true;
+		}
+		else {
+			return true;
+		}
+			
 	}
 
 
