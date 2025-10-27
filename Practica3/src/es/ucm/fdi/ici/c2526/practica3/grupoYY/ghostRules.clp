@@ -203,8 +203,39 @@
 	(assert (ACTION (id BLINKYchases) (info "No comestible --> perseguir")  (priority 10) ))
 )	
 
-;;(defrule BLINKYpacmanNear 
-;;	(BLINKY	
+;; NEW RULES ;;
+
+(defrule BLINKYpacmanFarAway
+   (PacmanToBLINKY (distanceTo ?d))
+   (BLINKYlair (lairTime ?t))
+   (BLINKYedible (edibleTime ?e))
+   (test (or (!= ?t 0) (> ?d (+ (/ ?e 2) 1))))  ;; far away if distance > (edibleTime/2 + 1)
+=>
+   (assert
+      (ACTION 
+         (id BLINKYOrbit)
+         (info "BLINKY far away and edible")
+         (priority 10) 		;;Reassign priority
+      )
+   )
+)
+
+(defrule BLINKYpacmanNear
+   (PacmanToBLINKY (distanceTo ?d))
+   (BLINKYlair (lairTime ?t))
+   (BLINKYedible (edibleTime ?e))
+   (test (or (== ?t 0) (< ?d 200)))  ;; near if distance < 200
+=>
+   (assert
+      (ACTION 
+         (id BLINKYOrbit)
+         (info "BLINKY near and edible")
+         (priority 10) 		;;Reassign priority
+      )
+   )
+)
+
+
 (defrule BLINKYNearestToMsPacman
   (BLINKYtoPacman (distanceTo ?blinkyDistance)) ; Hecho para la distancia de Blinky
   (PINKYtoPacman (distanceTo ?pinkyDistance))   ; Hecho para la distancia de Pinky
@@ -240,34 +271,3 @@
 	(assert (ACTION (id JailerAction) (info "Soy Jailer")  (priority 11) ))
 )
 
-;; NEW RULES ;;
-
-(defrule BLINKYpacmanFarAway
-   (PacmanToBLINKY (distanceTo ?d))
-   (BLINKYlair (lairTime ?t))
-   (BLINKYedible (edibleTime ?e))
-   (test (or (!= ?t 0) (> ?d (+ (/ ?e 2) 1))))  ;; far away if distance > (edibleTime/2 + 1)
-=>
-   (assert
-      (ACTION 
-         (id BLINKYOrbit)
-         (info "BLINKY far away and edible")
-         (priority 10) 		;;Reassign priority
-      )
-   )
-)
-
-(defrule BLINKYpacmanNear
-   (PacmanToBLINKY (distanceTo ?d))
-   (BLINKYlair (lairTime ?t))
-   (BLINKYedible (edibleTime ?e))
-   (test (or (== ?t 0) (< ?d 200)))  ;; near if distance < 200
-=>
-   (assert
-      (ACTION 
-         (id BLINKYOrbit)
-         (info "BLINKY near and edible")
-         (priority 10) 		;;Reassign priority
-      )
-   )
-)
