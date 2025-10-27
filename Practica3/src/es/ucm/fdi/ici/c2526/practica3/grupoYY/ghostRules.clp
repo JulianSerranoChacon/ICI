@@ -171,6 +171,9 @@
 (deftemplate EscuderoACTION
 	(slot id) (slot info (default "")) (slot priority (type NUMBER) )
 	(slot ghostQueCubre (type SYMBOL)))
+	
+(deftemplate EscuderoACTION
+	(slot id) (slot info (default "")) (slot priority (type NUMBER) )))
 
 ;; RULES OF ALL GHOSTS --> IS ALL IN THE PERSPECTIVE OF BLINKY, WE WILL ADAPT TO OTHER GHOSTS ;;
 
