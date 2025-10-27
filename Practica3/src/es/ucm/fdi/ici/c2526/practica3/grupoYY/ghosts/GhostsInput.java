@@ -145,23 +145,23 @@ public class GhostsInput extends RulesInput {
 		// SHIELD GHOST //
 		
 		if(!Objects.isNull(this.shieldGhost.get(GHOST.BLINKY))) {
-			facts.add(String.format("(BLINKYcovers (covers %d))", 
+			facts.add(String.format("(shieldGhost ", "(ghost %d))", GHOST.BLINKY,"(covers %d))",
 					this.shieldGhost.get(GHOST.BLINKY)));			
 		}
 		
 		if(!Objects.isNull(this.shieldGhost.get(GHOST.INKY))) {
-		facts.add(String.format("(INKYcovers (covers %d))", 
-				this.shieldGhost.get(GHOST.INKY)));
+			facts.add(String.format("(shieldGhost ", "(ghost %d))", GHOST.INKY,"(covers %d))",
+					this.shieldGhost.get(GHOST.INKY)));		
 		}
 		
 		if(!Objects.isNull(this.shieldGhost.get(GHOST.PINKY))) {
-		facts.add(String.format("(PINKYcovers (covers %d))", 
-				this.shieldGhost.get(GHOST.PINKY)));
+			facts.add(String.format("(shieldGhost ", "(ghost %d))", GHOST.PINKY,"(covers %d))",
+					this.shieldGhost.get(GHOST.PINKY)));		
 		}
 		
 		if(!Objects.isNull(this.shieldGhost.get(GHOST.SUE))) {
-		facts.add(String.format("(SUEcovers (covers %d))", 
-				this.shieldGhost.get(GHOST.SUE)));
+			facts.add(String.format("(shieldGhost ", "(ghost %d))", GHOST.SUE,"(covers %d))",
+					this.shieldGhost.get(GHOST.SUE)));		
 		}
 		
 		// EDIBLE TIME // 
