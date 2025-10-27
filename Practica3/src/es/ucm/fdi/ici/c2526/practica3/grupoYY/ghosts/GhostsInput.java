@@ -225,6 +225,7 @@ public class GhostsInput extends RulesInput {
 		}
 	}
 	
+	// TODO: I don't think this is working properly, we should take a closer look
 	  public void swapBehaviour(int indexA, int indexB) {
 	    	GHOSTTYPE aux = GhostClass.get(indexA);
 	    	GhostClass.remove(indexA);
