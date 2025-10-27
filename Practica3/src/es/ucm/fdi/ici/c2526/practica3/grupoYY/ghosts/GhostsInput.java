@@ -1,5 +1,6 @@
 package es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,6 +57,7 @@ public class GhostsInput extends RulesInput {
 		parseDistanceFromPacManToGhost();
 		parseDistanceGhostToGhost();
 		parseGhostPriority();
+		parseGhostShield();
 	}
 	
 	@Override
@@ -143,23 +145,23 @@ public class GhostsInput extends RulesInput {
 		// SHIELD GHOST //
 		
 		if(!Objects.isNull(this.shieldGhost.get(GHOST.BLINKY))) {
-			facts.add(String.format("(BLINKYcovers (covers %d))", 
+			facts.add(String.format("(shieldGhost ", "(ghost %d))", GHOST.BLINKY,"(covers %d))",
 					this.shieldGhost.get(GHOST.BLINKY)));			
 		}
 		
 		if(!Objects.isNull(this.shieldGhost.get(GHOST.INKY))) {
-		facts.add(String.format("(INKYcovers (covers %d))", 
-				this.shieldGhost.get(GHOST.INKY)));
+			facts.add(String.format("(shieldGhost ", "(ghost %d))", GHOST.INKY,"(covers %d))",
+					this.shieldGhost.get(GHOST.INKY)));		
 		}
 		
 		if(!Objects.isNull(this.shieldGhost.get(GHOST.PINKY))) {
-		facts.add(String.format("(PINKYcovers (covers %d))", 
-				this.shieldGhost.get(GHOST.PINKY)));
+			facts.add(String.format("(shieldGhost ", "(ghost %d))", GHOST.PINKY,"(covers %d))",
+					this.shieldGhost.get(GHOST.PINKY)));		
 		}
 		
 		if(!Objects.isNull(this.shieldGhost.get(GHOST.SUE))) {
-		facts.add(String.format("(SUEcovers (covers %d))", 
-				this.shieldGhost.get(GHOST.SUE)));
+			facts.add(String.format("(shieldGhost ", "(ghost %d))", GHOST.SUE,"(covers %d))",
+					this.shieldGhost.get(GHOST.SUE)));		
 		}
 		
 		// EDIBLE TIME // 
@@ -328,7 +330,50 @@ public class GhostsInput extends RulesInput {
     		}
     	}
     }
-
+	
+	private void parseGhostShield() {
+		//Compruebo que estoy lo sufcientemente amenzado como para buscar a un escudero
+		for(GHOST ghost : GHOST.values()) {
+			double limit = (game.getGhostEdibleTime(ghost) / 2) + 30;
+			double distance = distanceFromGhostToPacman.get(ghost);
+			
+			if(distance >= limit) {
+				continue;
+			}
+			
+			//Recorro todos los fantasmas buscando al no comestible más cercano y que no tenga a PacMan en medio
+			for(GHOST otherGhost : GHOST.values()) {
+				if(otherGhost == ghost || shieldGhost.containsKey(otherGhost)) {
+					continue;
+				}
+				
+				if(game.getGhostLairTime(ghost) <= 0 
+						&& otherGhost != ghost 
+						&& !game.isGhostEdible(otherGhost) 
+						&& game.getGhostLairTime(otherGhost) <= 0) {
+					
+					//Encuentro la distancia de mi yo comestible a mi posible escudero
+					int[] pathGhostDistance = game.getShortestPath(game.getGhostCurrentNodeIndex(ghost), 
+							game.getGhostCurrentNodeIndex(otherGhost),game.getGhostLastMoveMade(ghost));
+					
+					//Encuentro la distancia de mi yo comestible a PacMan
+					int[] pathPacManDistance = game.getShortestPath(game.getPacmanCurrentNodeIndex(), 
+							game.getGhostCurrentNodeIndex(ghost));
+				
+					//Si algun coincide PELIGRO ME PUEDEN COMER
+					for(int node : pathGhostDistance) {
+						if(Arrays.asList(pathPacManDistance).contains(node)) {
+							continue;
+						}
+					}
+					
+					shieldGhost.put(ghost, otherGhost);
+					break;
+				}
+			}
+		}
+	}
+	
 	public boolean isBLINKYedible() {
 		return BLINKYedible;
 	}

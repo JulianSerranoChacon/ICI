@@ -117,17 +117,10 @@
 
 ;; SHIELD GHOST ;;
 
-(deftemplate BLINKYcovers
-	(slot covers (type SYMBOL))) 
-
-(deftemplate INKYcovers
-	(slot covers (type SYMBOL))) 
-	
-(deftemplate PINKYcovers
-	(slot covers (type SYMBOL))) 
-	
-(deftemplate SUEcovers
-	(slot covers (type SYMBOL))) 
+(deftemplate shieldGhost
+	(slot ghost (type SYMBOL))
+	(slot covers (type SYMBOL))
+) 
 	
 ;; EDIBLE TIME GHOST ;;
 
@@ -173,6 +166,14 @@
 (deftemplate Hunter2ACTION
 	(slot id) (slot info (default "")) (slot priority (type NUMBER) )
 	(slot hunter1Id (type SYMBOL)))
+	
+;; RunToEscudero ACTION --> I just need to know the ghost hunter 1, not the entire map
+(deftemplate EscuderoACTION
+	(slot id) (slot info (default "")) (slot priority (type NUMBER) )
+	(slot ghostQueCubre (type SYMBOL)))
+	
+(deftemplate EscuderoACTION
+	(slot id) (slot info (default "")) (slot priority (type NUMBER) )))
 
 ;; RULES OF ALL GHOSTS --> IS ALL IN THE PERSPECTIVE OF BLINKY, WE WILL ADAPT TO OTHER GHOSTS ;;
 
@@ -235,6 +236,18 @@
    )
 )
 
+(defrule BLINKYhayEscudero
+	( shieldGhost (ghost ?g) (covers BLINKY)))
+=>
+   (assert
+      (EscuderoACTION 
+         (id RunToEscuderoAction)
+         (info "BLINKY going to escudero")
+         (ghostQueCubre ?g)
+         (priority 10) 		;;Reassign priority
+      )
+   )
+)
 
 (defrule BLINKYNearestToMsPacman
   (BLINKYtoPacman (distanceTo ?blinkyDistance)) ; Hecho para la distancia de Blinky
