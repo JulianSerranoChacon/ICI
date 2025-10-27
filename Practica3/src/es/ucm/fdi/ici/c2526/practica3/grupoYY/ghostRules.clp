@@ -173,7 +173,7 @@
 	(slot ghostQueCubre (type SYMBOL)))
 	
 (deftemplate EscuderoACTION
-	(slot id) (slot info (default "")) (slot priority (type NUMBER) )))
+	(slot id) (slot info (default "")) (slot priority (type NUMBER)) )
 
 ;; RULES OF ALL GHOSTS --> IS ALL IN THE PERSPECTIVE OF BLINKY, WE WILL ADAPT TO OTHER GHOSTS ;;
 
@@ -237,8 +237,8 @@
 )
 
 (defrule BLINKYhayEscudero
-	( shieldGhost (ghost ?g) (covers BLINKY)))
-=>
+	( shieldGhost (ghost ?g) (covers BLINKY))
+	=>
    (assert
       (EscuderoACTION 
          (id RunToEscuderoAction)
@@ -288,7 +288,7 @@
 (defrule BLINKYBlinkingAndSafe
 	(BLINKYtoPacman (distanceTo ?blinkyDistance))
 	(BLINKYedible (edibleTime ?e))
-
+	
 	(test (> ?blinkyDistance 40))
 	(test (< ?e 10))
 	(assert (ACTION (id Hunter1) (info "Soy Hunter1") (priority 14)))) ; Habría que discutir la prioridad, no la tengo clara
