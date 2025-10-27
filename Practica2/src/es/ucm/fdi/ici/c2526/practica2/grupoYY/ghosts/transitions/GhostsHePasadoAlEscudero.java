@@ -19,11 +19,10 @@ public class GhostsHePasadoAlEscudero implements Transition  {
 
 	@Override
 	public boolean evaluate(Input in) {
-		if(gi.getMyShieldGhost(ghost)==ghost && in.getGame().getGhostLairTime(ghost)==0
-				&&in.getGame().getGhostLairTime(gi.getMyShieldGhost(ghost))==0) {
+		if(gi.getMyShieldGhost(ghost)==ghost || in.getGame().getGhostLairTime(ghost)==0) {
 			return false;
 		}
-		else if (distanceFromShield >gi.getDistanceFromGhostToGhost(ghost, gi.getMyShieldGhost(ghost))){
+		else if (distanceFromShield > gi.getDistanceFromGhostToGhost(ghost, gi.getMyShieldGhost(ghost))){
 			distanceFromShield =gi.getDistanceFromGhostToGhost(ghost, gi.getMyShieldGhost(ghost));
 			return false;
 		}
