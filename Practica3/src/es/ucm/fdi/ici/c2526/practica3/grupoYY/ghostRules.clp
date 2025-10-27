@@ -259,6 +259,7 @@
   =>
   (assert (ACTION (id Hunter2) (info "Soy Hunter2") (priority 12)))
 )
+
 (defrule BLINKYNearestToIntersection
   (BLINKYToIntersection (distanceTo ?blinkyDistance)) ; Hecho para la distancia de Blinky
   (PINKYToIntersection (distanceTo ?pinkyDistance))   ; Hecho para la distancia de Pinky
@@ -269,5 +270,14 @@
   (test (<= ?blinkyDistance ?sueDistance))
 	=> 
 	(assert (ACTION (id JailerAction) (info "Soy Jailer")  (priority 11) ))
+)
+
+(defrule BLINKYBlinkingAndSafe
+	(BLINKYtoPacman (distanceTo ?blinkyDistance))
+	(BLINKYedible (edibleTime ?e))
+
+	(test (> ?blinkyDistance 40))
+	(test (< ?e 10))
+	(assert (ACTION (id Hunter1) (info "Soy Hunter1") (priority 14)))) ; Habría que discutir la prioridad, no la tengo clara
 )
 

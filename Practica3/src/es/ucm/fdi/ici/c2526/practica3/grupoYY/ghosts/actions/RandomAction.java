@@ -23,13 +23,13 @@ public class RandomAction implements RulesAction {
 		if(!game.doesGhostRequireAction(ghost))
 			return MOVE.NEUTRAL;
 		
-		int rand = rnd.nextInt(0,100);
+		int rand = rnd.nextInt(100);
     	if(rand < 33) {
     		return game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(),DM.PATH);
     	}
     	else {
     		MOVE[] availabeMoves = game.getPossibleMoves(game.getGhostCurrentNodeIndex(ghost));
-        	return availabeMoves[rnd.nextInt(0,availabeMoves.length)];
+        	return availabeMoves[rnd.nextInt(availabeMoves.length)];
     	}
 	}
 
