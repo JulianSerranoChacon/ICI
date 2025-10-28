@@ -33,30 +33,51 @@
 ) 
 
 ;RULES 
-(defrule BLINKYrunsAwayMSPACMANclosePPill
-	(MSPACMAN (mindistancePPill ?d)) (test (<= ?d 30)) 
-	=>  
-	(assert 
-		(ACTION (id BLINKYrunsAway) (info "MSPacMan cerca PPill") (priority 50) 
-			(runawaystrategy RANDOM)
+(defrule MSPacManMoveToClosestPill
+	(MSPACMAN (voyGreedy ?d)) (test (?d == true))
+	=>
+	(assert
+		(
+			ACTION (id Goes to nearest pill action) (info "Soy un greedy") (priority 0)
+		)
+	)
+)
+(defrule MSPacManGetMorePoints
+	(MSPACMAN (HayPillEnCaminoInmediato ?d)) (test (?d != 0))
+	=>
+	(assert
+		(
+			ACTION (id Greedy Points Action) (info "A por más puntos") (priority 1)
+		)
+	)
+)
+(defrule MSPacManEscapeFromAll
+	(MSPACMAN (hayFantasmasNoComestiblesCerca ?s)) (test (?s > 0))
+	=>
+	(assert
+		(
+			ACTION (id Basic Action) (info "Huyo En general") (priority 2)
 		)
 	)
 )
 
-(defrule BLINKYrunsAway
-	(BLINKY (edible true)) 
-	=>  
-	(assert 
-		(ACTION (id BLINKYrunsAway) (info "Comestible --> huir") (priority 30) 
-			(runawaystrategy CORNER)
+(defrule MSPacManEscapeFromOne
+	(MSPACMAN (hayVariosFantasmasNoComestiblesCerca ?d)) (test (?d == 1))
+	=>
+	(assert
+		(
+			ACTION (id Hide From One Action) (info "Huyo de un fantasma") (priority 3)
 		)
 	)
 )
-	
-(defrule BLINKYchases
-	(BLINKY (edible false)) 
-	=> 
-	(assert (ACTION (id BLINKYchases) (info "No comestible --> perseguir")  (priority 10) ))
-)	
-	
+(defrule MSPacManTryPPIL
+	(MSPACMAN (hayVariosFantasmasNoComestiblesCerca ?d)) (test (?d > 1))
+	=>
+	(assert
+		(
+			ACTION (id Go to PPill Action) (info "IntentoAcercarmeAunaPPIL") (priority 3)
+		)
+	)
+)
+
 	

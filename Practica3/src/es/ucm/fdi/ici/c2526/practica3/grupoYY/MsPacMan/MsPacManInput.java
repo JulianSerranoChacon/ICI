@@ -19,6 +19,7 @@ import pacman.game.Game;
 public class MsPacManInput extends RulesInput {
 
 	// Data gathered TODO: Maybe erase this and have everything on pi
+	boolean goGreedy; //We always start in greedy, then the rules will define where we will go
 	boolean finishLevel;
 	private Map<MOVE, Integer> moveToNode;
 	private Map<MOVE, Integer> moveToPoints;
@@ -31,7 +32,8 @@ public class MsPacManInput extends RulesInput {
 	private double distanceToPPill;
 	private final double dangerDistance = 30; //tentative, subject to change 
 	private final double hideDistance = 30; //tentative, subject to change 
-	private boolean hayFantasmasCerca;
+	private int numFantasmasNoComestiblesCerca;
+	private int numFantasmasComestiblesCerca;
 
 	public double getDangerDistance() {
 		return dangerDistance;
@@ -39,6 +41,7 @@ public class MsPacManInput extends RulesInput {
 
 	public MsPacManInput(Game game) {
 		super(game);
+		goGreedy = true;
 		moveToPoints = new HashMap<>();
 		moveToPpill = new HashMap<>();
 		moveToGhost = new HashMap<>();
@@ -49,6 +52,7 @@ public class MsPacManInput extends RulesInput {
 	}
 
 	private void reset() {
+		goGreedy = true;
 		moveToPoints = new HashMap<>();
 		moveToPpill = new HashMap<>();
 		moveToGhost = new HashMap<>();
@@ -75,12 +79,13 @@ public class MsPacManInput extends RulesInput {
 		
 		facts.add(String.format("(MSPACMAN (mindistancePPill %d))", 
 				distanceToPPill));
-		facts.add(String.format("(MSPACMAN (hayFantasmasCerca %s))", 
-				hayFantasmasCerca));
+		
 		facts.add(String.format("(MSPACMAN (soloUnaInterseccionPosible %s))", 
 				candidateMoves.size() > 1));
+		
 		facts.add(String.format("(MSPACMAN (variosCaminos %d))", 
 				candidateMoves.size()));
+		
 		facts.add(String.format("(MSPACMAN (quedanPPils %s))", 
 						game.getNumberOfActivePowerPills() > 0));
 		//TODO: cambiar esto por un booleano
@@ -92,6 +97,25 @@ public class MsPacManInput extends RulesInput {
 		//TODO: cambiar esto por un numero real
 		facts.add(String.format("(MSPACMAN (tiempoDesdePpil %d))", 
 						0));
+		
+		
+		//DEFINIDAS YA EN LAS RULES
+		
+		facts.add(String.format("(MSPACMAN (voyGreedy %d))",        
+						this.goGreedy));
+		
+		facts.add(String.format("(MSPACMAN (HayPillEnCaminoInmediato %d))",       
+				this.moveToPoints.size()));
+		
+		facts.add(String.format("(MSPACMAN (hayFantasmasNoComestiblesCerca %s))", 
+				this.numFantasmasNoComestiblesCerca));
+		
+		facts.add(String.format("(MSPACMAN (hayVariosFantasmasNoComestiblesCerca %d))", 
+				this.numFantasmasNoComestiblesCerca));
+		
+		facts.add(String.format("(MSPACMAN (hayVariosFantasmasComestiblesCerca %d))", 
+				this.numFantasmasComestiblesCerca));
+		
 		return facts;
 	}
 	
