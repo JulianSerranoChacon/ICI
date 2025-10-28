@@ -77,17 +77,9 @@ public class MsPacManInput extends RulesInput {
 	public Collection<String> getFacts(){
 		Vector<String> facts = new Vector<String>();
 		
-		facts.add(String.format("(MSPACMAN (mindistancePPill %d))", 
+		facts.add(String.format("(MSPACMAN (mindistancePPill %s))", 
 				distanceToPPill));
 		
-		facts.add(String.format("(MSPACMAN (soloUnaInterseccionPosible %s))", 
-				candidateMoves.size() > 1));
-		
-		facts.add(String.format("(MSPACMAN (variosCaminos %d))", 
-				candidateMoves.size()));
-		
-		facts.add(String.format("(MSPACMAN (quedanPPils %s))", 
-						game.getNumberOfActivePowerPills() > 0));
 		//TODO: cambiar esto por un booleano
 		facts.add(String.format("(MSPACMAN (estoyCercaDePpil %s))", 
 				false));
@@ -113,9 +105,15 @@ public class MsPacManInput extends RulesInput {
 		facts.add(String.format("(MSPACMAN (hayVariosFantasmasNoComestiblesCerca %d))", 
 				this.numFantasmasNoComestiblesCerca));
 		
-		facts.add(String.format("(MSPACMAN (hayVariosFantasmasComestiblesCerca %d))", 
+		facts.add(String.format("(MSPACMAN (hayVariosFantasmasComestiblesCerca %c))", 
 				this.numFantasmasComestiblesCerca));
 		
+		facts.add(String.format("(MSPACMAN (soloUnaInterseccionPosible %s))", 
+				candidateMoves.size()));
+		
+		facts.add(String.format("(MSPACMAN (quedanPPils %f))", 
+				game.getNumberOfActivePowerPills()));
+				
 		return facts;
 	}
 	
