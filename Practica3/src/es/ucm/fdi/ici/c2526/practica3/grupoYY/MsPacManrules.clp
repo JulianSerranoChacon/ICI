@@ -93,8 +93,10 @@
 	)
 )
 
+; Si tengo muchos fantasmas persiguiendome y llego a la powerPill voy a por ella
+; FALTA COMPROBAR SI LLEGO ANTES A LA PPIL QUE LOS FANTASMAS
 (defrule MSPacManEatPPIL
-	(MSPACMAN (estoyCercaDePpil ?d)) (mindistancePPill ?s) (test (?d == true)) (test (?s < 50)) ;ESTE VALOR ESTA A OJO HAY QUE CAMBIARLO
+	(MSPACMAN (hayVariosFantasmasNoComestiblesCerca ?f) (estoyCercaDePpil ?d)) (mindistancePPill ?s) (test (?f > 1)) (test (?d == true)) (test (?s < 50)) ;ESTE VALOR ESTA A OJO HAY QUE CAMBIARLO
 	=>
 	(assert
 		(
@@ -104,7 +106,7 @@
 )
 
 ; Si hay fantasmas comestibles cerca y no hay fantasmas no comestibles cerca me voy a comerlos 
-; FALTA COMPROBAR SI LLEGO A COMERLOS
+; FALTA COMPROBAR SI LLEGO A COMERLOS Y EL FANTASMA CERCANO NO ME JODE LA COMIDA
 (defrule MSPacManStartsFollowing
 	(MSPACMAN (hayVariosFantasmasNoComestiblesCerca ?d) (hayVariosFantasmasComestiblesCerca ?c)) (test (?d == 0)) && (test (?c > 0 ))
 	=>
