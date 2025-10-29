@@ -57,6 +57,7 @@ public class GhostsInput extends RulesInput {
 		parseDistanceFromPacManToGhost();
 		parseDistanceGhostToGhost();
 		parseGhostShield();
+		parseGhostToIntersection();
 	}
 	
 	@Override
@@ -140,6 +141,17 @@ public class GhostsInput extends RulesInput {
 					this.shieldGhost.get(GHOST.SUE)));		
 		}
 		
+		// DISTANCE TO NEXT PACMAN INTERSECTION // 
+		facts.add(String.format("(BLINKYToIntersection (distanceTo  %f))", 
+				ghostToIntersection.get(GHOST.BLINKY)));
+		facts.add(String.format("(INKYToIntersection (distanceTo  %f))", 
+				ghostToIntersection.get(GHOST.INKY)));
+		facts.add(String.format("PINKYToIntersection (distanceTo  %f))", 
+				ghostToIntersection.get(GHOST.PINKY)));
+		facts.add(String.format("SUEToIntersection (distanceTo  %f))", 
+				ghostToIntersection.get(GHOST.SUE)));
+		
+		
 		// EDIBLE TIME // 
 		facts.add(String.format("(BLINKYedible (edibleTime %d))", 
 				this.game.getGhostEdibleTime(GHOST.BLINKY)));
@@ -200,7 +212,28 @@ public class GhostsInput extends RulesInput {
 			}
 		}
 	}
-	
+	private void parseGhostToIntersection() {
+		 ghostToIntersection =  new HashMap<>();
+		 int nextIntersectNode = 99999;
+		 int nearestDistance = 99999;
+		 int[] juntions =  this.getGame().getJunctionIndices();
+		 for(int i = 0; i < juntions.length;i++) {
+			 int aux = this.getGame().getShortestPathDistance(game.getPacmanCurrentNodeIndex(), i,game.getPacmanLastMoveMade() );
+			 if(aux<nearestDistance) {
+				 nextIntersectNode = i;
+				 nearestDistance = aux;
+			 }
+			 
+		 }
+		 nextIntersectNode =  this.getGame().getClosestNodeIndexFromNodeIndex(nextIntersectNode, juntions, DM.PATH);
+		 
+		 
+		for(GHOST g : GHOST.values()) {
+			double auxDistance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(g), nextIntersectNode, game.getGhostLastMoveMade(g));
+			 ghostToIntersection.put(g, auxDistance);
+		}
+				
+	}
 	private void parseGhostShield() {
 		//Compruebo que estoy lo sufcientemente amenzado como para buscar a un escudero
 		for(GHOST ghost : GHOST.values()) {
