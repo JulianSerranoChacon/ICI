@@ -10,6 +10,8 @@ import pacman.game.Game;
 public class RunOptimalAction implements RulesAction {
 
     GHOST ghost;
+    int pacmanNode;
+    int mghostNode;
 	public RunOptimalAction(GHOST ghost) {
 		this.ghost = ghost;
 	}
@@ -27,7 +29,7 @@ public class RunOptimalAction implements RulesAction {
 
 	@Override
 	public void parseFact(Fact actionFact) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
