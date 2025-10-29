@@ -15,17 +15,46 @@ public class RunOptimalAction implements RulesAction {
 	public RunOptimalAction(GHOST ghost) {
 		this.ghost = ghost;
 	}
-
+	
 	//Huida optima david se lo mejora
 	@Override
 	public MOVE execute(Game game) {
-        if (game.doesGhostRequireAction(ghost))        //if it requires an action
-        {
-                return game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghost),
-                        game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH);
-        }
-            
-        return MOVE.NEUTRAL;	
+		if(!game.doesGhostRequireAction(ghost)) 
+			return MOVE.NEUTRAL;
+        
+		int nextIntersectNode = 99999;
+		 int nearestDistance = 99999;
+		//Calcule the next junction and the distance to it
+		 int[] juntions =  game.getJunctionIndices();
+		 for(int i = 0; i < juntions.length;i++) {
+			 int aux = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), i,game.getGhostLastMoveMade(ghost) );
+			 if(aux<nearestDistance) {
+				 nextIntersectNode = i;
+				 nearestDistance = aux;
+			 }
+			 
+		 }
+		//Calcule the paht to this juntion 
+		int[] pathToIntersect = game.getShortestPath(game.getGhostCurrentNodeIndex(ghost), nextIntersectNode);
+		boolean ghostInMyWay = false;
+		for(int n : pathToIntersect) {
+			for(GHOST g : GHOST.values())if(g != ghost && game.getGhostCurrentNodeIndex(g)==n)  ghostInMyWay = true;
+		}
+		 
+		if(!ghostInMyWay) {
+		return game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghost),
+        game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH);
+		}
+		else {
+			MOVE toPacman =  game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost),
+			        game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH);
+			for(MOVE m : MOVE.values()) {
+				if(m != toPacman &&m != MOVE.NEUTRAL) return m;
+			}
+			return MOVE.NEUTRAL;
+		}
+        
+       
 	}
 
 	@Override
