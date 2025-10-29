@@ -240,41 +240,36 @@ public class GhostsInput extends RulesInput {
 			double limit = (game.getGhostEdibleTime(ghost) / 2) + 30;
 			double distance = distanceFromGhostToPacman.get(ghost);
 			
-			if(distance >= limit) {
+			if(distance >= limit || game.getGhostLairTime(ghost) <= 0 || !game.isGhostEdible(ghost)) {
 				continue;
 			}
 			
 			//Recorro todos los fantasmas buscando al no comestible más cercano y que no tenga a PacMan en medio
-			for(GHOST otherGhost : GHOST.values()) {
-				if(otherGhost == ghost || shieldGhost.containsKey(otherGhost)) {
+			//
+			for(GHOST shield : GHOST.values()) {
+				if(shield == ghost || shieldGhost.containsKey(shield) || game.isGhostEdible(shield) || game.getGhostLairTime(shield) > 0) {
 					continue;
 				}
+				//Encuentro la distancia de mi yo comestible a mi posible escudero
+				int[] pathGhost = game.getShortestPath(game.getGhostCurrentNodeIndex(ghost), 
+						game.getGhostCurrentNodeIndex(shield),game.getGhostLastMoveMade(ghost));
 				
-				if(game.getGhostLairTime(ghost) <= 0 
-						&& otherGhost != ghost 
-						&& !game.isGhostEdible(otherGhost) 
-						&& game.getGhostLairTime(otherGhost) <= 0) {
-					
-					//Encuentro la distancia de mi yo comestible a mi posible escudero
-					int[] pathGhostDistance = game.getShortestPath(game.getGhostCurrentNodeIndex(ghost), 
-							game.getGhostCurrentNodeIndex(otherGhost),game.getGhostLastMoveMade(ghost));
-					
-					//Encuentro la distancia de mi yo comestible a PacMan
-					int[] pathPacManDistance = game.getShortestPath(game.getPacmanCurrentNodeIndex(), 
-							game.getGhostCurrentNodeIndex(ghost));
-				
-					//Si algun coincide PELIGRO ME PUEDEN COMER
-					for(int node : pathGhostDistance) {
-						if(Arrays.asList(pathPacManDistance).contains(node)) {
-							continue;
-						}
+				//Encuentro la distancia de mi yo comestible a PacMan
+				int[] pathPacManDistance = game.getShortestPath(game.getPacmanCurrentNodeIndex(), 
+						game.getGhostCurrentNodeIndex(ghost), game.getPacmanLastMoveMade());
+			
+				//Si algun coincide PELIGRO ME PUEDEN COMER
+				for(int node : pathGhost) {
+					if(Arrays.asList(pathPacManDistance).contains(node)) {
+						continue;
 					}
-					
-					shieldGhost.put(ghost, otherGhost);
-					break;
 				}
+				
+				shieldGhost.put(ghost, shield);
+				break;
 			}
 		}
 	}
-	
 }
+	
+
