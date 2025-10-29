@@ -28,29 +28,37 @@ public class RunToEscuderoAction implements RulesAction {
 
 	@Override
 	public MOVE execute(Game game) {
-        if (game.doesGhostRequireAction(ghost))        //if it requires an action
+        if (!game.doesGhostRequireAction(ghost))        //if it requires an action
         {
-        	
-           GHOST shield = GHOST.BLINKY;
-           double minDistance = Double.MAX_VALUE;
-           for(GHOST actGhost : allGhosts) {
-        	   double distance = 0; 
-        	   if(!game.isGhostEdible(actGhost)) {
-        		   
+        	return MOVE.NEUTRAL;
+        }
+          
+        GHOST shield = GHOST.BLINKY;
+        double minDistance = Double.MAX_VALUE;
+        for(GHOST actGhost : allGhosts) {
+        double distance = 0; 
+        //Find the nearest normal ghost to me
+        	if(!game.isGhostEdible(actGhost)) {
         		   distance = distanceFromGhostToGhost.get(this.ghost).get(actGhost);
-        		   
         		   if(distance < minDistance) {
         			   minDistance = distance;
         			   shield = actGhost;
         		   }
         	   }
            }
+        MOVE bestMoveToShield = game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(this.ghost),
+     		   game.getGhostCurrentNodeIndex(shield), game.getGhostLastMoveMade(this.ghost), DM.PATH);
            
-           return game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(this.ghost),
-        		   game.getGhostCurrentNodeIndex(shield), game.getGhostLastMoveMade(this.ghost), DM.PATH);
+        MOVE moveToPacman = game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(this.ghost),
+      		   game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(this.ghost), DM.PATH);
+        //If the move to shield is the same return the move away pacman;
+        if(bestMoveToShield == moveToPacman){
+        	return game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(this.ghost),
+           		   game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(this.ghost), DM.PATH);
         }
-            
-        return MOVE.NEUTRAL;	
+        //Return the best move to this Ghost ONLY IS PACMAN IS NOT IN THE MIDDLE OF MY PATH
+           return bestMoveToShield;
+      
 	}
 
 	@Override
