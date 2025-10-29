@@ -122,22 +122,22 @@ public class GhostsInput extends RulesInput {
 		// SHIELD GHOST //
 		
 		if(!Objects.isNull(this.shieldGhost.get(GHOST.BLINKY))) {
-			facts.add(String.format("(shieldGhost ", "(ghost %s))", GHOST.BLINKY,"(covers %s))", 
+			facts.add(String.format("(BLINKYshieldGhost ", "ghost %s))", 
 					this.shieldGhost.get(GHOST.BLINKY)));			
 		}
 		
 		if(!Objects.isNull(this.shieldGhost.get(GHOST.INKY))) {
-			facts.add(String.format("(shieldGhost ", "(ghost %s))", GHOST.INKY,"(covers %s))",
+			facts.add(String.format("(INKYshieldGhost ", "(ghost %s))",
 					this.shieldGhost.get(GHOST.INKY)));		
 		}
 		
 		if(!Objects.isNull(this.shieldGhost.get(GHOST.PINKY))) {
-			facts.add(String.format("(shieldGhost ", "(ghost %s))", GHOST.PINKY,"(covers %s))",
+			facts.add(String.format("(PINKYshieldGhost ", "(ghost %s))", 
 					this.shieldGhost.get(GHOST.PINKY)));		
 		}
 		
 		if(!Objects.isNull(this.shieldGhost.get(GHOST.SUE))) {
-			facts.add(String.format("(shieldGhost ", "(ghost %s))", GHOST.SUE,"(covers %s))",
+			facts.add(String.format("(SUEshieldGhost ", "(ghost %s))",
 					this.shieldGhost.get(GHOST.SUE)));		
 		}
 		

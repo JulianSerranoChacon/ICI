@@ -95,9 +95,20 @@
 
 ;; SHIELD GHOST ;;
 
-(deftemplate shieldGhost
-	(slot ghost (type SYMBOL))
-	(slot covers (type SYMBOL))
+(deftemplate BLINKYshieldGhost
+	(slot ghost (type SYMBOL) (default NONE))
+) 
+
+(deftemplate INKYshieldGhost
+	(slot ghost (type SYMBOL) (default NONE))
+)
+
+(deftemplate PINKYshieldGhost
+	(slot ghost (type SYMBOL) (default NONE))
+) 
+
+(deftemplate SUEshieldGhost
+	(slot ghost (type SYMBOL) (default NONE))
 ) 
 	
 ;; EDIBLE TIME GHOST ;;
@@ -161,13 +172,14 @@
       (ACTION 
          (id BLINKYOrbit)
          (info "BLINKY far away and edible")
-         (priority 22) 		;;Reassign priority
+         (priority 22) 	
       )
    )
 )
 
 (defrule BLINKYhayEscudero
-	(shieldGhost (ghost ?g) (covers BLINKY))
+	(BLINKYshieldGhost (ghost ?g))
+	(BLINKYedible (edibleTime ?e))
 	(test (> ?e 0))
 	=>
    	(assert
@@ -209,28 +221,23 @@
 
 ;; PERSECUCION ;;
 (defrule BLINKYediblesNearPacman
-	(PINKYtoPacman (distanceTo ?pinkyDistance))   ; Hecho para la distancia de Pinky
-  	(INKYtoPacman (distanceTo ?inkyDistance))     ; Hecho para la distancia de Inky
-  	(SUEtoPacman (distanceTo ?sueDistance))       ; Hecho para la distancia de Sue
-	(BLINKYedible (edibleTime ?blinkyEdible))
-	(INKYedible (edibleTime ?INKYEdible))
-	(SUEedible (edibleTime ?SUEEdible))
-	(PINKYedible (edibleTime ?PINKYEdible))
+	(PINKYshieldGhost (ghost ?p))
+	(INKYshieldGhost (ghost ?i))
+	(SUEshieldGhost (ghost ?s))
 
-	(and
-		(or
-			(and (PINKYedible (edibleTime ?PINKYEdible&:(> ?PINKYEdible 0)))
-				(PINKYtoPacman (distanceTo ?pinkyDistance&:(< ?pinkyDistance 100))))
-			(and (INKYedible (edibleTime ?INKYEdible&:(> ?INKYEdible 0)))
-				(INKYtoPacman (distanceTo ?inkyDistance&:(< ?inkyDistance 100))))
-			(and (SUEedible (edibleTime ?SUEEdible&:(> ?SUEEdible 0)))
-				(SUEtoPacman (distanceTo ?sueDistance&:(< ?sueDistance 100))))
-    )
+	(test (or 
+		(= ?p BLINKY)
+		(bind ?protegee ?p))
+		(= ?i BLINKY)
+		(bind ?protegee ?i))
+		(= ?s BLINKY)
+		(bind ?protegee ?s))
+	)
 	=>
-	(assert (ACTION (id "BLINKYrunToTheEdible") (info "me vuelvo escudero") (extraGhost (priority 17)
+	(assert (ACTION (id "BLINKYrunToTheEdible") (info "me vuelvo escudero") (extraGhost ?g) (priority 17)
 )
 
-(defrule BLINKYNearestToMsPacman ; HAY QUE CAMBIAR SEGUN EL FANTASMA QUE SEAS
+(defrule BLINKYNearestToMsPacman
   (BLINKYtoPacman (distanceTo ?blinkyDistance)) ; Hecho para la distancia de Blinky
   (PINKYtoPacman (distanceTo ?pinkyDistance))   ; Hecho para la distancia de Pinky
   (INKYtoPacman (distanceTo ?inkyDistance))     ; Hecho para la distancia de Inky
@@ -239,32 +246,32 @@
   (test (<= ?blinkyDistance ?inkyDistance))
   (test (<= ?blinkyDistance ?sueDistance))
 	=> 
-	(assert (ACTION (id BLINKYHunter1) (info "Soy cazador1")  (priority 15) ))
+	(assert (ACTION (id Hunter1) (info "Soy cazador1")  (priority 11) ))
 )
 
 (defrule BLINKYSecondNearestToMsPacman
-  (BLINKYtoPacman (distanceTo ?blinkyDistance)) ; Hecho para la distancia de Blinky
-  (PINKYtoPacman (distanceTo ?pinkyDistance))   ; Hecho para la distancia de Pinky
-  (INKYtoPacman (distanceTo ?inkyDistance))     ; Hecho para la distancia de Inky
-  (SUEtoPacman (distanceTo ?sueDistance))       ; Hecho para la distancia de Sue
-  (test
-    (or
-      (and (> ?blinkyDistance ?pinkyDistance)
-           (<= ?blinkyDistance ?inkyDistance)
-           (<= ?blinkyDistance ?sueDistance)
-           (bind ?closestGhost PINKY))
-      (and (> ?blinkyDistance ?inkyDistance)
-           (<= ?blinkyDistance ?pinkyDistance)
-           (<= ?blinkyDistance ?sueDistance)
-           (bind ?closestGhost INKY))
-      (and (> ?blinkyDistance ?sueDistance)
-           (<= ?blinkyDistance ?pinkyDistance)
-           (<= ?blinkyDistance ?inkyDistance)
-           (bind ?closestGhost SUE))
-    )
-  )
+  	(BLINKYtoPacman (distanceTo ?blinkyDistance)) ; Hecho para la distancia de Blinky
+  	(PINKYtoPacman (distanceTo ?pinkyDistance))   ; Hecho para la distancia de Pinky
+  	(INKYtoPacman (distanceTo ?inkyDistance))     ; Hecho para la distancia de Inky
+  	(SUEtoPacman (distanceTo ?sueDistance))       ; Hecho para la distancia de Sue
+	(test
+		(or
+			(and (> ?blinkyDistance ?pinkyDistance)
+				(<= ?blinkyDistance ?inkyDistance)
+				(<= ?blinkyDistance ?sueDistance)
+				(bind ?closestGhost PINKY))
+			(and (> ?blinkyDistance ?inkyDistance)
+				(<= ?blinkyDistance ?pinkyDistance)
+				(<= ?blinkyDistance ?sueDistance)
+				(bind ?closestGhost INKY))
+			(and (> ?blinkyDistance ?sueDistance)
+				(<= ?blinkyDistance ?pinkyDistance)
+				(<= ?blinkyDistance ?inkyDistance)
+				(bind ?closestGhost SUE))
+    	)
+  	)
   =>
-  (assert (ACTION (id BLINKYHunter2) (info "Soy Hunter2") (extraGhost ?closestGhost) (priority 14)))
+  (assert (ACTION (id Hunter2) (info "Soy Hunter2") (priority 12)))
 )
 
 (defrule BLINKYNearestToIntersection
@@ -277,9 +284,17 @@
   (test (<= ?blinkyDistance ?inkyDistance))
   (test (<= ?blinkyDistance ?sueDistance))
 	=> 
-	(assert (ACTION (id BLINKYJailer) (info "Soy Jailer") (intersection ?closestintersection)  (priority 13) ))
+	(assert (ACTION (id JailerAction) (info "Soy Jailer")  (priority 11) ))
 )
 
-(defrule BLINKYrandom ; HAY QUE CAMBIAR SEGUN EL FANTASMA QUE SEAS
-	(assert (ACTION (id BLINKYRandom) (info "Random move")  (priority 12) ))
-)	
+;;(defrule BLINKYhaPasadoEscudero
+
+(defrule BLINKYBlinkingAndSafe
+	(BLINKYtoPacman (distanceTo ?blinkyDistance))
+	(BLINKYedible (edibleTime ?e))
+	
+	(test (> ?blinkyDistance 40))
+	(test (< ?e 10))
+	(assert (ACTION (id Hunter1) (info "Soy Hunter1") (priority 14)))) ; Habría que discutir la prioridad, no la tengo clara
+)
+
