@@ -10,6 +10,7 @@ import java.util.Vector;
 import es.ucm.fdi.ici.rules.RulesInput;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
+import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
 public class GhostsInput extends RulesInput {
@@ -239,6 +240,8 @@ public class GhostsInput extends RulesInput {
 		for(GHOST ghost : GHOST.values()) {
 			double limit = (game.getGhostEdibleTime(ghost) / 2) + 30;
 			double distance = distanceFromGhostToPacman.get(ghost);
+			int ghostPosition = game.getGhostCurrentNodeIndex(ghost);
+			MOVE ghostLastmove = game.getGhostLastMoveMade(ghost);
 			
 			if(distance >= limit || game.getGhostLairTime(ghost) <= 0 || !game.isGhostEdible(ghost)) {
 				continue;
@@ -247,26 +250,28 @@ public class GhostsInput extends RulesInput {
 			//Recorro todos los fantasmas buscando al no comestible más cercano y que no tenga a PacMan en medio
 			//
 			for(GHOST shield : GHOST.values()) {
-				if(shield == ghost || shieldGhost.containsKey(shield) || game.isGhostEdible(shield) || game.getGhostLairTime(shield) > 0) {
+				if(shield == ghost || shieldGhost.containsValue(shield) || game.isGhostEdible(shield) || game.getGhostLairTime(shield) > 0) {
 					continue;
 				}
-				//Encuentro la distancia de mi yo comestible a mi posible escudero
-				int[] pathGhost = game.getShortestPath(game.getGhostCurrentNodeIndex(ghost), 
-						game.getGhostCurrentNodeIndex(shield),game.getGhostLastMoveMade(ghost));
-				
-				//Encuentro la distancia de mi yo comestible a PacMan
-				int[] pathPacManDistance = game.getShortestPath(game.getPacmanCurrentNodeIndex(), 
-						game.getGhostCurrentNodeIndex(ghost), game.getPacmanLastMoveMade());
-			
-				//Si algun coincide PELIGRO ME PUEDEN COMER
-				for(int node : pathGhost) {
-					if(Arrays.asList(pathPacManDistance).contains(node)) {
-						continue;
-					}
+
+				int shielderPosition = game.getGhostCurrentNodeIndex(shield);
+
+				// calculo la distancia hasta el escudero
+				double distanceToShielder = game.getDistance(shielderPosition, ghostPosition, game.getGhostLastMoveMade(shield), DM.PATH);
+				// ajuste asumiendo que el fantasma se esta dirigiendo a su escudero, camina la mitad que el otro porque es comestible 
+				// asi que nos basamos en la velocidad media de los fantasmas para ver cual seria la distancia que recorreria el escudero
+				// antes de encontrarse. Simplificado con las constantes de velocidad de los fantasmas queda 3/4 de la distancia
+				distanceToShielder -= 1/4 * distanceToShielder;
+								
+				double distanceToPacman = distanceFromPacmanToGhost.get(ghost);
+				// ajuste asumiendo que el fantasma se esta alejando de pacman, por lo que pacman tiene que recorrer extra
+				// calculamos ese extra basandonos en el limite de la serie geometrica de (1/2)^n (n en [1, infinito))
+				distanceToPacman += distanceToPacman;
+
+				if (distanceToShielder < distanceToPacman) {
+					shieldGhost.put(ghost, shield);
+					break;
 				}
-				
-				shieldGhost.put(ghost, shield);
-				break;
 			}
 		}
 	}

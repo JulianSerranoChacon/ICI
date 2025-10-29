@@ -172,7 +172,7 @@
       (ACTION 
          (id BLINKYOrbit)
          (info "BLINKY far away and edible")
-         (priority 22) 	
+         (priority 21) 	
       )
    )
 )
@@ -198,7 +198,7 @@
    (BLINKYedible (edibleTime ?e))
    (test (> ?e 0))
    (test (or (== ?t 0) (< ?d 200)))  ;; near if distance < 200
-=>
+	=>
    (assert
       (ACTION 
          (id BLINKYrunsOptimal)
@@ -207,8 +207,6 @@
       )
    )
 )
-
-;;(defrule BLINKYhaPasadoEscudero prioridad 21
 
 (defrule BLINKYrunsAwayMSPACMANclosePPill
 	(MSPACMAN (mindistancePPill ?d)) (test (<= ?d 30)) 
@@ -234,7 +232,7 @@
 		(bind ?protegee ?s))
 	)
 	=>
-	(assert (ACTION (id "BLINKYrunToTheEdible") (info "me vuelvo escudero") (extraGhost ?g) (priority 17)
+	(assert (ACTION (id "BLINKYrunToTheEdible") (info "me vuelvo escudero") (extraGhost ?protegee) (priority 17)
 )
 
 (defrule BLINKYNearestToMsPacman
@@ -246,7 +244,7 @@
   (test (<= ?blinkyDistance ?inkyDistance))
   (test (<= ?blinkyDistance ?sueDistance))
 	=> 
-	(assert (ACTION (id Hunter1) (info "Soy cazador1")  (priority 11) ))
+	(assert (ACTION (id Hunter1) (info "Soy cazador1")  (priority 15) ))
 )
 
 (defrule BLINKYSecondNearestToMsPacman
@@ -271,7 +269,7 @@
     	)
   	)
   =>
-  (assert (ACTION (id Hunter2) (info "Soy Hunter2") (priority 12)))
+  (assert (ACTION (id Hunter2) (info "Soy Hunter2") (priority 14)))
 )
 
 (defrule BLINKYNearestToIntersection
@@ -284,7 +282,7 @@
   (test (<= ?blinkyDistance ?inkyDistance))
   (test (<= ?blinkyDistance ?sueDistance))
 	=> 
-	(assert (ACTION (id JailerAction) (info "Soy Jailer")  (priority 11) ))
+	(assert (ACTION (id JailerAction) (info "Soy Jailer")  (priority 13) ))
 )
 
 ;;(defrule BLINKYhaPasadoEscudero
@@ -295,6 +293,6 @@
 	
 	(test (> ?blinkyDistance 40))
 	(test (< ?e 10))
-	(assert (ACTION (id Hunter1) (info "Soy Hunter1") (priority 14)))) ; Habría que discutir la prioridad, no la tengo clara
+	(assert (ACTION (id Hunter1) (info "Soy Hunter1") (priority 12)))) ; Habría que discutir la prioridad, no la tengo clara
 )
 
