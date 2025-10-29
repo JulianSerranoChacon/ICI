@@ -1,27 +1,37 @@
 ;FACTS ASSERTED BY GAME INPUT
 (deftemplate BLINKY
-	(slot edible (type SYMBOL)))
+	(slot edible (type SYMBOL))
+	(slot BLINKYMinDistancePacMan (type NUMBER))
+	(slot BLINKYMinDistancePpil (type NUMBER))
+)
 	
 (deftemplate INKY
-	(slot edible (type SYMBOL)))
+	(slot edible (type SYMBOL))
+	(slot INKYMinDistancePacMan (type NUMBER))
+	(slot INKYMinDistancePpil (type NUMBER))
+)
 	
 (deftemplate PINKY
-	(slot edible (type SYMBOL)))
+	(slot edible (type SYMBOL))
+	(slot PINKYMinDistancePacMan (type NUMBER))
+	(slot PINKYMinDistancePpil (type NUMBER))
+)
 
 (deftemplate SUE
-	(slot edible (type SYMBOL)))
+	(slot edible (type SYMBOL))
+	(slot SUEMinDistancePacMan (type NUMBER))
+	(slot PINKYMinDistancePpil (type NUMBER))
+)
 	
 (deftemplate MSPACMAN 
  	(slot voyGreedy (type SYMBOL)) 
-	(slot HayPillEnCaminoInmediato (type NUMBER)) 
+	(slot hayPillEnCaminoInmediato (type NUMBER)) 
     (slot mindistancePPill (type NUMBER)) 
-	(slot hayFantasmasNoComestiblesCerca (type SYMBOL))
 	(slot hayVariosFantasmasNoComestiblesCerca (type NUMBER))
 	(slot hayVariosFantasmasComestiblesCerca (type NUMBER))
 	(slot soloUnaInterseccionPosible (type SYMBOL))
 	(slot variosCaminos (type NUMBER))
 	(slot quedanPPils (type SYMBOL))
-	(slot estoyCercaDePpil (type SYMBOL))
 	(slot hayFantasmasCercaDePpil(type SYMBOL))
 	(slot tiempoDesdePpil (type NUMBER))
 	(slot distanceToBLINKY (type NUMBER))
@@ -39,7 +49,7 @@
 ;RULES 
 ; Comienzo siempre en ir a comer pills, luego iré viendo que tengo que hacer realmente
 (defrule MSPacManMoveToClosestPill
-	(MSPACMAN (voyGreedy ?d)) (test (?d == true))
+	(MSPACMAN (voyGreedy ?s)) (test (?s == true))
 	=>
 	(assert
 		(
@@ -50,7 +60,7 @@
 
 ; Si hay pills inmediatas voy a por ellas
 (defrule MSPacManGetMorePoints
-	(MSPACMAN (HayPillEnCaminoInmediato ?d)) (test (?d != 0))
+	(MSPACMAN (hayPillEnCaminoInmediato ?d)) (test (?d != 0))
 	=>
 	(assert
 		(
@@ -61,7 +71,7 @@
 
 ; Si hay fantasmas no comestibles cerca intento huir
 (defrule MSPacManEscapeFromAll
-	(MSPACMAN (hayFantasmasNoComestiblesCerca ?s)) (test (?s > 0))
+	(MSPACMAN (hayVariosFantasmasNoComestiblesCerca ?d)) (test (?d > 0))
 	=>
 	(assert
 		(
@@ -94,9 +104,12 @@
 )
 
 ; Si tengo muchos fantasmas persiguiendome y llego a la powerPill voy a por ella
-; FALTA COMPROBAR SI LLEGO ANTES A LA PPIL QUE LOS FANTASMAS
+
 (defrule MSPacManEatPPIL
-	(MSPACMAN (hayVariosFantasmasNoComestiblesCerca ?f) (estoyCercaDePpil ?d)) (mindistancePPill ?s) (test (?f > 1)) (test (?d == true)) (test (?s < 50)) ;ESTE VALOR ESTA A OJO HAY QUE CAMBIARLO
+	(MSPACMAN (hayVariosFantasmasNoComestiblesCerca ?d) ) (mindistancePPill ?d) (BLINKYMinDistancePpil ?d) (INKYMinDistancePpil ?d) (PINKYMinDistancePpil ?d) (SUEMinDistancePpil ?d) 
+	(test (?d > 1)) && (test (?d < 50));ESTE VALOR ESTA A OJO HAY QUE CAMBIARLO
+	 && (test (mindistancePPill < BLINKYMinDistancePpil)) && (test (mindistancePPill < INKYMinDistancePpil)) 
+	&& (test (mindistancePPill < PINKYMinDistancePpil)) && (test (mindistancePPill < SUEMinDistancePpil))
 	=>
 	(assert
 		(
@@ -108,7 +121,7 @@
 ; Si hay fantasmas comestibles cerca y no hay fantasmas no comestibles cerca me voy a comerlos 
 ; FALTA COMPROBAR SI LLEGO A COMERLOS Y EL FANTASMA CERCANO NO ME JODE LA COMIDA
 (defrule MSPacManStartsFollowing
-	(MSPACMAN (hayVariosFantasmasNoComestiblesCerca ?d) (hayVariosFantasmasComestiblesCerca ?c)) (test (?d == 0)) && (test (?c > 0 ))
+	(MSPACMAN (hayVariosFantasmasNoComestiblesCerca ?d) (hayVariosFantasmasComestiblesCerca ?d)) (test (?d == 0)) && (test (?c > 0 ))
 	=>
 	(assert
 		(
@@ -120,7 +133,7 @@
 ;Si no hay caminos disponibles intento ir a por la PPIL
 ;FALTA COMPROBAR SI LLEGO A COMERLA
 (defrule MSPacManStartSuicida
-	(MSPACMAN (variosCaminos ?s)) (test (?s == 0 ))
+	(MSPACMAN (variosCaminos ?d)) (test (?d == 0 ))
 	=>
 	(assert
 		(
@@ -131,7 +144,7 @@
 
 ; Si no hay caminos disponibles, ni PPILS pero hay pils accesibles, me muevo a esas pills
 (defrule MSPacManPillsSuicida
-	(MSPACMAN (variosCaminos ?s, quedanPPils ?f)) (test (?s == 0 && ?f == 0 ))
+	(MSPACMAN (variosCaminos ?d, quedanPPils ?d)) (test (?d == 0 && ?d == 0 ))
 	=>
 	(assert
 		(
@@ -142,7 +155,7 @@
 
 ;Si no hay caminos disponibles, ni PPILS, ni PILLS me muevo random
 (defrule MSPacManRandom
-	(MSPACMAN (variosCaminos ?s, quedanPPils ?f,HayPillEnCaminoInmediato ?d)) (test (?s == 0 && ?f == 0 && ?d == 0 ))
+	(MSPACMAN (variosCaminos ?d, quedanPPils ?d,hayPillEnCaminoInmediato ?d)) (test (?d == 0 && ?d == 0 && ?d == 0 ))
 	=>
 	(assert
 		(
@@ -159,6 +172,4 @@
 			ACTION (id Only move possible action) (info "Solo tengo un movimiento posible") (priority 19)
 		)
 	)
-)
-
-	
+)	
