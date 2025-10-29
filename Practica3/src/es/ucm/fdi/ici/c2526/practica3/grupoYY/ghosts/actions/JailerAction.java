@@ -16,13 +16,12 @@ public class JailerAction implements RulesAction{
 
 	@Override
 	public MOVE execute(Game game) {    
-
 		if(!game.doesGhostRequireAction(ghost))
 			return MOVE.NEUTRAL;
-
+		
     	MOVE moveToReturn = MOVE.NEUTRAL;
 
-   		int[] futureNodeMove = game.getNeighbouringNodes(game.getPacmanCurrentNodeIndex());
+   		int[] futureNodeMove = game.getNeighbouringNodes(game.getPacmanCurrentNodeIndex(), game.getPacmanLastMoveMade());
 		
 		while(futureNodeMove.length <= 1) {
 			futureNodeMove = game.getNeighbouringNodes(futureNodeMove[0]);
