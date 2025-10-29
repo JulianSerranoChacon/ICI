@@ -177,48 +177,14 @@
 
 ;; RULES OF ALL GHOSTS --> IS ALL IN THE PERSPECTIVE OF BLINKY, WE WILL ADAPT TO OTHER GHOSTS ;;
 
-;; Basic rules
-(defrule BLINKYrunsAwayMSPACMANclosePPill
-	(MSPACMAN (mindistancePPill ?d)) (test (<= ?d 30)) 
-	=>  
-	(assert 
-		(ACTION (id BLINKYrunsAway) (info "MSPacMan cerca PPill") (priority 50) 
-			(runawaystrategy RANDOM)
-		)
-	)
-)
-
 (defrule BLINKYrunsAway
 	(BLINKY (edible true)) 
 	=>  
 	(assert 
-		(ACTION (id BLINKYrunsAway) (info "Comestible --> huir") (priority 30) 
+		(ACTION (id BLINKYrunsAway) (info "Comestible --> huir") (priority 23) 
 			(runawaystrategy CORNER)
 		)
 	)
-)
-	
-(defrule BLINKYchases
-	(BLINKY (edible false)) 
-	=> 
-	(assert (ACTION (id BLINKYchases) (info "No comestible --> perseguir")  (priority 10) ))
-)	
-
-;; NEW RULES ;;
-
-(defrule BLINKYpacmanFarAway
-   (PacmanToBLINKY (distanceTo ?d))
-   (BLINKYlair (lairTime ?t))
-   (BLINKYedible (edibleTime ?e))
-   (test (or (!= ?t 0) (> ?d (+ (/ ?e 2) 1))))  ;; far away if distance > (edibleTime/2 + 1)
-=>
-   (assert
-      (ACTION 
-         (id BLINKYOrbit)
-         (info "BLINKY far away and edible")
-         (priority 10) 		;;Reassign priority
-      )
-   )
 )
 
 (defrule BLINKYpacmanNear
@@ -231,10 +197,12 @@
       (ACTION 
          (id BLINKYOrbit)
          (info "BLINKY near and edible")
-         (priority 10) 		;;Reassign priority
+         (priority 22) 		;;Reassign priority
       )
    )
 )
+
+;;(defrule BLINKYhaPasadoEscudero prioridad 21
 
 (defrule BLINKYhayEscudero
 	( shieldGhost (ghost ?g) (covers BLINKY))
@@ -244,12 +212,82 @@
          (id RunToEscuderoAction)
          (info "BLINKY going to escudero")
          (ghostQueCubre ?g)
-         (priority 10) 		;;Reassign priority
+         (priority 20) 		;;Reassign priority
       )
    )
 )
 
-(defrule BLINKYNearestToMsPacman
+(defrule BLINKYpacmanFarAway
+   (PacmanToBLINKY (distanceTo ?d))
+   (BLINKYlair (lairTime ?t))
+   (BLINKYedible (edibleTime ?e))
+   (test (or (!= ?t 0) (> ?d (+ (/ ?e 2) 1))))  ;; far away if distance > (edibleTime/2 + 1)
+=>
+   (assert
+      (ACTION 
+         (id BLINKYOrbit)
+         (info "BLINKY far away and edible")
+         (priority 19) 		;;Reassign priority
+      )
+   )
+)
+
+(defrule BLINKYrunsAwayMSPACMANclosePPill
+	(MSPACMAN (mindistancePPill ?d)) (test (<= ?d 30)) 
+	=>  
+	(assert 
+		(ACTION (id BLINKYrunsAway) (info "MSPacMan cerca PPill") (priority 18) 
+			(runawaystrategy RANDOM)
+		)
+	)
+)
+
+(defrule BLINKYediblesNearPacman
+	(PINKYtoPacman (distanceTo ?pinkyDistance))   ; Hecho para la distancia de Pinky
+  	(INKYtoPacman (distanceTo ?inkyDistance))     ; Hecho para la distancia de Inky
+  	(SUEtoPacman (distanceTo ?sueDistance))       ; Hecho para la distancia de Sue
+	(BLINKYedible (edibleTime ?blinkyEdible))
+	(INKYedible (edibleTime ?INKYEdible))
+	(SUEedible (edibleTime ?SUEEdible))
+	(PINKYedible (edibleTime ?PINKYEdible))
+
+	(and
+		(or
+			(and (PINKYedible (edibleTime ?PINKYEdible&:(> ?PINKYEdible 0)))
+				(PINKYtoPacman (distanceTo ?pinkyDistance&:(< ?pinkyDistance 100))))
+			(and (INKYedible (edibleTime ?INKYEdible&:(> ?INKYEdible 0)))
+				(INKYtoPacman (distanceTo ?inkyDistance&:(< ?inkyDistance 100))))
+			(and (SUEedible (edibleTime ?SUEEdible&:(> ?SUEEdible 0)))
+				(SUEtoPacman (distanceTo ?sueDistance&:(< ?sueDistance 100))))
+    )
+	=>
+	(assert (ACTION (id "BLINKYrunToTheEdible") (info "me vuelvo escudero") (priority 17)
+)
+
+(defrule BLINKYnoediblesNearPacman ; HAY QUE CAMBIAR SEGUN EL FANTASMA QUE SEAS
+	(PINKYtoPacman (distanceTo ?pinkyDistance))   ; Hecho para la distancia de Pinky
+  	(INKYtoPacman (distanceTo ?inkyDistance))     ; Hecho para la distancia de Inky
+  	(SUEtoPacman (distanceTo ?sueDistance))       ; Hecho para la distancia de Sue
+	(BLINKYedible (edibleTime ?blinkyEdible))
+	(INKYedible (edibleTime ?INKYEdible))
+	(SUEedible (edibleTime ?SUEEdible))
+	(PINKYedible (edibleTime ?PINKYEdible))
+
+	(not
+		(or
+			(and (PINKYedible (edibleTime ?PINKYEdible&:(> ?PINKYEdible 0)))
+				(PINKYtoPacman (distanceTo ?pinkyDistance&:(< ?pinkyDistance 100))))
+			(and (INKYedible (edibleTime ?INKYEdible&:(> ?INKYEdible 0)))
+				(INKYtoPacman (distanceTo ?inkyDistance&:(< ?inkyDistance 100))))
+			(and (SUEedible (edibleTime ?SUEEdible&:(> ?SUEEdible 0)))
+				(SUEtoPacman (distanceTo ?sueDistance&:(< ?sueDistance 100))))
+		)
+	)
+	=>
+	(assert (ACTION (id "BLINKYrunToTheEdible") (info "me vuelvo escudero") (priority 16)
+)
+
+(defrule BLINKYNearestToMsPacman ; HAY QUE CAMBIAR SEGUN EL FANTASMA QUE SEAS
   (BLINKYtoPacman (distanceTo ?blinkyDistance)) ; Hecho para la distancia de Blinky
   (PINKYtoPacman (distanceTo ?pinkyDistance))   ; Hecho para la distancia de Pinky
   (INKYtoPacman (distanceTo ?inkyDistance))     ; Hecho para la distancia de Inky
@@ -258,7 +296,7 @@
   (test (<= ?blinkyDistance ?inkyDistance))
   (test (<= ?blinkyDistance ?sueDistance))
 	=> 
-	(assert (ACTION (id Hunter1) (info "Soy cazador1")  (priority 11) ))
+	(assert (ACTION (id Hunter1) (info "Soy cazador1")  (priority 15) ))
 )
 
 (defrule BLINKYSecondNearestToMsPacman
@@ -270,7 +308,7 @@
   (test (<= ?blinkyDistance ?inkyDistance))
   (test (<= ?blinkyDistance ?sueDistance))
   =>
-  (assert (ACTION (id Hunter2) (info "Soy Hunter2") (priority 12)))
+  (assert (ACTION (id Hunter2) (info "Soy Hunter2") (priority 14)))
 )
 
 (defrule BLINKYNearestToIntersection
@@ -282,17 +320,9 @@
   (test (<= ?blinkyDistance ?inkyDistance))
   (test (<= ?blinkyDistance ?sueDistance))
 	=> 
-	(assert (ACTION (id JailerAction) (info "Soy Jailer")  (priority 11) ))
+	(assert (ACTION (id JailerAction) (info "Soy Jailer")  (priority 13) ))
 )
 
-;;(defrule BLINKYhaPasadoEscudero
-
-(defrule BLINKYBlinkingAndSafe
-	(BLINKYtoPacman (distanceTo ?blinkyDistance))
-	(BLINKYedible (edibleTime ?e))
-	
-	(test (> ?blinkyDistance 40))
-	(test (< ?e 10))
-	(assert (ACTION (id Hunter1) (info "Soy Hunter1") (priority 14)))) ; Habría que discutir la prioridad, no la tengo clara
-)
-
+(defrule BLINKYrandom ; HAY QUE CAMBIAR SEGUN EL FANTASMA QUE SEAS
+	(assert (ACTION (id ) (info "BLINKYRandom")  (priority 12) ))
+)	
