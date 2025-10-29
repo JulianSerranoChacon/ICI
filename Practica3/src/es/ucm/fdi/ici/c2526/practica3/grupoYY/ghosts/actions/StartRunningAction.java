@@ -18,9 +18,12 @@ public class StartRunningAction implements RulesAction {
 
 	@Override
 	public MOVE execute(Game game) {
-        if (game.doesGhostRequireAction(ghost))        //if it requires an action
-        {
-        	//We take the best Move to "Follow" PacMan, this move can not be done because we want to escape from PacMan when he eats the PPill
+        if (!game.doesGhostRequireAction(ghost))        
+        return MOVE.NEUTRAL;
+        
+      //if it requires an action
+        	//We take the best Move to "Follow" PacMan, this move can not be done
+        	//because we want to escape from PacMan when he eats the PPill
             MOVE bestTowardsMove = game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost),
                     				game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH);
             
@@ -37,7 +40,7 @@ public class StartRunningAction implements RulesAction {
           	  //If it is not the bestMove (because Pacman is there, checks which move is the closest of all to "Follow" PacMan
           	  if(mv != bestTowardsMove) {
           		  
-          		  distance = game.getApproximateShortestPathDistance(game.getGhostCurrentNodeIndex(this.ghost), game.getPacmanCurrentNodeIndex(), mv);
+          		  distance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(this.ghost), game.getPacmanCurrentNodeIndex(), mv);
 
           		  if(distance < minDistance) {
           			  minDistance = distance;
@@ -47,9 +50,6 @@ public class StartRunningAction implements RulesAction {
           	  }
             }
             return moveToReturn;
-        }
-            
-        return MOVE.NEUTRAL;	
 	}
 
 	@Override

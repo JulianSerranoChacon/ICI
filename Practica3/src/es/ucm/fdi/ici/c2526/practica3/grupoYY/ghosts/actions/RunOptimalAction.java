@@ -16,6 +16,7 @@ public class RunOptimalAction implements RulesAction {
 		this.ghost = ghost;
 	}
 
+	//Huida optima david se lo mejora
 	@Override
 	public MOVE execute(Game game) {
         if (game.doesGhostRequireAction(ghost))        //if it requires an action
