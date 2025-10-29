@@ -285,6 +285,8 @@
 	(assert (ACTION (id JailerAction) (info "Soy Jailer")  (priority 11) ))
 )
 
+;;(defrule BLINKYhaPasadoEscudero
+
 (defrule BLINKYBlinkingAndSafe
 	(BLINKYtoPacman (distanceTo ?blinkyDistance))
 	(BLINKYedible (edibleTime ?e))
