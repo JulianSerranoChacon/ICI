@@ -31,7 +31,7 @@ public class GhostsInput extends RulesInput {
 	private Map<GHOST,Double> distanceFromPacmanToGhost;
 	private Map<GHOST,Map<GHOST,Double>> distanceFromGhostToGhost;
 	private Map<GHOST,GHOST> shieldGhost;
-	private Map<GHOST,GHOSTTYPE> GhostClass;
+	private Map<GHOST,Double> ghostToIntersection; 
 	
 	public boolean[] behaviourChanged;
 	
@@ -56,111 +56,87 @@ public class GhostsInput extends RulesInput {
 		parseDistanceFromGhostToPacman();
 		parseDistanceFromPacManToGhost();
 		parseDistanceGhostToGhost();
-		parseGhostPriority();
 		parseGhostShield();
 	}
 	
 	@Override
 	public Collection<String> getFacts() {
+		parseInput();
 		Vector<String> facts = new Vector<String>();
 		//ADD EDIBLE FACTS //
-//		facts.add(String.format("(BLINKY (edible %s))", this.BLINKYedible));
-//		facts.add(String.format("(INKY (edible %s))", this.INKYedible));
-//		facts.add(String.format("(PINKY (edible %s))", this.PINKYedible));
-//		facts.add(String.format("(SUE (edible %s))", this.SUEedible));
-		facts.add(String.format("(MSPACMAN (mindistancePPill %d))", 
-								(int)this.minPacmanDistancePPill));
+		facts.add(String.format("(MSPACMAN (mindistancePPill %f))", 
+								(float)this.minPacmanDistancePPill));
 		
 		//ADD DISTANCE FROM GHOST TO PACMAN //
-		facts.add(String.format("(BLINKYtoPacman (distanceTo %d))", 
+		facts.add(String.format("(BLINKYtoPacman (distanceTo %f))", 
 				this.distanceFromGhostToPacman.get(GHOST.BLINKY)));
-		facts.add(String.format("(INKYtoPacman (distanceTo %d))", 
+		facts.add(String.format("(INKYtoPacman (distanceTo %f))", 
 				this.distanceFromGhostToPacman.get(GHOST.INKY)));
-		facts.add(String.format("(PINKYtoPacman (distanceTo %d))", 
+		facts.add(String.format("(PINKYtoPacman (distanceTo %f))", 
 				this.distanceFromGhostToPacman.get(GHOST.PINKY)));
-		facts.add(String.format("(SUEtoPacman (distanceTo %d))", 
+		facts.add(String.format("(SUEtoPacman (distanceTo %f))", 
 				this.distanceFromGhostToPacman.get(GHOST.SUE)));
 		
 		//ADD DISTANCE FROM PACMAN TO GHOST //
-		facts.add(String.format("(PacmanToBLINKY (distanceTo %d))", 
+		facts.add(String.format("(PacmanToBLINKY (distanceTo %f))", 
 				this.distanceFromPacmanToGhost.get(GHOST.BLINKY)));
-		facts.add(String.format("(PacmanToINKY (distanceTo %d))", 
+		facts.add(String.format("(PacmanToINKY (distanceTo %f))", 
 				this.distanceFromPacmanToGhost.get(GHOST.INKY)));
-		facts.add(String.format("(PacmanToPINKY (distanceTo %d))", 
+		facts.add(String.format("(PacmanToPINKY (distanceTo %f))", 
 				this.distanceFromPacmanToGhost.get(GHOST.PINKY)));
-		facts.add(String.format("(PacmanToSUE (distanceTo %d))", 
+		facts.add(String.format("(PacmanToSUE (distanceTo %f))", 
 				this.distanceFromPacmanToGhost.get(GHOST.SUE)));
 		
 		//ADD DISTANCE FROM GHOST TO GHOST //
 		//BLINKY
-		facts.add(String.format("(BLINKYtoINKY (distanceTo %d))", 
+		facts.add(String.format("(BLINKYtoINKY (distanceTo %f))", 
 				this.distanceFromGhostToGhost.get(GHOST.BLINKY).get(GHOST.INKY)));
-		facts.add(String.format("(BLINKYtoPINKY (distanceTo %d))", 
+		facts.add(String.format("(BLINKYtoPINKY (distanceTo %f))", 
 				this.distanceFromGhostToGhost.get(GHOST.BLINKY).get(GHOST.PINKY)));
-		facts.add(String.format("(BLINKYtoSUE (distanceTo %d))", 
+		facts.add(String.format("(BLINKYtoSUE (distanceTo %f))", 
 				this.distanceFromGhostToGhost.get(GHOST.BLINKY).get(GHOST.SUE)));
 		//INKY
-		facts.add(String.format("(INKYToBLINKY (distanceTo %d))", 
+		facts.add(String.format("(INKYToBLINKY (distanceTo %f))", 
 				this.distanceFromGhostToGhost.get(GHOST.INKY).get(GHOST.BLINKY)));
-		facts.add(String.format("(INKYToPINKY (distanceTo %d))", 
+		facts.add(String.format("(INKYToPINKY (distanceTo %f))", 
 				this.distanceFromGhostToGhost.get(GHOST.INKY).get(GHOST.PINKY)));
-		facts.add(String.format("(INKYToSUE (distanceTo %d))", 
+		facts.add(String.format("(INKYToSUE (distanceTo %f))", 
 				this.distanceFromGhostToGhost.get(GHOST.INKY).get(GHOST.SUE)));
 		//PINKY
-		facts.add(String.format("(PINKYToBLINKY (distanceTo %d))", 
+		facts.add(String.format("(PINKYToBLINKY (distanceTo %f))", 
 				this.distanceFromGhostToGhost.get(GHOST.PINKY).get(GHOST.BLINKY)));
-		facts.add(String.format("(PINKYToINKY (distanceTo %d))", 
+		facts.add(String.format("(PINKYToINKY (distanceTo %f))", 
 				this.distanceFromGhostToGhost.get(GHOST.PINKY).get(GHOST.INKY)));
-		facts.add(String.format("(PINKYToSUE (distanceTo %d))", 
+		facts.add(String.format("(PINKYToSUE (distanceTo %f))", 
 				this.distanceFromGhostToGhost.get(GHOST.PINKY).get(GHOST.SUE)));
 		//SUE
-		facts.add(String.format("(SUEToBLINKY (distanceTo %d))", 
+		facts.add(String.format("(SUEToBLINKY (distanceTo %f))", 
 				this.distanceFromGhostToGhost.get(GHOST.SUE).get(GHOST.BLINKY)));
-		facts.add(String.format("(SUEToINKY (distanceTo %d))", 
+		facts.add(String.format("(SUEToINKY (distanceTo %f))", 
 				this.distanceFromGhostToGhost.get(GHOST.SUE).get(GHOST.INKY)));
-		facts.add(String.format("(SUEToPINKY (distanceTo %d))", 
+		facts.add(String.format("(SUEToPINKY (distanceTo %f))", 
 				this.distanceFromGhostToGhost.get(GHOST.SUE).get(GHOST.PINKY)));
-		
-		//  GHOST ROLES   //
-		if(!Objects.isNull(this.GhostClass.get(GHOST.BLINKY))) {
-			facts.add(String.format("(BLINKYrole (role %d))", 
-					this.GhostClass.get(GHOST.BLINKY)));			
-		}
-		
-		if(!Objects.isNull(this.GhostClass.get(GHOST.INKY))) {
-			facts.add(String.format("(INKYrole (role %d))", 
-				this.GhostClass.get(GHOST.INKY)));
-		}
-		
-		if(!Objects.isNull(this.GhostClass.get(GHOST.PINKY))) {
-			facts.add(String.format("(PINKYrole (role %d))", 
-				this.GhostClass.get(GHOST.PINKY)));
-		}
-		
-		if(!Objects.isNull(this.GhostClass.get(GHOST.SUE))) {
-			facts.add(String.format("(SUErole (role %d))", 
-				this.GhostClass.get(GHOST.SUE)));
-		}					
+					
 		
 		// SHIELD GHOST //
 		
 		if(!Objects.isNull(this.shieldGhost.get(GHOST.BLINKY))) {
-			facts.add(String.format("(shieldGhost ", "(ghost %d))", GHOST.BLINKY,"(covers %d))",
+			facts.add(String.format("(shieldGhost ", "(ghost %s))", GHOST.BLINKY,"(covers %s))", 
 					this.shieldGhost.get(GHOST.BLINKY)));			
 		}
 		
 		if(!Objects.isNull(this.shieldGhost.get(GHOST.INKY))) {
-			facts.add(String.format("(shieldGhost ", "(ghost %d))", GHOST.INKY,"(covers %d))",
+			facts.add(String.format("(shieldGhost ", "(ghost %s))", GHOST.INKY,"(covers %s))",
 					this.shieldGhost.get(GHOST.INKY)));		
 		}
 		
 		if(!Objects.isNull(this.shieldGhost.get(GHOST.PINKY))) {
-			facts.add(String.format("(shieldGhost ", "(ghost %d))", GHOST.PINKY,"(covers %d))",
+			facts.add(String.format("(shieldGhost ", "(ghost %s))", GHOST.PINKY,"(covers %s))",
 					this.shieldGhost.get(GHOST.PINKY)));		
 		}
 		
 		if(!Objects.isNull(this.shieldGhost.get(GHOST.SUE))) {
-			facts.add(String.format("(shieldGhost ", "(ghost %d))", GHOST.SUE,"(covers %d))",
+			facts.add(String.format("(shieldGhost ", "(ghost %s))", GHOST.SUE,"(covers %s))",
 					this.shieldGhost.get(GHOST.SUE)));		
 		}
 		
@@ -174,7 +150,7 @@ public class GhostsInput extends RulesInput {
 		facts.add(String.format("(SUEedible (edibleTime %d))", 
 				this.game.getGhostEdibleTime(GHOST.SUE)));
 		
-		// EDIBLE TIME // 
+		// LAIR TIME // 
 		facts.add(String.format("(BLINKYlair (lairTime %d))", 
 				this.game.getGhostEdibleTime(GHOST.BLINKY)));
 		facts.add(String.format("(INKYlair (lairTime %d))", 
@@ -225,113 +201,6 @@ public class GhostsInput extends RulesInput {
 		}
 	}
 	
-	// TODO: I don't think this is working properly, we should take a closer look
-	  public void swapBehaviour(int indexA, int indexB) {
-	    	GHOSTTYPE aux = GhostClass.get(indexA);
-	    	GhostClass.remove(indexA);
-	    	GhostClass.put(GHOST.values()[indexA], GhostClass.get(indexB));
-	    	GhostClass.remove(indexB);
-	    	GhostClass.put(GHOST.values()[indexB], aux);
-	    }
-	private void parseGhostPriority() {
-    	
-		GhostClass = new HashMap<>();
-		//Roles to be assigned
-    	GHOST closerGhostToPacMan = GHOST.BLINKY;
-		GHOST jailerGhost = GHOST.BLINKY;
-		GHOST secondCloserGhost = GHOST.BLINKY;
-
-		boolean[] asignados = new boolean[4];
-		double distance = 0;
-		double minDistance = Double.MAX_VALUE;
-
-		
-		// ROL CLOSER GHOST TO PACMAN //
-    	for (GHOST ghostType : GHOST.values()) {
-    		if(!game.isGhostEdible(ghostType) && game.getGhostLairTime(ghostType) <= 0) {
-    			distance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghostType), game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghostType)); //Math.abs(game.getPacmanCurrentNodeIndex() - game.getGhostCurrentNodeIndex(ghostType));
-    			 if(distance < minDistance) {
-    				minDistance = distance;
-    				closerGhostToPacMan = ghostType;
-    				asignados[0] = true;
-    			}
-    		}
-    	}
-    	
-    	// ROL SECOND CLOSEST GHOST //
-    	minDistance = Double.MAX_VALUE;
-    	
-    	//Sacar Segundo Fantasma Cercano
-       	for (GHOST ghostType : GHOST.values()) {
-    		if(!game.isGhostEdible(ghostType) && game.getGhostLairTime(ghostType) <= 0 && ghostType != closerGhostToPacMan) {
-    			distance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghostType), game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghostType));
-    			if(distance < minDistance) {
-    				minDistance = distance;
-    				secondCloserGhost = ghostType;
-    				asignados[1] = true;
-    			}
-    		}
-    	}	
-    	
-    	// ROL JAILER //
-    	minDistance = Double.MAX_VALUE;
-    	distance = 0;
-    	
-    	//We calculated the future intersection where PacMan is going
-		int[] futureNodeMove = game.getNeighbouringNodes(game.getPacmanCurrentNodeIndex());
-		
-		//In what direction?
-		while(futureNodeMove.length <= 1) {
-			futureNodeMove = game.getNeighbouringNodes(futureNodeMove[0]);
-		}
-		
-		//Assign the rol to the closest ghost
-       	for (GHOST ghostType : GHOST.values()) {
-    		if(!game.isGhostEdible(ghostType) && game.getGhostLairTime(ghostType) <= 0 && ghostType != closerGhostToPacMan && ghostType != secondCloserGhost) {
-    			
-    			//Dont select a well placed ghost
-    			if(game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghostType), game.getGhostCurrentNodeIndex(closerGhostToPacMan), game.getGhostLastMoveMade(ghostType))  <= 5) {
-    				break;
-    			}
-    			
-    			distance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghostType), futureNodeMove[0], game.getGhostLastMoveMade(ghostType));
-    			
-      			if( minDistance > distance) {
-    				minDistance = distance;
-    				jailerGhost = ghostType;
-    				asignados[2] = true;
-    			}
-    		}
-    	}
-    	
-    	//Change the behavior of every ghost if is necessary
-    	for(GHOST g : GHOST.values()) {	
-    		if(asignados[0] && g == closerGhostToPacMan) {
-    			GhostClass.put(g, GHOSTTYPE.HUNTER1);
-    		}
-    		else if(asignados[2] && g == jailerGhost) {
-    			GhostClass.put(g, GHOSTTYPE.JAILER);
-    		}
-    		else if(asignados[1] && g == secondCloserGhost) {
-    			GhostClass.put(g, GHOSTTYPE.HUNTER2);
-    		}
-    		else {
-    			if(asignados[1] == false) {
-    				GhostClass.put(g, GHOSTTYPE.HUNTER2);
-    				asignados[1] = true; 
-    			}
-    			else if(asignados[2] == false) {
-    				GhostClass.put(g, GHOSTTYPE.JAILER);
-    				asignados[2] = true; 
-    			}
-    			else if(asignados[3] == false){
-    				asignados[3] = true;
-        			GhostClass.put(g, GHOSTTYPE.RANDOM);
-    			}
-    		}
-    	}
-    }
-	
 	private void parseGhostShield() {
 		//Compruebo que estoy lo sufcientemente amenzado como para buscar a un escudero
 		for(GHOST ghost : GHOST.values()) {
@@ -375,23 +244,4 @@ public class GhostsInput extends RulesInput {
 		}
 	}
 	
-	public boolean isBLINKYedible() {
-		return BLINKYedible;
-	}
-
-	public boolean isINKYedible() {
-		return INKYedible;
-	}
-
-	public boolean isPINKYedible() {
-		return PINKYedible;
-	}
-
-	public boolean isSUEedible() {
-		return SUEedible;
-	}
-
-	public double getMinPacmanDistancePPill() {
-		return minPacmanDistancePPill;
-	}
 }
