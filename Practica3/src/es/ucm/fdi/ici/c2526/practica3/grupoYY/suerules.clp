@@ -100,7 +100,7 @@
 	(SUEedible (edibleTime ?e))
 	(test (> ?e 0))
 	=>
-	(assert (ACTION (id RunToEscuderoAction) (info "SUE going to escudero") (extraGhost ?g) (priority 20)))
+	(assert (ACTION (id SUERunToEscudero) (info "SUE going to escudero") (extraGhost ?g) (priority 20)))
 )
 
 (defrule SUEpacmanNear
@@ -130,7 +130,7 @@
   (test (<= ?sueDistance ?inkyDistance))
   (test (<= ?sueDistance ?blinkyDistance))
 	=>
-	(assert (ACTION (id Hunter1) (info "Soy cazador1") (priority 15)))
+	(assert (ACTION (id SUEHunter1) (info "Soy cazador1") (priority 15)))
 )
 
 (defrule SUESecondNearestToMsPacman
@@ -155,7 +155,7 @@
     	)
   	)
   =>
-  (assert (ACTION (id Hunter2) (info "Soy Hunter2") (priority 14)))
+  (assert (ACTION (id SUEHunter2) (info "Soy Hunter2") (priority 14)))
 )
 
 (defrule SUENearestToIntersection
@@ -168,14 +168,5 @@
   (test (<= ?sueDistance ?inkyDistance))
   (test (<= ?sueDistance ?blinkyDistance))
 	=>
-	(assert (ACTION (id JailerAction) (info "Soy Jailer") (priority 13)))
-)
-
-(defrule SUEBlinkingAndSafe
-	(SUEtoPacman (distanceTo ?sueDistance))
-	(SUEedible (edibleTime ?e))
-	(test (> ?sueDistance 40))
-	(test (< ?e 10))
-	=>
-	(assert (ACTION (id Hunter1) (info "Soy Hunter1") (priority 12)))
+	(assert (ACTION (id SUEJailer) (info "Soy Jailer") (priority 13)))
 )
