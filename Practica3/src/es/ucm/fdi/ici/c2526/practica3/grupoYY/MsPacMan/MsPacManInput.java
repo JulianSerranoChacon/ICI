@@ -20,7 +20,6 @@ import pacman.game.Game;
 public class MsPacManInput extends RulesInput {
 
 	// Data gathered TODO: Maybe erase this and have everything on pi
-	boolean goGreedy; //We always start in greedy, then the rules will define where we will go
 	boolean finishLevel;
 	private Map<MOVE, Integer> moveToNode;
 	private Map<MOVE, Integer> moveToPoints;
@@ -63,7 +62,7 @@ public class MsPacManInput extends RulesInput {
 	}
 
 	private void initializeVars(){
-		goGreedy = true;
+
 		moveToPoints = new HashMap<>();
 		moveToPpill = new HashMap<>();
 		moveToGhost = new HashMap<>();
@@ -94,7 +93,6 @@ public class MsPacManInput extends RulesInput {
 		Vector<String> facts = new Vector<String>();
 		
 		//MISSPACMAN
-		facts.add(String.format("(MSPACMAN (voyGreedy %d))", this.goGreedy));
 		
 		facts.add(String.format("(MSPACMAN (hayPillCaminoInmediato %s))",hayPillCaminoInmediato));
 
