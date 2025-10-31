@@ -32,14 +32,20 @@ public class GhostsInput extends RulesInput {
 	
 	public GhostsInput(Game game) {
 		super(game);
+		reset();
 	}
-
+	
+	private void reset() {
+		distanceFromGhostToPacman = new HashMap<>();
+		distanceFromPacmanToGhost = new HashMap<>();
+		distanceFromGhostToGhost = new HashMap<>();
+		shieldGhost = new HashMap<>();
+		ghostToIntersection = new HashMap<>();
+	}
+	
 	@Override
 	public void parseInput() {
-		game.isGhostEdible(GHOST.BLINKY);
-		game.isGhostEdible(GHOST.INKY);
-		game.isGhostEdible(GHOST.PINKY);
-		game.isGhostEdible(GHOST.SUE);
+		reset();
 	
 		int pacman = game.getPacmanCurrentNodeIndex();
 		this.minPacmanDistancePPill = Double.MAX_VALUE;
@@ -173,7 +179,13 @@ public class GhostsInput extends RulesInput {
 	private void parseDistanceFromGhostToPacman() {
 		distanceFromGhostToPacman = new HashMap<>();
 		for(GHOST g : GHOST.values()) {
-			double auxDistance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(g) , game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(g));
+			double auxDistance = 0;
+			if(game.getGhostLairTime(g) > 0) {
+				auxDistance = Double.MAX_VALUE;
+			}
+			else {
+				auxDistance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(g) , game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(g));
+			}
 			distanceFromGhostToPacman.put(g, auxDistance);
 		}
 		
@@ -183,10 +195,14 @@ public class GhostsInput extends RulesInput {
 		distanceFromPacmanToGhost = new HashMap<>();
 		
 		for(GHOST g : GHOST.values()) {
-		if(game.getGhostLairTime(g)==0) {	
-			double auxDistance = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(g),game.getPacmanLastMoveMade());
-			distanceFromPacmanToGhost.put(g, auxDistance);
+			double auxDistance = 0;
+			if(game.getGhostLairTime(g) > 0) {
+				auxDistance = Double.MAX_VALUE;
 			}
+			else {
+				auxDistance = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(g),game.getPacmanLastMoveMade());
+			}
+			distanceFromPacmanToGhost.put(g, auxDistance);
 		}
 		
 	}
@@ -194,17 +210,18 @@ public class GhostsInput extends RulesInput {
 	private void parseDistanceGhostToGhost() {
 		distanceFromGhostToGhost= new HashMap<>();
 		for(GHOST g : GHOST.values()) {
-			if(game.getGhostLairTime(g)==0) {
-				Map<GHOST,Double> auxMap = new HashMap<>();
-				for(GHOST otherghost : GHOST.values()) {
-					if(game.getGhostLairTime(otherghost)==0){ 	
-						double auxdistance = game.getShortestPathDistance( game.getGhostCurrentNodeIndex(g), game.getGhostCurrentNodeIndex(otherghost),game.getGhostLastMoveMade(g));
-						auxMap.put(otherghost, auxdistance);
-					}
+			Map<GHOST,Double> auxMap = new HashMap<>();
+			for(GHOST otherghost : GHOST.values()) {
+				double auxdistance = 0;
+				if(game.getGhostLairTime(otherghost) > 0 || game.getGhostLairTime(g) > 0) { 	
+					auxdistance = Double.MAX_VALUE;
 				}
-			distanceFromGhostToGhost.put(g, auxMap);
-			
+				else {
+					auxdistance = game.getShortestPathDistance( game.getGhostCurrentNodeIndex(g), game.getGhostCurrentNodeIndex(otherghost),game.getGhostLastMoveMade(g));
+				}
+				auxMap.put(otherghost, auxdistance);
 			}
+			distanceFromGhostToGhost.put(g, auxMap);
 		}
 	}
 	private void parseGhostToIntersection() {
