@@ -1,7 +1,11 @@
 package es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts.actions;
 
+import java.util.Objects;
+
 import es.ucm.fdi.ici.rules.RulesAction;
 import jess.Fact;
+import jess.JessException;
+import jess.Value;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
@@ -9,9 +13,10 @@ import pacman.game.Game;
 
 public class JailerAction implements RulesAction{
     GHOST ghost;
-
+    int targetNode = 0;
 	public JailerAction( GHOST ghost) {
 		this.ghost = ghost;
+		
 	}
 
 	@Override
@@ -21,18 +26,21 @@ public class JailerAction implements RulesAction{
 		
     	MOVE moveToReturn = MOVE.NEUTRAL;
 
-   		int[] futureNodeMove = game.getNeighbouringNodes(game.getPacmanCurrentNodeIndex(), game.getPacmanLastMoveMade());
-		
-		while(futureNodeMove.length <= 1) {
-			futureNodeMove = game.getNeighbouringNodes(futureNodeMove[0]);
-		}
-	
-    	moveToReturn = game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), futureNodeMove[0], DM.PATH);
+    	moveToReturn = game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost),targetNode, DM.PATH);
     	return moveToReturn;
 	}
 	
 	@Override
-	public void parseFact(Fact actionFact) {}
+	public void parseFact(Fact actionFact) {
+		try {
+			Value target = actionFact.getSlotValue("MSPACMANclosestIntersection");
+			if(!Objects.isNull(target)) {
+				targetNode =  target.intValue(null);
+			}
+		} catch (JessException e) {
+			e.printStackTrace();
+		}
+	}
 
 	@Override
 	public String getActionId() {
