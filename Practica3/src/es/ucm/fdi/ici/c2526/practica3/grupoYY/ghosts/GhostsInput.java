@@ -1,6 +1,5 @@
 package es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +9,6 @@ import java.util.Vector;
 import es.ucm.fdi.ici.rules.RulesInput;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
-import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
 public class GhostsInput extends RulesInput {
@@ -22,10 +20,6 @@ public class GhostsInput extends RulesInput {
 		   RANDOM
 	}
 	
-	private boolean BLINKYedible;
-	private boolean INKYedible;
-	private boolean PINKYedible;
-	private boolean SUEedible;
 	private double minPacmanDistancePPill;
 	
 	private Map<GHOST,Double> distanceFromGhostToPacman;
@@ -42,10 +36,10 @@ public class GhostsInput extends RulesInput {
 
 	@Override
 	public void parseInput() {
-		this.BLINKYedible = game.isGhostEdible(GHOST.BLINKY);
-		this.INKYedible = game.isGhostEdible(GHOST.INKY);
-		this.PINKYedible = game.isGhostEdible(GHOST.PINKY);
-		this.SUEedible = game.isGhostEdible(GHOST.SUE);
+		game.isGhostEdible(GHOST.BLINKY);
+		game.isGhostEdible(GHOST.INKY);
+		game.isGhostEdible(GHOST.PINKY);
+		game.isGhostEdible(GHOST.SUE);
 	
 		int pacman = game.getPacmanCurrentNodeIndex();
 		this.minPacmanDistancePPill = Double.MAX_VALUE;
@@ -241,7 +235,7 @@ public class GhostsInput extends RulesInput {
 			double limit = (game.getGhostEdibleTime(ghost) / 2) + 30;
 			double distance = distanceFromGhostToPacman.get(ghost);
 			int ghostPosition = game.getGhostCurrentNodeIndex(ghost);
-			MOVE ghostLastmove = game.getGhostLastMoveMade(ghost);
+			//MOVE ghostLastmove = game.getGhostLastMoveMade(ghost);
 			
 			if(distance >= limit || game.getGhostLairTime(ghost) <= 0 || !game.isGhostEdible(ghost)) {
 				continue;
