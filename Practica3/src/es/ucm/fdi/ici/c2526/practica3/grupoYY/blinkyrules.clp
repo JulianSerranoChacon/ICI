@@ -1,50 +1,217 @@
-;FACTS ASSERTED BY GAME INPUT
-(deftemplate BLINKY
-	(slot edible (type SYMBOL)))
-	
-(deftemplate INKY
-	(slot edible (type SYMBOL)))
-	
-(deftemplate PINKY
-	(slot edible (type SYMBOL)))
+;; ============================================================
+;; ===============   BLINKY RULES FILE   ======================
+;; ============================================================
 
-(deftemplate SUE
-	(slot edible (type SYMBOL)))
-	
+;; DEFINITION OF DATA TYPES 
 (deftemplate MSPACMAN 
-    (slot mindistancePPill (type NUMBER)) )
-    
-;DEFINITION OF THE ACTION FACT
+    (slot mindistancePPill (type NUMBER))
+)
+
+(deftemplate MSPACMANclosestIntersection
+	(slot index (type NUMBER))
+)
+
+;; NEW DATA TYPES
+
+;; ADD DISTANCE FROM GHOST TO PACMAN 
+(deftemplate BLINKYtoPacman
+	(slot distanceTo (type FLOAT))
+)
+
+(deftemplate INKYtoPacman
+	(slot distanceTo (type FLOAT))
+)
+
+(deftemplate PINKYtoPacman
+	(slot distanceTo (type FLOAT))
+)
+
+(deftemplate SUEtoPacman
+	(slot distanceTo (type FLOAT))
+)
+
+;; ADD DISTANCE FROM PACMAN TO GHOST 
+(deftemplate PacmanToBLINKY
+	(slot distanceTo (type FLOAT))
+)
+
+(deftemplate PacmanToINKY
+	(slot distanceTo (type FLOAT))
+)
+
+(deftemplate PacmanToPINKY
+	(slot distanceTo (type FLOAT))
+)
+
+(deftemplate PacmanToSUE
+	(slot distanceTo (type FLOAT))
+)
+
+;; ADD DISTANCE FROM GHOST TO NEXT PACMAN INTERSECTION 
+(deftemplate BLINKYToIntersection
+	(slot distanceTo (type FLOAT))
+)
+
+(deftemplate INKYToIntersection
+	(slot distanceTo (type FLOAT))
+)
+
+(deftemplate PINKYToIntersection
+	(slot distanceTo (type FLOAT))
+)
+
+(deftemplate SUEToIntersection
+	(slot distanceTo (type FLOAT))
+)
+
+;; DISTANCE FROM GHOST TO GHOST 
+(deftemplate BLINKYToINKY (slot distanceTo (type FLOAT)))
+(deftemplate BLINKYToPINKY (slot distanceTo (type FLOAT)))
+(deftemplate BLINKYToSUE (slot distanceTo (type FLOAT)))
+
+(deftemplate INKYToBLINKY (slot distanceTo (type FLOAT)))
+(deftemplate INKYToPINKY (slot distanceTo (type FLOAT)))
+(deftemplate INKYToSUE (slot distanceTo (type FLOAT)))
+
+(deftemplate PINKYToBLINKY (slot distanceTo (type FLOAT)))
+(deftemplate PINKYToINKY (slot distanceTo (type FLOAT)))
+(deftemplate PINKYToSUE (slot distanceTo (type FLOAT)))
+
+(deftemplate SUEToBLINKY (slot distanceTo (type FLOAT)))
+(deftemplate SUEToINKY (slot distanceTo (type FLOAT)))
+(deftemplate SUEToPINKY (slot distanceTo (type FLOAT)))
+
+;; SHIELD GHOST 
+(deftemplate BLINKYshieldGhost (slot ghost (type SYMBOL) (default NONE)))
+(deftemplate INKYshieldGhost (slot ghost (type SYMBOL) (default NONE)))
+(deftemplate PINKYshieldGhost (slot ghost (type SYMBOL) (default NONE)))
+(deftemplate SUEshieldGhost (slot ghost (type SYMBOL) (default NONE)))
+
+;; EDIBLE TIME GHOST 
+(deftemplate BLINKYedible (slot edibleTime (type NUMBER)))
+(deftemplate INKYedible (slot edibleTime (type NUMBER)))
+(deftemplate PINKYedible (slot edibleTime (type NUMBER)))
+(deftemplate SUEedible (slot edibleTime (type NUMBER)))
+
+;; LAIR TIME GHOST 
+(deftemplate BLINKYlair (slot lairTime (type NUMBER)))
+(deftemplate INKYlair (slot lairTime (type NUMBER)))
+(deftemplate PINKYlair (slot lairTime (type NUMBER)))
+(deftemplate SUElair (slot lairTime (type NUMBER)))
+
+;; DEFINITION OF THE ACTION FACT
 (deftemplate ACTION
-	(slot id) (slot info (default "")) (slot priority (type NUMBER) ) ; mandatory slots
-	(slot runawaystrategy (type SYMBOL)) ; Extra slot for the runaway action
-) 
+	(slot id)
+	(slot info (default ""))
+	(slot priority (type NUMBER))
+	(slot extraGhost (type SYMBOL) (default NONE))
+	(slot intersection (type NUMBER) (default NONE))
+)
 
-;RULES 
+;; ============================================================
+;; ===============   BLINKY RULES   ===========================
+;; ============================================================
+
+;; LAIR
+(defrule BLINKYinlair
+	(BLINKYlair (lairTime ?t))
+	(test (> ?t 0))
+	=>
+	(assert (ACTION (id BLINKYRandom) (info "Random move") (priority 100)))
+)
+
+;; HUIDA
+(defrule BLINKYpacmanFarAway
+   (PacmanToBLINKY (distanceTo ?d))
+   (BLINKYlair (lairTime ?t))
+   (BLINKYedible (edibleTime ?e))
+   (test (> ?e 0))
+   (test (or (!= ?t 0) (> ?d (+ (/ ?e 2) 1))))
+	=>
+   (assert (ACTION (id BLINKYOrbit) (info "BLINKY far away and edible") (priority 21)))
+)
+
+(defrule BLINKYhayEscudero
+	(BLINKYshieldGhost (ghost ?g))
+	(BLINKYedible (edibleTime ?e))
+	(test (> ?e 0))
+	=>
+	(assert (ACTION (id RunToEscuderoAction) (info "BLINKY going to escudero") (extraGhost ?g) (priority 20)))
+)
+
+(defrule BLINKYpacmanNear
+   (PacmanToBLINKY (distanceTo ?d))
+   (BLINKYlair (lairTime ?t))
+   (BLINKYedible (edibleTime ?e))
+   (test (> ?e 0))
+   (test (or (== ?t 0) (< ?d 200)))
+	=>
+   (assert (ACTION (id BLINKYrunsOptimal) (info "BLINKY near and edible") (priority 19)))
+)
+
 (defrule BLINKYrunsAwayMSPACMANclosePPill
-	(MSPACMAN (mindistancePPill ?d)) (test (<= ?d 30)) 
-	=>  
-	(assert 
-		(ACTION (id BLINKYrunsAway) (info "MSPacMan cerca PPill") (priority 50) 
-			(runawaystrategy RANDOM)
-		)
-	)
+	(MSPACMAN (mindistancePPill ?d)) 
+	(test (<= ?d 30))
+	=>
+	(assert (ACTION (id "BLINKYstartRunning") (info "MSPacMan cerca PPill") (priority 18)))
 )
 
-(defrule BLINKYrunsAway
-	(BLINKY (edible true)) 
-	=>  
-	(assert 
-		(ACTION (id BLINKYrunsAway) (info "Comestible --> huir") (priority 30) 
-			(runawaystrategy CORNER)
-		)
-	)
+;; PERSECUCION
+(defrule BLINKYNearestToMsPacman
+  (BLINKYtoPacman (distanceTo ?blinkyDistance))
+  (PINKYtoPacman (distanceTo ?pinkyDistance))
+  (INKYtoPacman (distanceTo ?inkyDistance))
+  (SUEtoPacman (distanceTo ?sueDistance))
+  (test (<= ?blinkyDistance ?pinkyDistance))
+  (test (<= ?blinkyDistance ?inkyDistance))
+  (test (<= ?blinkyDistance ?sueDistance))
+	=>
+	(assert (ACTION (id Hunter1) (info "Soy cazador1") (priority 15)))
 )
-	
-(defrule BLINKYchases
-	(BLINKY (edible false)) 
-	=> 
-	(assert (ACTION (id BLINKYchases) (info "No comestible --> perseguir")  (priority 10) ))
-)	
-	
-	
+
+(defrule BLINKYSecondNearestToMsPacman
+  	(BLINKYtoPacman (distanceTo ?blinkyDistance))
+  	(PINKYtoPacman (distanceTo ?pinkyDistance))
+  	(INKYtoPacman (distanceTo ?inkyDistance))
+  	(SUEtoPacman (distanceTo ?sueDistance))
+	(test
+		(or
+			(and (> ?blinkyDistance ?pinkyDistance)
+				(<= ?blinkyDistance ?inkyDistance)
+				(<= ?blinkyDistance ?sueDistance)
+				(bind ?closestGhost PINKY))
+			(and (> ?blinkyDistance ?inkyDistance)
+				(<= ?blinkyDistance ?pinkyDistance)
+				(<= ?blinkyDistance ?sueDistance)
+				(bind ?closestGhost INKY))
+			(and (> ?blinkyDistance ?sueDistance)
+				(<= ?blinkyDistance ?pinkyDistance)
+				(<= ?blinkyDistance ?inkyDistance)
+				(bind ?closestGhost SUE))
+    	)
+  	)
+  =>
+  (assert (ACTION (id Hunter2) (info "Soy Hunter2") (priority 14)))
+)
+
+(defrule BLINKYNearestToIntersection
+  (MSPACMANclosestIntersection (index ?closestintersection))
+  (BLINKYToIntersection (distanceTo ?blinkyDistance))
+  (PINKYToIntersection (distanceTo ?pinkyDistance))
+  (INKYToIntersection (distanceTo ?inkyDistance))
+  (SUEToIntersection (distanceTo ?sueDistance))
+  (test (<= ?blinkyDistance ?pinkyDistance))
+  (test (<= ?blinkyDistance ?inkyDistance))
+  (test (<= ?blinkyDistance ?sueDistance))
+	=>
+	(assert (ACTION (id JailerAction) (info "Soy Jailer") (priority 13)))
+)
+
+(defrule BLINKYBlinkingAndSafe
+	(BLINKYtoPacman (distanceTo ?blinkyDistance))
+	(BLINKYedible (edibleTime ?e))
+	(test (> ?blinkyDistance 40))
+	(test (< ?e 10))
+	=>
+	(assert (ACTION (id Hunter1) (info "Soy Hunter1") (priority 12)))
+)
