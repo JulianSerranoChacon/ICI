@@ -269,7 +269,7 @@
     	)
   	)
   =>
-  (assert (ACTION (id INKYHunter2) (info "Soy Hunter2") (priority 14)))
+  (assert (ACTION (id INKYHunter2) (info "Soy Hunter2") (extraGhost closestGhost) (priority 14)))
 )
 
 (defrule inkyNearestToIntersection
@@ -282,7 +282,7 @@
   (test (<= ?inkyDistance ?blinkyDistance))
   (test (<= ?inkyDistance ?sueDistance))
 	=> 
-	(assert (ACTION (id INKYJailer) (info "Soy Jailer")  (priority 13) ))
+	(assert (ACTION (id INKYJailer) (info "Soy Jailer") (intersection ?closestintersection) (priority 13) ))
 )
 
 

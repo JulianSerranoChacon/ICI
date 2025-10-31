@@ -155,7 +155,7 @@
     	)
   	)
   =>
-  (assert (ACTION (id SUEHunter2) (info "Soy Hunter2") (priority 14)))
+  (assert (ACTION (id SUEHunter2) (info "Soy Hunter2") (extraGhost closestGhost) (priority 14)))
 )
 
 (defrule SUENearestToIntersection
@@ -168,5 +168,5 @@
   (test (<= ?sueDistance ?inkyDistance))
   (test (<= ?sueDistance ?blinkyDistance))
 	=>
-	(assert (ACTION (id SUEJailer) (info "Soy Jailer") (priority 13)))
+	(assert (ACTION (id SUEJailer) (info "Soy Jailer") (intersection ?closestintersection) (priority 13)))
 )
