@@ -147,9 +147,9 @@ public class GhostsInput extends RulesInput {
 				ghostToIntersection.get(GHOST.BLINKY)));
 		facts.add(String.format("(INKYToIntersection (distanceTo  %f))", 
 				ghostToIntersection.get(GHOST.INKY)));
-		facts.add(String.format("PINKYToIntersection (distanceTo  %f))", 
+		facts.add(String.format("(PINKYToIntersection (distanceTo  %f))", 
 				ghostToIntersection.get(GHOST.PINKY)));
-		facts.add(String.format("SUEToIntersection (distanceTo  %f))", 
+		facts.add(String.format("(SUEToIntersection (distanceTo  %f))", 
 				ghostToIntersection.get(GHOST.SUE)));
 		
 		
