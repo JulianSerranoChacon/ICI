@@ -18,38 +18,38 @@ public class StartRunningAction implements RulesAction {
 
 	@Override
 	public MOVE execute(Game game) {
-        if (game.doesGhostRequireAction(ghost))        //if it requires an action
-        {
-        	//We take the best Move to "Follow" PacMan, this move can not be done because we want to escape from PacMan when he eats the PPill
-            MOVE bestTowardsMove = game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost),
-                    				game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH);
-            
-           
-            MOVE moveToReturn = MOVE.NEUTRAL; //Which move should return
-            double minDistance = 10000; //Save the closest distance through PacMan
-            
-            
-            //For every possible Move
-            for(MOVE mv : possibleMoves) {
-          	  
-          	  double distance = 0;
-          	  
-          	  //If it is not the bestMove (because Pacman is there, checks which move is the closest of all to "Follow" PacMan
-          	  if(mv != bestTowardsMove) {
-          		  
-          		  distance = game.getApproximateShortestPathDistance(game.getGhostCurrentNodeIndex(this.ghost), game.getPacmanCurrentNodeIndex(), mv);
+        if (!game.doesGhostRequireAction(ghost))        
+        	return MOVE.NEUTRAL;
+        
+    	//if it requires an action
+    	//We take the best Move to "Follow" PacMan, this move can not be done
+    	//because we want to escape from PacMan when he eats the PPill
+        MOVE bestTowardsMove = game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost),
+                				game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH);
+        
+       
+        MOVE moveToReturn = MOVE.NEUTRAL; //Which move should return
+        double minDistance = 10000; //Save the closest distance through PacMan
+        
+        
+        //For every possible Move
+        for(MOVE mv : possibleMoves) {
+      	  
+      	  double distance = 0;
+      	  
+      	  //If it is not the bestMove (because Pacman is there, checks which move is the closest of all to "Follow" PacMan
+      	  if(mv != bestTowardsMove) {
+      		  
+      		  distance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(this.ghost), game.getPacmanCurrentNodeIndex(), mv);
 
-          		  if(distance < minDistance) {
-          			  minDistance = distance;
-          			  moveToReturn = mv;
-          		  }
-          		  
-          	  }
-            }
-            return moveToReturn;
+      		  if(distance < minDistance) {
+      			  minDistance = distance;
+      			  moveToReturn = mv;
+      		  }
+      		  
+      	  }
         }
-            
-        return MOVE.NEUTRAL;	
+        return moveToReturn;
 	}
 
 	@Override

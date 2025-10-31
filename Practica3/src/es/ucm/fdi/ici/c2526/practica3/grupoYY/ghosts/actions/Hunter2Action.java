@@ -26,34 +26,25 @@ public class Hunter2Action implements RulesAction  {
 		if(!game.doesGhostRequireAction(ghost))
 			return MOVE.NEUTRAL;
 		
+		//Get possible moves of ghost
 		MOVE[] possibleMoves = game.getPossibleMoves(game.getGhostCurrentNodeIndex(ghost), game.getGhostLastMoveMade(ghost));
-		MOVE bestMove = game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(),DM.PATH);
-		MOVE moveToReturn = MOVE.NEUTRAL;  
+		//Move that hunter 1 will do to go to pacman
+		MOVE moveHunter1 = game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(),DM.PATH);
+		//Saves return moves
+		MOVE moveToReturn = MOVE.NEUTRAL;
+		
+		//Distances
 		double minDistance = Double.MAX_VALUE;
-		double distanceBetweenHunters = 0;
+		double distanceBetweenHunters = game.getDistance(game.getGhostCurrentNodeIndex(ghost), game.getGhostCurrentNodeIndex(hunter1), DM.PATH);
 		
-		for (GHOST g : GHOST.values()) {
-			if(g == hunter1) {
-				distanceBetweenHunters = game.getDistance(game.getGhostCurrentNodeIndex(ghost), game.getGhostCurrentNodeIndex(g), DM.PATH);
-				break;
+		for(MOVE m : possibleMoves) { 
+			if(minDistance > game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), m)) {
+				//If both hunters are to close, the second hunter must not take the closest Move to PacMan
+				if(distanceBetweenHunters < DISTANCE_LIMIT && m != moveHunter1) {
+    				minDistance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), m);
+    				moveToReturn = m;
+	    		}
 			}
-		}
-		
-		for(int i = 0; i < possibleMoves.length; ++i) {
-			//If both hunters are to close the second hunter must not take the closest Move to PacMan
-			if(distanceBetweenHunters < DISTANCE_LIMIT && possibleMoves[i] != bestMove) {
-    			if(minDistance > game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), possibleMoves[i])) {
-    				minDistance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), possibleMoves[i]);
-    				moveToReturn = possibleMoves[i];
-    			}
-    		}
-    		// else follow Pac-Man
-    		else {
-    			if(minDistance > game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), possibleMoves[i])) {
-    				minDistance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), possibleMoves[i]);
-    				moveToReturn = possibleMoves[i];
-    				}
-    		}
 		}
 		
 		return moveToReturn;
@@ -61,7 +52,6 @@ public class Hunter2Action implements RulesAction  {
 	
 	@Override
 	public void parseFact(Fact actionFact) {
-		
 		try {
 			Value hunter1Role = actionFact.getSlotValue("hunter1Id");
 			if(!Objects.isNull(hunter1Role)) {

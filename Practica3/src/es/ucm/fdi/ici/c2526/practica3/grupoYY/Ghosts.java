@@ -5,8 +5,15 @@ import java.util.EnumMap;
 import java.util.HashMap;
 
 import es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts.GhostsInput;
-import es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts.actions.BasicAction1;
-import es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts.actions.BasicAction2;
+import es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts.actions.Hunter1Action;
+import es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts.actions.Hunter2Action;
+import es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts.actions.JailerAction;
+import es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts.actions.OrbitateAction;
+import es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts.actions.ProtectEdibleGhostAction;
+import es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts.actions.RandomAction;
+import es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts.actions.RunOptimalAction;
+import es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts.actions.RunToEscuderoAction;
+import es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts.actions.StartRunningAction;
 import es.ucm.fdi.ici.rules.RuleEngine;
 import es.ucm.fdi.ici.rules.RulesAction;
 import es.ucm.fdi.ici.rules.RulesInput;
@@ -29,23 +36,19 @@ public class Ghosts  extends GhostController  {
 		
 		map = new HashMap<String,RulesAction>();
 		//Fill Actions
-		RulesAction BLINKYchases = new BasicAction1(GHOST.BLINKY);
-		RulesAction INKYchases = new BasicAction1(GHOST.INKY);
-		RulesAction PINKYchases = new BasicAction1(GHOST.PINKY);
-		RulesAction SUEchases = new BasicAction1(GHOST.SUE);
-		RulesAction BLINKYrunsAway = new BasicAction2(GHOST.BLINKY);
-		RulesAction INKYrunsAway = new BasicAction2(GHOST.INKY);
-		RulesAction PINKYrunsAway = new BasicAction2(GHOST.PINKY);
-		RulesAction SUErunsAway = new BasicAction2(GHOST.SUE);
-		
-		map.put("BLINKYchases", BLINKYchases);
-		map.put("INKYchases", INKYchases);
-		map.put("PINKYchases", PINKYchases);
-		map.put("SUEchases", SUEchases);	
-		map.put("BLINKYrunsAway", BLINKYrunsAway);
-		map.put("INKYrunsAway", INKYrunsAway);
-		map.put("PINKYrunsAway", PINKYrunsAway);
-		map.put("SUErunsAway", SUErunsAway);
+		// Then, for each action type:
+		for (GHOST ghost : GHOST.values()) {
+		    map.put(ghost.name() + "chases", new Hunter1Action(ghost));
+		    map.put(ghost.name() + "advancedChases", new Hunter2Action(ghost));
+		    map.put(ghost.name() + "jails", new JailerAction(ghost));
+		    map.put(ghost.name() + "orbits", new OrbitateAction(ghost));
+		    map.put(ghost.name() + "protects", new ProtectEdibleGhostAction(ghost));
+		    map.put(ghost.name() + "randomMoves", new RandomAction(ghost));
+		    map.put(ghost.name() + "runsOptimally", new RunOptimalAction(ghost));
+		    map.put(ghost.name() + "runsToEscudero", new RunToEscuderoAction(ghost));
+		    map.put(ghost.name() + "startsRunning", new StartRunningAction(ghost));
+		}
+
 		
 		ghostRuleEngines = new EnumMap<GHOST,RuleEngine>(GHOST.class);
 		for(GHOST ghost: GHOST.values())
