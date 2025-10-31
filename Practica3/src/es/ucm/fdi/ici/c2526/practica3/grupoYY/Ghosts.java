@@ -38,15 +38,15 @@ public class Ghosts  extends GhostController  {
 		//Fill Actions
 		// Then, for each action type:
 		for (GHOST ghost : GHOST.values()) {
-		    map.put(ghost.name() + "chases", new Hunter1Action(ghost));
-		    map.put(ghost.name() + "advancedChases", new Hunter2Action(ghost));
-		    map.put(ghost.name() + "jails", new JailerAction(ghost));
-		    map.put(ghost.name() + "orbits", new OrbitateAction(ghost));
-		    map.put(ghost.name() + "protects", new ProtectEdibleGhostAction(ghost));
-		    map.put(ghost.name() + "randomMoves", new RandomAction(ghost));
-		    map.put(ghost.name() + "runsOptimally", new RunOptimalAction(ghost));
-		    map.put(ghost.name() + "runsToEscudero", new RunToEscuderoAction(ghost));
-		    map.put(ghost.name() + "startsRunning", new StartRunningAction(ghost));
+		    map.put(ghost.name() + "Hunter1", new Hunter1Action(ghost));
+		    map.put(ghost.name() + "Hunter2", new Hunter2Action(ghost));
+		    map.put(ghost.name() + "Jailer", new JailerAction(ghost));
+		    map.put(ghost.name() + "Orbit", new OrbitateAction(ghost));
+		    map.put(ghost.name() + "runToTheEdible", new ProtectEdibleGhostAction(ghost));
+		    map.put(ghost.name() + "Random", new RandomAction(ghost));
+		    map.put(ghost.name() + "runsOptimal", new RunOptimalAction(ghost));
+		    map.put(ghost.name() + "runToEscudero", new RunToEscuderoAction(ghost));
+		    map.put(ghost.name() + "statrRunning", new StartRunningAction(ghost));
 		}
 
 		
