@@ -14,6 +14,7 @@ import pacman.game.Constants;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
+import pacman.game.internal.Ghost;
 import pacman.game.Game;
 
 public class MsPacManInput extends RulesInput {
@@ -29,11 +30,24 @@ public class MsPacManInput extends RulesInput {
 	private Map<GHOST, MOVE> ghostLastMove;
 	private List<MOVE> candidateMoves;
 	private int closestPPill;
-	private double distanceToPPill;
+	private double minDistancePpill;
 	private final double dangerDistance = 30; //tentative, subject to change 
 	private final double hideDistance = 30; //tentative, subject to change 
-	private int numFantasmasNoComestiblesCerca;
-	private int numFantasmasComestiblesCerca;
+	private boolean hayPillCaminoInmediato;
+	private double tiempoDesdePpill;
+	private double distanceToBlinky;
+	private double distanceToINKY;
+	private double distanceToPINKY;
+	private double distanceToSUE;
+	private double BLINKYdistancePacMan;
+	private double BLINKYMinDistanceToPpill;
+	private double INKYdistancePacMan;
+	private double INKYMinDistanceToPpill;
+	private double PINKYdistancePacMan;
+	private double PINKYMinDistanceToPpill;
+	private double SUEdistancePacMan;
+	private double SUEMinDistanceToPpill;
+
 
 	public double getDangerDistance() {
 		return dangerDistance;
@@ -41,17 +55,14 @@ public class MsPacManInput extends RulesInput {
 
 	public MsPacManInput(Game game) {
 		super(game);
-		goGreedy = true;
-		moveToPoints = new HashMap<>();
-		moveToPpill = new HashMap<>();
-		moveToGhost = new HashMap<>();
-		moveToNode = new HashMap<>();
-		ghostEdible = new HashMap<>();
-		ghostLastMove = new HashMap<>();
-		candidateMoves = new ArrayList<>();
+		initializeVars();
 	}
 
 	private void reset() {
+		initializeVars();
+	}
+
+	private void initializeVars(){
 		goGreedy = true;
 		moveToPoints = new HashMap<>();
 		moveToPpill = new HashMap<>();
@@ -60,8 +71,13 @@ public class MsPacManInput extends RulesInput {
 		ghostEdible = new HashMap<>();
 		ghostLastMove = new HashMap<>();
 		candidateMoves = new ArrayList<>();
+		hayPillCaminoInmediato = false;
+		tiempoDesdePpill = -1;
+		distanceToBlinky = getGhostDistance(GHOST.BLINKY, DM.PATH);
+		distanceToINKY = getGhostDistance(GHOST.INKY, DM.PATH);
+		distanceToPINKY = getGhostDistance(GHOST.PINKY,DM.PATH);
+		distanceToSUE = getGhostDistance(GHOST.SUE, DM.PATH);
 	}
-	
 	@Override
 	public void parseInput() {
 		reset();
@@ -77,43 +93,73 @@ public class MsPacManInput extends RulesInput {
 	public Collection<String> getFacts(){
 		Vector<String> facts = new Vector<String>();
 		
-		facts.add(String.format("(MSPACMAN (mindistancePPill %s))", 
-				distanceToPPill));
+		//MISSPACMAN
+		facts.add(String.format("(MSPACMAN (voyGreedy %d))", this.goGreedy));
 		
-		//TODO: cambiar esto por un booleano
-		facts.add(String.format("(MSPACMAN (estoyCercaDePpil %s))", 
-				false));
-		//TODO: cambiar esto por un booleano
-				facts.add(String.format("(MSPACMAN (hayFantasmasCercaDePpil %s))", 
-						false));		
-		//TODO: cambiar esto por un numero real
-		facts.add(String.format("(MSPACMAN (tiempoDesdePpil %d))", 
-						0));
+		facts.add(String.format("(MSPACMAN (hayPillCaminoInmediato %s))",hayPillCaminoInmediato));
+
+		facts.add(String.format("(MSPACMAN (minDistancePPill %s))", minDistancePpill));
+
+		//TODO: inicializar
+		facts.add(String.format("(MSPACMAN (variosCaminos %d))", candidateMoves.size()));
+
+		//TODO: inicializar
+		facts.add(String.format("(MSPACMAN (numPpills %n))", game.getActivePowerPillsIndices().length));
 		
-		
-		//DEFINIDAS YA EN LAS RULES
-		
-		facts.add(String.format("(MSPACMAN (voyGreedy %d))",        
-						this.goGreedy));
-		
-		facts.add(String.format("(MSPACMAN (HayPillEnCaminoInmediato %d))",       
-				this.moveToPoints.size()));
-		
-		facts.add(String.format("(MSPACMAN (hayFantasmasNoComestiblesCerca %s))", 
-				this.numFantasmasNoComestiblesCerca));
-		
-		facts.add(String.format("(MSPACMAN (hayVariosFantasmasNoComestiblesCerca %d))", 
-				this.numFantasmasNoComestiblesCerca));
-		
-		facts.add(String.format("(MSPACMAN (hayVariosFantasmasComestiblesCerca %c))", 
-				this.numFantasmasComestiblesCerca));
-		
-		facts.add(String.format("(MSPACMAN (soloUnaInterseccionPosible %s))", 
-				candidateMoves.size()));
-		
-		facts.add(String.format("(MSPACMAN (quedanPPils %f))", 
-				game.getNumberOfActivePowerPills()));
+		//TODO: inicializar
+		facts.add(String.format("(MSPACMAN (tiempoDesdePpill %d))", tiempoDesdePpill));
+
+		//TODO: inicializar
+		facts.add(String.format("(MSPACMAN (distanceToBLINKY %d))", distanceToBlinky));
 				
+		//TODO: inicializar
+		facts.add(String.format("(MSPACMAN (distanceToINKY %d))", distanceToINKY));
+
+		//TODO: inicializar
+		facts.add(String.format("(MSPACMAN (distanceToPINKY %d))", distanceToPINKY));
+		
+		//TODO: inicializar
+		facts.add(String.format("(MSPACMAN (distanceToSUE %d))", distanceToSUE));
+
+
+		//TODO: inicializar
+		facts.add(String.format("(MSPACMAN (dangerDistance %d))", dangerDistance));
+		
+		//BLINKY
+		facts.add(String.format("(BLINKY (edible %s))", game.isGhostEdible(GHOST.BLINKY)));
+
+		//TODO: inicializar
+		facts.add(String.format("(BLINKY (BLINKYMinDistanceToPacman %d))", BLINKYdistancePacMan));
+		
+		//TODO: inicializar
+		facts.add(String.format("(BLINKY (BLINKYMinDistanceToPpill %d))", BLINKYMinDistanceToPpill));
+		
+		//INKY
+		facts.add(String.format("(INKY (edible %s))", game.isGhostEdible(GHOST.INKY)));
+
+		//TODO: inicializar
+		facts.add(String.format("(INKY (INKYMinDistanceToPacman %d))", INKYdistancePacMan));
+		
+		//TODO: inicializar
+		facts.add(String.format("(INKY (INKYMinDistanceToPpill %d))", INKYMinDistanceToPpill));
+
+		//PINKY
+		facts.add(String.format("(PINKY (edible %s))", game.isGhostEdible(GHOST.PINKY)));
+
+		//TODO: inicializar
+		facts.add(String.format("(PINKY (PINKYMinDistanceToPacman %d))", PINKYdistancePacMan));
+		
+		//TODO: inicializar
+		facts.add(String.format("(PINKY (PINKYMinDistanceToPpill %d))", PINKYMinDistanceToPpill));
+
+		//SUE
+		facts.add(String.format("(SUE (edible %s))", game.isGhostEdible(GHOST.SUE)));
+
+		//TODO: inicializar
+		facts.add(String.format("(SUE (SUEMinDistanceToPacman %d))", SUEdistancePacMan));
+		
+		//TODO: inicializar
+		facts.add(String.format("(SUE (SUEMinDistanceToPpill %d))", SUEMinDistanceToPpill));
 		return facts;
 	}
 	
@@ -121,6 +167,7 @@ public class MsPacManInput extends RulesInput {
 		for (GHOST g : GHOST.values()) {
 			if (game.isGhostEdible(g)) {
 				ghostEdible.put(g, true);
+				tiempoDesdePpill = Constants.EDIBLE_TIME - game.getGhostLairTime(g);
 			} else {
 				ghostEdible.put(g, false);
 			}
@@ -156,6 +203,8 @@ public class MsPacManInput extends RulesInput {
 				// Check if there is a power pill between the intersections
 				if (game.getPowerPillIndex(node) != -1 && game.isPowerPillStillAvailable(game.getPowerPillIndex(node))) {
 					pPill = true;
+					hayPillCaminoInmediato = true;
+					minDistancePpill = game.getDistance(game.getPacmanCurrentNodeIndex(), game.getPowerPillIndex(node), DM.PATH);
 				}
 
 				// Checks if a ghost
@@ -213,13 +262,13 @@ public class MsPacManInput extends RulesInput {
 	private void setNearestPPill() {
 		int[] ppills = game.getActivePowerPillsIndices();
         closestPPill = -1; // no Ppill active
-        distanceToPPill = Double.MAX_VALUE;
+        minDistancePpill = Double.MAX_VALUE;
 	    if (!(game.getNumberOfActivePowerPills() == 0)) {
 	        for (int pill : ppills) {
 	            double aux = game.getDistance(game.getPacmanCurrentNodeIndex(), pill, DM.PATH);
-	            if (aux < distanceToPPill) {
+	            if (aux < minDistancePpill) {
 	                closestPPill = pill;
-	                distanceToPPill = game.getDistance(game.getPacmanCurrentNodeIndex(), pill, DM.PATH);
+	                minDistancePpill = game.getDistance(game.getPacmanCurrentNodeIndex(), pill, DM.PATH);
 	            }
 	        }
 	    }
@@ -255,7 +304,10 @@ public class MsPacManInput extends RulesInput {
 		return game.getGhostEdibleTime(ghost) >= distanceToGhostPosition;
 	}
 	
-	
+	//method to not repeat the same line
+	double getGhostDistance(GHOST g, DM dm){
+		return game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(g), dm);
+	}
 
 	// GETTERS // 
 	public boolean isFinishLevel() {
@@ -294,8 +346,8 @@ public class MsPacManInput extends RulesInput {
 		return closestPPill;
 	}
 
-	public double getDistanceToPPill() {
-		return distanceToPPill;
+	public double getMinDistancePpill() {
+		return minDistancePpill;
 	}
 
 	public double getHideDistance() {
