@@ -144,8 +144,8 @@
 ;; Basic action
 (deftemplate ACTION
 	(slot id) (slot info (default "")) (slot priority (type NUMBER) ) ; mandatory slots
-	(slot extraGhost (type SYMBOL) (default: NONE)) ; Extra slot for any action that requires a target ghost
-	(slot intersection (type NUMBER) (default: NONE)) ; Extra slot for any action that requires a target intersection
+	(slot extraGhost (type SYMBOL) (default NONE)) ; Extra slot for any action that requires a target ghost
+	(slot intersection (type NUMBER) (default NONE)) ; Extra slot for any action that requires a target intersection
 ) 
 
 ;; -------------------------------------------------------------------------------------------;;
@@ -284,5 +284,3 @@
 	=> 
 	(assert (ACTION (id INKYJailer) (info "Soy Jailer") (intersection ?closestintersection) (priority 13) ))
 )
-
-
