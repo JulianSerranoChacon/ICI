@@ -157,7 +157,7 @@
 	(INKYlair (lairTime ?t)
 	(test (> ?t 0))
 	=>
-	(assert (ACTION (id INKYRandom) (info "Random move")  (priority 100) ))
+	(assert (ACTION (id INKYRandom) (info "Random move")  (priority 100) )))
 )	
 
 ;; HUIDA ;;
@@ -223,16 +223,18 @@
 	(BLINKYshieldGhost (ghost ?i))
 	(SUEshieldGhost (ghost ?s))
 
-	(test (or 
-		(= ?p INKY)
-		(bind ?protegee ?p))
-		(= ?i INKY)
-		(bind ?protegee ?i))
-		(= ?s INKY)
-		(bind ?protegee ?s))
+	(test 
+		(or 
+			((= ?p INKY)
+			(bind ?protegee ?p))
+			((= ?i INKY)
+			(bind ?protegee ?i))
+			((= ?s INKY)
+			(bind ?protegee ?s))
+		)
 	)
 	=>
-	(assert (ACTION (id "INKYrunToTheEdible") (info "me vuelvo escudero") (extraGhost ?protegee) (priority 17)
+	(assert (ACTION (id "INKYrunToTheEdible") (info "me vuelvo escudero") (extraGhost ?protegee) (priority 17)))
 )
 
 (defrule INKYNearestToMsPacman

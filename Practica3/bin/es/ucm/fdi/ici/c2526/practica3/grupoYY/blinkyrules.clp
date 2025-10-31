@@ -157,7 +157,7 @@
 	(BLINKYlair (lairTime ?t)
 	(test (> ?t 0))
 	=>
-	(assert (ACTION (id BLINKYRandom) (info "Random move")  (priority 100) ))
+	(assert (ACTION (id BLINKYRandom) (info "Random move")  (priority 100) )))
 )	
 
 ;; HUIDA ;;
@@ -224,15 +224,16 @@
 	(SUEshieldGhost (ghost ?s))
 
 	(test (or 
-		(= ?p BLINKY)
+		((= ?p BLINKY)
 		(bind ?protegee ?p))
-		(= ?i BLINKY)
+		((= ?i BLINKY)
 		(bind ?protegee ?i))
-		(= ?s BLINKY)
+		((= ?s BLINKY)
 		(bind ?protegee ?s))
+		)
 	)
 	=>
-	(assert (ACTION (id BLINKYrunToTheEdible) (info "me vuelvo escudero") (extraGhost ?protegee) (priority 17)
+	(assert (ACTION (id BLINKYrunToTheEdible) (info "me vuelvo escudero") (extraGhost ?protegee) (priority 17)))
 )
 
 (defrule BLINKYNearestToMsPacman

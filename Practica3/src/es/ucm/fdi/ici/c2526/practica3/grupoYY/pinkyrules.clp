@@ -158,7 +158,7 @@
 
 ;; LAIR ;;
 (defrule PINKYinlair
-	(PINKYlair (lairTime ?t)
+	(PINKYlair (lairTime ?t))
 	(test (> ?t 0))
 	=>
 	(assert (ACTION (id PINKYRandom) (info "Random move")  (priority 100) ))
@@ -227,16 +227,18 @@
 	(INKYshieldGhost (ghost ?i))
 	(SUEshieldGhost (ghost ?s))
 
-	(test (or 
-		(= ?p PINKY)
-		(bind ?protegee ?p))
-		(= ?i PINKY)
-		(bind ?protegee ?i))
-		(= ?s PINKY)
-		(bind ?protegee ?s))
+	(test 
+		(or 
+			((= ?p PINKY)
+			(bind ?protegee ?p))
+			((= ?i PINKY)
+			(bind ?protegee ?i))
+			((= ?s PINKY)
+			(bind ?protegee ?s))
+		)
 	)
 	=>
-	(assert (ACTION (id PINKYrunToTheEdible) (info "me vuelvo escudero") (extraGhost ?protegee) (priority 17)
+	(assert (ACTION (id PINKYrunToTheEdible) (info "me vuelvo escudero") (extraGhost ?protegee) (priority 17)))
 )
 
 (defrule PINKYNearestToMsPacman
@@ -258,33 +260,33 @@
   	(SUEtoPacman (distanceTo ?sueDistance))       ; Hecho para la distancia de Sue
 	(test
 		(or
-			(and (> ?blinkyDistance ?pinkyDistance)
+			((and (> ?blinkyDistance ?pinkyDistance)
 				(<= ?blinkyDistance ?inkyDistance)
 				(<= ?blinkyDistance ?sueDistance)
-				(bind ?closestGhost PINKY))
-			(and (> ?blinkyDistance ?inkyDistance)
+				(bind ?closestGhost PINKY)))
+			((and (> ?blinkyDistance ?inkyDistance)
 				(<= ?blinkyDistance ?pinkyDistance)
 				(<= ?blinkyDistance ?sueDistance)
-				(bind ?closestGhost INKY))
-			(and (> ?blinkyDistance ?sueDistance)
+				(bind ?closestGhost INKY)))
+			((and (> ?blinkyDistance ?sueDistance)
 				(<= ?blinkyDistance ?pinkyDistance)
 				(<= ?blinkyDistance ?inkyDistance)
-				(bind ?closestGhost SUE))
-    	)
-  	)
-  =>
-  (assert (ACTION (id PINKYHunter2) (info "Soy Hunter2") (extraGhost closestGhost) (priority 14)))
+				(bind ?closestGhost SUE)))
+  		)
+	)
+	=>
+	(assert (ACTION (id PINKYHunter2) (info "Soy Hunter2") (extraGhost closestGhost) (priority 14)))
 )
 
 (defrule BLINKYNearestToIntersection
-  (MSPACMANclosestIntersection (index ?closestintersection))
-  (BLINKYToIntersection (distanceTo ?blinkyDistance)) ; Hecho para la distancia de Blinky
-  (PINKYToIntersection (distanceTo ?pinkyDistance))   ; Hecho para la distancia de Pinky
-  (INKYToIntersection (distanceTo ?inkyDistance))     ; Hecho para la distancia de Inky
-  (SUEToIntersection (distanceTo ?sueDistance))       ; Hecho para la distancia de Sue
-  (test (<= ?pinkyDistance ?pinkyDistance))
-  (test (<= ?pinkyDistance ?inkyDistance))
-  (test (<= ?pinkyDistance ?sueDistance))
+	(MSPACMANclosestIntersection (index ?closestintersection))
+	(BLINKYToIntersection (distanceTo ?blinkyDistance)) ; Hecho para la distancia de Blinky
+	(PINKYToIntersection (distanceTo ?pinkyDistance))   ; Hecho para la distancia de Pinky
+	(INKYToIntersection (distanceTo ?inkyDistance))     ; Hecho para la distancia de Inky
+	(SUEToIntersection (distanceTo ?sueDistance))       ; Hecho para la distancia de Sue
+	(test (<= ?pinkyDistance ?pinkyDistance))
+	(test (<= ?pinkyDistance ?inkyDistance))
+	(test (<= ?pinkyDistance ?sueDistance))
 	=> 
-	(assert (ACTION (id PINKYJailer) (info "Soy Jailer") (intersection ?closestintersection (priority 13) ))
+	(assert (ACTION (id PINKYJailer) (info "Soy Jailer") (intersection ?closestintersection (priority 13) )))
 )
