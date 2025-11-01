@@ -242,11 +242,16 @@ public class GhostsInput extends RulesInput {
 				int shielderPosition = game.getGhostCurrentNodeIndex(shield);
 
 				// calculo la distancia hasta el escudero
+				// el punto de encuentro entre los dos fantasmas, asumiendo que se están moviendo uno hacia el otro respectivamente
+				// viene modelado por x - 1/2d = d donde:
+				// x es la distancia inicial entre los dos fantasmas
+				// d es la distancia que recorre el escudero antes de cruzarse con el fantasma comestible
+				// simplificando tenemos d = 2/3x
 				double distanceToShielder = 2/3 * game.getDistance(shielderPosition, ghostPosition, game.getGhostLastMoveMade(shield), DM.PATH);
 												
 				double distanceToPacman = distanceFromPacmanToGhost.get(ghost);
 				// ajuste asumiendo que el fantasma se esta alejando de pacman, por lo que pacman tiene que recorrer extra
-				// calculamos ese extra basandonos en el limite de la serie geometrica de (1/2)^n (n en [1, infinito))
+				// calculamos ese extra basandonos en el limite de la serie geometrica (1/2)^n (n en [1, infinito))
 				distanceToPacman += distanceToPacman;
 
 				if (distanceToShielder < distanceToPacman) {
