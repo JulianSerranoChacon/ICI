@@ -89,7 +89,7 @@
 (defrule PINKYpacmanFarAway
    (PINKY (distanceToPacman ?d) (lairTime ?t) (edibleTime ?e))
    (test (> ?e 0))
-   (test (or (!= ?t 0) (> ?d (+ (/ ?e 2) 1))))  ;; far away if distance > (edibleTime/2 + 1)
+   (test (or (neq ?t 0) (> ?d (+ (/ ?e 2) 1))))  ;; far away if distance > (edibleTime/2 + 1)
 	=>
    (assert
       (ACTION 
