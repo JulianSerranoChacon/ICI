@@ -106,6 +106,7 @@
 	(declare (salience 20))
 	(INKY (myShield ?g) (edibleTime ?e))
 	(test (> ?e 0))
+	(test (neq ?g NONE))
 	=>
    	(assert
     	(ACTION 
@@ -121,7 +122,7 @@
 	(declare (salience 19))
 	(INKY (distanceToPacman ?d) (lairTime ?t) (edibleTime ?e))
 	(test (> ?e 0))
-	(test (or (== ?t 0) (< ?d 200)))  ;; near if distance < 200
+	(test (or (= ?t 0) (< ?d 200)))  ;; near if distance < 200
 		=>
 	(assert
 		(ACTION 
@@ -139,7 +140,7 @@
 	=>  
 	(assert 
 		(ACTION 
-			(id BLINKYstatrRunning) 
+			(id INKYstatrRunning) 
 			(info "MSPacMan cerca PPill") 
 			(priority 18) 
 		)
@@ -267,6 +268,17 @@
 			(info "Soy Jailer") 
 			(intersection ?closestintersection) 
 			(priority 13) 
+		)
+	)
+)
+
+(defrule Random
+	(declare (salience -1))
+	(assert 
+		(ACTION 
+			(id INKYRandom) 
+			(info "Random move")  
+			(priority 100) 
 		)
 	)
 )
