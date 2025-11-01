@@ -73,7 +73,7 @@
 ;; DEDUCED INFORMATION ;;
 ;; LAIR ;;
 (defrule BLINKYinlair
-	declare (salience 100)
+	(declare (salience 100))
 	(BLINKY (lairTime ?t))
 	(test (> ?t 0))
 	=>
@@ -88,7 +88,7 @@
 
 ;; HUIDA ;;
 (defrule BLINKYpacmanFarAway
-	declare (salience 21)
+	(declare (salience 21))
    (BLINKY (distanceToPacman ?d) (lairTime ?t) (edibleTime ?e))
    (test (> ?e 0))
    (test (or (neq ?t 0) (> ?d (+ (/ ?e 2) 1))))  ;; far away if distance > (edibleTime/2 + 1)
@@ -103,7 +103,7 @@
 )
 
 (defrule BLINKYhayEscudero
-	declare (salience 20)
+	(declare (salience 20))
 	(BLINKY (myShield ?g) (edibleTime ?e))
 	(test (> ?e 0))
 	=>
@@ -118,7 +118,7 @@
 )
 
 (defrule BLINKYpacmanNear
-	declare (salience 19)
+	(declare (salience 19))
 	(BLINKY (distanceToPacman ?d) (lairTime ?t) (edibleTime ?e))
 	(test (> ?e 0))
 	(test (or (== ?t 0) (< ?d 200)))  ;; near if distance < 200
@@ -133,7 +133,7 @@
 )
 
 (defrule BLINKYrunsAwayMSPACMANclosePPill
-	declare (salience 18)
+	(declare (salience 18))
 	(MSPACMAN (distanceToClosestPPill ?d)) 
 	(test (<= ?d 30)) 
 	=>  
@@ -148,7 +148,7 @@
 
 ;; PERSECUCION ;;
 (defrule ShieldInky
-	declare (salience 17)
+	(declare (salience 17))
 	(INKY (myShield ? i))
 	test (
 		(eq ?i BLINKY)
@@ -165,7 +165,7 @@
 )
 
 (defrule ShieldPinky
-	declare (salience 17)
+	(declare (salience 17))
 	(PINKY (myShield ? p))
 	test (
 		(eq ?p BLINKY)
@@ -182,7 +182,7 @@
 )
 
 (defrule ShieldSue
-	declare (salience 17)
+	(declare (salience 17))
 	(SUE (myShield ? s))
 	test (
 		(eq ?s BLINKY)
@@ -199,7 +199,7 @@
 )
 
 (defrule BLINKYNearestToMsPacman
-	declare (salience 15)
+	(declare (salience 15))
 	(BLINKY (distanceToPacman ?blinkyDistance)) 	; Hecho para la distancia de Blinky
 	(PINKY 	(distanceToPacman ?pinkyDistance))   	; Hecho para la distancia de Pinky
 	(INKY  	(distanceToPacman ?inkyDistance))     	; Hecho para la distancia de Inky
@@ -218,7 +218,7 @@
 )
 
 (defrule BLINKYSecondNearestToMsPacman
-	declare (salience 14)
+	(declare (salience 14))
   	(BLINKY (distanceToPacman ?blinkyDistance)) 	; Hecho para la distancia de Blinky
 	(PINKY 	(distanceToPacman ?pinkyDistance))   	; Hecho para la distancia de Pinky
 	(INKY  	(distanceToPacman ?inkyDistance))     	; Hecho para la distancia de Inky
@@ -251,7 +251,7 @@
 )
 
 (defrule BLINKYNearestToIntersection
-	declare (salience 13)
+	(declare (salience 13))
 	(MSPACMAN 	(closestIntersection 	?closestintersection))
 	(BLINKY 	(distanceToIntersection ?blinkyDistance)) 	; Hecho para la distancia de Blinky
 	(PINKY 		(distanceToIntersection ?pinkyDistance))   	; Hecho para la distancia de Pinky
