@@ -73,6 +73,7 @@
 ;; DEDUCED INFORMATION ;;
 ;; LAIR ;;
 (defrule INKYinlair
+	declare (salience 100)
 	(INKY (lairTime ?t))
 	(test (> ?t 0))
 	=>
@@ -87,20 +88,22 @@
 
 ;; HUIDA ;;
 (defrule INKYpacmanFarAway
-   (INKY (distanceToPacman ?d) (lairTime ?t) (edibleTime ?e))
-   (test (> ?e 0))
-   (test (or (neq ?t 0) (> ?d (+ (/ ?e 2) 1))))  ;; far away if distance > (edibleTime/2 + 1)
-	=>
-   (assert
-      (ACTION 
-         (id INKYOrbit)
-         (info "INKY far away and edible")
-         (priority 21) 	
-      )
-   )
+	declare (salience 21)
+	(INKY (distanceToPacman ?d) (lairTime ?t) (edibleTime ?e))
+	(test (> ?e 0))
+	(test (or (neq ?t 0) (> ?d (+ (/ ?e 2) 1))))  ;; far away if distance > (edibleTime/2 + 1)
+		=>
+	(assert
+		(ACTION 
+			(id INKYOrbit)
+			(info "INKY far away and edible")
+			(priority 21) 	
+		)
+	)
 )
 
 (defrule INKYhayEscudero
+	declare (salience 20)
 	(INKY (myShield ?g) (edibleTime ?e))
 	(test (> ?e 0))
 	=>
@@ -115,20 +118,22 @@
 )
 
 (defrule INKYpacmanNear
-   (INKY (distanceToPacman ?d) (lairTime ?t) (edibleTime ?e))
-   (test (> ?e 0))
-   (test (or (== ?t 0) (< ?d 200)))  ;; near if distance < 200
-	=>
-   (assert
-      (ACTION 
-         (id INKYrunsOptimal)
-         (info "INKY near and edible")
-         (priority 19) 		
-      )
-   )
+	declare (salience 19)
+	(INKY (distanceToPacman ?d) (lairTime ?t) (edibleTime ?e))
+	(test (> ?e 0))
+	(test (or (== ?t 0) (< ?d 200)))  ;; near if distance < 200
+		=>
+	(assert
+		(ACTION 
+			(id INKYrunsOptimal)
+			(info "INKY near and edible")
+			(priority 19) 		
+		)
+	)
 )
 
 (defrule INKYrunsAwayMSPACMANclosePPill
+	declare (salience 18)
 	(MSPACMAN (distanceToClosestPPill ?d)) 
 	(test (<= ?d 30)) 
 	=>  
@@ -142,31 +147,59 @@
 )
 
 ;; PERSECUCION ;;
-(defrule INKYediblesNearPacman
-	(BLINKY	(myShield ?b))
-	(PINKY 	(myShield ?p)) 
-	(SUE   	(myShield ?s))
-	(test (or 
-		((= ?p INKY)
-		(bind ?protegee ?p))
-		((= ?b INKY)
-		(bind ?protegee ?b))
-		((= ?s INKY)
-		(bind ?protegee ?s))
-		)
+(defrule Shieldblinky
+	declare (salience 17)
+	(BLINKY (myShield ? b))
+	test (
+		(eq ?b INKY)
 	)
 	=>
 	(assert 
 		(ACTION 
 			(id INKYrunToTheEdible) 
 			(info "me vuelvo escudero") 
-			(extraGhost ?protegee) 
+			(extraGhost BLINKY) 
+			(priority 17)
+		)
+	)
+)
+
+(defrule ShieldPinky
+	declare (salience 17)
+	(PINKY (myShield ? p))
+	test (
+		(eq ?p INKY)
+	)
+	=>
+	(assert 
+		(ACTION 
+			(id INKYrunToTheEdible) 
+			(info "me vuelvo escudero") 
+			(extraGhost PINKY) 
+			(priority 17)
+		)
+	)
+)
+
+(defrule ShieldSue
+	declare (salience 17)
+	(SUE (myShield ? s))
+	test (
+		(eq ?s INKY)
+	)
+	=>
+	(assert 
+		(ACTION 
+			(id INKYrunToTheEdible) 
+			(info "me vuelvo escudero") 
+			(extraGhost SUE) 
 			(priority 17)
 		)
 	)
 )
 
 (defrule INKYNearestToMsPacman
+	declare (salience 15)
 	(BLINKY (distanceToPacman ?blinkyDistance)) 	; Hecho para la distancia de Blinky
 	(PINKY 	(distanceToPacman ?pinkyDistance))   	; Hecho para la distancia de Pinky
 	(INKY  	(distanceToPacman ?inkyDistance))     	; Hecho para la distancia de Inky
@@ -185,6 +218,7 @@
 )
 
 (defrule INKYSecondNearestToMsPacman
+	declare (salience 14)
   	(BLINKY (distanceToPacman ?blinkyDistance)) 	; Hecho para la distancia de Blinky
 	(PINKY 	(distanceToPacman ?pinkyDistance))   	; Hecho para la distancia de Pinky
 	(INKY  	(distanceToPacman ?inkyDistance))     	; Hecho para la distancia de Inky
@@ -217,6 +251,7 @@
 )
 
 (defrule INKYNearestToIntersection
+	declare (salience 13)
 	(MSPACMAN 	(closestIntersection 	?closestintersection))
 	(BLINKY 	(distanceToIntersection ?blinkyDistance)) 	; Hecho para la distancia de Blinky
 	(PINKY 		(distanceToIntersection ?pinkyDistance))   	; Hecho para la distancia de Pinky
