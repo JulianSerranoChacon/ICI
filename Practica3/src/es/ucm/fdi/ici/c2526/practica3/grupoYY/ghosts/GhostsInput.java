@@ -21,6 +21,7 @@ public class GhostsInput extends RulesInput {
 	}
 	
 	private double minPacmanDistancePPill;
+	private double distancePacmanToIntersection;
 	
 	private Map<GHOST,Double> distanceFromGhostToPacman;
 	private Map<GHOST,Double> distanceFromPacmanToGhost;
@@ -65,114 +66,86 @@ public class GhostsInput extends RulesInput {
 	public Collection<String> getFacts() {
 		parseInput();
 		Vector<String> facts = new Vector<String>();
-		//ADD EDIBLE FACTS //
-		facts.add(String.format("(MSPACMAN (mindistancePPill %f))", 
-								(float)this.minPacmanDistancePPill));
+		String pacmanData = "(MSPACMAN ";
 		
-		//ADD DISTANCE FROM GHOST TO PACMAN //
-		facts.add(String.format("(BLINKYtoPacman (distanceTo %f))", 
-				this.distanceFromGhostToPacman.get(GHOST.BLINKY)));
-		facts.add(String.format("(INKYtoPacman (distanceTo %f))", 
-				this.distanceFromGhostToPacman.get(GHOST.INKY)));
-		facts.add(String.format("(PINKYtoPacman (distanceTo %f))", 
-				this.distanceFromGhostToPacman.get(GHOST.PINKY)));
-		facts.add(String.format("(SUEtoPacman (distanceTo %f))", 
-				this.distanceFromGhostToPacman.get(GHOST.SUE)));
+		pacmanData += (String.format("(distanceToBlinky %f)"		, this.distanceFromPacmanToGhost.get(GHOST.BLINKY)));
+		pacmanData += (String.format("(distanceToPinky %f)"   		, this.distanceFromPacmanToGhost.get(GHOST.INKY)));
+		pacmanData += (String.format("(distanceToInky %f)"			, this.distanceFromPacmanToGhost.get(GHOST.PINKY)));
+		pacmanData += (String.format("(distanceToSue %f)"			, this.distanceFromPacmanToGhost.get(GHOST.SUE)));
+		pacmanData += (String.format("(distanceToIntersection %f)"	, this.distancePacmanToIntersection));
+		pacmanData += (String.format("(distanceToClosestPPill %f)"	, this.minPacmanDistancePPill));
 		
-		//ADD DISTANCE FROM PACMAN TO GHOST //
-		facts.add(String.format("(PacmanToBLINKY (distanceTo %f))", 
-				this.distanceFromPacmanToGhost.get(GHOST.BLINKY)));
-		facts.add(String.format("(PacmanToINKY (distanceTo %f))", 
-				this.distanceFromPacmanToGhost.get(GHOST.INKY)));
-		facts.add(String.format("(PacmanToPINKY (distanceTo %f))", 
-				this.distanceFromPacmanToGhost.get(GHOST.PINKY)));
-		facts.add(String.format("(PacmanToSUE (distanceTo %f))", 
-				this.distanceFromPacmanToGhost.get(GHOST.SUE)));
+		pacmanData += ")";
+		facts.add(pacmanData);
+
+		// BLINKY
+		String blinkyData = "(BLINKY ";
 		
-		//ADD DISTANCE FROM GHOST TO GHOST //
-		//BLINKY
-		facts.add(String.format("(BLINKYtoINKY (distanceTo %f))", 
-				this.distanceFromGhostToGhost.get(GHOST.BLINKY).get(GHOST.INKY)));
-		facts.add(String.format("(BLINKYtoPINKY (distanceTo %f))", 
-				this.distanceFromGhostToGhost.get(GHOST.BLINKY).get(GHOST.PINKY)));
-		facts.add(String.format("(BLINKYtoSUE (distanceTo %f))", 
-				this.distanceFromGhostToGhost.get(GHOST.BLINKY).get(GHOST.SUE)));
-		//INKY
-		facts.add(String.format("(INKYToBLINKY (distanceTo %f))", 
-				this.distanceFromGhostToGhost.get(GHOST.INKY).get(GHOST.BLINKY)));
-		facts.add(String.format("(INKYToPINKY (distanceTo %f))", 
-				this.distanceFromGhostToGhost.get(GHOST.INKY).get(GHOST.PINKY)));
-		facts.add(String.format("(INKYToSUE (distanceTo %f))", 
-				this.distanceFromGhostToGhost.get(GHOST.INKY).get(GHOST.SUE)));
-		//PINKY
-		facts.add(String.format("(PINKYToBLINKY (distanceTo %f))", 
-				this.distanceFromGhostToGhost.get(GHOST.PINKY).get(GHOST.BLINKY)));
-		facts.add(String.format("(PINKYToINKY (distanceTo %f))", 
-				this.distanceFromGhostToGhost.get(GHOST.PINKY).get(GHOST.INKY)));
-		facts.add(String.format("(PINKYToSUE (distanceTo %f))", 
-				this.distanceFromGhostToGhost.get(GHOST.PINKY).get(GHOST.SUE)));
-		//SUE
-		facts.add(String.format("(SUEToBLINKY (distanceTo %f))", 
-				this.distanceFromGhostToGhost.get(GHOST.SUE).get(GHOST.BLINKY)));
-		facts.add(String.format("(SUEToINKY (distanceTo %f))", 
-				this.distanceFromGhostToGhost.get(GHOST.SUE).get(GHOST.INKY)));
-		facts.add(String.format("(SUEToPINKY (distanceTo %f))", 
-				this.distanceFromGhostToGhost.get(GHOST.SUE).get(GHOST.PINKY)));
-					
-		
-		// SHIELD GHOST //
-		
+		blinkyData += (String.format("(distanceToPacman %f)"		, this.distanceFromGhostToPacman.get(GHOST.BLINKY)));
+		blinkyData += (String.format("(distanceToPinky %f)"   		, this.distanceFromGhostToGhost.get(GHOST.BLINKY).get(GHOST.INKY)));
+		blinkyData += (String.format("(distanceToInky %f)"			, this.distanceFromGhostToGhost.get(GHOST.BLINKY).get(GHOST.PINKY)));
+		blinkyData += (String.format("(distanceToSue %f)"			, this.distanceFromGhostToGhost.get(GHOST.BLINKY).get(GHOST.SUE)));
+		blinkyData += (String.format("(distanceToIntersection %f)"	, this.ghostToIntersection.get(GHOST.BLINKY)));
 		if(!Objects.isNull(this.shieldGhost.get(GHOST.BLINKY))) {
-			facts.add(String.format("(BLINKYshieldGhost ", "ghost %s))", 
-					this.shieldGhost.get(GHOST.BLINKY)));			
+		blinkyData += (String.format("(myShield %s)"				, this.shieldGhost.get(GHOST.BLINKY)));
 		}
+		blinkyData += (String.format("(edibleTime %d)"				, this.game.getGhostEdibleTime(GHOST.BLINKY)));
+		blinkyData += (String.format("(lairTime %d)"				, this.game.getGhostEdibleTime(GHOST.BLINKY)));
 		
+		blinkyData += ")";
+		facts.add(blinkyData);
+		
+		// INKY
+		String inkyData = "(INKY ";
+		
+		inkyData += (String.format("(distanceToPacman %f)"			, this.distanceFromGhostToPacman.get(GHOST.INKY)));
+		inkyData += (String.format("(distanceToBlinky %f)"   		, this.distanceFromGhostToGhost.get(GHOST.INKY).get(GHOST.BLINKY)));
+		inkyData += (String.format("(distanceToPinky %f)"			, this.distanceFromGhostToGhost.get(GHOST.INKY).get(GHOST.PINKY)));
+		inkyData += (String.format("(distanceToSue %f)"				, this.distanceFromGhostToGhost.get(GHOST.INKY).get(GHOST.SUE)));
+		inkyData += (String.format("(distanceToIntersection %f)"	, this.ghostToIntersection.get(GHOST.INKY)));
 		if(!Objects.isNull(this.shieldGhost.get(GHOST.INKY))) {
-			facts.add(String.format("(INKYshieldGhost ", "(ghost %s))",
-					this.shieldGhost.get(GHOST.INKY)));		
+		inkyData += (String.format("(myShield %s)"					, this.shieldGhost.get(GHOST.INKY)));
 		}
+		inkyData += (String.format("(edibleTime %d)"				, this.game.getGhostEdibleTime(GHOST.INKY)));
+		inkyData += (String.format("(lairTime %d)"					, this.game.getGhostEdibleTime(GHOST.INKY)));
 		
+		inkyData += ")";
+		facts.add(inkyData);
+
+		// PINKY
+		String pinkyData = "(PINKY ";
+		
+		pinkyData += (String.format("(distanceToPacman %f)"			, this.distanceFromGhostToPacman.get(GHOST.PINKY)));
+		pinkyData += (String.format("(distanceToBlinky %f)"   		, this.distanceFromGhostToGhost.get(GHOST.PINKY).get(GHOST.BLINKY)));
+		pinkyData += (String.format("(distanceToInky %f)"			, this.distanceFromGhostToGhost.get(GHOST.PINKY).get(GHOST.INKY)));
+		pinkyData += (String.format("(distanceToSue %f)"			, this.distanceFromGhostToGhost.get(GHOST.PINKY).get(GHOST.SUE)));
+		pinkyData += (String.format("(distanceToIntersection %f)"	, this.ghostToIntersection.get(GHOST.PINKY)));
 		if(!Objects.isNull(this.shieldGhost.get(GHOST.PINKY))) {
-			facts.add(String.format("(PINKYshieldGhost ", "(ghost %s))", 
-					this.shieldGhost.get(GHOST.PINKY)));		
+		pinkyData += (String.format("(myShield %s)"					, this.shieldGhost.get(GHOST.PINKY)));
 		}
+		pinkyData += (String.format("(edibleTime %d)"				, this.game.getGhostEdibleTime(GHOST.PINKY)));
+		pinkyData += (String.format("(lairTime %d)"					, this.game.getGhostEdibleTime(GHOST.PINKY)));
 		
+		pinkyData += ")";
+		facts.add(pinkyData);
+
+		// SUE
+		String sueData = "(SUE ";
+		
+		sueData += (String.format("(distanceToPacman %f)"			, this.distanceFromGhostToPacman.get(GHOST.SUE)));
+		sueData += (String.format("(distanceToBlinky %f)"   		, this.distanceFromGhostToGhost.get(GHOST.SUE).get(GHOST.BLINKY)));
+		sueData += (String.format("(distanceToInky %f)"				, this.distanceFromGhostToGhost.get(GHOST.SUE).get(GHOST.INKY)));
+		sueData += (String.format("(distanceToPinky %f)"			, this.distanceFromGhostToGhost.get(GHOST.SUE).get(GHOST.PINKY)));
+		sueData += (String.format("(distanceToIntersection %f)"		, this.ghostToIntersection.get(GHOST.SUE)));
 		if(!Objects.isNull(this.shieldGhost.get(GHOST.SUE))) {
-			facts.add(String.format("(SUEshieldGhost ", "(ghost %s))",
-					this.shieldGhost.get(GHOST.SUE)));		
+		sueData += (String.format("(myShield %s)"					, this.shieldGhost.get(GHOST.SUE)));
 		}
+		sueData += (String.format("(edibleTime %d)"					, this.game.getGhostEdibleTime(GHOST.SUE)));
+		sueData += (String.format("(lairTime %d)"					, this.game.getGhostEdibleTime(GHOST.SUE)));
 		
-		// DISTANCE TO NEXT PACMAN INTERSECTION // 
-		facts.add(String.format("(BLINKYToIntersection (distanceTo  %f))", 
-				ghostToIntersection.get(GHOST.BLINKY)));
-		facts.add(String.format("(INKYToIntersection (distanceTo  %f))", 
-				ghostToIntersection.get(GHOST.INKY)));
-		facts.add(String.format("(PINKYToIntersection (distanceTo  %f))", 
-				ghostToIntersection.get(GHOST.PINKY)));
-		facts.add(String.format("(SUEToIntersection (distanceTo  %f))", 
-				ghostToIntersection.get(GHOST.SUE)));
-		
-		
-		// EDIBLE TIME // 
-		facts.add(String.format("(BLINKYedible (edibleTime %d))", 
-				this.game.getGhostEdibleTime(GHOST.BLINKY)));
-		facts.add(String.format("(INKYedible (edibleTime %d))", 
-				this.game.getGhostEdibleTime(GHOST.INKY)));
-		facts.add(String.format("(PINKYedible (edibleTime %d))", 
-				this.game.getGhostEdibleTime(GHOST.PINKY)));
-		facts.add(String.format("(SUEedible (edibleTime %d))", 
-				this.game.getGhostEdibleTime(GHOST.SUE)));
-		
-		// LAIR TIME // 
-		facts.add(String.format("(BLINKYlair (lairTime %d))", 
-				this.game.getGhostEdibleTime(GHOST.BLINKY)));
-		facts.add(String.format("(INKYlair (lairTime %d))", 
-				this.game.getGhostEdibleTime(GHOST.INKY)));
-		facts.add(String.format("(PINKYlair (lairTime %d))", 
-				this.game.getGhostEdibleTime(GHOST.PINKY)));
-		facts.add(String.format("(SUElair (lairTime %d))", 
-				this.game.getGhostEdibleTime(GHOST.SUE)));
-				
+		sueData += ")";
+		facts.add(sueData);
+
 		return facts;
 	}
 	
@@ -242,9 +215,10 @@ public class GhostsInput extends RulesInput {
 		 
 		for(GHOST g : GHOST.values()) {
 			double auxDistance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(g), nextIntersectNode, game.getGhostLastMoveMade(g));
-			 ghostToIntersection.put(g, auxDistance);
+			ghostToIntersection.put(g, auxDistance);
 		}
-				
+		
+		distancePacmanToIntersection = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), nextIntersectNode, game.getPacmanLastMoveMade());
 	}
 	private void parseGhostShield() {
 		//Compruebo que estoy lo sufcientemente amenzado como para buscar a un escudero

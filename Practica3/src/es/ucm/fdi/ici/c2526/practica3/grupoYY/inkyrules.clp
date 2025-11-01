@@ -1,190 +1,112 @@
 ;; DEFINITION OF DATA TYPES ;;
-	
-(deftemplate MSPACMAN 
-    (slot mindistancePPill (type NUMBER)) )
 
-(deftemplate MSPACMANclosestIntersection
-	(slot index (type NUMBER)))
- 
-;;NEW DATA TYPES
-
-;;  ADD DISTANCE FROM GHOST TO PACMAN ;;
-
-(deftemplate BLINKYtoPacman
-	(slot distanceTo (type FLOAT)))   ;;I dont know if this should be float
-   
-(deftemplate INKYtoPacman
-	(slot distanceTo (type FLOAT)))   ;;I dont know if this should be float   
-  
-(deftemplate PINKYtoPacman
-	(slot distanceTo (type FLOAT)))   ;;I dont know if this should be float
-	
-(deftemplate SUEtoPacman
-	(slot distanceTo (type FLOAT)))   ;;I dont know if this should be float  
-
-;;  ADD DISTANCE FROM PACMAN TO GHOST ;;
-
-(deftemplate PacmanToBLINKY
-	(slot distanceTo (type FLOAT)))   
-   
-(deftemplate PacmanToINKY
-	(slot distanceTo (type FLOAT)))   
-  
-(deftemplate PacmanToPINKY
-	(slot distanceTo (type FLOAT)))   
-	
-(deftemplate PacmanToSUE
-	(slot distanceTo (type FLOAT)))    
-
-	;;  ADD DISTANCE FROM GHOST TO NEXT PACMAN INTERSECTION ;;
-
-(deftemplate BLINKYToIntersection
-	(slot distanceTo (type FLOAT)))   
-   
-(deftemplate INKYToIntersection
-	(slot distanceTo (type FLOAT)))   
-  
-(deftemplate PINKYToIntersection
-	(slot distanceTo (type FLOAT)))   
-	
-(deftemplate SUEToIntersection
-	(slot distanceTo (type FLOAT)))    
-
-
-;; DISTANCE FROM GHOST TO GHOST ;;
-
-;;BLINKY
-(deftemplate BLINKYToINKY
-	(slot distanceTo (type FLOAT)))    
-
-(deftemplate BLINKYToPINKY
-	(slot distanceTo (type FLOAT)))  
-	
-(deftemplate BLINKYToSUE
-	(slot distanceTo (type FLOAT)))  
-
-;;INKY	
-(deftemplate INKYToBLINKY
-	(slot distanceTo (type FLOAT)))    
-
-(deftemplate INKYToPINKY
-	(slot distanceTo (type FLOAT)))  
-	
-(deftemplate INKYToSUE
-	(slot distanceTo (type FLOAT)))  
-
-;;PINKY
-(deftemplate PINKYToBLINKY
-	(slot distanceTo (type FLOAT)))    
-
-(deftemplate PINKYToINKY
-	(slot distanceTo (type FLOAT)))  
-	
-(deftemplate PINKYToSUE
-	(slot distanceTo (type FLOAT)))  
-
-;;SUE
-(deftemplate SUEToBLINKY
-	(slot distanceTo (type FLOAT)))    
-
-(deftemplate SUEToINKY
-	(slot distanceTo (type FLOAT)))  
-	
-(deftemplate SUEToPINKY
-	(slot distanceTo (type FLOAT)))  
-
-;; SHIELD GHOST ;;
-
-(deftemplate BLINKYshieldGhost
-	(slot ghost (type SYMBOL) (default NONE))
-) 
-
-(deftemplate INKYshieldGhost
-	(slot ghost (type SYMBOL) (default NONE))
+(deftemplate MSPACMAN
+	(slot distanceToBlinky 			(type float) (default -1))
+	(slot distanceToPinky 			(type float) (default -1))
+	(slot distanceToInky 			(type float) (default -1))
+	(slot distanceToSue 			(type float) (default -1))
+	(slot closestIntersection 		(type integer) (default -1))
+	(slot distanceToClosestPPill 	(type float) (default -1))	
 )
 
-(deftemplate PINKYshieldGhost
-	(slot ghost (type SYMBOL) (default NONE))
-) 
+(deftemplate BLINKY
+	(slot distanceToPacman 			(type float)  (default -1))
+	(slot distanceToPinky 			(type float)  (default -1))
+	(slot distanceToInky 			(type float)  (default -1))
+	(slot distanceToSue 			(type float)  (default -1))
+	(slot distanceToIntersection 	(type float)  (default -1))
+	(slot myShield		            (type SYMBOL) (default ""))
+	(slot edibleTime				(type NUMBER) (default 0))
+	(slot lairTime					(type NUMBER) (default 0))
+)
 
-(deftemplate SUEshieldGhost
-	(slot ghost (type SYMBOL) (default NONE))
-) 
-	
-;; EDIBLE TIME GHOST ;;
+(deftemplate INKY
+	(slot distanceToPacman 			(type float)  (default -1))
+	(slot distanceToBlinky 			(type float)  (default -1))
+	(slot distanceToPinky 			(type float)  (default -1))
+	(slot distanceToSue 			(type float)  (default -1))
+	(slot distanceToIntersection 	(type float)  (default -1))
+	(slot myShield		            (type SYMBOL) (default ""))
+	(slot edibleTime				(type NUMBER) (default 0))
+	(slot lairTime					(type NUMBER) (default 0))
+)
 
-(deftemplate BLINKYedible
-	(slot edibleTime (type NUMBER))) 
+(deftemplate PINKY
+	(slot distanceToPacman 			(type float)  (default -1))
+	(slot distanceToBlinky 			(type float)  (default -1))
+	(slot distanceToInky 			(type float)  (default -1))
+	(slot distanceToSue 			(type float)  (default -1))
+	(slot distanceToIntersection 	(type float)  (default -1))
+	(slot myShield		            (type SYMBOL) (default ""))
+	(slot edibleTime				(type NUMBER) (default 0))
+	(slot lairTime					(type NUMBER) (default 0))
+)
 
-(deftemplate INKYedible
-	(slot edibleTime (type NUMBER))) 
-	
-(deftemplate PINKYedible
-	(slot edibleTime (type NUMBER))) 
-	
-(deftemplate SUEedible
-	(slot edibleTime (type NUMBER))) 
-	
-;; LAIR TIME GHOST ;;
+(deftemplate SUE
+	(slot distanceToPacman 			(type float)  (default -1))
+	(slot distanceToBlinky 			(type float)  (default -1))
+	(slot distanceToPinky 			(type float)  (default -1))
+	(slot distanceToInky 			(type float)  (default -1))
+	(slot distanceToIntersection 	(type float)  (default -1))
+	(slot myShield		            (type SYMBOL) (default ""))
+	(slot edibleTime				(type NUMBER) (default 0))
+	(slot lairTime					(type NUMBER) (default 0))
+)
 
-(deftemplate BLINKYlair
-	(slot lairTime (type NUMBER))) 
-
-(deftemplate INKYlair
-	(slot lairTime (type NUMBER))) 
-	
-(deftemplate PINKYlair
-	(slot lairTime (type NUMBER))) 
-	
-(deftemplate SUElair
-	(slot lairTime (type NUMBER))) 
- 
 ;; DEFINITION OF THE ACTION FACT (ALSO A DATA_TYPE lol) --> IS ALL IN THE PERSPECTIVE OF BLINKY, WE WILL ADAPT TO OTHER GHOSTS ;;
 
 ;; Basic action
 (deftemplate ACTION
-	(slot id) (slot info (default "")) (slot priority (type NUMBER) ) ; mandatory slots
-	(slot extraGhost (type SYMBOL) (default NONE)) ; Extra slot for any action that requires a target ghost
-	(slot intersection (type NUMBER) (default NONE)) ; Extra slot for any action that requires a target intersection
+	; MANDATORY SLOTS ;
+	(slot id			(type SYMBOL)			  ) 
+	(slot info 			(type STRING) (default "")) 
+	; OPTIONAL SLOTS ; 
+	(slot extraGhost 	(type SYMBOL) (default NONE)) ; Extra slot for any action that requires a target ghost
+	(slot intersection 	(type NUMBER) (default NONE)) ; Extra slot for any action that requires a target intersection
+	(slot priority 		(type NUMBER) (default NONE))
 ) 
 
 ;; -------------------------------------------------------------------------------------------;;
 
-;; RULES OF ALL GHOSTS --> IS ALL IN THE PERSPECTIVE OF BLINKY, WE WILL ADAPT TO OTHER GHOSTS ;;
+;; RULES OF ALL GHOSTS ;;
 
+;; DEDUCED INFORMATION ;;
 ;; LAIR ;;
 (defrule INKYinlair
-	(INKYlair (lairTime ?t)
+	(INKY (lairTime ?t))
 	(test (> ?t 0))
 	=>
-	(assert (ACTION (id INKYRandom) (info "Random move")  (priority 100) )))
+	(assert 
+		(ACTION 
+			(id INKYRandom) 
+			(info "Random move")  
+			(priority 100) 
+		)
+	)
 )	
 
 ;; HUIDA ;;
 (defrule INKYpacmanFarAway
-   (PacmanToINKY (distanceTo ?d))
-   (BLINKYlair (lairTime ?t))
-   (BLINKYedible (edibleTime ?e))
+   (INKY (distanceToPacman ?d) (lairTime ?t) (edibleTime ?e))
    (test (> ?e 0))
    (test (or (!= ?t 0) (> ?d (+ (/ ?e 2) 1))))  ;; far away if distance > (edibleTime/2 + 1)
 	=>
    (assert
       (ACTION 
          (id INKYOrbit)
-         (info "BLINKY far away and edible")
+         (info "INKY far away and edible")
          (priority 21) 	
       )
    )
 )
 
 (defrule INKYhayEscudero
-	(INKYshieldGhost (ghost ?g))
-	(INKYedible (edibleTime ?e))
+	(INKY (myShield ?g) (edibleTime ?e))
 	(test (> ?e 0))
 	=>
    	(assert
     	(ACTION 
-        	(id INKYRunToEscuderoAction)
+        	(id INKYRunToEscudero)
          	(info "INKY going to escudero")
          	(extraGhost ?g)
          	(priority 20) 		
@@ -193,9 +115,7 @@
 )
 
 (defrule INKYpacmanNear
-   (PacmanToBLINKY (distanceTo ?d))
-   (INKYlair (lairTime ?t))
-   (INKYedible (edibleTime ?e))
+   (INKY (distanceToPacman ?d) (lairTime ?t) (edibleTime ?e))
    (test (> ?e 0))
    (test (or (== ?t 0) (< ?d 200)))  ;; near if distance < 200
 	=>
@@ -209,51 +129,66 @@
 )
 
 (defrule INKYrunsAwayMSPACMANclosePPill
-	(MSPACMAN (mindistancePPill ?d)) (test (<= ?d 30)) 
+	(MSPACMAN (distanceToClosestPPill ?d)) 
+	(test (<= ?d 30)) 
 	=>  
 	(assert 
-		(ACTION (id "INKYstatrRunning") (info "MSPacMan cerca PPill") (priority 18) 
+		(ACTION 
+			(id BLINKYstatrRunning) 
+			(info "MSPacMan cerca PPill") 
+			(priority 18) 
 		)
 	)
 )
 
 ;; PERSECUCION ;;
 (defrule INKYediblesNearPacman
-	(PINKYshieldGhost (ghost ?p))
-	(BLINKYshieldGhost (ghost ?i))
-	(SUEshieldGhost (ghost ?s))
-
-	(test 
-		(or 
-			((= ?p INKY)
-			(bind ?protegee ?p))
-			((= ?i INKY)
-			(bind ?protegee ?i))
-			((= ?s INKY)
-			(bind ?protegee ?s))
+	(BLINKY	(myShield ?b))
+	(PINKY 	(myShield ?p)) 
+	(SUE   	(myShield ?s))
+	(test (or 
+		((= ?p INKY)
+		(bind ?protegee ?p))
+		((= ?i INKY)
+		(bind ?protegee ?b))
+		((= ?s INKY)
+		(bind ?protegee ?s))
 		)
 	)
 	=>
-	(assert (ACTION (id "INKYrunToTheEdible") (info "me vuelvo escudero") (extraGhost ?protegee) (priority 17)))
+	(assert 
+		(ACTION 
+			(id INKYrunToTheEdible) 
+			(info "me vuelvo escudero") 
+			(extraGhost ?protegee) 
+			(priority 17)
+		)
+	)
 )
 
 (defrule INKYNearestToMsPacman
-  (BLINKYtoPacman (distanceTo ?blinkyDistance)) ; Hecho para la distancia de Blinky
-  (PINKYtoPacman (distanceTo ?pinkyDistance))   ; Hecho para la distancia de Pinky
-  (INKYtoPacman (distanceTo ?inkyDistance))     ; Hecho para la distancia de Inky
-  (SUEtoPacman (distanceTo ?sueDistance))       ; Hecho para la distancia de Sue
-  (test (<= ?inkyDistance ?pinkyDistance))
-  (test (<= ?inkyDistance ?blinkyDistance))
-  (test (<= ?inkyDistance ?sueDistance))
+	(BLINKY (distanceToPacman ?blinkyDistance)) 	; Hecho para la distancia de Blinky
+	(PINKY 	(distanceToPacman ?pinkyDistance))   	; Hecho para la distancia de Pinky
+	(INKY  	(distanceToPacman ?inkyDistance))     	; Hecho para la distancia de Inky
+	(SUE	(distanceToPacman ?sueDistance))       	; Hecho para la distancia de Sue
+	(test (<= ?inkyDistance ?pinkyDistance))
+	(test (<= ?inkyDistance ?blinkyDistance))
+	(test (<= ?inkyDistance ?sueDistance))
 	=> 
-	(assert (ACTION (id INKYHunter1) (info "Soy cazador1")  (priority 15) ))
+	(assert 
+		(ACTION 
+			(id INKYHunter1) 
+			(info "Soy cazador1")  
+			(priority 15) 
+		)
+	)
 )
 
 (defrule INKYSecondNearestToMsPacman
-  	(BLINKYtoPacman (distanceTo ?blinkyDistance)) ; Hecho para la distancia de Blinky
-  	(PINKYtoPacman (distanceTo ?pinkyDistance))   ; Hecho para la distancia de Pinky
-  	(INKYtoPacman (distanceTo ?inkyDistance))     ; Hecho para la distancia de Inky
-  	(SUEtoPacman (distanceTo ?sueDistance))       ; Hecho para la distancia de Sue
+  	(BLINKY (distanceToPacman ?blinkyDistance)) 	; Hecho para la distancia de Blinky
+	(PINKY 	(distanceToPacman ?pinkyDistance))   	; Hecho para la distancia de Pinky
+	(INKY  	(distanceToPacman ?inkyDistance))     	; Hecho para la distancia de Inky
+	(SUE	(distanceToPacman ?sueDistance))       	; Hecho para la distancia de Sue
 	(test
 		(or
 			(and (> ?inkyDistance ?pinkyDistance)
@@ -265,24 +200,38 @@
 				(<= ?inkyDistance ?sueDistance)
 				(bind ?closestGhost INKY))
 			(and (> ?inkyDistance ?sueDistance)
-				(<= linkyDistance ?pinkyDistance)
+				(<= ?inkyDistance ?pinkyDistance)
 				(<= ?inkyDistance ?blinkyDistance)
 				(bind ?closestGhost SUE))
     	)
   	)
   =>
-  (assert (ACTION (id INKYHunter2) (info "Soy Hunter2") (extraGhost closestGhost) (priority 14)))
+  	(assert 
+  		(ACTION 
+			(id INKYHunter2) 
+			(info "Soy Hunter2") 
+			(extraGhost closestGhost) 
+			(priority 14)
+		)
+	)
 )
 
-(defrule inkyNearestToIntersection
-  (MSPACMANclosestIntersection (index ?closestintersection))
-  (BLINKYToIntersection (distanceTo ?blinkyDistance)) ; Hecho para la distancia de Blinky
-  (PINKYToIntersection (distanceTo ?pinkyDistance))   ; Hecho para la distancia de Pinky
-  (INKYToIntersection (distanceTo ?inkyDistance))     ; Hecho para la distancia de Inky
-  (SUEToIntersection (distanceTo ?sueDistance))       ; Hecho para la distancia de Sue
-  (test (<= ?inkyDistance ?pinkyDistance))
-  (test (<= ?inkyDistance ?blinkyDistance))
-  (test (<= ?inkyDistance ?sueDistance))
+(defrule INKYNearestToIntersection
+	(MSPACMAN 	(closestIntersection 	?closestintersection))
+	(BLINKY 	(distanceToIntersection ?blinkyDistance)) 	; Hecho para la distancia de Blinky
+	(PINKY 		(distanceToIntersection ?pinkyDistance))   	; Hecho para la distancia de Pinky
+	(INKY  		(distanceToIntersection ?inkyDistance))     	; Hecho para la distancia de Inky
+	(SUE		(distanceToIntersection ?sueDistance))       	; Hecho para la distancia de Sue
+	(test (<= ?inkyDistance ?pinkyDistance))
+	(test (<= ?inkyDistance ?blinkyDistance))
+	(test (<= ?inkyDistance ?sueDistance))
 	=> 
-	(assert (ACTION (id INKYJailer) (info "Soy Jailer") (intersection ?closestintersection) (priority 13) ))
+	(assert 
+		(ACTION 
+			(id INKYJailer) 
+			(info "Soy Jailer") 
+			(intersection ?closestintersection) 
+			(priority 13) 
+		)
+	)
 )
