@@ -20,7 +20,7 @@ public class ExecutorTest {
         GhostController ghosts = new es.ucm.fdi.ici.c2526.practica3.grupoYY.Ghosts();
         
         System.out.println( 
-        		executor.runGame(pacMan, ghosts, 40)
+        	executor.runGame(pacMan, ghosts, 40)
         );
         
     }

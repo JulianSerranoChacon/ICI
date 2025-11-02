@@ -212,35 +212,70 @@
 	)
 )
 
-(defrule INKYSecondNearestToMsPacman
+(defrule INKYbehindPINKYToMsPacman
 	(declare (salience 14))
   	(BLINKY (distanceToPacman ?blinkyDistance)) 	; Hecho para la distancia de Blinky
 	(PINKY 	(distanceToPacman ?pinkyDistance))   	; Hecho para la distancia de Pinky
 	(INKY  	(distanceToPacman ?inkyDistance))     	; Hecho para la distancia de Inky
 	(SUE	(distanceToPacman ?sueDistance))       	; Hecho para la distancia de Sue
 	(test
-		(or
-			(and (> ?inkyDistance ?pinkyDistance)
-				(<= ?inkyDistance ?blinkyDistance)
-				(<= ?inkyDistance ?sueDistance)
-				(bind ?closestGhost PINKY))
-			(and (> ?inkyDistance ?blinkyDistance)
-				(<= ?inkyDistance ?pinkyDistance)
-				(<= ?inkyDistance ?sueDistance)
-				(bind ?closestGhost INKY))
-			(and (> ?inkyDistance ?sueDistance)
-				(<= ?inkyDistance ?pinkyDistance)
-				(<= ?inkyDistance ?blinkyDistance)
-				(bind ?closestGhost SUE))
-    	)
-  	)
-  =>
-   (bind ?closestGhost (if (not ?closestGhost) INKY)) ; Asignar valor por defecto
-  	(assert 
+		(and (> ?inkyDistance ?pinkyDistance)
+			(<= ?inkyDistance ?blinkyDistance)
+			(<= ?inkyDistance ?sueDistance)
+		)
+	)
+	=>
+	(assert 
   		(ACTION 
 			(id INKYHunter2) 
 			(info "Soy Hunter2") 
-			(extraGhost ?closestGhost) 
+			(extraGhost PINKY) 
+			(priority 14)
+		)
+	)
+)	
+
+(defrule INKYbehindBLINKYToMsPacman
+	(declare (salience 14))
+  	(BLINKY (distanceToPacman ?blinkyDistance)) 	; Hecho para la distancia de Blinky
+	(PINKY 	(distanceToPacman ?pinkyDistance))   	; Hecho para la distancia de Pinky
+	(INKY  	(distanceToPacman ?inkyDistance))     	; Hecho para la distancia de Inky
+	(SUE	(distanceToPacman ?sueDistance))       	; Hecho para la distancia de Sue
+	(test
+		(and (> ?inkyDistance ?blinkyDistance)
+			(<= ?inkyDistance ?pinkyDistance)
+			(<= ?inkyDistance ?sueDistance)
+		)
+	)
+	=>
+	(assert 
+  		(ACTION 
+			(id INKYHunter2) 
+			(info "Soy Hunter2") 
+			(extraGhost BLINKY) 
+			(priority 14)
+		)
+	)
+)	
+
+(defrule INKYbehindSUEToMsPacman
+	(declare (salience 14))
+  	(BLINKY (distanceToPacman ?blinkyDistance)) 	; Hecho para la distancia de Blinky
+	(PINKY 	(distanceToPacman ?pinkyDistance))   	; Hecho para la distancia de Pinky
+	(INKY  	(distanceToPacman ?inkyDistance))     	; Hecho para la distancia de Inky
+	(SUE	(distanceToPacman ?sueDistance))       	; Hecho para la distancia de Sue
+	(test
+		(and (> ?inkyDistance ?sueDistance)
+			(<= ?inkyDistance ?pinkyDistance)
+			(<= ?inkyDistance ?blinkyDistance)
+		)
+	)
+	=>
+	(assert 
+  		(ACTION 
+			(id INKYHunter2) 
+			(info "Soy Hunter2") 
+			(extraGhost SUE) 
 			(priority 14)
 		)
 	)
