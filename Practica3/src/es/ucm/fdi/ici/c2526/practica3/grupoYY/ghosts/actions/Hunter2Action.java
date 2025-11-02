@@ -56,7 +56,6 @@ public class Hunter2Action implements RulesAction  {
 			Value hunter1Role = actionFact.getSlotValue("extraGhost");
 			if(!Objects.isNull(hunter1Role)) {
 				String strategyValue = hunter1Role.stringValue(null);
-				System.out.printf("hunter 1 es "+strategyValue);
 				hunter1 = GHOST.valueOf(strategyValue);
 			}
 		} catch (JessException e) {
