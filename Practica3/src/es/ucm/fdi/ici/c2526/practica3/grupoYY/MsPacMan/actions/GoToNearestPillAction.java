@@ -4,12 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 
-import es.ucm.fdi.ici.Action;
+import es.ucm.fdi.ici.rules.*;
+import jess.Fact;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
-public class GoToNearestPillAction implements Action {
+public class GoToNearestPillAction implements RulesAction {
 	
 
 	public GoToNearestPillAction() {
@@ -43,6 +44,12 @@ public class GoToNearestPillAction implements Action {
 		//If no pill seems appeling, we play safe
 		return pi.getCandidateMoves().get(0);*/
 		return MOVE.NEUTRAL;
+	}
+	
+	@Override
+	public void parseFact(Fact actionFact) {
+		// Nothing to parse
+		
 	}
 	
 	@Override

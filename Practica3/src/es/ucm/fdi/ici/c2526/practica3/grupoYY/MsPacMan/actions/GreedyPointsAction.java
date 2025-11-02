@@ -2,11 +2,12 @@ package es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions;
 
 import java.util.Map.Entry;
 
-import es.ucm.fdi.ici.Action;
+import es.ucm.fdi.ici.rules.*;
+import jess.Fact;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
-public class GreedyPointsAction implements Action {
+public class GreedyPointsAction implements RulesAction {
 
 	public GreedyPointsAction() {
 
@@ -33,6 +34,12 @@ public class GreedyPointsAction implements Action {
 
 		return bestMove;*/
 		return MOVE.NEUTRAL;
+	}
+	
+	@Override
+	public void parseFact(Fact actionFact) {
+		// Nothing to parse
+		
 	}
 
 	@Override

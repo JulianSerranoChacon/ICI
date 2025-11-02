@@ -2,11 +2,12 @@ package es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions;
 
 import java.util.Random;
 
-import es.ucm.fdi.ici.Action;
+import es.ucm.fdi.ici.rules.*;
+import jess.Fact;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
-public class RandomAction implements Action {
+public class RandomAction implements RulesAction {
 
 	public RandomAction() {
 		// TODO Auto-generated constructor stub
@@ -18,6 +19,12 @@ public class RandomAction implements Action {
 	@Override
 	public MOVE execute(Game game) {
 		return allMoves[rnd.nextInt(allMoves.length)];
+	}
+	
+	@Override
+	public void parseFact(Fact actionFact) {
+		// Nothing to parse
+		
 	}
 
 	@Override

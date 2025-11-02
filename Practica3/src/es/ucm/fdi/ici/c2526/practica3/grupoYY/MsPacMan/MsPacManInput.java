@@ -117,7 +117,6 @@ public class MsPacManInput extends RulesInput {
 
 		facts.add(String.format("(MSPACMAN (minDistancePPill %s))", minDistancePpill));
 
-		//TODO: inicializar
 		facts.add(String.format("(MSPACMAN (variosCaminos %d))", candidateMoves.size()));
 
 		

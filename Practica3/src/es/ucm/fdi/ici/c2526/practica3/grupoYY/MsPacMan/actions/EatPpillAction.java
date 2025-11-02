@@ -1,17 +1,25 @@
 package es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Map.Entry;
 
-import es.ucm.fdi.ici.Action;
+import es.ucm.fdi.ici.rules.*;
+import jess.Fact;
+import jess.JessException;
+import jess.Value;
+import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
-public class EatPpillAction implements Action {
+public class EatPpillAction implements RulesAction {
 
-
-
+	private Map<GHOST, Integer> distances;
+	private int pacManDistance;
+	private boolean caminoInmediato;
 	public EatPpillAction() {
-	
+		distances = new HashMap<>();
 	}
 	
 	@Override
@@ -26,7 +34,41 @@ public class EatPpillAction implements Action {
 		return pi.getCandidateMoves().get(0);*/
 		return MOVE.NEUTRAL;
 	}
+	
+	@Override
+	public void parseFact(Fact actionFact){
+		// Nothing to parse
+		try {
+		Value v = actionFact.getSlotValue("BLINKYminDistanceToPpill");
+		if(!Objects.isNull(v))
+			distances.put( GHOST.BLINKY,v.intValue(null));
+		
+		v = actionFact.getSlotValue("PINKYminDistanceToPpill");
+			if(!Objects.isNull(v))
+				distances.put( GHOST.PINKY,v.intValue(null));
+		
+		v = actionFact.getSlotValue("INKYminDistanceToPpill");
+		if(!Objects.isNull(v))
+			distances.put( GHOST.INKY,v.intValue(null));
 
+		v = actionFact.getSlotValue("SUEminDistanceToPpill");
+		if(!Objects.isNull(v))
+			distances.put( GHOST.SUE,v.intValue(null));
+		
+		v = actionFact.getSlotValue("MSPACMANminDistancePPill");
+		if(!Objects.isNull(v))
+			pacManDistance = v.intValue(null);
+		
+		v = actionFact.getSlotValue("MSPACMANhayPillCaminoInmediato");
+		if(!Objects.isNull(v))
+			pacManDistance = v.intValue(null);
+		}
+		catch (JessException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 	@Override
 	public String getActionId() {
 		return "Eat PPill Action";

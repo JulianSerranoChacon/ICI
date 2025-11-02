@@ -1,13 +1,14 @@
 package es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions;
 
-import es.ucm.fdi.ici.Action;
+import es.ucm.fdi.ici.rules.*;
+import jess.Fact;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
 import pacman.game.Constants;
 import pacman.game.Game;
 
-public class HuntAction implements Action {
+public class HuntAction implements RulesAction {
 
 	public HuntAction() {
 	
@@ -61,7 +62,12 @@ public class HuntAction implements Action {
 		return pi.getCandidateMoves().get(0);*/
 		return MOVE.NEUTRAL;
 	}
-
+	
+	@Override
+	public void parseFact(Fact actionFact) {
+		// Nothing to parse
+		
+	}
 
 	/* this function assumes that the ghost is going to be running away from pacman so it is pessimistic, it may cut cases where it could have
 	 * reached the ghost but it didn't see it

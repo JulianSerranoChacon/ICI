@@ -3,13 +3,14 @@ package es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.ucm.fdi.ici.Action;
+import es.ucm.fdi.ici.rules.*;
+import jess.Fact;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
-public class HideAction implements Action {
+public class HideAction implements RulesAction {
 
 	public HideAction() {
 
@@ -76,6 +77,12 @@ public class HideAction implements Action {
 
 		return mean / 4;*/
 		return MOVE.NEUTRAL;
+	}
+	
+	@Override
+	public void parseFact(Fact actionFact) {
+		// Nothing to parse
+		
 	}
 
 	@Override
