@@ -106,7 +106,7 @@
 	(declare (salience 20))
 	(INKY (myShield ?g) (edibleTime ?e))
 	(test (> ?e 0))
-	(test (neq ?g NONE))
+	(test (neq ?g ""))
 	=>
    	(assert
     	(ACTION 

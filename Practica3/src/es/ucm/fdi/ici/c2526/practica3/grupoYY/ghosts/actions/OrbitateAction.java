@@ -36,7 +36,7 @@ public class OrbitateAction implements RulesAction {
        for(int i = 0; i < possibleMoves.length; ++i) {
     	   
     	    //We take the neighbour nodes of the current Ghost node position
-      		int[] futureNodeMove = game.getNeighbouringNodes(game.getGhostCurrentNodeIndex(this.ghost), possibleMoves[i]);
+      		int[] futureNodeMove = game.getNeighbouringNodes(game.getGhostCurrentNodeIndex(this.ghost), MOVE.NEUTRAL);
       		//We search for the closest node intersection
     		while(futureNodeMove.length <= 1) {
     			futureNodeMove = game.getNeighbouringNodes(futureNodeMove[0]);
