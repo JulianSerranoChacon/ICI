@@ -33,7 +33,7 @@ public class JailerAction implements RulesAction{
 	@Override
 	public void parseFact(Fact actionFact) {
 		try {
-			Value target = actionFact.getSlotValue("MSPACMANclosestIntersection");
+			Value target = actionFact.getSlotValue("closestIntersection");
 			if(!Objects.isNull(target)) {
 				targetNode =  target.intValue(null);
 			}

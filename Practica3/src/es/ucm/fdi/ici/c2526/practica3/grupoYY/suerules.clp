@@ -235,11 +235,12 @@
     	)
   	)
   =>
+   (bind ?closestGhost (if (not ?closestGhost) SUE)) ; Asignar valor por defecto
   	(assert 
   		(ACTION 
 			(id SUEHunter2) 
 			(info "Soy Hunter2") 
-			(extraGhost closestGhost) 
+			(extraGhost ?closestGhost) 
 			(priority 14)
 		)
 	)
@@ -273,7 +274,7 @@
 		(ACTION 
 			(id SUERandom) 
 			(info "Random move")  
-			(priority 100) 
+			(priority 12) 
 		)
 	)
 )

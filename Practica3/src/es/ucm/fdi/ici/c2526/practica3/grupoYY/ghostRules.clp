@@ -210,7 +210,7 @@
   		(ACTION 
 			(id BLINKYHunter2) 
 			(info "Soy Hunter2") 
-			(extraGhost closestGhost) 
+			(extraGhost ?closestGhost) 
 			(priority 14)
 		)
 	)

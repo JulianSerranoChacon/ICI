@@ -15,9 +15,9 @@ public class Hunter1Action implements RulesAction {
 	
 	@Override
 	public MOVE execute(Game game) {
-        if (!game.doesGhostRequireAction(ghost)){ //if does not require action
-        	return MOVE.NEUTRAL;
-        }
+		if(!game.doesGhostRequireAction(ghost))
+			return MOVE.NEUTRAL;
+		
         
         return game.getApproximateNextMoveTowardsTarget(
          	   game.getGhostCurrentNodeIndex(ghost),
