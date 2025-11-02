@@ -1,53 +1,53 @@
 ;; DEFINITION OF DATA TYPES ;;
 
 (deftemplate MSPACMAN
-	(slot distanceToBlinky 			(type integer) (default -1))
-	(slot distanceToPinky 			(type integer) (default -1))
-	(slot distanceToInky 			(type integer) (default -1))
-	(slot distanceToSue 			(type integer) (default -1))
+	(slot distanceToBlinky 			(type float) (default -1))
+	(slot distanceToPinky 			(type float) (default -1))
+	(slot distanceToInky 			(type float) (default -1))
+	(slot distanceToSue 			(type float) (default -1))
 	(slot closestIntersection 		(type integer) (default -1))
-	(slot distanceToClosestPPill 	(type integer) (default -1))	
+	(slot distanceToClosestPPill 	(type float) (default -1))	
 )
 
 (deftemplate BLINKY
-	(slot distanceToPacman 			(type integer)  (default -1))
-	(slot distanceToPinky 			(type integer)  (default -1))
-	(slot distanceToInky 			(type integer)  (default -1))
-	(slot distanceToSue 			(type integer)  (default -1))
-	(slot distanceToIntersection 	(type integer)  (default -1))
+	(slot distanceToPacman 			(type float)  (default -1))
+	(slot distanceToPinky 			(type float)  (default -1))
+	(slot distanceToInky 			(type float)  (default -1))
+	(slot distanceToSue 			(type float)  (default -1))
+	(slot distanceToIntersection 	(type float)  (default -1))
 	(slot myShield		            (type SYMBOL) (default ""))
 	(slot edibleTime				(type NUMBER) (default 0))
 	(slot lairTime					(type NUMBER) (default 0))
 )
 
 (deftemplate INKY
-	(slot distanceToPacman 			(type integer)  (default -1))
-	(slot distanceToBlinky 			(type integer)  (default -1))
-	(slot distanceToPinky 			(type integer)  (default -1))
-	(slot distanceToSue 			(type integer)  (default -1))
-	(slot distanceToIntersection 	(type integer)  (default -1))
+	(slot distanceToPacman 			(type float)  (default -1))
+	(slot distanceToBlinky 			(type float)  (default -1))
+	(slot distanceToPinky 			(type float)  (default -1))
+	(slot distanceToSue 			(type float)  (default -1))
+	(slot distanceToIntersection 	(type float)  (default -1))
 	(slot myShield		            (type SYMBOL) (default ""))
 	(slot edibleTime				(type NUMBER) (default 0))
 	(slot lairTime					(type NUMBER) (default 0))
 )
 
 (deftemplate PINKY
-	(slot distanceToPacman 			(type integer)  (default -1))
-	(slot distanceToBlinky 			(type integer)  (default -1))
-	(slot distanceToInky 			(type integer)  (default -1))
-	(slot distanceToSue 			(type integer)  (default -1))
-	(slot distanceToIntersection 	(type integer)  (default -1))
+	(slot distanceToPacman 			(type float)  (default -1))
+	(slot distanceToBlinky 			(type float)  (default -1))
+	(slot distanceToInky 			(type float)  (default -1))
+	(slot distanceToSue 			(type float)  (default -1))
+	(slot distanceToIntersection 	(type float)  (default -1))
 	(slot myShield		            (type SYMBOL) (default ""))
 	(slot edibleTime				(type NUMBER) (default 0))
 	(slot lairTime					(type NUMBER) (default 0))
 )
 
 (deftemplate SUE
-	(slot distanceToPacman 			(type integer)  (default -1))
-	(slot distanceToBlinky 			(type integer)  (default -1))
-	(slot distanceToPinky 			(type integer)  (default -1))
-	(slot distanceToInky 			(type integer)  (default -1))
-	(slot distanceToIntersection 	(type integer)  (default -1))
+	(slot distanceToPacman 			(type float)  (default -1))
+	(slot distanceToBlinky 			(type float)  (default -1))
+	(slot distanceToPinky 			(type float)  (default -1))
+	(slot distanceToInky 			(type float)  (default -1))
+	(slot distanceToIntersection 	(type float)  (default -1))
 	(slot myShield		            (type SYMBOL) (default ""))
 	(slot edibleTime				(type NUMBER) (default 0))
 	(slot lairTime					(type NUMBER) (default 0))
@@ -122,7 +122,7 @@
 	(declare (salience 19))
 	(PINKY (distanceToPacman ?d) (lairTime ?t) (edibleTime ?e))
 	(test (> ?e 0))
-	(test (or (= ?t 0) (< ?d 200)))  ;; near if distance < 200
+	(test (and (= ?t 0) (< ?d 200)))  ;; near if distance < 200
 		=>
 	(assert
 		(ACTION 
@@ -150,10 +150,8 @@
 ;; PERSECUCION ;;
 (defrule ShieldInky
 	(declare (salience 17))
-	(INKY (myShield ? i))
-	test (
-		(eq ?i PINKY)
-	)
+	(INKY (myShield ?i))
+	(test (eq ?i PINKY))
 	=>
 	(assert 
 		(ACTION 
@@ -167,10 +165,8 @@
 
 (defrule ShieldBlinky
 	(declare (salience 17))
-	(BLINKY (myShield ? b))
-	test (
-		(eq ?b PINKY)
-	)
+	(BLINKY (myShield ?b))
+	(test (eq ?b PINKY))
 	=>
 	(assert 
 		(ACTION 
@@ -184,10 +180,8 @@
 
 (defrule ShieldSue
 	(declare (salience 17))
-	(SUE (myShield ? s))
-	test (
-		(eq ?s PINKY)
-	)
+	(SUE (myShield ?s))
+	(test (eq ?s PINKY))
 	=>
 	(assert 
 		(ACTION 
@@ -274,6 +268,7 @@
 
 (defrule Random
 	(declare (salience -1))
+	=>
 	(assert 
 		(ACTION 
 			(id PINKYRandom) 
