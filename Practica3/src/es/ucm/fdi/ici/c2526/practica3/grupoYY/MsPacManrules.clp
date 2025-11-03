@@ -73,6 +73,11 @@
 	(slot LEFTMoveToPoints (type NUMBER))
 	(slot UPMoveToPoints (type NUMBER))
 	(slot DOWNMoveToPoints (type NUMBER))
+	
+	(slot RIGHTMoveToNode (type NUMBER))
+	(slot LEFTMoveToNode (type NUMBER))
+	(slot UPMoveToNode (type NUMBER))
+	(slot DOWNMoveToNode (type NUMBER))
 )
     
 ;DEFINITION OF THE ACTION FACT

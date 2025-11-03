@@ -185,24 +185,29 @@ public class MsPacManInput extends RulesInput {
 		
 		for(MOVE m: MOVE.values()) {
 			if(moveToPpill.get(m))
-				facts.add(String.format("(MSPACMAN (goToPillMove %d))", m));
+				facts.add(String.format("(MSPACMAN (goToPillMove %s))", m));
 		}
 		
-		facts.add(String.format("(MSPACMAN (RIGHTCandidate %d))", isCandidateMove.get(MOVE.RIGHT)));
-		facts.add(String.format("(MSPACMAN (LEFTCandidate %d))", isCandidateMove.get(MOVE.LEFT)));
-		facts.add(String.format("(MSPACMAN (UPCandidate %d))", isCandidateMove.get(MOVE.UP)));
-		facts.add(String.format("(MSPACMAN (DOWNCandidate %d))", isCandidateMove.get(MOVE.DOWN)));
+		facts.add(String.format("(MSPACMAN (RIGHTCandidate %s))", isCandidateMove.get(MOVE.RIGHT)));
+		facts.add(String.format("(MSPACMAN (LEFTCandidate %s))", isCandidateMove.get(MOVE.LEFT)));
+		facts.add(String.format("(MSPACMAN (UPCandidate %s))", isCandidateMove.get(MOVE.UP)));
+		facts.add(String.format("(MSPACMAN (DOWNCandidate %ds))", isCandidateMove.get(MOVE.DOWN)));
 		
-		facts.add(String.format("(MSPACMAN (RIGHTMoveToPpill %d))", moveToPpill.get(MOVE.RIGHT)));
-		facts.add(String.format("(MSPACMAN (LEFTMoveToPpill %d))", moveToPpill.get(MOVE.LEFT)));
-		facts.add(String.format("(MSPACMAN (UPMoveToPpill %d))", moveToPpill.get(MOVE.UP)));
-		facts.add(String.format("(MSPACMAN (DOWNMoveToPpill %d))", moveToPpill.get(MOVE.DOWN)));
+		facts.add(String.format("(MSPACMAN (RIGHTMoveToPpill %s))", moveToPpill.get(MOVE.RIGHT)));
+		facts.add(String.format("(MSPACMAN (LEFTMoveToPpill %s))", moveToPpill.get(MOVE.LEFT)));
+		facts.add(String.format("(MSPACMAN (UPMoveToPpill %s))", moveToPpill.get(MOVE.UP)));
+		facts.add(String.format("(MSPACMAN (DOWNMoveToPpill %s))", moveToPpill.get(MOVE.DOWN)));
 		
 
 		facts.add(String.format("(MSPACMAN (RIGHTMoveToPoints %d))", moveToPoints.get(MOVE.RIGHT)));
 		facts.add(String.format("(MSPACMAN (LEFTMoveToPoints %d))", moveToPoints.get(MOVE.LEFT)));
 		facts.add(String.format("(MSPACMAN (UPMoveToPoints %d))", moveToPoints.get(MOVE.UP)));
 		facts.add(String.format("(MSPACMAN (DOWNMoveToPoints %d))", moveToPoints.get(MOVE.DOWN)));
+		
+		facts.add(String.format("(MSPACMAN (RIGHTMoveToNode %d))", moveToNode.get(MOVE.RIGHT)));
+		facts.add(String.format("(MSPACMAN (LEFTMoveToNode %d))", moveToNode.get(MOVE.LEFT)));
+		facts.add(String.format("(MSPACMAN (UPTMoveToNode %d))", moveToNode.get(MOVE.UP)));
+		facts.add(String.format("(MSPACMAN (DOWNTMoveToNode %d))", moveToNode.get(MOVE.DOWN)));
 	
 		facts.add(String.format("(MSPACMAN (ClosestPpil %d))", closestPPill));
 		return facts;
