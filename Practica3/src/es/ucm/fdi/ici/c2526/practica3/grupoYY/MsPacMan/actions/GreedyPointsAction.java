@@ -82,6 +82,18 @@ public class GreedyPointsAction implements RulesAction {
 			
 			v = actionFact.getSlotValue("RIGHTMoveToPoints");
 			if(!Objects.isNull(v))
+				moveToPoints.put(MOVE.RIGHT, v.intValue(null));
+			
+			v = actionFact.getSlotValue("LEFTMoveToPoints");
+			if(!Objects.isNull(v))
+				moveToPoints.put(MOVE.LEFT, v.intValue(null));
+			
+			v = actionFact.getSlotValue("UPMoveToPoints");
+			if(!Objects.isNull(v))
+				moveToPoints.put(MOVE.UP, v.intValue(null));
+			
+			v = actionFact.getSlotValue("DOWNMoveToPoints");
+			if(!Objects.isNull(v))
 				moveToPoints.put(MOVE.DOWN, v.intValue(null));
 			
 		}
