@@ -53,6 +53,11 @@
 	(slot lairTime					(type NUMBER) (default 0))
 )
 
+(deftemplate ROLES
+	(slot hunter1					(type SYMBOL) (default ""))
+	(slot hunter2					(type SYMBOL) (default ""))
+)
+
 ;; DEFINITION OF THE ACTION FACT (ALSO A DATA_TYPE lol) --> IS ALL IN THE PERSPECTIVE OF BLINKY, WE WILL ADAPT TO OTHER GHOSTS ;;
 
 ;; Basic action
@@ -68,9 +73,147 @@
 
 ;; -------------------------------------------------------------------------------------------;;
 
-;; RULES OF ALL GHOSTS --> IS ALL IN THE PERSPECTIVE OF BLINKY, WE WILL ADAPT TO OTHER GHOSTS ;;
-
 ;; DEDUCED INFORMATION ;;
+
+(defrule BLINKYHunter1
+	(declare (salience 50))
+	(BLINKY (lairTime ?t))
+  	(BLINKY (distanceToPacman ?blinkyDistance)) 	; Hecho para la distancia de Blinky
+	(PINKY 	(distanceToPacman ?pinkyDistance))   	; Hecho para la distancia de Pinky
+	(INKY  	(distanceToPacman ?inkyDistance))     	; Hecho para la distancia de Inky
+	(SUE	(distanceToPacman ?sueDistance))       	; Hecho para la distancia de Sue
+	
+	;(test (<= ?t 0))
+	(test
+		(and (<= ?blinkyDistance ?pinkyDistance)
+			(<= ?blinkyDistance ?inkyDistance)
+			(<= ?blinkyDistance ?sueDistance)
+		)
+	)
+	=>
+	(assert (ROLES (hunter1 BLINKY)))
+)
+
+(defrule PINKYHunter1
+   (declare (salience 50))
+   (PINKY (lairTime ?t))
+   (BLINKY (distanceToPacman ?blinkyDistance))
+   (PINKY  (distanceToPacman ?pinkyDistance))
+   (INKY   (distanceToPacman ?inkyDistance))
+   (SUE    (distanceToPacman ?sueDistance))
+
+   (test (<= ?t 0))
+   (test (and (<= ?pinkyDistance ?blinkyDistance)
+              (<= ?pinkyDistance ?inkyDistance)
+              (<= ?pinkyDistance ?sueDistance)))
+   =>
+   (assert (ROLES (hunter1 PINKY)))
+)
+
+(defrule INKYHunter1
+   (declare (salience 50))
+   (INKY (lairTime ?t))
+   (BLINKY (distanceToPacman ?blinkyDistance))
+   (PINKY  (distanceToPacman ?pinkyDistance))
+   (INKY   (distanceToPacman ?inkyDistance))
+   (SUE    (distanceToPacman ?sueDistance))
+
+   (test (<= ?t 0))
+   (test (and (<= ?inkyDistance ?blinkyDistance)
+              (<= ?inkyDistance ?pinkyDistance)
+              (<= ?inkyDistance ?sueDistance)))
+   =>
+   (assert (ROLES (hunter1 INKY)))
+)
+
+(defrule SUEHunter1
+   (declare (salience 50))
+   (SUE (lairTime ?t))
+   (BLINKY (distanceToPacman ?blinkyDistance))
+   (PINKY  (distanceToPacman ?pinkyDistance))
+   (INKY   (distanceToPacman ?inkyDistance))
+   (SUE    (distanceToPacman ?sueDistance))
+
+   (test (<= ?t 0))
+   (test (and (<= ?sueDistance ?blinkyDistance)
+              (<= ?sueDistance ?pinkyDistance)
+              (<= ?sueDistance ?inkyDistance)))
+   =>
+   (assert (ROLES (hunter1 SUE)))
+)
+
+(defrule BLINKYHunter2
+	(declare (salience 49))
+  	(BLINKY (distanceToPacman ?blinkyDistance)) 
+	(PINKY 	(distanceToPacman ?pinkyDistance))   
+	(INKY  	(distanceToPacman ?inkyDistance))     
+	(SUE	(distanceToPacman ?sueDistance))
+	?roles <- (ROLES (hunter1 ?h1) (hunter2 ?h2))       
+	(test
+		(and 
+			(or (eq ?h1 PINKY) (<= ?blinkyDistance ?pinkyDistance))
+			(or (eq ?h1 INKY)  (<= ?blinkyDistance ?inkyDistance))
+			(or (eq ?h1 SUE)   (<= ?blinkyDistance ?sueDistance))
+		)
+   	)
+	=>
+	(modify ?roles (hunter2 BLINKY))
+)
+
+(defrule PINKYHunter2
+	(declare (salience 49))
+  	(BLINKY (distanceToPacman ?blinkyDistance)) 
+	(PINKY 	(distanceToPacman ?pinkyDistance))   
+	(INKY  	(distanceToPacman ?inkyDistance))     
+	(SUE	(distanceToPacman ?sueDistance))
+	?roles <- (ROLES (hunter1 ?h1) (hunter2 ?h2))       
+	(test
+		(and 
+			(or (eq ?h1 BLINKY) (<= ?pinkyDistance ?blinkyDistance))
+			(or (eq ?h1 INKY)   (<= ?pinkyDistance ?inkyDistance))
+			(or (eq ?h1 SUE)    (<= ?pinkyDistance ?sueDistance))
+		)
+   	)
+	=>
+	(modify ?roles (hunter2 PINKY))
+)
+
+(defrule INKYHunter2
+	(declare (salience 49))
+  	(BLINKY (distanceToPacman ?blinkyDistance)) 
+	(PINKY 	(distanceToPacman ?pinkyDistance))   
+	(INKY  	(distanceToPacman ?inkyDistance))     
+	(SUE	(distanceToPacman ?sueDistance))
+	?roles <- (ROLES (hunter1 ?h1) (hunter2 ?h2))       
+	(test
+		(and 
+			(or (eq ?h1 BLINKY) (<= ?inkyDistance ?blinkyDistance))
+			(or (eq ?h1 PINKY)  (<= ?inkyDistance ?pinkyDistance))
+			(or (eq ?h1 SUE)    (<= ?inkyDistance ?sueDistance))
+		)
+   	)
+	=>
+	(modify ?roles (hunter2 INKY))
+)
+
+(defrule SUEHunter2
+	(declare (salience 49))
+  	(BLINKY (distanceToPacman ?blinkyDistance)) 
+	(PINKY 	(distanceToPacman ?pinkyDistance))   
+	(INKY  	(distanceToPacman ?inkyDistance))     
+	(SUE	(distanceToPacman ?sueDistance))
+	?roles <- (ROLES (hunter1 ?h1) (hunter2 ?h2))       
+	(test
+		(and 
+			(or (eq ?h1 BLINKY) (<= ?sueDistance ?blinkyDistance))
+			(or (eq ?h1 PINKY)  (<= ?sueDistance ?pinkyDistance))
+			(or (eq ?h1 INKY)   (<= ?sueDistance ?inkyDistance))
+		)
+   	)
+	=>
+	(modify ?roles (hunter2 SUE))
+)
+
 ;; LAIR ;;
 (defrule BLINKYinlair
 	(declare (salience 100))
@@ -195,13 +338,8 @@
 
 (defrule BLINKYNearestToMsPacman
 	(declare (salience 15))
-	(BLINKY (distanceToPacman ?blinkyDistance)) 	; Hecho para la distancia de Blinky
-	(PINKY 	(distanceToPacman ?pinkyDistance))   	; Hecho para la distancia de Pinky
-	(INKY  	(distanceToPacman ?inkyDistance))     	; Hecho para la distancia de Inky
-	(SUE	(distanceToPacman ?sueDistance))       	; Hecho para la distancia de Sue
-	(test (<= ?blinkyDistance ?pinkyDistance))
-	(test (<= ?blinkyDistance ?inkyDistance))
-	(test (<= ?blinkyDistance ?sueDistance))
+	(ROLES (hunter1 ?h1))
+	(test (eq ?h1 BLINKY))
 	=> 
 	(assert 
 		(ACTION 
@@ -212,74 +350,20 @@
 	)
 )
 
-(defrule BLINKYbehindPINKYToMsPacman
+(defrule BLINKYSecondNearestToMsPacman
 	(declare (salience 14))
-  	(BLINKY (distanceToPacman ?blinkyDistance)) 	; Hecho para la distancia de Blinky
-	(PINKY 	(distanceToPacman ?pinkyDistance))   	; Hecho para la distancia de Pinky
-	(INKY  	(distanceToPacman ?inkyDistance))     	; Hecho para la distancia de Inky
-	(SUE	(distanceToPacman ?sueDistance))       	; Hecho para la distancia de Sue
-	(test
-		(and (> ?blinkyDistance ?pinkyDistance)
-			(<= ?blinkyDistance ?inkyDistance)
-			(<= ?blinkyDistance ?sueDistance)
-		)
-	)
+	(ROLES (hunter1 ?h1) (hunter2 ?h2))
+	(test (eq ?h2 BLINKY))
 	=>
 	(assert 
   		(ACTION 
 			(id BLINKYHunter2) 
 			(info "Soy Hunter2") 
-			(extraGhost PINKY) 
+			(extraGhost ?h1) 
 			(priority 14)
 		)
 	)
 )	
-
-(defrule BLINKYbehindINKYToMsPacman
-	(declare (salience 14))
-  	(BLINKY (distanceToPacman ?blinkyDistance)) 	; Hecho para la distancia de Blinky
-	(PINKY 	(distanceToPacman ?pinkyDistance))   	; Hecho para la distancia de Pinky
-	(INKY  	(distanceToPacman ?inkyDistance))     	; Hecho para la distancia de Inky
-	(SUE	(distanceToPacman ?sueDistance))       	; Hecho para la distancia de Sue
-	(test
-		(and (> ?blinkyDistance ?inkyDistance)
-			(<= ?blinkyDistance ?pinkyDistance)
-			(<= ?blinkyDistance ?sueDistance)
-		)
-	)
-	=>
-	(assert 
-  		(ACTION 
-			(id BLINKYHunter2) 
-			(info "Soy Hunter2") 
-			(extraGhost INKY) 
-			(priority 14)
-		)
-	)
-)	
-
-(defrule BLINKYbehindSUEToMsPacman
-	(declare (salience 14))
-  	(BLINKY (distanceToPacman ?blinkyDistance)) 	; Hecho para la distancia de Blinky
-	(PINKY 	(distanceToPacman ?pinkyDistance))   	; Hecho para la distancia de Pinky
-	(INKY  	(distanceToPacman ?inkyDistance))     	; Hecho para la distancia de Inky
-	(SUE	(distanceToPacman ?sueDistance))       	; Hecho para la distancia de Sue
-	(test
-		(and (> ?blinkyDistance ?sueDistance)
-			(<= ?blinkyDistance ?pinkyDistance)
-			(<= ?blinkyDistance ?inkyDistance)
-		)
-	)
-	=>
-	(assert 
-  		(ACTION 
-			(id BLINKYHunter2) 
-			(info "Soy Hunter2") 
-			(extraGhost SUE) 
-			(priority 14)
-		)
-	)
-)
 
 (defrule BLINKYNearestToIntersection
 	(declare (salience 13))

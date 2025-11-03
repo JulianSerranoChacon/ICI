@@ -69,9 +69,14 @@ public class RuleEngine extends RuleEngineObservable{
 				Iterator<?> it = jess.listFacts();
 				while(it.hasNext())
 					facts.add(((Fact)it.next()).toStringWithParens());
+					
 				this.notifyActionFired(actionFact.toStringWithParens(), facts);
 				//end-notify
 				
+				for (String f : facts) {
+					System.out.println(f);
+				}
+
 				RulesAction gameAction = map.get(actionFact.getSlotValue(RulesAction.ID_SLOT).toString());
 				gameAction.parseFact(actionFact);
 				return gameAction.execute(game);

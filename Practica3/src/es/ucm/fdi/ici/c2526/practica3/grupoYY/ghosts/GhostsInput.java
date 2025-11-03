@@ -50,8 +50,8 @@ public class GhostsInput extends RulesInput {
 	
 		int pacman = game.getPacmanCurrentNodeIndex();
 		this.minPacmanDistancePPill = Double.MAX_VALUE;
-		for(int ppill: game.getPowerPillIndices()) {
-			double distance = game.getDistance(pacman, ppill, DM.PATH);
+		for(int ppill: game.getActivePowerPillsIndices()) {
+			double distance = game.getDistance(pacman, ppill, game.getPacmanLastMoveMade(), DM.PATH);
 			this.minPacmanDistancePPill = Math.min(distance, this.minPacmanDistancePPill);
 		}
 		
