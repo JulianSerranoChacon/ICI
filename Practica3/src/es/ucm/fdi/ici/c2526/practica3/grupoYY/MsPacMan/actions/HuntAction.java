@@ -1,7 +1,12 @@
 package es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions;
 
+import java.util.List;
+import java.util.Objects;
+
 import es.ucm.fdi.ici.rules.*;
 import jess.Fact;
+import jess.JessException;
+import jess.Value;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
@@ -10,13 +15,15 @@ import pacman.game.Game;
 
 public class HuntAction implements RulesAction {
 
+	private List<MOVE> CandidateMoves;
+
 	public HuntAction() {
 	
 	}
 	
 	@Override
 	public MOVE execute(Game game) {
-		/*
+		
 		GHOST objective = null;
 		double distance = Double.MAX_VALUE;
 
@@ -38,7 +45,7 @@ public class HuntAction implements RulesAction {
 		double bestSpareTime = 0;
 		for(GHOST g : GHOST.values()) {
 			MOVE candidateMove = game.getApproximateNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(g), game.getPacmanLastMoveMade(), DM.PATH);
-			if (!game.isGhostEdible(g) || game.getGhostLairTime(g) > 0 || !pi.getCandidateMoves().contains(candidateMove)) { continue; }
+			if (!game.isGhostEdible(g) || game.getGhostLairTime(g) > 0 || !CandidateMoves.contains(candidateMove)) { continue; }
 			double timeToEatFirst = timeToEat(game, g);
 			double timeLeft = Constants.EDIBLE_TIME;
 			timeLeft = timeLeft - timeToEatFirst;
@@ -55,18 +62,36 @@ public class HuntAction implements RulesAction {
 			}
 		}
 		MOVE candidateMove = game.getApproximateNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(objective), game.getPacmanLastMoveMade(), DM.PATH);
-		if (pi.getCandidateMoves().contains(candidateMove) || pi.getCandidateMoves().size() == 0) {
+		if (CandidateMoves.contains(candidateMove) || CandidateMoves.size() == 0) {
 			return candidateMove;
 		}
 
-		return pi.getCandidateMoves().get(0);*/
-		return MOVE.NEUTRAL;
+		return CandidateMoves.get(0);
 	}
 	
 	@Override
 	public void parseFact(Fact actionFact) {
-		// Nothing to parse
-		
+		try {
+			// Nothing to parse
+			Value v = actionFact.getSlotValue("RIGHTCandidate");
+			if(!Objects.isNull(v) && v.symbolValue(null) == "true")
+				CandidateMoves.addLast(MOVE.RIGHT);
+			
+			v = actionFact.getSlotValue("LEFTCandidate");
+			if(!Objects.isNull(v) && v.symbolValue(null) == "true")
+				CandidateMoves.addLast(MOVE.LEFT);
+			
+			v = actionFact.getSlotValue("UPCandidate");
+			if(!Objects.isNull(v) && v.symbolValue(null) == "true")
+				CandidateMoves.addLast(MOVE.UP);
+			
+			v = actionFact.getSlotValue("DOWNCandidate");
+			if(!Objects.isNull(v) && v.symbolValue(null) == "true")
+				CandidateMoves.addLast(MOVE.DOWN);
+		}
+		catch (JessException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/* this function assumes that the ghost is going to be running away from pacman so it is pessimistic, it may cut cases where it could have
