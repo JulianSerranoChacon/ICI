@@ -54,6 +54,25 @@
 	(slot numEatableGhost (type NUMBER) (default 0))
 	(slot numDangerGhosts (type NUMBER) (default 0))
 	(slot llegoAntesAPPil (type SYMBOL) (default true))
+	
+	(slot goToPillMove (type SYMBOL))
+	
+	(slot RIGHTCandidate (type SYMBOL))
+	(slot LEFTCandidate (type SYMBOL))
+	(slot UPCandidate (type SYMBOL))
+	(slot DOWNCandidate (type SYMBOL))
+	
+	(slot ClosestPpil (type NUMBER))
+	
+	(slot RIGHTMoveToPpill (type SYMBOL))
+	(slot LEFTMoveToPpill (type SYMBOL))
+	(slot UPMoveToPpill (type SYMBOL))
+	(slot DOWNMoveToPpill (type SYMBOL))
+	
+	(slot RIGHTMoveToPoints (type NUMBER))
+	(slot LEFTMoveToPoints (type NUMBER))
+	(slot UPMoveToPoints (type NUMBER))
+	(slot DOWNMoveToPoints (type NUMBER))
 )
     
 ;DEFINITION OF THE ACTION FACT

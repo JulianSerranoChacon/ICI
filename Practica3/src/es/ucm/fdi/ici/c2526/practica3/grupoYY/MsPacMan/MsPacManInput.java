@@ -28,6 +28,7 @@ public class MsPacManInput extends RulesInput {
 	private Map<GHOST, Boolean> ghostEdible;
 	private Map<GHOST, MOVE> ghostLastMove;
 	private List<MOVE> candidateMoves;
+	private Map<MOVE, Boolean> isCandidateMove;
 	private int closestPPill; //Index of the closer PPIL of PacMan
 	private double minDistancePpill; //PacMan distance to Closer PPil
 	private final double dangerDistance = 30; //tentative, subject to change 
@@ -181,6 +182,29 @@ public class MsPacManInput extends RulesInput {
 		facts.add(String.format("(SUE (minDistanceToPacman %d))", SUEdistancePacMan));
 		
 		facts.add(String.format("(SUE (minDistanceToPpill %d))", SUEMinDistanceToPpill));
+		
+		for(MOVE m: MOVE.values()) {
+			if(moveToPpill.get(m))
+				facts.add(String.format("(MSPACMAN (goToPillMove %d))", m));
+		}
+		
+		facts.add(String.format("(MSPACMAN (RIGHTCandidate %d))", isCandidateMove.get(MOVE.RIGHT)));
+		facts.add(String.format("(MSPACMAN (LEFTCandidate %d))", isCandidateMove.get(MOVE.LEFT)));
+		facts.add(String.format("(MSPACMAN (UPCandidate %d))", isCandidateMove.get(MOVE.UP)));
+		facts.add(String.format("(MSPACMAN (DOWNCandidate %d))", isCandidateMove.get(MOVE.DOWN)));
+		
+		facts.add(String.format("(MSPACMAN (RIGHTMoveToPpill %d))", moveToPpill.get(MOVE.RIGHT)));
+		facts.add(String.format("(MSPACMAN (LEFTMoveToPpill %d))", moveToPpill.get(MOVE.LEFT)));
+		facts.add(String.format("(MSPACMAN (UPMoveToPpill %d))", moveToPpill.get(MOVE.UP)));
+		facts.add(String.format("(MSPACMAN (DOWNMoveToPpill %d))", moveToPpill.get(MOVE.DOWN)));
+		
+
+		facts.add(String.format("(MSPACMAN (RIGHTMoveToPoints %d))", moveToPoints.get(MOVE.RIGHT)));
+		facts.add(String.format("(MSPACMAN (LEFTMoveToPoints %d))", moveToPoints.get(MOVE.LEFT)));
+		facts.add(String.format("(MSPACMAN (UPMoveToPoints %d))", moveToPoints.get(MOVE.UP)));
+		facts.add(String.format("(MSPACMAN (DOWNMoveToPoints %d))", moveToPoints.get(MOVE.DOWN)));
+	
+		facts.add(String.format("(MSPACMAN (ClosestPpil %d))", closestPPill));
 		return facts;
 	}
 	
@@ -205,6 +229,9 @@ public class MsPacManInput extends RulesInput {
 		List<MOVE> cM = new ArrayList<>();
 		Set<Integer> auxSet = new HashSet<>();
 		int node = game.getPacmanCurrentNodeIndex();
+		
+		for(MOVE m : MOVE.values())
+			isCandidateMove.put(m,false);
 
 		for (MOVE m : game.getPossibleMoves(game.getPacmanCurrentNodeIndex(), game.getPacmanLastMoveMade())) {
 			// Reset everything
@@ -265,6 +292,10 @@ public class MsPacManInput extends RulesInput {
 		if(candidateMoves.size() > 1) {
 			candidateMoves = filterData();
 		}
+		
+		for(MOVE m: candidateMoves)
+			isCandidateMove.put(m, true);
+		
 	}
 	
 	private List<MOVE> filterData() {
