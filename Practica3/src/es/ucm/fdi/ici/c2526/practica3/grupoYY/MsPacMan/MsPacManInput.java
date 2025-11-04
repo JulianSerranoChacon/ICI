@@ -124,9 +124,7 @@ public class MsPacManInput extends RulesInput {
 		
 		facts.add(String.format("(MSPACMAN (numPpills %n))", game.getNumberOfActivePowerPills()));
 		
-		//TODO: inicializar
 		facts.add(String.format("(MSPACMAN (tiempoDesdePpill %d))", tiempoDesdePpill));
-
 
 		facts.add(String.format("(MSPACMAN (distanceToBLINKY %d))", distanceToBlinky));
 				
@@ -139,20 +137,15 @@ public class MsPacManInput extends RulesInput {
 
 		facts.add(String.format("(MSPACMAN (distanceToSUE %d))", distanceToSUE));
 
-		//TODO: inicializar
-		facts.add(String.format("(MSPACMAN (distanceToEatBLINKY %d))", distanceToEatBlinky));
+		facts.add(String.format("(MSPACMAN (distanceToEatBLINKY %d))", timeToEat(GHOST.BLINKY)));
 		
-		//TODO: inicializar
-		facts.add(String.format("(MSPACMAN (distanceToEatINKY %d))", distanceToEatINKY));
+		facts.add(String.format("(MSPACMAN (distanceToEatINKY %d))", timeToEat(GHOST.INKY)));
 
-		//TODO: inicializar
-		facts.add(String.format("(MSPACMAN (distanceToEatPINKY %d))", distanceToEatPINKY));
+		facts.add(String.format("(MSPACMAN (distanceToEatPINKY %d))", timeToEat(GHOST.PINKY)));
 		
-		//TODO: inicializar
-		facts.add(String.format("(MSPACMAN (distanceToEatSUE %d))", distanceToEatSUE));
+		facts.add(String.format("(MSPACMAN (distanceToEatSUE %d))",  timeToEat(GHOST.SUE)));
 		
-		
-		//TODO: inicializar
+		//TODO: parametizar
 		facts.add(String.format("(MSPACMAN (dangerDistance %d))", dangerDistance));
 		
 		
@@ -391,6 +384,10 @@ public class MsPacManInput extends RulesInput {
 	//method to not repeat the same line
 	double getGhostDistance(GHOST g, DM dm){
 		return game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(g), dm);
+	}
+	
+	private double timeToEat(GHOST ghost) {
+		return 2 * game.getShortestPathDistance(game.getPacManInitialNodeIndex(), game.getGhostCurrentNodeIndex(ghost), game.getPacmanLastMoveMade());
 	}
 
 	// GETTERS // 
