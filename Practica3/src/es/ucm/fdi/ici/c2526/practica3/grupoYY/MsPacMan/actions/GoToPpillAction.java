@@ -64,7 +64,7 @@ public class GoToPpillAction implements RulesAction {
 
 	@Override
 	public String getActionId() {
-		return "Go to PPill Action";
+		return "Go PPill Action";
 	}
 
 }

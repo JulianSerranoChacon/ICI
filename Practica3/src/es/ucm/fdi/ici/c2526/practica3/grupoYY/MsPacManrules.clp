@@ -94,96 +94,64 @@
 (defrule BlinkyNoComestibleYCerca
 	(MSPACMAN (dangerDistanceGhost ?d))
 	?b <- (BLINKY (edible ?be) (minDistancePacMan ?bd)) 
-	(test (?be == false)) and (test (?bd <= ?d))
+	(test (?be false)) (test (?bd <= ?d))
 	=>
-	(assert
-		(
-			 (modify ?b (estoyCercaYsoyPeligroso true))
-		)
-	)
+	 (modify ?b (estoyCercaYsoyPeligroso true))
 )
 ;Añado a Blinky a peligroso si es que este lo es
 (defrule BlinkySeConsideraPeligroso
 	?m <- (MSPACMAN (numDangerGhosts ?n))
 	(BLINKY (estoyCercaYsoyPeligroso true))
 	=>
-	(assert
-		(
-			 (modify ?m (numDangerGhosts (?n + 1)))
-		)
-	)
+	(modify ?m (numDangerGhosts (?n + 1)))
 )
 
 ;INKY
 (defrule InkyNoComestibleYCerca
 	(MSPACMAN (dangerDistanceGhost ?d))
 	?b <- (INKY (edible ?be) (minDistancePacMan ?bd)) 
-	(test (?be == false)) and (test (?bd <= ?d))
+	(test (?be false)) (test (?bd <= ?d))
 	=>
-	(assert
-		(
-			 (modify ?b (estoyCercaYsoyPeligroso true))
-		)
-	)
+	(modify ?b (estoyCercaYsoyPeligroso true))
 )
 ;Añado a Inky a peligroso si es que este lo es
 (defrule InkySeConsideraPeligroso
 	?m <- (MSPACMAN (numDangerGhosts ?n))
 	(INKY (estoyCercaYsoyPeligroso true))
 	=>
-	(assert
-		(
-			 (modify ?m (numDangerGhosts (?n + 1)))
-		)
-	)
+	(modify ?m (numDangerGhosts (?n + 1)))
 )
 
 ;PINKY
 (defrule Pinky
 	(MSPACMAN (dangerDistanceGhost ?d))
 	?b <- (PINKY (edible ?be) (minDistancePacMan ?bd)) 
-	(test (?be == false)) and (test (?bd <= ?d))
+	(test (?be false)) (test (?bd <= ?d))
 	=>
-	(assert
-		(
-			 (modify ?b (estoyCercaYsoyPeligroso true))
-		)
-	)
+	(modify ?b (estoyCercaYsoyPeligroso true))
 )
 ;Añado a Pinky a peligroso si es que este lo es
 (defrule PinkySeConsideraPeligroso
 	?m <- (MSPACMAN (numDangerGhosts ?n))
 	(PINKY (estoyCercaYsoyPeligroso true))
 	=>
-	(assert
-		(
-			 (modify ?m (numDangerGhosts (?n + 1)))
-		)
-	)
+	(modify ?m (numDangerGhosts (?n + 1)))
 )
 
 ;SUE
 (defrule SueNoComestibleYCerca
 	(MSPACMAN (dangerDistanceGhost ?d))
 	?b <- (SUE (edible ?be) (minDistancePacMan ?bd)) 
-	(test (?be == false)) and (test (?bd <= ?d))
+	(test (?be false)) (test (?bd <= ?d))
 	=>
-	(assert
-		(
-			 (modify ?b (estoyCercaYsoyPeligroso true))
-		)
-	)
+	(modify ?b (estoyCercaYsoyPeligroso true))
 )
 ;Añado a Sue a peligroso si es que este lo es
 (defrule SueSeConsideraPeligroso
 	?m <- (MSPACMAN (numDangerGhosts ?n))
 	(SUE (estoyCercaYsoyPeligroso true))
 	=>
-	(assert
-		(
-			 (modify ?m (numDangerGhosts (?n + 1)))
-		)
-	)
+	(modify ?m (numDangerGhosts (?n + 1)))
 )
 
 
@@ -191,14 +159,10 @@
 ;BLINKY
 (defrule BlinkyHaciaPPil
 	(MSPACMAN (minDistancePPill ?md))
-	?b <- (BLINKY (edible ?e) (minDistancePpil ?d))
-	(test ?e == false) and (?bd < ?md)
+	?b <- (BLINKY (edible ?e) (minDistancePpil ?bd))
+	(test (?e false)) (test(?bd < ?md))
 	=>
-	(assert
-		(
-			 (modify ?b (llegoAntesAPPil true))
-		)
-	)
+	(modify ?b (llegoAntesAPPil true))
 )
 
 ;Informo a PacMan de que no llega a la PPIL
@@ -206,23 +170,15 @@
 	?m <- (MSPACMAN (llegoAntesAPPil))
 	(BLINKY (llegoAntesAPPil true))
 	=>
-	(assert
-		(
-			 (modify ?m (llegoAntesAPPil false))
-		)
-	)
+	(modify ?m (llegoAntesAPPil false))
 )
-;INKY
+;INKY 	
 (defrule InkyHaciaPPil
 	(MSPACMAN (minDistancePPill ?md))
-	?b <- (INKY (edible ?e) (minDistancePpil ?d))
-	(test ?e == false) and (?bd < ?md)
+	?b <- (INKY (edible ?e) (minDistancePpil ?bd))
+	(test (?e false)) (test(?bd < ?md))
 	=>
-	(assert
-		(
-			 (modify ?b (llegoAntesAPPil true))
-		)
-	)
+	(modify ?b (llegoAntesAPPil true))
 )
 
 ;Informo a PacMan de que no llega a la PPIL
@@ -230,23 +186,15 @@
 	?m <- (MSPACMAN (llegoAntesAPPil))
 	(INKY (llegoAntesAPPil true))
 	=>
-	(assert
-		(
-			 (modify ?m (llegoAntesAPPil false))
-		)
-	)
+	(modify ?m (llegoAntesAPPil false))
 )
 ;PINKY
 (defrule PinkyHaciaPPil
 	(MSPACMAN (minDistancePPill ?md))
-	?b <- (PINKY (edible ?e) (minDistancePpil ?d))
-	(test ?e == false) and (?bd < ?md)
+	?b <- (PINKY (edible ?e) (minDistancePpil ?bd))
+	(test (?e false)) (test(?bd < ?md))
 	=>
-	(assert
-		(
-			 (modify ?b (llegoAntesAPPil true))
-		)
-	)
+	(modify ?b (llegoAntesAPPil true))
 )
 
 ;Informo a PacMan de que no llega a la PPIL
@@ -254,23 +202,15 @@
 	?m <- (MSPACMAN (llegoAntesAPPil))
 	(PINKY (llegoAntesAPPil true))
 	=>
-	(assert
-		(
-			 (modify ?m (llegoAntesAPPil false))
-		)
-	)
+	(modify ?m (llegoAntesAPPil false))
 )
 ;SUE
 (defrule SueHaciaPPil
 	(MSPACMAN (minDistancePPill ?md))
-	?b <- (SUE (edible ?e) (minDistancePpil ?d))
-	(test ?e == false) and (?bd < ?md)
+	?b <- (SUE (edible ?e) (minDistancePpil ?bd))
+	(test (?e false)) (test(?bd < ?md))
 	=>
-	(assert
-		(
-			 (modify ?b (llegoAntesAPPil true))
-		)
-	)
+	(modify ?b (llegoAntesAPPil true))
 )
 
 ;Informo a PacMan de que no llega a la PPIL
@@ -278,11 +218,7 @@
 	?m <- (MSPACMAN (llegoAntesAPPil))
 	(SUE (llegoAntesAPPil true))
 	=>
-	(assert
-		(
-			 (modify ?m (llegoAntesAPPil false))
-		)
-	)
+	(modify ?m (llegoAntesAPPil false))
 )
 
 
@@ -290,60 +226,44 @@
 ;Blinky
 (defrule BlinkySePuedeComer
 	?m <- (MSPACMAN (numEatableGhost ?n) (distanceToBLINKY ?d) (distanceToEatBLINKY ?de))
-	?b <-(BLINKY (edible ?e))
-	test(?e == true) and (?d <= ?de)
+	(BLINKY (edible ?e))
+	(test(?e true)) (test(?d <= ?de))
 	=>
-	(assert
-		(
-			 (modify ?m (numEatableGhost (?n + 1)))
-		)
-	)
+	(modify ?m (numEatableGhost (?n + 1)))
 )
 ;Inky
 (defrule InkySePuedeComer
 	?m <- (MSPACMAN (numEatableGhost ?n) (distanceToINKY ?d) (distanceToEatINKY ?de))
-	?b <-(INKY (edible ?e))
-	test(?e == true) and (?d <= ?de)
+	(INKY (edible ?e))
+	(test(?e true)) (test(?d <= ?de))
 	=>
-	(assert
-		(
-			 (modify ?m (numEatableGhost (?n + 1)))
-		)
-	)
+	(modify ?m (numEatableGhost (?n + 1)))
 )
 ;Pinky
 (defrule PinkySePuedeComer
 	?m <- (MSPACMAN (numEatableGhost ?n) (distanceToPINKY ?d) (distanceToEatPINKY ?de))
-	?b <-(PINKY (edible ?e))
-	test(?e == true) and (?d <= ?de)
+	(PINKY (edible ?e))
+	(test(?e true)) (test(?d <= ?de))
 	=>
-	(assert
-		(
-			 (modify ?m (numEatableGhost (?n + 1)))
-		)
-	)
+	(modify ?m (numEatableGhost (?n + 1)))
 )
 ;Sue
 (defrule SueSePuedeComer
 	?m <- (MSPACMAN (numEatableGhost ?n) (distanceToSUE ?d) (distanceToEatSUE ?de))
-	?b <-(SUE (edible ?e))
-	test(?e == true) and (?d <= ?de)
+	(SUE (edible ?e))
+	(test(?e true)) (test(?d <= ?de))
 	=>
-	(assert
-		(
-			 (modify ?m (numEatableGhost (?n + 1)))
-		)
-	)
+	(modify ?m (numEatableGhost (?n + 1)))
 )
 
 ;RULES 
 ; Comienzo siempre en ir a comer pills, luego iré viendo que tengo que hacer realmente
 (defrule MSPacManMoveToClosestPill
-	(MSPACMAN (voyGreedy true)) ;(test (?s == true))
+	(MSPACMAN (voyGreedy true)) 
 	=>
 	(assert
 		(
-			ACTION (id Goes to nearest pill action) (info "Soy un greedy") (priority 0)
+			ACTION (id "Goes nearest pill action") (info "Soy un greedy") (priority 0)
 		)
 	)
 )
@@ -354,18 +274,19 @@
 	=>
 	(assert
 		(
-			ACTION (id Greedy Points Action) (info "A por más puntos") (priority 1)
+			ACTION (id "Greedy Points Action") (info "A por más puntos") (priority 1)
 		)
 	)
 )
 
 ; Si solo hay un fantasma cerca de mi huyo de el
 (defrule MSPacManEscapeFromOne
-	MSPACMAN(numDangerGhosts 1)
+	(MSPACMAN (numDangerGhosts ?n)) 
+	(test (= ?n 1))
 	=>
 	(assert
 		(
-			ACTION (id Hide From One Action) (info "Huyo de un fantasma") (priority 2)
+			ACTION (id "Hide From One Action") (info "Huyo de un fantasma") (priority 2)
 		)
 	)
 )
@@ -373,11 +294,11 @@
 ; Si hay muchos fantasmas cerca de mi, intento comerme la PPIL
 
 (defrule MSPacManTryPPIL
-	(MSPACMAN (numDangerGhosts ?n))(test ?n > 1)
+	(MSPACMAN (numDangerGhosts ?n))(test (>?n 1))
 	=>
 	(assert
 		(
-			ACTION (id Go to PPill Action) (info "IntentoAcercarmeAunaPPIL") (priority 3)
+			ACTION (id "Go PPill Action") (info "IntentoAcercarmeAunaPPIL") (priority 3)
 		)
 	)
 )
@@ -386,12 +307,12 @@
 
 (defrule MSPacManEatPPIL
 	(MSPACMAN (llegoAntesAPPil ?b) (numDangerGhosts ?n) (minDistancePPill ?m))
-	(test(?b == true)) and (?n > 1) and (?m <= 50) ;50 puesto a ojo
+	(test(?b true))  (test(> ?n 1))  (test( <= ?m 50)) ;50 puesto a ojo
 
 	=>
 	(assert
 		(
-			ACTION (id Eat PPill Action) (info "Me he comido una PPIl") (priority 4)
+			ACTION (id "Eat PPill Action") (info "Me he comido una PPIl") (priority 4)
 		)
 	)
 )
@@ -399,10 +320,11 @@
 ; Si hay fantasmas comestibles cerca y no hay fantasmas no comestibles cerca me voy a comerlos 
 (defrule MSPacManStartsFollowing
 	(MSPACMAN (numDangerGhosts ?nd) (numEatableGhost ?ne) )
-	(test (?nd == 0)) and (test (?ne > 0))
+	(test (= ?nd 0))  (test (> ?ne 0))
+	=>
 	(assert
 		(
-			ACTION (id Chase Action) (info "voy a comer") (priority 5)
+			ACTION (id "Hunt Action") (info "voy a comer") (priority 5)
 		)
 	)
 )
@@ -410,43 +332,47 @@
 ;Si no hay caminos disponibles intento ir a por la PPIL
 ;FALTA COMPROBAR SI LLEGO A COMERLA
 (defrule MSPacManStartSuicida
-	(MSPACMAN (variosCaminos 0)) 
+	(MSPACMAN (variosCaminos ?v))
+	(test(= ?v 0)) 
 	=>
 	(assert
 		(
-			ACTION (id PPill Suicida) (info "Intento huir a la powerPPil") (priority 6)
+			ACTION (id "PPill Suicida") (info "Intento huir a la powerPPil") (priority 6)
 		)
 	)
 )
 
 ; Si no hay caminos disponibles, ni PPILS pero hay pils accesibles, me muevo a esas pills
 (defrule MSPacManPillsSuicida
-	(MSPACMAN (variosCaminos 0, quedanPPils 0))
+	(MSPACMAN (variosCaminos ?v) (quedanPPils ?p))
+	(test(= ?v 0)) (test(= ?p 0))
 	=>
 	(assert
 		(
-			ACTION (id Go to pills suicida action) (info "A pillar la mayor cantidad de puntos que pueda") (priority 7)
+			ACTION (id "Go pills suicida action") (info "A pillar la mayor cantidad de puntos que pueda") (priority 7)
 		)
 	)
 )
 
 ;Si no hay caminos disponibles, ni PPILS, ni PILLS me muevo random
 (defrule MSPacManRandom
-	(MSPACMAN (variosCaminos 0, quedanPPils 0,hayPillEnCaminoInmediato false)) 
+	(MSPACMAN (variosCaminos ?v) (quedanPPils ?p) (hayPillEnCaminoInmediato ?b)) 
+	(test(= ?v 0)) (test(= ?p 0)) (test(?b false))
 	=>
 	(assert
 		(
-			ACTION (id Random Action) (info "Todo al verde") (priority 8)
+			ACTION (id "Random Action") (info "Todo al verde") (priority 8)
 		)
 	)
 )
 ;Si solo se puede mover a un lado da igual todo lo demás debemos ir a ese camino
 (defrule MSPacManSoloUnMovimiento
-	(MSPACMAN (variosCaminos 1))
+	(MSPACMAN (variosCaminos ?v))
+	(test(= ?v 1))
 	=>
 	(assert
 		(
-			ACTION (id Only move possible action) (info "Solo tengo un movimiento posible") (priority 19)
+			ACTION (id "Only move possible action") (info "Solo tengo un movimiento posible") (priority 19)
 		)
 	)
 )	

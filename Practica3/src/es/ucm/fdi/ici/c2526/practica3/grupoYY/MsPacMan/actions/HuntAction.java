@@ -107,7 +107,7 @@ public class HuntAction implements RulesAction {
 
 	@Override
 	public String getActionId() {
-		return "Chase Action";
+		return "Hunt Action";
 	}
 
 }

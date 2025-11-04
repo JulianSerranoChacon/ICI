@@ -9,6 +9,7 @@ import es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions.GoToPpillAction;
 import es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions.GreedyPointsAction;
 import es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions.HideAction;
 import es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions.HideFromOneAction;
+import es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions.HuntAction;
 import es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions.MorePillsSuicidaAction;
 import es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions.MoveAction;
 import es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions.PPillSuicidaAction;
@@ -42,6 +43,8 @@ public class msPacMan  extends PacmanController  {
 		act = new GreedyPointsAction();
 		map.put(act.getActionId(), act);
 		act = new HideAction();
+		map.put(act.getActionId(), act);
+		act = new HuntAction();
 		map.put(act.getActionId(), act);
 		act = new HideFromOneAction();
 		map.put(act.getActionId(), act);

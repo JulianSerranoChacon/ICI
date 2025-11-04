@@ -62,7 +62,7 @@ public class MorePillsSuicidaAction implements RulesAction {
 	
 	@Override
 	public String getActionId() {
-		return "Go to pills suicida action";
+		return "Go pills suicida action";
 	}
 
 }
