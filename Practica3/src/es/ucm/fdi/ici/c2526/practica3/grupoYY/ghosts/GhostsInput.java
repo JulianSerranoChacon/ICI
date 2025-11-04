@@ -3,7 +3,6 @@ package es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Vector;
 
 import es.ucm.fdi.ici.rules.RulesInput;
@@ -26,7 +25,6 @@ public class GhostsInput extends RulesInput {
 	private Map<GHOST,Double> distanceFromGhostToPacman;
 	private Map<GHOST,Double> distanceFromPacmanToGhost;
 	private Map<GHOST,Map<GHOST,Double>> distanceFromGhostToGhost;
-	private Map<GHOST,GHOST> shieldGhost;
 	private Map<GHOST,Double> ghostToIntersection; 
 	
 	public boolean[] behaviourChanged;
@@ -40,7 +38,6 @@ public class GhostsInput extends RulesInput {
 		distanceFromGhostToPacman = new HashMap<>();
 		distanceFromPacmanToGhost = new HashMap<>();
 		distanceFromGhostToGhost = new HashMap<>();
-		shieldGhost = new HashMap<>();
 		ghostToIntersection = new HashMap<>();
 	}
 	
@@ -58,7 +55,6 @@ public class GhostsInput extends RulesInput {
 		parseDistanceFromGhostToPacman();
 		parseDistanceFromPacManToGhost();
 		parseDistanceGhostToGhost();
-		parseGhostShield();
 		parseGhostToIntersection();
 	}
 	
@@ -86,9 +82,6 @@ public class GhostsInput extends RulesInput {
 		blinkyData += (String.format("(distanceToInky %d)"			, this.distanceFromGhostToGhost.get(GHOST.BLINKY).get(GHOST.INKY).intValue()));
 		blinkyData += (String.format("(distanceToSue %d)"			, this.distanceFromGhostToGhost.get(GHOST.BLINKY).get(GHOST.SUE).intValue()));
 		blinkyData += (String.format("(distanceToIntersection %d)"	, this.ghostToIntersection.get(GHOST.BLINKY).intValue()));
-		if(!Objects.isNull(this.shieldGhost.get(GHOST.BLINKY))) {
-		blinkyData += (String.format("(myShield %s)"				, this.shieldGhost.get(GHOST.BLINKY)));
-		}
 		blinkyData += (String.format("(edibleTime %d)"				, this.game.getGhostEdibleTime(GHOST.BLINKY)));
 		blinkyData += (String.format("(lairTime %d)"				, this.game.getGhostLairTime(GHOST.BLINKY)));
 		
@@ -103,9 +96,6 @@ public class GhostsInput extends RulesInput {
 		inkyData += (String.format("(distanceToPinky %d)"			, this.distanceFromGhostToGhost.get(GHOST.INKY).get(GHOST.PINKY).intValue()));
 		inkyData += (String.format("(distanceToSue %d)"				, this.distanceFromGhostToGhost.get(GHOST.INKY).get(GHOST.SUE).intValue()));
 		inkyData += (String.format("(distanceToIntersection %d)"	, this.ghostToIntersection.get(GHOST.INKY).intValue()));
-		if(!Objects.isNull(this.shieldGhost.get(GHOST.INKY))) {
-		inkyData += (String.format("(myShield %s)"					, this.shieldGhost.get(GHOST.INKY)));
-		}
 		inkyData += (String.format("(edibleTime %d)"				, this.game.getGhostEdibleTime(GHOST.INKY)));
 		inkyData += (String.format("(lairTime %d)"					, this.game.getGhostLairTime(GHOST.INKY)));
 		
@@ -120,9 +110,6 @@ public class GhostsInput extends RulesInput {
 		pinkyData += (String.format("(distanceToInky %d)"			, this.distanceFromGhostToGhost.get(GHOST.PINKY).get(GHOST.INKY).intValue()));
 		pinkyData += (String.format("(distanceToSue %d)"			, this.distanceFromGhostToGhost.get(GHOST.PINKY).get(GHOST.SUE).intValue()));
 		pinkyData += (String.format("(distanceToIntersection %d)"	, this.ghostToIntersection.get(GHOST.PINKY).intValue()));
-		if(!Objects.isNull(this.shieldGhost.get(GHOST.PINKY))) {
-		pinkyData += (String.format("(myShield %s)"					, this.shieldGhost.get(GHOST.PINKY)));
-		}
 		pinkyData += (String.format("(edibleTime %d)"				, this.game.getGhostEdibleTime(GHOST.PINKY)));
 		pinkyData += (String.format("(lairTime %d)"					, this.game.getGhostLairTime(GHOST.PINKY)));
 		
@@ -137,16 +124,11 @@ public class GhostsInput extends RulesInput {
 		sueData += (String.format("(distanceToInky %d)"				, this.distanceFromGhostToGhost.get(GHOST.SUE).get(GHOST.INKY).intValue()));
 		sueData += (String.format("(distanceToPinky %d)"			, this.distanceFromGhostToGhost.get(GHOST.SUE).get(GHOST.PINKY).intValue()));
 		sueData += (String.format("(distanceToIntersection %d)"		, this.ghostToIntersection.get(GHOST.SUE).intValue()));
-		if(!Objects.isNull(this.shieldGhost.get(GHOST.SUE))) {
-		sueData += (String.format("(myShield %s)"					, this.shieldGhost.get(GHOST.SUE)));
-		}
 		sueData += (String.format("(edibleTime %d)"					, this.game.getGhostEdibleTime(GHOST.SUE)));
 		sueData += (String.format("(lairTime %d)"					, this.game.getGhostLairTime(GHOST.SUE)));
 		
 		sueData += ")";
 		facts.add(sueData);
-
-		//facts.add("(ROLES (hunter1 NONE) (hunter2 NONE))");
 
 		return facts;
 	}
@@ -222,47 +204,7 @@ public class GhostsInput extends RulesInput {
 		
 		distancePacmanToIntersection = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), nextIntersectNode, game.getPacmanLastMoveMade());
 	}
-	private void parseGhostShield() {
-		//Compruebo que estoy lo sufcientemente amenzado como para buscar a un escudero
-		for(GHOST ghost : GHOST.values()) {
-			double limit = (game.getGhostEdibleTime(ghost) / 2) + 30;
-			double distance = distanceFromGhostToPacman.get(ghost);
-			int ghostPosition = game.getGhostCurrentNodeIndex(ghost);
-			//MOVE ghostLastmove = game.getGhostLastMoveMade(ghost);
-			
-			if(distance >= limit || game.getGhostLairTime(ghost) <= 0 || !game.isGhostEdible(ghost)) {
-				continue;
-			}
-			
-			//Recorro todos los fantasmas buscando al no comestible más cercano y que no tenga a PacMan en medio
-			//
-			for(GHOST shield : GHOST.values()) {
-				if(shield == ghost || shieldGhost.containsValue(shield) || game.isGhostEdible(shield) || game.getGhostLairTime(shield) > 0) {
-					continue;
-				}
-
-				int shielderPosition = game.getGhostCurrentNodeIndex(shield);
-
-				// calculo la distancia hasta el escudero
-				// el punto de encuentro entre los dos fantasmas, asumiendo que se están moviendo uno hacia el otro respectivamente
-				// viene modelado por x - 1/2d = d donde:
-				// x es la distancia inicial entre los dos fantasmas
-				// d es la distancia que recorre el escudero antes de cruzarse con el fantasma comestible
-				// simplificando tenemos d = 2/3x
-				double distanceToShielder = 2/3 * game.getDistance(shielderPosition, ghostPosition, game.getGhostLastMoveMade(shield), DM.PATH);
-												
-				double distanceToPacman = distanceFromPacmanToGhost.get(ghost);
-				// ajuste asumiendo que el fantasma se esta alejando de pacman, por lo que pacman tiene que recorrer extra
-				// calculamos ese extra basandonos en el limite de la serie geometrica (1/2)^n (n en [1, infinito))
-				distanceToPacman += distanceToPacman;
-
-				if (distanceToShielder < distanceToPacman) {
-					shieldGhost.put(ghost, shield);
-					break;
-				}
-			}
-		}
-	}
+	
 }
 	
 

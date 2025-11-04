@@ -81,6 +81,54 @@
 	(assert (ROLES (hunter1 NONE) (hunter2 NONE)))
 )
 
+(defrule PINKYsavesBLINKY
+	(declare (salience 120))
+	(PINKY 	(edibleTime ?be) (lairTime ?bl) (distanceToBlinky ?dis))
+	?blinkyFact <- (BLINKY (edibleTime ?ie) (lairTime ?il) (myShield ?shield))
+	(MSPACMAN 	(distanceToBlinky ?distanceFromPacman))
+	(test (and 
+		(<= ?il 0) (<= ?bl 0) 		;; They are not in the lair (neither shield nor shieldee)
+		(<= ?be 0) (>= ?ie 0)		;; The shield is not edible and the shielder is edible
+		(< ?distanceFromPacman (+ (/ ?ie 2) 30))	;; And is not orbiting
+		(< ?distanceFromPacman (* (/ ?dis 3) 2))	;; And is reachable by us first
+		(eq ?shield "")							;; And our shield doesnt need to protect anyone else
+	))
+	=>
+		(modify ?blinkyFact (myShield "PINKY"))
+)
+
+(defrule PINKYsavesINKY
+	(declare (salience 120))
+	(PINKY 	(edibleTime ?be) (lairTime ?bl) (distanceToInky ?dis))
+	?inkyFact <- (INKY (edibleTime ?ie) (lairTime ?il) (myShield ?shield))
+	(MSPACMAN 	(distanceToInky ?distanceFromPacman))
+	(test (and 
+		(<= ?il 0) (<= ?bl 0) 		;; They are not in the lair (neither shield nor shieldee)
+		(<= ?be 0) (>= ?ie 0)		;; The shield is not edible and the shielder is edible
+		(< ?distanceFromPacman (+ (/ ?ie 2) 30))	;; And is not orbiting
+		(< ?distanceFromPacman (* (/ ?dis 3) 2))	;; And is reachable by us first
+		(eq ?shield "")							;; And our shield doesnt need to protect anyone else
+	))
+	=>
+		(modify ?inkyFact (myShield "PINKY"))
+)
+
+(defrule PINKYsavesSUE
+	(declare (salience 120))
+	(PINKY 	(edibleTime ?be) (lairTime ?bl) (distanceToSue ?dis))
+	?sueFact <- (SUE (edibleTime ?ie) (lairTime ?il) (myShield ?shield))
+	(MSPACMAN 	(distanceToSue ?distanceFromPacman))
+	(test (and 
+		(<= ?il 0) (<= ?bl 0) 		;; They are not in the lair (neither shield nor shieldee)
+		(<= ?be 0) (>= ?ie 0)		;; The shield is not edible and the shielder is edible
+		(< ?distanceFromPacman (+ (/ ?ie 2) 30))	;; And is not orbiting
+		(< ?distanceFromPacman (* (/ ?dis 3) 2))	;; And is reachable by us first
+		(eq ?shield "")							;; And our shield doesnt need to protect anyone else
+	))
+	=>
+		(modify ?sueFact (myShield "PINKY"))
+)
+
 (defrule BLINKYHunter1
 	(declare (salience 50))
 	(BLINKY (lairTime ?t))
