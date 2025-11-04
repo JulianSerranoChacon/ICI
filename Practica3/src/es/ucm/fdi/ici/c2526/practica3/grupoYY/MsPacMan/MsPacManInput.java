@@ -34,7 +34,7 @@ public class MsPacManInput extends RulesInput {
 	private final double dangerDistance = 30; //tentative, subject to change 
 	private final double hideDistance = 30; //tentative, subject to change 
 	private boolean hayPillCaminoInmediato;
-	private double tiempoDesdePpill; //Time since PacMan eat the PPIL
+	private double tiempoDesdePpill = -1; //Time since PacMan eat the PPIL
 	
 	//Distance from PacMan to the different Ghosts
 	private double distanceToBlinky;
@@ -124,68 +124,68 @@ public class MsPacManInput extends RulesInput {
 		
 		facts.add(String.format("(MSPACMAN (numPpills %n))", game.getNumberOfActivePowerPills()));
 		
-		facts.add(String.format("(MSPACMAN (tiempoDesdePpill %d))", tiempoDesdePpill));
+		facts.add(String.format("(MSPACMAN (tiempoDesdePpill %n))", tiempoDesdePpill));
 
-		facts.add(String.format("(MSPACMAN (distanceToBLINKY %d))", distanceToBlinky));
+		facts.add(String.format("(MSPACMAN (distanceToBLINKY %n))", distanceToBlinky));
 				
 
-		facts.add(String.format("(MSPACMAN (distanceToINKY %d))", distanceToINKY));
+		facts.add(String.format("(MSPACMAN (distanceToINKY %n))", distanceToINKY));
 
 
-		facts.add(String.format("(MSPACMAN (distanceToPINKY %d))", distanceToPINKY));
+		facts.add(String.format("(MSPACMAN (distanceToPINKY %n))", distanceToPINKY));
 		
 
-		facts.add(String.format("(MSPACMAN (distanceToSUE %d))", distanceToSUE));
+		facts.add(String.format("(MSPACMAN (distanceToSUE %n))", distanceToSUE));
 
-		facts.add(String.format("(MSPACMAN (distanceToEatBLINKY %d))", timeToEat(GHOST.BLINKY)));
+		facts.add(String.format("(MSPACMAN (distanceToEatBLINKY %n))", timeToEat(GHOST.BLINKY)));
 		
-		facts.add(String.format("(MSPACMAN (distanceToEatINKY %d))", timeToEat(GHOST.INKY)));
+		facts.add(String.format("(MSPACMAN (distanceToEatINKY %n))", timeToEat(GHOST.INKY)));
 
-		facts.add(String.format("(MSPACMAN (distanceToEatPINKY %d))", timeToEat(GHOST.PINKY)));
+		facts.add(String.format("(MSPACMAN (distanceToEatPINKY %n))", timeToEat(GHOST.PINKY)));
 		
-		facts.add(String.format("(MSPACMAN (distanceToEatSUE %d))",  timeToEat(GHOST.SUE)));
+		facts.add(String.format("(MSPACMAN (distanceToEatSUE %n))",  timeToEat(GHOST.SUE)));
 		
 		//TODO: parametizar
-		facts.add(String.format("(MSPACMAN (dangerDistance %d))", dangerDistance));
+		facts.add(String.format("(MSPACMAN (dangerDistance %n))", dangerDistance));
 		
 		
 		//BLINKY
 		facts.add(String.format("(BLINKY (edible %s))", game.isGhostEdible(GHOST.BLINKY)));
 
-		facts.add(String.format("(BLINKY (minDistanceToPacman %d))", BLINKYdistancePacMan));
+		facts.add(String.format("(BLINKY (minDistanceToPacman %n))", BLINKYdistancePacMan));
 		
-		facts.add(String.format("(BLINKY (minDistanceToPpill %d))", BLINKYMinDistanceToPpill));
+		facts.add(String.format("(BLINKY (minDistanceToPpill %n))", BLINKYMinDistanceToPpill));
 		
 		//INKY
 		facts.add(String.format("(INKY (edible %s))", game.isGhostEdible(GHOST.INKY)));
 
-		facts.add(String.format("(INKY (minDistanceToPacman %d))", INKYdistancePacMan));
+		facts.add(String.format("(INKY (minDistanceToPacman %n))", INKYdistancePacMan));
 		
-		facts.add(String.format("(INKY (minDistanceToPpill %d))", INKYMinDistanceToPpill));
+		facts.add(String.format("(INKY (minDistanceToPpill %n))", INKYMinDistanceToPpill));
 
 		//PINKY
 		facts.add(String.format("(PINKY (edible %s))", game.isGhostEdible(GHOST.PINKY)));
 
-		facts.add(String.format("(PINKY (minDistanceToPacman %d))", PINKYdistancePacMan));
+		facts.add(String.format("(PINKY (minDistanceToPacman %n))", PINKYdistancePacMan));
 		
-		facts.add(String.format("(PINKY (minDistanceToPpill %d))", PINKYMinDistanceToPpill));
+		facts.add(String.format("(PINKY (minDistanceToPpill %n))", PINKYMinDistanceToPpill));
 
 		//SUE
 		facts.add(String.format("(SUE (edible %s))", game.isGhostEdible(GHOST.SUE)));
 
-		facts.add(String.format("(SUE (minDistanceToPacman %d))", SUEdistancePacMan));
+		facts.add(String.format("(SUE (minDistanceToPacman %n))", SUEdistancePacMan));
 		
-		facts.add(String.format("(SUE (minDistanceToPpill %d))", SUEMinDistanceToPpill));
+		facts.add(String.format("(SUE (minDistanceToPpill %n))", SUEMinDistanceToPpill));
 		
 		for(MOVE m: MOVE.values()) {
-			if(moveToPpill.get(m))
+			if(moveToPpill.containsValue(m))
 				facts.add(String.format("(MSPACMAN (goToPillMove %s))", m));
 		}
 		
 		facts.add(String.format("(MSPACMAN (RIGHTCandidate %s))", isCandidateMove.get(MOVE.RIGHT)));
 		facts.add(String.format("(MSPACMAN (LEFTCandidate %s))", isCandidateMove.get(MOVE.LEFT)));
 		facts.add(String.format("(MSPACMAN (UPCandidate %s))", isCandidateMove.get(MOVE.UP)));
-		facts.add(String.format("(MSPACMAN (DOWNCandidate %ds))", isCandidateMove.get(MOVE.DOWN)));
+		facts.add(String.format("(MSPACMAN (DOWNCandidate %s))", isCandidateMove.get(MOVE.DOWN)));
 		
 		facts.add(String.format("(MSPACMAN (RIGHTMoveToPpill %s))", moveToPpill.get(MOVE.RIGHT)));
 		facts.add(String.format("(MSPACMAN (LEFTMoveToPpill %s))", moveToPpill.get(MOVE.LEFT)));
@@ -387,7 +387,9 @@ public class MsPacManInput extends RulesInput {
 	}
 	
 	private double timeToEat(GHOST ghost) {
-		return 2 * game.getShortestPathDistance(game.getPacManInitialNodeIndex(), game.getGhostCurrentNodeIndex(ghost), game.getPacmanLastMoveMade());
+		if(game.getGhostLairTime(ghost) <= 0)
+			return 2 * game.getShortestPathDistance(game.getPacManInitialNodeIndex(), game.getGhostCurrentNodeIndex(ghost), game.getPacmanLastMoveMade());
+		return -1;
 	}
 
 	// GETTERS // 
