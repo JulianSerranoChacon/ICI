@@ -50,8 +50,8 @@ public class GhostsInput extends RulesInput {
 	
 		int pacman = game.getPacmanCurrentNodeIndex();
 		this.minPacmanDistancePPill = Double.MAX_VALUE;
-		for(int ppill: game.getPowerPillIndices()) {
-			double distance = game.getDistance(pacman, ppill, DM.PATH);
+		for(int ppill: game.getActivePowerPillsIndices()) {
+			double distance = game.getDistance(pacman, ppill, game.getPacmanLastMoveMade(), DM.PATH);
 			this.minPacmanDistancePPill = Math.min(distance, this.minPacmanDistancePPill);
 		}
 		
@@ -69,8 +69,8 @@ public class GhostsInput extends RulesInput {
 		String pacmanData = "(MSPACMAN ";
 		
 		pacmanData += (String.format("(distanceToBlinky %d)"		, this.distanceFromPacmanToGhost.get(GHOST.BLINKY).intValue()));
-		pacmanData += (String.format("(distanceToPinky %d)"   		, this.distanceFromPacmanToGhost.get(GHOST.INKY).intValue()));
-		pacmanData += (String.format("(distanceToInky %d)"			, this.distanceFromPacmanToGhost.get(GHOST.PINKY).intValue()));
+		pacmanData += (String.format("(distanceToPinky %d)"   		, this.distanceFromPacmanToGhost.get(GHOST.PINKY).intValue()));
+		pacmanData += (String.format("(distanceToInky %d)"			, this.distanceFromPacmanToGhost.get(GHOST.INKY).intValue()));
 		pacmanData += (String.format("(distanceToSue %d)"			, this.distanceFromPacmanToGhost.get(GHOST.SUE).intValue()));
 		pacmanData += (String.format("(closestIntersection %d)"		, (int) this.distancePacmanToIntersection));
 		pacmanData += (String.format("(distanceToClosestPPill %d)"	, (int) this.minPacmanDistancePPill));
@@ -82,8 +82,8 @@ public class GhostsInput extends RulesInput {
 		String blinkyData = "(BLINKY ";
 		
 		blinkyData += (String.format("(distanceToPacman %d)"		, this.distanceFromGhostToPacman.get(GHOST.BLINKY).intValue()));
-		blinkyData += (String.format("(distanceToPinky %d)"   		, this.distanceFromGhostToGhost.get(GHOST.BLINKY).get(GHOST.INKY).intValue()));
-		blinkyData += (String.format("(distanceToInky %d)"			, this.distanceFromGhostToGhost.get(GHOST.BLINKY).get(GHOST.PINKY).intValue()));
+		blinkyData += (String.format("(distanceToPinky %d)"   		, this.distanceFromGhostToGhost.get(GHOST.BLINKY).get(GHOST.PINKY).intValue()));
+		blinkyData += (String.format("(distanceToInky %d)"			, this.distanceFromGhostToGhost.get(GHOST.BLINKY).get(GHOST.INKY).intValue()));
 		blinkyData += (String.format("(distanceToSue %d)"			, this.distanceFromGhostToGhost.get(GHOST.BLINKY).get(GHOST.SUE).intValue()));
 		blinkyData += (String.format("(distanceToIntersection %d)"	, this.ghostToIntersection.get(GHOST.BLINKY).intValue()));
 		if(!Objects.isNull(this.shieldGhost.get(GHOST.BLINKY))) {
@@ -145,6 +145,8 @@ public class GhostsInput extends RulesInput {
 		
 		sueData += ")";
 		facts.add(sueData);
+
+		//facts.add("(ROLES (hunter1 NONE) (hunter2 NONE))");
 
 		return facts;
 	}
