@@ -80,6 +80,7 @@ public class MsPacManInput extends RulesInput {
 		ghostEdible = new HashMap<>();
 		ghostLastMove = new HashMap<>();
 		candidateMoves = new ArrayList<>();
+		isCandidateMove = new HashMap<>();
 		hayPillCaminoInmediato = false;
 		tiempoDesdePpill = -1;
 		distanceToBlinky = getGhostDistance(GHOST.BLINKY, DM.PATH);
