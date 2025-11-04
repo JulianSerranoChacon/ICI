@@ -299,16 +299,16 @@ public class MsPacManInput extends RulesInput {
 	private void setGhostDistanceToPPIL() {
 		for(GHOST g: GHOST.values()) {
 			switch(g) {
-			case GHOST.BLINKY:
+			case BLINKY:
 				BLINKYMinDistanceToPpill = game.getDistance(game.getGhostCurrentNodeIndex(g), closestPPill, DM.PATH);
 				break;
-			case GHOST.INKY:
+			case INKY:
 				INKYMinDistanceToPpill = game.getDistance(game.getGhostCurrentNodeIndex(g), closestPPill, DM.PATH);
 				break;
-			case GHOST.PINKY:
+			case PINKY:
 				PINKYMinDistanceToPpill = game.getDistance(game.getGhostCurrentNodeIndex(g), closestPPill, DM.PATH);
 				break;
-			case GHOST.SUE:
+			case SUE:
 				SUEMinDistanceToPpill = game.getDistance(game.getGhostCurrentNodeIndex(g), closestPPill, DM.PATH);
 				break;
 			}

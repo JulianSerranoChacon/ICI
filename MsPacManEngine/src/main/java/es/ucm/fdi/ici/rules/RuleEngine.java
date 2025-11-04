@@ -73,9 +73,9 @@ public class RuleEngine extends RuleEngineObservable{
 				this.notifyActionFired(actionFact.toStringWithParens(), facts);
 				//end-notify
 				
-				for (String f : facts) {
+				/* for (String f : facts) {
 					System.out.println(f);
-				}
+				} */
 
 				RulesAction gameAction = map.get(actionFact.getSlotValue(RulesAction.ID_SLOT).toString());
 				gameAction.parseFact(actionFact);
