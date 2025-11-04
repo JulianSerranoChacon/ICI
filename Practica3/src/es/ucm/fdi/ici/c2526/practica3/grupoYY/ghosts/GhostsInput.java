@@ -2,12 +2,15 @@ package es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import es.ucm.fdi.ici.rules.RulesInput;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
+import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
 public class GhostsInput extends RulesInput {
@@ -20,7 +23,7 @@ public class GhostsInput extends RulesInput {
 	}
 	
 	private double minPacmanDistancePPill;
-	private double distancePacmanToIntersection;
+	private double pacmanBestNextNode;
 	
 	private Map<GHOST,Double> distanceFromGhostToPacman;
 	private Map<GHOST,Double> distanceFromPacmanToGhost;
@@ -49,7 +52,9 @@ public class GhostsInput extends RulesInput {
 		this.minPacmanDistancePPill = Double.MAX_VALUE;
 		for(int ppill: game.getActivePowerPillsIndices()) {
 			double distance = game.getDistance(pacman, ppill, game.getPacmanLastMoveMade(), DM.PATH);
-			this.minPacmanDistancePPill = Math.min(distance, this.minPacmanDistancePPill);
+			if( this.minPacmanDistancePPill > distance) {
+				this.minPacmanDistancePPill = distance;
+			}
 		}
 		
 		parseDistanceFromGhostToPacman();
@@ -68,7 +73,7 @@ public class GhostsInput extends RulesInput {
 		pacmanData += (String.format("(distanceToPinky %d)"   		, this.distanceFromPacmanToGhost.get(GHOST.PINKY).intValue()));
 		pacmanData += (String.format("(distanceToInky %d)"			, this.distanceFromPacmanToGhost.get(GHOST.INKY).intValue()));
 		pacmanData += (String.format("(distanceToSue %d)"			, this.distanceFromPacmanToGhost.get(GHOST.SUE).intValue()));
-		pacmanData += (String.format("(closestIntersection %d)"		, (int) this.distancePacmanToIntersection));
+		pacmanData += (String.format("(closestIntersection %d)"		, (int) this.pacmanBestNextNode));
 		pacmanData += (String.format("(distanceToClosestPPill %d)"	, (int) this.minPacmanDistancePPill));
 		
 		pacmanData += ")";
@@ -182,27 +187,74 @@ public class GhostsInput extends RulesInput {
 		}
 	}
 	private void parseGhostToIntersection() {
-		 ghostToIntersection =  new HashMap<>();
-		 int nextIntersectNode = 99999;
-		 int nearestDistance = 99999;
-		 int[] juntions =  this.getGame().getJunctionIndices();
-		 for(int i = 0; i < juntions.length;i++) {
-			 int aux = this.getGame().getShortestPathDistance(game.getPacmanCurrentNodeIndex(), i,game.getPacmanLastMoveMade() );
-			 if(aux<nearestDistance) {
-				 nextIntersectNode = i;
-				 nearestDistance = aux;
-			 }
-			 
-		 }
-		 nextIntersectNode =  this.getGame().getClosestNodeIndexFromNodeIndex(nextIntersectNode, juntions, DM.PATH);
-		 
-		 
+		Set<Integer> auxSet = new HashSet<>();
+		Map<Integer, Integer> nodeToPoints = new HashMap<>();
+		int bestNode = -1; double distFromBest = Double.MAX_VALUE;
+		int node = game.getPacmanCurrentNodeIndex();
+
+		for (MOVE m : game.getPossibleMoves(game.getPacmanCurrentNodeIndex(), game.getPacmanLastMoveMade())) {
+			// Reset everything
+			int count = 0;
+			node = game.getNeighbour(game.getPacmanCurrentNodeIndex(), m);
+			MOVE dirToMove = m;
+
+			while (!game.isJunction(node)) {
+
+				// Gather number of pills between our node and the node searching
+				if (game.getPillIndex(node) != -1 && game.isPillStillAvailable(game.getPillIndex(node))) {
+					count++;
+				}
+
+				// If the node is one corner
+				if (game.getNeighbour(node, dirToMove) == -1) {
+					int[] possibleNodes = game.getNeighbouringNodes(node);
+					for (int i : possibleNodes) {
+						if (!auxSet.contains(i) && i != -1) {
+							dirToMove = game.getMoveToMakeToReachDirectNeighbour(node, i);
+							node = i;
+						}
+					}
+				} 
+				else {
+					node = game.getNeighbour(node, dirToMove);
+				}
+				auxSet.add(node);
+			}
+			
+			for(int ppillNode : game.getActivePowerPillsIndices()) {
+				double distFromNode = game.getDistance(node, ppillNode, DM.PATH);
+				if(distFromBest >  distFromNode ) {
+					bestNode = node;
+					distFromBest = distFromNode;
+				}
+			}
+			
+			if (count != 0) {
+				nodeToPoints.put(node, count);
+			}
+		}
+		
+		if(game.getActivePowerPillsIndices().length == 0) {
+			int maxPoints = 0;
+			for(Map.Entry<Integer, Integer> points : nodeToPoints.entrySet()) {
+				if(maxPoints < points.getValue()) {
+					bestNode = points.getKey();
+					maxPoints = points.getValue();
+				}
+			}
+		}
+		
+		//It should always reach a safe value, but we want to be extra safe
+		if(bestNode == -1) {
+			bestNode = game.getPacmanCurrentNodeIndex();
+		}
+		
 		for(GHOST g : GHOST.values()) {
-			double auxDistance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(g), nextIntersectNode, game.getGhostLastMoveMade(g));
+			double auxDistance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(g), bestNode, game.getGhostLastMoveMade(g));
 			ghostToIntersection.put(g, auxDistance);
 		}
 		
-		distancePacmanToIntersection = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), nextIntersectNode, game.getPacmanLastMoveMade());
+		pacmanBestNextNode = bestNode;
 	}
 	
 }
