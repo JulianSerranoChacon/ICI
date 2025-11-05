@@ -453,6 +453,7 @@
 (defrule PINKYSecondNearestToMsPacman
 	(declare (salience 14))
 	(ROLES (hunter1 ?h1) (hunter2 ?h2))
+	(MSPACMAN 	(closestIntersection 	?closestintersection))
 	(test (neq ?h1 NONE))
 	(test (eq ?h2 PINKY))
 	=>
@@ -461,6 +462,7 @@
 			(id PINKYHunter2) 
 			(info "Soy Hunter2") 
 			(extraGhost ?h1) 
+			(intersection ?closestintersection) 
 			(priority 14)
 		)
 	)
