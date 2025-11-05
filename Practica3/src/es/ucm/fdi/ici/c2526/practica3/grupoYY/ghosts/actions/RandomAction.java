@@ -11,7 +11,7 @@ import pacman.game.Game;
 
 public class RandomAction implements RulesAction {
     GHOST ghost;
-    int limitDistance = 50;
+    int limitDistance = 40;
     private Random rnd = new Random();
     
 	public RandomAction( GHOST ghost) {
