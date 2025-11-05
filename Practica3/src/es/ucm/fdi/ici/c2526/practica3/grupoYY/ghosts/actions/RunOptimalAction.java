@@ -22,46 +22,48 @@ public class RunOptimalAction implements RulesAction {
 		if(!game.doesGhostRequireAction(ghost)) 
 			return MOVE.NEUTRAL;
         
-		int nextIntersectNode = 99999;
-		 int nearestDistance = 99999;
-		//Calcule the next junction and the distance to it
-		 int[] juntions =  game.getJunctionIndices();
-		 for(int i = 0; i < juntions.length;i++) {
-			 int aux = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), i,game.getGhostLastMoveMade(ghost) );
+		int nextIntersectNode = Integer.MAX_VALUE;
+		int nearestDistance = Integer.MAX_VALUE;
+		
+		//Calculate the next junction and the distance to it
+		 int[] junctions =  game.getJunctionIndices();
+		 for(int node : junctions) {
+			 int aux = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), node,game.getGhostLastMoveMade(ghost) );
 			 if(aux<nearestDistance) {
-				 nextIntersectNode = i;
+				 nextIntersectNode = node;
 				 nearestDistance = aux;
 			 }
 			 
 		 }
-		//Calcule the paht to this juntion 
-		int[] pathToIntersect = game.getShortestPath(game.getGhostCurrentNodeIndex(ghost), nextIntersectNode);
+		 
+		 
+		//Calculate the path to this junction 
+		int[] pathToIntersect = game.getShortestPath(game.getGhostCurrentNodeIndex(ghost), nextIntersectNode, game.getGhostLastMoveMade(ghost));
 		boolean ghostInMyWay = false;
 		for(int n : pathToIntersect) {
-			for(GHOST g : GHOST.values())if(g != ghost && game.getGhostCurrentNodeIndex(g)==n)  ghostInMyWay = true;
+			for(GHOST g : GHOST.values()) {
+				if(g != ghost && game.getGhostCurrentNodeIndex(g)==n) {
+					ghostInMyWay = true;
+				}
+			}
 		}
 		 
 		if(!ghostInMyWay) {
-		return game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghost),
-        game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH);
+			return game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH);
 		}
 		else {
-			MOVE toPacman =  game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost),
-			        game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH);
+			MOVE toPacman =  game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost),game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH);
 			for(MOVE m : MOVE.values()) {
-				if(m != toPacman &&m != MOVE.NEUTRAL) return m;
+				if(m != toPacman && m != MOVE.NEUTRAL) {
+					return m;
+				}
 			}
-			return MOVE.NEUTRAL;
+			return game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH);
 		}
-        
-       
 	}
 
 	@Override
-	public void parseFact(Fact actionFact) {
-		
-		
-	}
+	public void parseFact(Fact actionFact) {}
 
 	@Override
 	public String getActionId() {

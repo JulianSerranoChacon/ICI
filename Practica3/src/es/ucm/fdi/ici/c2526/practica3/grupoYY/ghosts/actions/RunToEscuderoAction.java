@@ -23,7 +23,7 @@ public class RunToEscuderoAction implements RulesAction {
         if (!game.doesGhostRequireAction(ghost)){
         	return MOVE.NEUTRAL;
         }
-        if(ghost == escudero) return MOVE.NEUTRAL;
+        
         return game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getGhostCurrentNodeIndex(escudero), game.getGhostLastMoveMade(ghost), DM.PATH);
 	}
 	

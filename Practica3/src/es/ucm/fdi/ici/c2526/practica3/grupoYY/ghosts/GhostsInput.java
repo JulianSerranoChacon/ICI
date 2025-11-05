@@ -47,7 +47,8 @@ public class GhostsInput extends RulesInput {
 	@Override
 	public void parseInput() {
 		reset();
-	
+		
+		//Gathers the distance of the closest ppill
 		int pacman = game.getPacmanCurrentNodeIndex();
 		this.minPacmanDistancePPill = Double.MAX_VALUE;
 		for(int ppill: game.getActivePowerPillsIndices()) {
@@ -189,7 +190,7 @@ public class GhostsInput extends RulesInput {
 	private void parseGhostToIntersection() {
 		Set<Integer> auxSet = new HashSet<>();
 		Map<Integer, Integer> nodeToPoints = new HashMap<>();
-		int bestNode = -1; double distFromBest = Double.MAX_VALUE;
+		int bestNode = game.getPacmanCurrentNodeIndex(); double distFromBest = Double.MAX_VALUE;
 		int node = game.getPacmanCurrentNodeIndex();
 
 		for (MOVE m : game.getPossibleMoves(game.getPacmanCurrentNodeIndex(), game.getPacmanLastMoveMade())) {
@@ -223,7 +224,7 @@ public class GhostsInput extends RulesInput {
 			
 			for(int ppillNode : game.getActivePowerPillsIndices()) {
 				double distFromNode = game.getDistance(node, ppillNode, DM.PATH);
-				if(distFromBest >  distFromNode ) {
+				if(distFromBest >  distFromNode  && game.isPowerPillStillAvailable(ppillNode)) {
 					bestNode = node;
 					distFromBest = distFromNode;
 				}
@@ -242,11 +243,6 @@ public class GhostsInput extends RulesInput {
 					maxPoints = points.getValue();
 				}
 			}
-		}
-		
-		//It should always reach a safe value, but we want to be extra safe
-		if(bestNode == -1) {
-			bestNode = game.getPacmanCurrentNodeIndex();
 		}
 		
 		for(GHOST g : GHOST.values()) {
