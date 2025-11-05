@@ -49,36 +49,56 @@ public class GreedyPointsAction implements RulesAction {
 		try {
 
 			Value v = actionFact.getSlotValue("RIGHTCandidate");
-			if(!Objects.isNull(v) && v.symbolValue(null) == "true")
-				CandidateMoves.addLast(MOVE.RIGHT);
+			v = actionFact.getSlotValue("RIGHTCandidate");
+			if(!Objects.isNull(v)) {
+				String value = v.stringValue(null);
+				boolean moveRight = Boolean.getBoolean(value);
+				if(moveRight) {
+					CandidateMoves.addLast(MOVE.RIGHT);	
+				}
+			}
+			
 			
 			v = actionFact.getSlotValue("LEFTCandidate");
-			if(!Objects.isNull(v) && v.symbolValue(null) == "true")
-				CandidateMoves.addLast(MOVE.LEFT);
-			
+			if(!Objects.isNull(v)) {
+				String value = v.stringValue(null);
+				boolean moveLeft = Boolean.getBoolean(value);
+				if(moveLeft) {
+					CandidateMoves.addLast(MOVE.LEFT);	
+				}
+			}
 			v = actionFact.getSlotValue("UPCandidate");
-			if(!Objects.isNull(v) && v.symbolValue(null) == "true")
-				CandidateMoves.addLast(MOVE.UP);
-			
+			if(!Objects.isNull(v)) {
+				String value = v.stringValue(null);
+				boolean moveUp = Boolean.getBoolean(value);
+				if(moveUp) {
+					CandidateMoves.addLast(MOVE.UP);	
+				}
+			}
 			v = actionFact.getSlotValue("DOWNCandidate");
-			if(!Objects.isNull(v) && v.symbolValue(null) == "true")
-				CandidateMoves.addLast(MOVE.DOWN);
+			if(!Objects.isNull(v)) {
+				String value = v.stringValue(null);
+				boolean moveDown = Boolean.getBoolean(value);
+				if(moveDown) {
+					CandidateMoves.addLast(MOVE.DOWN);	
+				}
+			}
 			
 			v = actionFact.getSlotValue("RIGHTMoveToPpill");
 			if(!Objects.isNull(v))
-				moveToPpill.put(MOVE.RIGHT, v.symbolValue(null) == "true");
+				moveToPpill.put(MOVE.RIGHT, v.stringValue(null) == "true");
 			
 			v = actionFact.getSlotValue("LEFTMoveToPpill");
 			if(!Objects.isNull(v))
-				moveToPpill.put(MOVE.LEFT, v.symbolValue(null) == "true");
+				moveToPpill.put(MOVE.LEFT, v.stringValue(null) == "true");
 			
 			v = actionFact.getSlotValue("UPMoveToPpill");
 			if(!Objects.isNull(v))
-				moveToPpill.put(MOVE.UP, v.symbolValue(null) == "true");
+				moveToPpill.put(MOVE.UP, v.stringValue(null) == "true");
 			
 			v = actionFact.getSlotValue("DOWNMoveToPpill");
 			if(!Objects.isNull(v))
-				moveToPpill.put(MOVE.DOWN, v.symbolValue(null) == "true");
+				moveToPpill.put(MOVE.DOWN,v.stringValue(null) == "true");
 			
 			v = actionFact.getSlotValue("RIGHTMoveToPoints");
 			if(!Objects.isNull(v))
