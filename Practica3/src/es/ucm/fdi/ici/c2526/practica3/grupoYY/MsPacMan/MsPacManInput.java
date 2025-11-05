@@ -149,26 +149,37 @@ public class MsPacManInput extends RulesInput {
 		facts.add(String.format("(MSPACMAN (dangerDistance %n))", dangerDistance));
 		
 		
+		String BlinkyData = "(BLINKY ";
 		//BLINKY
-		facts.add(String.format("(BLINKY (edible %s))", game.isGhostEdible(GHOST.BLINKY)));
+		BlinkyData += (String.format("(edible %s))", game.isGhostEdible(GHOST.BLINKY)));
 
-		facts.add(String.format("(BLINKY (minDistanceToPacman %n))", BLINKYdistancePacMan));
+		BlinkyData += (String.format("(minDistanceToPacman %n))", BLINKYdistancePacMan));
 		
-		facts.add(String.format("(BLINKY (minDistanceToPpill %n))", BLINKYMinDistanceToPpill));
+		BlinkyData += (String.format("(minDistanceToPpill %n))", BLINKYMinDistanceToPpill));
 		
+		BlinkyData += ")";
+		facts.add(BlinkyData);
+		
+		String InkyData = "(INKY ";
 		//INKY
-		facts.add(String.format("(INKY (edible %s))", game.isGhostEdible(GHOST.INKY)));
+		InkyData += (String.format("(edible %s))", game.isGhostEdible(GHOST.INKY)));
 
-		facts.add(String.format("(INKY (minDistanceToPacman %n))", INKYdistancePacMan));
+		InkyData += (String.format("(minDistanceToPacman %n))", INKYdistancePacMan));
 		
-		facts.add(String.format("(INKY (minDistanceToPpill %n))", INKYMinDistanceToPpill));
+		InkyData += (String.format("(minDistanceToPpill %n))", INKYMinDistanceToPpill));
 
+		InkyData += ")";
+		facts.add(InkyData);
+		
+		String PinkyData = "(PINKY ";
 		//PINKY
-		facts.add(String.format("(PINKY (edible %s))", game.isGhostEdible(GHOST.PINKY)));
+		PinkyData += (String.format("(edible %s))", game.isGhostEdible(GHOST.PINKY)));
 
-		facts.add(String.format("(PINKY (minDistanceToPacman %n))", PINKYdistancePacMan));
+		PinkyData += (String.format("(minDistanceToPacman %n))", PINKYdistancePacMan));
 		
-		facts.add(String.format("(PINKY (minDistanceToPpill %n))", PINKYMinDistanceToPpill));
+		PinkyData += (String.format("(minDistanceToPpill %n))", PINKYMinDistanceToPpill));
+		PinkyData += ")";
+		facts.add(PinkyData);
 
 		//SUE
 		facts.add(String.format("(SUE (edible %s))", game.isGhostEdible(GHOST.SUE)));
