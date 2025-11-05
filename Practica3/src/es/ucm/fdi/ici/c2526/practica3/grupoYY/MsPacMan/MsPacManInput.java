@@ -56,6 +56,10 @@ public class MsPacManInput extends RulesInput {
 	private double PINKYMinDistanceToPpill;
 	private double SUEdistancePacMan;
 	private double SUEMinDistanceToPpill;
+	
+	private int numEateableGhost = 0;
+	private int numDangerGhost = 0;
+	private boolean llegoAntesAPPill = true;
 
 
 	public double getDangerDistance() {

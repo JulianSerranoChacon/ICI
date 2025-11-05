@@ -362,7 +362,7 @@
 		(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
 		(ClosestPpil ?cpp)
 	)
-	(test (>?n 1))
+	(test (> ?n 1))
 	=>
 	(assert
 		(
