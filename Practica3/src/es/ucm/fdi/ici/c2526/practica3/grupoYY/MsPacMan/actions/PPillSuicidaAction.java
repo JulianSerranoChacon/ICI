@@ -36,19 +36,19 @@ public class PPillSuicidaAction implements RulesAction {
 	public void parseFact(Fact actionFact) {
 		// Nothing to parse
 		try {
-			Value v = actionFact.getSlotValue("RIGHTMoveToPpill");
+			Value v = actionFact.getSlotValue("MoveToPpillRight");
 			if(!Objects.isNull(v))
 				moveToPpill.put(MOVE.RIGHT, v.stringValue(null) == "true");
 			
-			v = actionFact.getSlotValue("LEFTMoveToPpill");
+			v = actionFact.getSlotValue("MoveToPpillLeft");
 			if(!Objects.isNull(v))
 				moveToPpill.put(MOVE.LEFT, v.stringValue(null) == "true");
 			
-			v = actionFact.getSlotValue("UPMoveToPpill");
+			v = actionFact.getSlotValue("MoveToPpillUp");
 			if(!Objects.isNull(v))
 				moveToPpill.put(MOVE.UP, v.stringValue(null) == "true");
 			
-			v = actionFact.getSlotValue("DOWNMoveToPpill");
+			v = actionFact.getSlotValue("MoveToPpillDown");
 			if(!Objects.isNull(v))
 				moveToPpill.put(MOVE.DOWN, v.stringValue(null) == "true");
 			

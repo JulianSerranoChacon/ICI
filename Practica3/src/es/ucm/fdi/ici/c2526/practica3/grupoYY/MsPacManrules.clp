@@ -83,7 +83,29 @@
 ;DEFINITION OF THE ACTION FACT
 (deftemplate ACTION
 	(slot id) (slot info (default "")) (slot priority (type NUMBER) ) ; mandatory slots
-	(slot runawaystrategy (type SYMBOL)) ; Extra slot for the runaway action
+
+	(slot CandidateLeft (type SYMBOL)) ; Extra slot for the runaway action
+	(slot CandidateRight (type SYMBOL))
+	(slot CandidateUp (type SYMBOL))
+	(slot CandidateDown (type SYMBOL))
+
+	(slot MoveToPpillLeft (type SYMBOL)) 
+	(slot MoveToPpillRight (type SYMBOL))
+	(slot MoveToPpillUp (type SYMBOL))
+	(slot MoveToPpillDown (type SYMBOL))
+
+	(slot MoveToPointsLeft (type NUMBER)) 
+	(slot MoveToPointsRight (type NUMBER))
+	(slot MoveToPointsUp (type NUMBER))
+	(slot MoveToPointsDown (type NUMBER))
+
+	(slot MoveToNodeLeft (type NUMBER)) 
+	(slot MoveToNodeRight (type NUMBER))
+	(slot MoveToNodeUp (type NUMBER))
+	(slot MoveToNodeDown (type NUMBER))
+
+	(slot closerPpil (type NUMBER))
+
 ) 
 
 
@@ -259,34 +281,74 @@
 ;RULES 
 ; Comienzo siempre en ir a comer pills, luego iré viendo que tengo que hacer realmente
 (defrule MSPacManMoveToClosestPill
-	(MSPACMAN (voyGreedy true)) 
+	( MSPACMAN 
+		(voyGreedy true) 
+		(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
+	) 
 	=>
 	(assert
 		(
-			ACTION (id "Goes nearest pill action") (info "Soy un greedy") (priority 0)
+			ACTION 
+				(id "Goes nearest pill action") 
+				(info "Soy un greedy") 
+				(priority 0)
+				(CandidateLeft ?lc)
+				(CandidateRight ?rc)
+				(CandidateUp ?uc)
+				(CandidateDown ?dc)
 		)
 	)
 )
 
 ; Si hay pills inmediatas voy a por ellas
 (defrule MSPacManGetMorePoints
-	(MSPACMAN (hayPillEnCaminoInmediato true))
+	( MSPACMAN
+		(hayPillEnCaminoInmediato true) 	
+		(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
+		(RIGHTMoveToPpill ?rpp) (LEFTMoveToPpill ?lpp) (UPMoveToPpill ?upp) (DOWNMoveToPpill ?dpp)
+		(RIGHTMoveToPoints ?rp) (LEFTMoveToPoints ?lp) (UPMoveToPoints ?up) (DOWNMoveToPoints ?dp)
+	)
 	=>
 	(assert
 		(
-			ACTION (id "Greedy Points Action") (info "A por más puntos") (priority 1)
+			ACTION 
+				(id "Greedy Points Action") 
+				(info "A por más puntos") 
+				(priority 1)
+				(CandidateLeft ?lc)
+				(CandidateRight ?rc)
+				(CandidateUp ?uc)
+				(CandidateDown ?dc)
+				(MoveToPpillLeft ?lpp)
+				(MoveToPpillRight ?rpp)
+				(MoveToPpillUp ?upp)
+				(MoveToPpillDown ?dpp)
+				(MoveToPointsLeft ?lp)
+				(MoveToPointsRight ?rp)
+				(MoveToPointsUp ?up)
+				(MoveToPointsDown ?dp)
 		)
 	)
 )
 
 ; Si solo hay un fantasma cerca de mi huyo de el
 (defrule MSPacManEscapeFromOne
-	(MSPACMAN (numDangerGhosts ?n)) 
+	( MSPACMAN 
+		(numDangerGhosts ?n)
+		(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
+	) 
 	(test (= ?n 1))
 	=>
 	(assert
 		(
-			ACTION (id "Hide From One Action") (info "Huyo de un fantasma") (priority 2)
+			ACTION 
+				(id "Hide From One Action") 
+				(info "Huyo de un fantasma") 
+				(priority 2)
+				(CandidateLeft ?lc)
+				(CandidateRight ?rc)
+				(CandidateUp ?uc)
+				(CandidateDown ?dc)
 		)
 	)
 )
@@ -294,11 +356,24 @@
 ; Si hay muchos fantasmas cerca de mi, intento comerme la PPIL
 
 (defrule MSPacManTryPPIL
-	(MSPACMAN (numDangerGhosts ?n))(test (>?n 1))
+	( MSPACMAN 
+		(numDangerGhosts ?n)
+		(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
+		(ClosestPpil ?cpp)
+	)
+	(test (>?n 1))
 	=>
 	(assert
 		(
-			ACTION (id "Go PPill Action") (info "IntentoAcercarmeAunaPPIL") (priority 3)
+			ACTION 
+				(id "Go PPill Action") 
+				(info "IntentoAcercarmeAunaPPIL") 
+				(priority 3)
+				(CandidateLeft ?lc)
+				(CandidateRight ?rc)
+				(CandidateUp ?uc)
+				(CandidateDown ?dc)
+				(closerPpil ?cpp)
 		)
 	)
 )
