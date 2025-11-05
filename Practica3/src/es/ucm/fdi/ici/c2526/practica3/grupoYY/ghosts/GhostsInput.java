@@ -145,7 +145,7 @@ public class GhostsInput extends RulesInput {
 		return facts;
 	}
 	private void parsePacmanRequestAction() {
-		if(game.getNeighbouringNodes(game.getPacmanCurrentNodeIndex())>2) pacmanRequestAccion = 1;
+		if(game.getNeighbouringNodes(game.getPacmanCurrentNodeIndex()).length>2) pacmanRequestAccion = 1;
 		else pacmanRequestAccion = 0;
 	}
 	private void parseDistanceFromGhostToPacman() {
