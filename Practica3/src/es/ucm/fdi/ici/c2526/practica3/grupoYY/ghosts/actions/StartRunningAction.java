@@ -28,9 +28,8 @@ public class StartRunningAction implements RulesAction {
                 				game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH);
         
        
-        MOVE moveToReturn = MOVE.NEUTRAL; //Which move should return
-        double minDistance = 10000; //Save the closest distance through PacMan
-        
+        MOVE moveToReturn = game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH); //Which move should return
+        double minDistance = Double.MAX_VALUE; //Save the closest distance through PacMan
         
         //For every possible Move
         for(MOVE mv : possibleMoves) {
@@ -53,10 +52,7 @@ public class StartRunningAction implements RulesAction {
 	}
 
 	@Override
-	public void parseFact(Fact actionFact) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void parseFact(Fact actionFact) {}
 
 	@Override
 	public String getActionId() {
