@@ -31,7 +31,7 @@ public class Hunter2Action implements RulesAction  {
 		//Move that hunter 1 will do to go to pacman
 		MOVE moveHunter1 = game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(),DM.PATH);
 		//Saves return moves
-		MOVE moveToReturn = MOVE.NEUTRAL;
+		MOVE moveToReturn =game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH);
 		
 		//Distances
 		double minDistance = Double.MAX_VALUE;
@@ -46,8 +46,11 @@ public class Hunter2Action implements RulesAction  {
 	    		}
 			}
 		}
-		if(moveToReturn == game.getNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(),game.getGhostLastMoveMade(ghost) ,DM.PATH))
-		return game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(),game.getGhostLastMoveMade(ghost) ,DM.PATH);
+		
+		if(moveToReturn == game.getNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(),game.getGhostLastMoveMade(ghost) ,DM.PATH)) {
+			return game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(),game.getGhostLastMoveMade(ghost) ,DM.PATH);
+		}
+		
 		return moveToReturn;
 	}
 	
