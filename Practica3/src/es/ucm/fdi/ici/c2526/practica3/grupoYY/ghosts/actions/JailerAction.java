@@ -24,7 +24,7 @@ public class JailerAction implements RulesAction{
 		if(!game.doesGhostRequireAction(ghost))
 			return MOVE.NEUTRAL;
 		
-    	MOVE moveToReturn = game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost),targetNode, DM.PATH);
+    	MOVE moveToReturn = game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost),targetNode,game.getGhostLastMoveMade(ghost) ,DM.PATH);
     	
     	return moveToReturn;
 	}

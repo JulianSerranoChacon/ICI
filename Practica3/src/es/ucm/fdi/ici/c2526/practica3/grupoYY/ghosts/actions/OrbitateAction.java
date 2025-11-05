@@ -2,6 +2,7 @@ package es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts.actions;
 
 import es.ucm.fdi.ici.rules.RulesAction;
 import jess.Fact;
+import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
@@ -58,7 +59,7 @@ public class OrbitateAction implements RulesAction {
          	   
             }
             
-            double minor = 100000; //Minor Value
+            double minor = Double.MAX_VALUE; //Minor Value
             int minorIndex = 0; //Index of the minor movement
             boolean canMove = false; //Checks if there is a possible move
             
@@ -72,11 +73,12 @@ public class OrbitateAction implements RulesAction {
          		   }
          	   }
             }
-            if(canMove) return possibleMoves[minorIndex]; //Returns the best Move only if exists
-            //else return Neutral
+            if(canMove) {
+            	return possibleMoves[minorIndex]; //Returns the best Move only if exists
+            }
          }
           
-        return MOVE.NEUTRAL;	
+        return game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH);	
 	}
 
 	@Override
