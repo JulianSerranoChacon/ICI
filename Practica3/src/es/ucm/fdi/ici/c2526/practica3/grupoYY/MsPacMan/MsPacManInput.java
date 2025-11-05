@@ -153,26 +153,33 @@ public class MsPacManInput extends RulesInput {
 				pacmanData += (String.format("(goToPillMove %s)", m.toString()));
 		}
 		
-		pacmanData += (String.format("(RIGHTCandidate %s)", isCandidateMove.get(MOVE.RIGHT)));
-		pacmanData += (String.format("(LEFTCandidate %s)", isCandidateMove.get(MOVE.LEFT)));
-		pacmanData += (String.format("(UPCandidate %s)", isCandidateMove.get(MOVE.UP)));
-		pacmanData += (String.format("(DOWNCandidate %s)", isCandidateMove.get(MOVE.DOWN)));
+		pacmanData += (String.format("(RIGHTCandidate %s)", isCandidateMove.containsKey(MOVE.RIGHT)));
+		pacmanData += (String.format("(LEFTCandidate %s)", isCandidateMove.containsKey(MOVE.LEFT)));
+		pacmanData += (String.format("(UPCandidate %s)", isCandidateMove.containsKey(MOVE.UP)));
+		pacmanData += (String.format("(DOWNCandidate %s)", isCandidateMove.containsKey(MOVE.DOWN)));
 		
-		pacmanData += (String.format("(RIGHTMoveToPpill %s)", moveToPpill.get(MOVE.RIGHT)));
-		pacmanData += (String.format("(LEFTMoveToPpill %s)", moveToPpill.get(MOVE.LEFT)));
-		pacmanData += (String.format("(UPMoveToPpill %s)", moveToPpill.get(MOVE.UP)));
-		pacmanData += (String.format("(DOWNMoveToPpill %s)", moveToPpill.get(MOVE.DOWN)));
+		pacmanData += (String.format("(RIGHTMoveToPpill %s)", moveToPpill.containsKey(MOVE.RIGHT)));
+		pacmanData += (String.format("(LEFTMoveToPpill %s)", moveToPpill.containsKey(MOVE.LEFT)));
+		pacmanData += (String.format("(UPMoveToPpill %s)", moveToPpill.containsKey(MOVE.UP)));
+		pacmanData += (String.format("(DOWNMoveToPpill %s)", moveToPpill.containsKey(MOVE.DOWN)));
 		
-
-		pacmanData += (String.format("(RIGHTMoveToPoints %d)", moveToPoints.get(MOVE.RIGHT)));
-		pacmanData += (String.format("(LEFTMoveToPoints %d)", moveToPoints.get(MOVE.LEFT)));
-		pacmanData += (String.format("(UPMoveToPoints %d)", moveToPoints.get(MOVE.UP)));
-		pacmanData += (String.format("(DOWNMoveToPoints %d)", moveToPoints.get(MOVE.DOWN)));
+		if( moveToPoints.containsKey(MOVE.RIGHT))
+			pacmanData += (String.format("(RIGHTMoveToPoints %d)", moveToPoints.get(MOVE.RIGHT).intValue()));
+		if( moveToPoints.containsKey(MOVE.LEFT))
+			pacmanData += (String.format("(LEFTMoveToPoints %d)", moveToPoints.get(MOVE.LEFT).intValue()));
+		if( moveToPoints.containsKey(MOVE.UP))
+			pacmanData += (String.format("(UPMoveToPoints %d)", moveToPoints.get(MOVE.UP).intValue()));
+		if( moveToPoints.containsKey(MOVE.DOWN))
+			pacmanData += (String.format("(DOWNMoveToPoints %d)", moveToPoints.get(MOVE.DOWN).intValue()));
 		
-		pacmanData += (String.format("(RIGHTMoveToNode %d)", moveToNode.get(MOVE.RIGHT)));
-		pacmanData += (String.format("(LEFTMoveToNode %d)", moveToNode.get(MOVE.LEFT)));
-		pacmanData += (String.format("(UPMoveToNode %d)", moveToNode.get(MOVE.UP)));
-		pacmanData += (String.format("(DOWNMoveToNode %d)", moveToNode.get(MOVE.DOWN)));
+		if(moveToNode.containsKey(MOVE.RIGHT))
+			pacmanData += (String.format("(RIGHTMoveToNode %d)", moveToNode.get(MOVE.RIGHT).intValue()));
+		if(moveToNode.containsKey(MOVE.LEFT))
+			pacmanData += (String.format("(LEFTMoveToNode %d)", moveToNode.get(MOVE.LEFT).intValue()));
+		if(moveToNode.containsKey(MOVE.UP))
+			pacmanData += (String.format("(UPMoveToNode %d)", moveToNode.get(MOVE.UP).intValue()));
+		if(moveToNode.containsKey(MOVE.DOWN))
+			pacmanData += (String.format("(DOWNMoveToNode %d)", moveToNode.get(MOVE.DOWN).intValue()));
 	
 		pacmanData += (String.format("(ClosestPpil %d)", (int) closestPPill));
 		
@@ -248,8 +255,12 @@ public class MsPacManInput extends RulesInput {
 		Set<Integer> auxSet = new HashSet<>();
 		int node = game.getPacmanCurrentNodeIndex();
 		
-		for(MOVE m : MOVE.values())
-			isCandidateMove.put(m,false);
+//		for(MOVE m : MOVE.values()) {
+//			isCandidateMove.put(m,false);
+//			moveToPpill.put(m, false);
+//			moveToPoints.put(m,0);
+//			moveToNode.put(m, 100000);
+//		}
 
 		for (MOVE m : game.getPossibleMoves(game.getPacmanCurrentNodeIndex(), game.getPacmanLastMoveMade())) {
 			// Reset everything
@@ -302,7 +313,9 @@ public class MsPacManInput extends RulesInput {
 			moveToGhost.put(m, ghostInPath);
 			moveToNode.put(m, node);
 			moveToPpill.put(m, pPill);
-			if (count != 0) moveToPoints.put(m, count);
+			if (count != 0) {
+				moveToPoints.put(m, count);
+			}
 		}
 		
 		candidateMoves = cM;
@@ -336,7 +349,7 @@ public class MsPacManInput extends RulesInput {
 	    if (!(game.getNumberOfActivePowerPills() == 0)) {
 	        for (int pill : ppills) {
 	            double aux = game.getDistance(game.getPacmanCurrentNodeIndex(), pill, DM.PATH);
-	            if (aux < minDistancePpill) {
+	            if (aux < minDistancePpill && game.isPowerPillStillAvailable(pill)) {
 	                closestPPill = pill;
 	                minDistancePpill = game.getDistance(game.getPacmanCurrentNodeIndex(), pill, DM.PATH);
 	            }
@@ -397,19 +410,19 @@ public class MsPacManInput extends RulesInput {
 	
 
 	double getPacManDistance(GHOST g, DM dm){
-		return game.getDistance( game.getGhostCurrentNodeIndex(g),game.getPacmanCurrentNodeIndex(), dm);
+		return game.getDistance( game.getGhostCurrentNodeIndex(g),game.getPacmanCurrentNodeIndex(),game.getGhostLastMoveMade(g), dm);
 	}
 	
 	//method to not repeat the same line
 	double getGhostDistance(GHOST g, DM dm){
-		double distance =game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(g), dm);
-		return distance == -1? 10000: distance;
+		double distance =game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(g),game.getGhostLastMoveMade(g), dm);
+		return distance == -1? Integer.MAX_VALUE: distance;
 	}
 	
 	private double timeToEat(GHOST ghost) {
 		if(game.getGhostLairTime(ghost) <= 0)
 			return 2 * game.getShortestPathDistance(game.getPacManInitialNodeIndex(), game.getGhostCurrentNodeIndex(ghost), game.getPacmanLastMoveMade());
-		return 100000;
+		return Integer.MAX_VALUE;
 	}
 
 	// GETTERS // 

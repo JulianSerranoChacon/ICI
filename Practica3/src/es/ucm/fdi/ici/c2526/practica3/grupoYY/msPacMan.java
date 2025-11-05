@@ -66,6 +66,7 @@ public class msPacMan  extends PacmanController  {
 	@Override
     public MOVE getMove(Game game, long timeDue) {
     	RulesInput input = new MsPacManInput(game);
+    	input.parseInput();
     	MsPacManRuleEngine.reset();
     	MsPacManRuleEngine.assertFacts(input.getFacts());
     	MOVE move = MsPacManRuleEngine.run(game);
