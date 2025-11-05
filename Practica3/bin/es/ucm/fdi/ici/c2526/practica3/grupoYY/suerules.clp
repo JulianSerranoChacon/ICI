@@ -380,7 +380,7 @@
 	(MSPACMAN (inCorridor ?c) (distanceToIntersection ?i))
 	(SUE (distanceToIntersection ?d))
 	(test (= ?c 1))
-	(test (<= ?d (?i - 2)))
+	(test (<= ?d (- ?i 2)))
 	=>
 	(assert 
 		(ACTION 
