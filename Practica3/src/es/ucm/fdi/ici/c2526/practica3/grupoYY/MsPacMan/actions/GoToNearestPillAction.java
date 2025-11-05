@@ -96,7 +96,7 @@ public class GoToNearestPillAction implements RulesAction {
 	
 	@Override
 	public String getActionId() {
-		return "Goes nearest pill action";
+		return "Goesnearestpillaction";
 	}
 
 }

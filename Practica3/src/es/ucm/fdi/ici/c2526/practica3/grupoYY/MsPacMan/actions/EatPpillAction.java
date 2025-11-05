@@ -87,7 +87,7 @@ public class EatPpillAction implements RulesAction {
 	
 	@Override
 	public String getActionId() {
-		return "Eat PPill Action";
+		return "EatPPillAction";
 	}
 
 }

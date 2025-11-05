@@ -28,7 +28,7 @@ public class RandomAction implements RulesAction {
 
 	@Override
 	public String getActionId() {
-		return "Random Action";
+		return "RandomAction";
 	}
 
 }

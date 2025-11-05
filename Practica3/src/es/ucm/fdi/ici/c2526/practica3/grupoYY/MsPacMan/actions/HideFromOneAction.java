@@ -90,7 +90,7 @@ public class HideFromOneAction implements RulesAction {
 
 	@Override
 	public String getActionId() {
-		return "Hide From One Action";
+		return "HideFromOneAction";
 	}
 
 }

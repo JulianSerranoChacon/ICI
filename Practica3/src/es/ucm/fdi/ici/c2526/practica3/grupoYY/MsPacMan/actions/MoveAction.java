@@ -69,7 +69,7 @@ public class MoveAction implements RulesAction {
 	
 	@Override
 	public String getActionId() {
-		return "Only move possible action";
+		return "Onlymovepossibleaction";
 	}
 
 }

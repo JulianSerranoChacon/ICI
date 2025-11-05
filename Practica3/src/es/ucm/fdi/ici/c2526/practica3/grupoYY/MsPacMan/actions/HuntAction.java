@@ -127,7 +127,7 @@ public class HuntAction implements RulesAction {
 
 	@Override
 	public String getActionId() {
-		return "Hunt Action";
+		return "HuntAction";
 	}
 
 }

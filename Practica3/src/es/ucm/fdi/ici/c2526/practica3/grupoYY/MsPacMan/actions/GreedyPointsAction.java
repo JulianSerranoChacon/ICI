@@ -123,7 +123,7 @@ public class GreedyPointsAction implements RulesAction {
 
 	@Override
 	public String getActionId() {
-		return "Greedy Points Action";
+		return "GreedyPointsAction";
 	}
 
 }

@@ -60,7 +60,7 @@ public class PPillSuicidaAction implements RulesAction {
 	
 	@Override
 	public String getActionId() {
-		return "PPill Suicida";
+		return "PPillSuicida";
 	}
 
 }
