@@ -377,7 +377,7 @@
 ;; PERSECUCION ;;
 (defrule killPacman 
 	(declare (salience 17))
-	(MSPACMAN (inCorridor ?c distanceToIntersection ?i))
+	(MSPACMAN (inCorridor ?c) (distanceToIntersection ?i))
 	(BLINKY (distanceToIntersection ?d))
 	(test (= ?c 1))
 	(test (<= ?d (?i - 2)))
