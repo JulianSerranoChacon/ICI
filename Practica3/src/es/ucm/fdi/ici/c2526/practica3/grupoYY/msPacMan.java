@@ -17,6 +17,7 @@ import es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions.RandomAction;
 import es.ucm.fdi.ici.rules.RuleEngine;
 import es.ucm.fdi.ici.rules.RulesAction;
 import es.ucm.fdi.ici.rules.RulesInput;
+import es.ucm.fdi.ici.rules.observers.ConsoleRuleEngineObserver;
 import pacman.controllers.PacmanController;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
@@ -57,7 +58,11 @@ public class msPacMan  extends PacmanController  {
 		map.put(act11.getActionId(), act11);
 
 		String rulesFile = String.format("%s%srules.clp", RULES_PATH, "MsPacMan");
-		MsPacManRuleEngine = new RuleEngine("MsPacMan",rulesFile,map);		
+		MsPacManRuleEngine = new RuleEngine("MsPacMan",rulesFile,map);	
+		ConsoleRuleEngineObserver observer = new ConsoleRuleEngineObserver("MsPacMan", true);
+		ConsoleRuleEngineObserver observer1 = new ConsoleRuleEngineObserver("BLINKY", true);
+		MsPacManRuleEngine.addObserver(observer);
+		MsPacManRuleEngine.addObserver(observer1);
 	}
 	
 	@Override

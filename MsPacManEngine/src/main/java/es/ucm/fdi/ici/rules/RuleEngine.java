@@ -50,8 +50,8 @@ public class RuleEngine extends RuleEngineObservable{
 			try {
 					jess.assertString(f);
 			} catch (JessException e) {
-				System.err.println(engineName+" :Exception assserting fact: "+f);
-				e.printStackTrace();
+			//	System.err.println(engineName+" :Exception assserting fact: "+f);
+			//	e.printStackTrace();
 			}
 		}
 	}
@@ -82,11 +82,11 @@ public class RuleEngine extends RuleEngineObservable{
 				return gameAction.execute(game);
 			}
 		} catch (JessException e) {
-			System.err.println(engineName+" : Jess Exception executing rules");
-			e.printStackTrace();
+			//System.err.println(engineName+" : Jess Exception executing rules");
+			//e.printStackTrace();
 		} catch (Exception e) {
-			System.err.println(engineName+" :Exception executing rules");
-			e.printStackTrace();
+			//System.err.println(engineName+" :Exception executing rules");
+			//e.printStackTrace();
 		}
 		return MOVE.NEUTRAL;
 	}

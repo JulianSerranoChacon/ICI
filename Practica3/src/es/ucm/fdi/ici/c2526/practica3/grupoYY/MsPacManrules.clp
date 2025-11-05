@@ -35,7 +35,7 @@
  	(slot voyGreedy (type SYMBOL) (default true)) 
 	(slot hayPillEnCaminoInmediato (type SYMBOL) (default false)) 
     (slot minDistancePPill (type NUMBER) (default 100000)) 
-	(slot variosCaminos (type NUMBER) (default 0))
+	(slot variosCaminos (type NUMBER) (default 1))
 	(slot quedanPPils (type SYMBOL) (default false))
 	(slot tiempoDesdePpil (type NUMBER) (default 0))
 
@@ -109,13 +109,13 @@
 
 ) 
 
-
 ;TEMPLATES ASIGNADOS EN EL CLP
 
 ; Compruebo cuantos fantasmas cercanos no comestibles hay
 ;BLINKY
 (defrule BlinkyNoComestibleYCerca
-	(MSPACMAN (dangerDistanceGhost ?d))
+	(declare (salience 50))
+	(MSPACMAN (dangerDistanceGhost ?d) (numDangerGhosts ?n))
 	?b <- (BLINKY (edible ?be) (minDistancePacMan ?bd)) 
 	(test (?be false)) (test (?bd <= ?d))
 	=>
@@ -123,6 +123,7 @@
 )
 ;Añado a Blinky a peligroso si es que este lo es
 (defrule BlinkySeConsideraPeligroso
+	(declare (salience 30))
 	?m <- (MSPACMAN (numDangerGhosts ?n))
 	(BLINKY (estoyCercaYsoyPeligroso true))
 	=>
@@ -131,6 +132,7 @@
 
 ;INKY
 (defrule InkyNoComestibleYCerca
+    (declare (salience 50))
 	(MSPACMAN (dangerDistanceGhost ?d))
 	?b <- (INKY (edible ?be) (minDistancePacMan ?bd)) 
 	(test (?be false)) (test (?bd <= ?d))
@@ -139,6 +141,7 @@
 )
 ;Añado a Inky a peligroso si es que este lo es
 (defrule InkySeConsideraPeligroso
+	(declare (salience 30))
 	?m <- (MSPACMAN (numDangerGhosts ?n))
 	(INKY (estoyCercaYsoyPeligroso true))
 	=>
@@ -147,6 +150,7 @@
 
 ;PINKY
 (defrule Pinky
+	(declare (salience 50))
 	(MSPACMAN (dangerDistanceGhost ?d))
 	?b <- (PINKY (edible ?be) (minDistancePacMan ?bd)) 
 	(test (?be false)) (test (?bd <= ?d))
@@ -155,6 +159,7 @@
 )
 ;Añado a Pinky a peligroso si es que este lo es
 (defrule PinkySeConsideraPeligroso
+	(declare (salience 30))
 	?m <- (MSPACMAN (numDangerGhosts ?n))
 	(PINKY (estoyCercaYsoyPeligroso true))
 	=>
@@ -163,6 +168,7 @@
 
 ;SUE
 (defrule SueNoComestibleYCerca
+	(declare (salience 50))
 	(MSPACMAN (dangerDistanceGhost ?d))
 	?b <- (SUE (edible ?be) (minDistancePacMan ?bd)) 
 	(test (?be false)) (test (?bd <= ?d))
@@ -171,6 +177,7 @@
 )
 ;Añado a Sue a peligroso si es que este lo es
 (defrule SueSeConsideraPeligroso
+	(declare (salience 30))
 	?m <- (MSPACMAN (numDangerGhosts ?n))
 	(SUE (estoyCercaYsoyPeligroso true))
 	=>
@@ -181,6 +188,7 @@
 ;COMPROBACION DE QUIEN LLEGA ANTES A LA PPIL
 ;BLINKY
 (defrule BlinkyHaciaPPil
+	(declare (salience 50))
 	(MSPACMAN (minDistancePPill ?md))
 	?b <- (BLINKY (edible ?e) (minDistancePpil ?bd))
 	(test (?e false)) (test(?bd < ?md))
@@ -190,6 +198,7 @@
 
 ;Informo a PacMan de que no llega a la PPIL
 (defrule BlinkySeComeLaPPil
+	(declare (salience 30))
 	?m <- (MSPACMAN (llegoAntesAPPil))
 	(BLINKY (llegoAntesAPPil true))
 	=>
@@ -197,6 +206,7 @@
 )
 ;INKY 	
 (defrule InkyHaciaPPil
+	(declare (salience 50))
 	(MSPACMAN (minDistancePPill ?md))
 	?b <- (INKY (edible ?e) (minDistancePpil ?bd))
 	(test (?e false)) (test(?bd < ?md))
@@ -206,6 +216,7 @@
 
 ;Informo a PacMan de que no llega a la PPIL
 (defrule InkySeComeLaPPil
+	(declare (salience 30))
 	?m <- (MSPACMAN (llegoAntesAPPil))
 	(INKY (llegoAntesAPPil true))
 	=>
@@ -213,6 +224,7 @@
 )
 ;PINKY
 (defrule PinkyHaciaPPil
+	(declare (salience 50))
 	(MSPACMAN (minDistancePPill ?md))
 	?b <- (PINKY (edible ?e) (minDistancePpil ?bd))
 	(test (?e false)) (test(?bd < ?md))
@@ -222,6 +234,7 @@
 
 ;Informo a PacMan de que no llega a la PPIL
 (defrule PinkySeComeLaPPil
+	(declare (salience 30))
 	?m <- (MSPACMAN (llegoAntesAPPil))
 	(PINKY (llegoAntesAPPil true))
 	=>
@@ -229,6 +242,7 @@
 )
 ;SUE
 (defrule SueHaciaPPil
+	(declare (salience 50))
 	(MSPACMAN (minDistancePPill ?md))
 	?b <- (SUE (edible ?e) (minDistancePpil ?bd))
 	(test (?e false)) (test(?bd < ?md))
@@ -238,6 +252,7 @@
 
 ;Informo a PacMan de que no llega a la PPIL
 (defrule SueSeComeLaPPil
+	(declare (salience 30))
 	?m <- (MSPACMAN (llegoAntesAPPil))
 	(SUE (llegoAntesAPPil true))
 	=>
@@ -280,6 +295,29 @@
 )
 
 ;RULES 
+
+;Si solo se puede mover a un lado da igual todo lo demás debemos ir a ese camino
+(defrule MSPacManSoloUnMovimiento
+	( MSPACMAN 
+		(variosCaminos ?v )
+		(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
+	)
+	 (test (= ?v 1))
+	=>
+	(assert
+		(
+			ACTION 
+				(id Onlymovepossibleaction) 
+				(info "Solo tengo un movimiento posible") 
+				(priority 19)
+				(CandidateLeft ?lc)
+				(CandidateRight ?rc)
+				(CandidateUp ?uc)
+				(CandidateDown ?dc)
+		)
+	)
+)	
+
 ; Comienzo siempre en ir a comer pills, luego iré viendo que tengo que hacer realmente
 (defrule MSPacManMoveToClosestPill
 	( MSPACMAN 
@@ -332,26 +370,27 @@
 	)
 )
 
-; Si solo hay un fantasma cerca de mi huyo de el
+(watch facts)
+
 (defrule MSPacManEscapeFromOne
-	( MSPACMAN 
-		(numDangerGhosts ?n)
-		(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
-	) 
-	(test (= ?n 1))
-	=>
-	(assert
-		(
-			ACTION 
-				(id HideFromOneAction) 
-				(info "Huyo de un fantasma") 
-				(priority 2)
-				(CandidateLeft ?lc)
-				(CandidateRight ?rc)
-				(CandidateUp ?uc)
-				(CandidateDown ?dc)
-		)
-	)
+    ( MSPACMAN 
+        (numDangerGhosts ?n)
+        (RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
+    ) 
+    (test (= ?n 1))
+    =>
+    (assert
+        (
+            ACTION 
+                (id HideFromOneAction) 
+                (info "Huyo de un fantasma") 
+                (priority 2)
+                (CandidateLeft ?lc)
+                (CandidateRight ?rc)
+                (CandidateUp ?uc)
+                (CandidateDown ?dc)
+        )
+    )
 )
 
 ; Si hay muchos fantasmas cerca de mi, intento comerme la PPIL
@@ -496,24 +535,3 @@
 		)
 	)
 )
-;Si solo se puede mover a un lado da igual todo lo demás debemos ir a ese camino
-(defrule MSPacManSoloUnMovimiento
-	( MSPACMAN 
-		(variosCaminos ?v)
-		(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
-	)
-	(test(= ?v 1))
-	=>
-	(assert
-		(
-			ACTION 
-				(id Onlymovepossibleaction) 
-				(info "Solo tengo un movimiento posible") 
-				(priority 19)
-				(CandidateLeft ?lc)
-				(CandidateRight ?rc)
-				(CandidateUp ?uc)
-				(CandidateDown ?dc)
-		)
-	)
-)	

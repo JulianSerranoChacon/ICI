@@ -57,7 +57,7 @@ public class MsPacManInput extends RulesInput {
 	private double SUEdistancePacMan;
 	private double SUEMinDistanceToPpill;
 	
-	private int numEateableGhost = 0;
+	private int numEateableGhosts = 0;
 	private int numDangerGhost = 0;
 	private boolean llegoAntesAPPill = true;
 
@@ -123,7 +123,7 @@ public class MsPacManInput extends RulesInput {
 
 		pacmanData += (String.format("(minDistancePPill %s)", minDistancePpill));
 
-		pacmanData += (String.format("(variosCaminos %d)", candidateMoves.size()));
+		pacmanData += (String.format("(variosCaminos %d)", isCandidateMove.size()));
 
 		
 		pacmanData += (String.format("(quedanPPils %d)", (int)game.getNumberOfActivePowerPills()));
@@ -138,6 +138,9 @@ public class MsPacManInput extends RulesInput {
 
 		pacmanData += (String.format("(distanceToPINKY %d)", (int)distanceToPINKY));
 		
+		pacmanData += (String.format("(numDangerGhosts %d)", this.numDangerGhost));
+		
+		pacmanData += (String.format("(numEatableGhost %d)", this.numEateableGhosts));
 
 		pacmanData += (String.format("(distanceToSUE %d)", (int)distanceToSUE));
 
@@ -241,9 +244,15 @@ public class MsPacManInput extends RulesInput {
 		for (GHOST g : GHOST.values()) {
 			if (game.isGhostEdible(g)) {
 				ghostEdible.put(g, true);
-				tiempoDesdePpill = Constants.EDIBLE_TIME - game.getGhostLairTime(g);
+				tiempoDesdePpill = Constants.EDIBLE_TIME - game.getGhostEdibleTime(g);
+				if(game.getDistance(game.getPacmanCurrentNodeIndex(),game.getGhostCurrentNodeIndex(g), DM.MANHATTAN) <= this.timeToEat(g)) {
+					this.numEateableGhosts++;
+				}
 			} else {
 				ghostEdible.put(g, false);
+				if(game.getDistance(game.getGhostCurrentNodeIndex(g), game.getPacmanCurrentNodeIndex(), DM.MANHATTAN) <= this.dangerDistance) {
+					this.numDangerGhost++;
+				}
 			}
 		}
 	}
@@ -428,7 +437,7 @@ public class MsPacManInput extends RulesInput {
 	
 	private double timeToEat(GHOST ghost) {
 		if(game.getGhostLairTime(ghost) <= 0)
-			return 2 * game.getShortestPathDistance(game.getPacManInitialNodeIndex(), game.getGhostCurrentNodeIndex(ghost), game.getPacmanLastMoveMade());
+			return game.getShortestPathDistance(game.getPacManInitialNodeIndex(), game.getGhostCurrentNodeIndex(ghost), game.getPacmanLastMoveMade()) - 2;
 		return Integer.MAX_VALUE;
 	}
 
