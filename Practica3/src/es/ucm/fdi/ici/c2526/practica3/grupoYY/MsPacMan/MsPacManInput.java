@@ -122,9 +122,9 @@ public class MsPacManInput extends RulesInput {
 		pacmanData += (String.format("(variosCaminos %d)", candidateMoves.size()));
 
 		
-		pacmanData += (String.format("(numPpills %d)", (int)game.getNumberOfActivePowerPills()));
+		pacmanData += (String.format("(quedanPPils %d)", (int)game.getNumberOfActivePowerPills()));
 		
-		pacmanData += (String.format("(tiempoDesdePpill %d)", (int)tiempoDesdePpill));
+		pacmanData += (String.format("(tiempoDesdePpil %d)", (int)tiempoDesdePpill));
 
 		pacmanData += (String.format("(distanceToBLINKY %d)", (int)distanceToBlinky));
 				
@@ -146,11 +146,11 @@ public class MsPacManInput extends RulesInput {
 		pacmanData += (String.format("(distanceToEatSUE %d)",  (int)timeToEat(GHOST.SUE)));
 		
 		//TODO: parametizar
-		pacmanData += (String.format("(dangerDistance %d)", (int)dangerDistance));
+		pacmanData += (String.format("(dangerDistanceGhost %d)", (int)dangerDistance));
 		
 		for(MOVE m: MOVE.values()) {
 			if(moveToPpill.containsValue(m))
-				pacmanData += (String.format("(goToPillMove %s)", m));
+				pacmanData += (String.format("(goToPillMove %s)", m.toString()));
 		}
 		
 		pacmanData += (String.format("(RIGHTCandidate %s)", isCandidateMove.get(MOVE.RIGHT)));
@@ -171,8 +171,8 @@ public class MsPacManInput extends RulesInput {
 		
 		pacmanData += (String.format("(RIGHTMoveToNode %d)", moveToNode.get(MOVE.RIGHT)));
 		pacmanData += (String.format("(LEFTMoveToNode %d)", moveToNode.get(MOVE.LEFT)));
-		pacmanData += (String.format("(UPTMoveToNode %d)", moveToNode.get(MOVE.UP)));
-		pacmanData += (String.format("(DOWNTMoveToNode %d)", moveToNode.get(MOVE.DOWN)));
+		pacmanData += (String.format("(UPMoveToNode %d)", moveToNode.get(MOVE.UP)));
+		pacmanData += (String.format("(DOWNMoveToNode %d)", moveToNode.get(MOVE.DOWN)));
 	
 		pacmanData += (String.format("(ClosestPpil %d)", (int) closestPPill));
 		
@@ -402,13 +402,14 @@ public class MsPacManInput extends RulesInput {
 	
 	//method to not repeat the same line
 	double getGhostDistance(GHOST g, DM dm){
-		return game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(g), dm);
+		double distance =game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(g), dm);
+		return distance == -1? 10000: distance;
 	}
 	
 	private double timeToEat(GHOST ghost) {
 		if(game.getGhostLairTime(ghost) <= 0)
 			return 2 * game.getShortestPathDistance(game.getPacManInitialNodeIndex(), game.getGhostCurrentNodeIndex(ghost), game.getPacmanLastMoveMade());
-		return -1;
+		return 100000;
 	}
 
 	// GETTERS // 

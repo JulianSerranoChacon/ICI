@@ -46,50 +46,46 @@ public class EatPpillAction implements RulesAction {
 	public void parseFact(Fact actionFact){
 		// Nothing to parse
 		try {
-		/*Value v = actionFact.getSlotValue("BLINKYminDistanceToPpill");
-		if(!Objects.isNull(v))
-			distances.put( GHOST.BLINKY,v.intValue(null));
-		
-		v = actionFact.getSlotValue("PINKYminDistanceToPpill");
-			if(!Objects.isNull(v))
-				distances.put( GHOST.PINKY,v.intValue(null));
-		
-		v = actionFact.getSlotValue("INKYminDistanceToPpill");
-		if(!Objects.isNull(v))
-			distances.put( GHOST.INKY,v.intValue(null));
-
-		v = actionFact.getSlotValue("SUEminDistanceToPpill");
-		if(!Objects.isNull(v))
-			distances.put( GHOST.SUE,v.intValue(null));
-		
-		v = actionFact.getSlotValue("MSPACMANminDistancePPill");
-		if(!Objects.isNull(v))
-			pacManDistance = v.intValue(null);
-		
-		v = actionFact.getSlotValue("MSPACMANhayPillCaminoInmediato");
-		if(!Objects.isNull(v))
-			pacManDistance = v.intValue(null);*/
 		
 		Value v = actionFact.getSlotValue("goToPillMove");
-		if(!Objects.isNull(v))
+		if(!Objects.isNull(v)) {
 			moveToPpill = MOVE.valueOf(v.stringValue(null));
+		}
 		
 		v = actionFact.getSlotValue("RIGHTCandidate");
-		if(!Objects.isNull(v) && v.symbolValue(null) == "true")
-			CandidateMoves.addLast(MOVE.RIGHT);
+		if(!Objects.isNull(v)) {
+			String value = v.stringValue(null);
+			boolean moveRight = Boolean.getBoolean(value);
+			if(moveRight) {
+				CandidateMoves.addLast(MOVE.RIGHT);	
+			}
+		}
+		
 		
 		v = actionFact.getSlotValue("LEFTCandidate");
-		if(!Objects.isNull(v) && v.symbolValue(null) == "true")
-			CandidateMoves.addLast(MOVE.LEFT);
-		
+		if(!Objects.isNull(v)) {
+			String value = v.stringValue(null);
+			boolean moveLeft = Boolean.getBoolean(value);
+			if(moveLeft) {
+				CandidateMoves.addLast(MOVE.LEFT);	
+			}
+		}
 		v = actionFact.getSlotValue("UPCandidate");
-		if(!Objects.isNull(v) && v.symbolValue(null) == "true")
-			CandidateMoves.addLast(MOVE.UP);
-		
+		if(!Objects.isNull(v)) {
+			String value = v.stringValue(null);
+			boolean moveUp = Boolean.getBoolean(value);
+			if(moveUp) {
+				CandidateMoves.addLast(MOVE.UP);	
+			}
+		}
 		v = actionFact.getSlotValue("DOWNCandidate");
-		if(!Objects.isNull(v) && v.symbolValue(null) == "true")
-			CandidateMoves.addLast(MOVE.DOWN);
-		
+		if(!Objects.isNull(v)) {
+			String value = v.stringValue(null);
+			boolean moveDown = Boolean.getBoolean(value);
+			if(moveDown) {
+				CandidateMoves.addLast(MOVE.DOWN);	
+			}
+		}
 		}
 		catch (JessException e) {
 			e.printStackTrace();
