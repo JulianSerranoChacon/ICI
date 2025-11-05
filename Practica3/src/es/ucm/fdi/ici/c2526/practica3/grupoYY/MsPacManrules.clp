@@ -312,8 +312,8 @@
 	=>
 	(assert
 		(
-			ACTION GreedyPointsAction
-				(id Goesnearestpillaction) 
+			ACTION
+				(id GreedyPointsAction) 
 				(info "A por más puntos") 
 				(priority 1)
 				(CandidateLeft ?lc)

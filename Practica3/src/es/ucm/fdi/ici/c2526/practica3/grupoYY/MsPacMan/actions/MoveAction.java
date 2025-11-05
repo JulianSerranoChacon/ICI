@@ -1,5 +1,7 @@
 package es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,6 +18,7 @@ public class MoveAction implements RulesAction {
 	private List<MOVE> CandidateMoves;
 	public MoveAction() {
 
+		CandidateMoves = new ArrayList<>();
 	}
 	
 	@Override

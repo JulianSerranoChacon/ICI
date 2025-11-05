@@ -1,5 +1,7 @@
 package es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,6 +20,7 @@ public class HideFromOneAction implements RulesAction {
 
 	public HideFromOneAction() {
 
+		CandidateMoves = new ArrayList<>();
 	}
 	
 	@Override

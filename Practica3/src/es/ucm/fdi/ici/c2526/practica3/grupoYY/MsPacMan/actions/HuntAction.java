@@ -1,5 +1,6 @@
 package es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,7 +19,7 @@ public class HuntAction implements RulesAction {
 	private List<MOVE> CandidateMoves;
 
 	public HuntAction() {
-	
+		CandidateMoves = new ArrayList<>();
 	}
 	
 	@Override

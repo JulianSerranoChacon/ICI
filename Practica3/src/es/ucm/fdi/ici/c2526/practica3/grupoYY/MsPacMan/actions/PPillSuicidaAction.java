@@ -1,5 +1,7 @@
 package es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Map.Entry;
@@ -16,7 +18,7 @@ public class PPillSuicidaAction implements RulesAction {
 	private Map<MOVE, Boolean> moveToPpill;
 	
 	public PPillSuicidaAction() {
-		
+		moveToPpill = new HashMap<>();
 	}
 	
 	//Sabemos que tiene que haber una Ppill

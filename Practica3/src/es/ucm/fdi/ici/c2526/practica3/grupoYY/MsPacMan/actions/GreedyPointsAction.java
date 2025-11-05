@@ -1,5 +1,7 @@
 package es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -18,7 +20,9 @@ public class GreedyPointsAction implements RulesAction {
 	private Map<MOVE, Integer> moveToPoints;
 
 	public GreedyPointsAction() {
-
+		CandidateMoves = new ArrayList<>();
+		moveToPpill = new HashMap<>();
+		moveToPoints = new HashMap<>();
 	}
 	
 	@Override

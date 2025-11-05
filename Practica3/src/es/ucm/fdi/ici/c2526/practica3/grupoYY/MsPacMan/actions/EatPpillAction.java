@@ -1,5 +1,6 @@
 package es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,6 +16,7 @@ public class EatPpillAction implements RulesAction {
 	MOVE moveToPpill;
 	private List<MOVE> CandidateMoves;
 	public EatPpillAction() {
+		CandidateMoves = new ArrayList<>();
 	}
 	
 	@Override

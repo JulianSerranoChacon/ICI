@@ -1,6 +1,7 @@
 package es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions;
 
 import java.util.Objects;
+import java.util.ArrayList;
 import java.util.List;
 
 import es.ucm.fdi.ici.rules.*;
@@ -13,10 +14,10 @@ import pacman.game.Game;
 
 public class GoToPpillAction implements RulesAction {
 	private List<MOVE>CandidateMoves;
-	private int closestPPill;
+	private int closestPPill = 0;
 
 	public GoToPpillAction() {
-
+		CandidateMoves = new ArrayList<>();
 	}
 	
 	//Same code since it is very similar, we have to distinct them
