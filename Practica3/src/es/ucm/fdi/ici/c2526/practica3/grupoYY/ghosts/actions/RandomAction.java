@@ -11,6 +11,7 @@ import pacman.game.Game;
 
 public class RandomAction implements RulesAction {
     GHOST ghost;
+    int limitDistance = 50;
     private Random rnd = new Random();
     
 	public RandomAction( GHOST ghost) {
@@ -23,8 +24,8 @@ public class RandomAction implements RulesAction {
 		if(!game.doesGhostRequireAction(ghost))
 			return MOVE.NEUTRAL;
 		
-		int rand = rnd.nextInt(100);
-    	if(rand < 33) {
+	
+    	if(game.getActivePowerPillsIndices().length==0||limitDistance< game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex())) {
     		return game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(),DM.PATH);
     	}
     	else {

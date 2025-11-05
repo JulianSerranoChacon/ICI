@@ -41,26 +41,26 @@ public class ExecutorTest {
     public static void main(String[] args) {
         Executor executor = new Executor.Builder()
                 .setTickLimit(4000)
-                .setVisual(true)
+                .setVisual(false)
                 .setScaleFactor(2.5)
                 .build();
 
         //PacmanController pacMan = new pacman.controllers.HumanController.HumanController(new pacman.controllers.HumanController.KeyBoardInput());
-        PacmanController pacMan = new es.ucm.fdi.ici.c2425.practica2.grupo08.MsPacMan();
+        PacmanController pacMan = new es.ucm.fdi.ici.c2122.practica1.grupo10.MsPacMan ();
         
         GhostController ghosts = new es.ucm.fdi.ici.c2526.practica3.grupoYY.Ghosts();
         
         
-//        Stats stats[] = executor.runExperiment(pacMan, ghosts, 50, "triaje 1");//last parameter defines speed
-//        for (Stats stat : stats) {
-//            System.out.println( 
-//                stat.toString()
-//            );     
-//        }
+        Stats stats[] = executor.runExperiment(pacMan, ghosts, 60, "triaje 1");//last parameter defines speed
+        for (Stats stat : stats) {
+            System.out.println( 
+                stat.toString()
+            );     
+        }
         
-        System.out.println( 
-            executor.runGame(pacMan, ghosts, 1) //last parameter defines speed
-        );     
+        /*System.out.println( 
+            executor.runGame(pacMan, ghosts, 10) //last parameter defines speed
+        );  */   
     }
 	
 }

@@ -46,7 +46,8 @@ public class Hunter2Action implements RulesAction  {
 	    		}
 			}
 		}
-		
+		if(moveToReturn == game.getNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(),game.getGhostLastMoveMade(ghost) ,DM.PATH))
+		return game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(),game.getGhostLastMoveMade(ghost) ,DM.PATH);
 		return moveToReturn;
 	}
 	
