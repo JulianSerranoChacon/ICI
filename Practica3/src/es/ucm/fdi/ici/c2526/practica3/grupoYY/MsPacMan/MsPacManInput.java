@@ -402,13 +402,14 @@ public class MsPacManInput extends RulesInput {
 	
 	//method to not repeat the same line
 	double getGhostDistance(GHOST g, DM dm){
-		return game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(g), dm);
+		double distance =game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(g), dm);
+		return distance == -1? 10000: distance;
 	}
 	
 	private double timeToEat(GHOST ghost) {
 		if(game.getGhostLairTime(ghost) <= 0)
 			return 2 * game.getShortestPathDistance(game.getPacManInitialNodeIndex(), game.getGhostCurrentNodeIndex(ghost), game.getPacmanLastMoveMade());
-		return -1;
+		return 100000;
 	}
 
 	// GETTERS // 
