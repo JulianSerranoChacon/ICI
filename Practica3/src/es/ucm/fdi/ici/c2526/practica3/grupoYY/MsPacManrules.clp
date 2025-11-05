@@ -105,6 +105,7 @@
 	(slot MoveToNodeDown (type NUMBER))
 
 	(slot closerPpil (type NUMBER))
+	(slot goPillMove (type SYMBOL))
 
 ) 
 
@@ -361,7 +362,7 @@
 		(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
 		(ClosestPpil ?cpp)
 	)
-	(test (>?n 1))
+	(test (> ?n 1))
 	=>
 	(assert
 		(
@@ -381,25 +382,52 @@
 ; Si tengo muchos fantasmas persiguiendome y llego a la powerPill voy a por ella
 
 (defrule MSPacManEatPPIL
-	(MSPACMAN (llegoAntesAPPil ?b) (numDangerGhosts ?n) (minDistancePPill ?m))
-	(test(?b true))  (test(> ?n 1))  (test( <= ?m 50)) ;50 puesto a ojo
+	( MSPACMAN
+	 (llegoAntesAPPil ?b) (numDangerGhosts ?n) (minDistancePPill ?m)
+	 (RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
+	 (goToPillMove ?gpm)
+
+	)
+	(test(?b true))  
+	(test(> ?n 1))  
+	(test( <= ?m 50)) ;50 puesto a ojo
 
 	=>
 	(assert
 		(
-			ACTION (id "Eat PPill Action") (info "Me he comido una PPIl") (priority 4)
+			ACTION 
+				(id "Eat PPill Action") 
+				(info "Me he comido una PPIl") 
+				(priority 4)
+				(CandidateLeft ?lc)
+				(CandidateRight ?rc)
+				(CandidateUp ?uc)
+				(CandidateDown ?dc)
+				(goPillMove ?gpm)
 		)
 	)
 )
 
 ; Si hay fantasmas comestibles cerca y no hay fantasmas no comestibles cerca me voy a comerlos 
 (defrule MSPacManStartsFollowing
-	(MSPACMAN (numDangerGhosts ?nd) (numEatableGhost ?ne) )
-	(test (= ?nd 0))  (test (> ?ne 0))
+	( MSPACMAN 
+		(numDangerGhosts ?nd) 
+		(numEatableGhost ?ne) 
+		(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
+	)
+	(test (= ?nd 0)) 
+	(test (> ?ne 0))
 	=>
 	(assert
 		(
-			ACTION (id "Hunt Action") (info "voy a comer") (priority 5)
+			ACTION 
+				(id "Hunt Action") 
+				(info "voy a comer") 
+				(priority 5)
+				(CandidateLeft ?lc)
+				(CandidateRight ?rc)
+				(CandidateUp ?uc)
+				(CandidateDown ?dc)
 		)
 	)
 )
@@ -407,47 +435,85 @@
 ;Si no hay caminos disponibles intento ir a por la PPIL
 ;FALTA COMPROBAR SI LLEGO A COMERLA
 (defrule MSPacManStartSuicida
-	(MSPACMAN (variosCaminos ?v))
+	( MSPACMAN 
+		(variosCaminos ?v)
+		(RIGHTMoveToPpill ?rpp) (LEFTMoveToPpill ?lpp) (UPMoveToPpill ?upp) (DOWNMoveToPpill ?dpp)
+	)
 	(test(= ?v 0)) 
 	=>
 	(assert
 		(
-			ACTION (id "PPill Suicida") (info "Intento huir a la powerPPil") (priority 6)
+			ACTION 
+				(id "PPill Suicida") 
+				(info "Intento huir a la powerPPil") 
+				(priority 6)
+				(MoveToPpillLeft ?lpp)
+				(MoveToPpillRight ?rpp)
+				(MoveToPpillUp ?upp)
+				(MoveToPpillDown ?dpp)
 		)
 	)
 )
 
 ; Si no hay caminos disponibles, ni PPILS pero hay pils accesibles, me muevo a esas pills
 (defrule MSPacManPillsSuicida
-	(MSPACMAN (variosCaminos ?v) (quedanPPils ?p))
-	(test(= ?v 0)) (test(= ?p 0))
+	( MSPACMAN 
+		(variosCaminos ?v) (quedanPPils ?p)
+		(RIGHTMoveToPoints ?rp) (LEFTMoveToPoints ?lp) (UPMoveToPoints ?up) (DOWNMoveToPoints ?dp)
+	)
+	(test(= ?v 0)) 
+	(test(= ?p 0))
 	=>
 	(assert
 		(
-			ACTION (id "Go pills suicida action") (info "A pillar la mayor cantidad de puntos que pueda") (priority 7)
+			ACTION 
+				(id "Go pills suicida action") 
+				(info "A pillar la mayor cantidad de puntos que pueda") 
+				(priority 7)
+				(MoveToPointsLeft ?lp)
+				(MoveToPointsRight ?rp)
+				(MoveToPointsUp ?up)
+				(MoveToPointsDown ?dp)
 		)
 	)
 )
 
 ;Si no hay caminos disponibles, ni PPILS, ni PILLS me muevo random
 (defrule MSPacManRandom
-	(MSPACMAN (variosCaminos ?v) (quedanPPils ?p) (hayPillEnCaminoInmediato ?b)) 
-	(test(= ?v 0)) (test(= ?p 0)) (test(?b false))
+	( MSPACMAN 
+		(variosCaminos ?v) (quedanPPils ?p) (hayPillEnCaminoInmediato ?b)
+	) 
+	(test(= ?v 0)) 
+	(test(= ?p 0)) 
+	(test(?b false))
 	=>
 	(assert
 		(
-			ACTION (id "Random Action") (info "Todo al verde") (priority 8)
+			ACTION 
+				(id "Random Action") 
+				(info "Todo al verde") 
+				(priority 8)
 		)
 	)
 )
 ;Si solo se puede mover a un lado da igual todo lo demás debemos ir a ese camino
 (defrule MSPacManSoloUnMovimiento
-	(MSPACMAN (variosCaminos ?v))
+	( MSPACMAN 
+		(variosCaminos ?v)
+		(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
+	)
 	(test(= ?v 1))
 	=>
 	(assert
 		(
-			ACTION (id "Only move possible action") (info "Solo tengo un movimiento posible") (priority 19)
+			ACTION 
+				(id "Only move possible action") 
+				(info "Solo tengo un movimiento posible") 
+				(priority 19)
+				(CandidateLeft ?lc)
+				(CandidateRight ?rc)
+				(CandidateUp ?uc)
+				(CandidateDown ?dc)
 		)
 	)
 )	
