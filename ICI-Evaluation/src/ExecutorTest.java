@@ -41,7 +41,7 @@ public class ExecutorTest {
     public static void main(String[] args) {
         Executor executor = new Executor.Builder()
                 .setTickLimit(4000)
-                .setVisual(false)
+                .setVisual(true)
                 .setScaleFactor(2.5)
                 .build();
 
@@ -51,16 +51,16 @@ public class ExecutorTest {
         GhostController ghosts = new es.ucm.fdi.ici.c2526.practica3.grupoYY.Ghosts();
         
         
-        Stats stats[] = executor.runExperiment(pacMan, ghosts, 50, "triaje 1");//last parameter defines speed
-        for (Stats stat : stats) {
-            System.out.println( 
-                stat.toString()
-            );     
-        }
+//        Stats stats[] = executor.runExperiment(pacMan, ghosts, 50, "triaje 1");//last parameter defines speed
+//        for (Stats stat : stats) {
+//            System.out.println( 
+//                stat.toString()
+//            );     
+//        }
         
-        /*System.out.println( 
-            executor.runGame(pacMan, ghosts, 10) //last parameter defines speed
-        );  */   
+        System.out.println( 
+            executor.runGame(pacMan, ghosts, 1) //last parameter defines speed
+        );     
     }
 	
 }
