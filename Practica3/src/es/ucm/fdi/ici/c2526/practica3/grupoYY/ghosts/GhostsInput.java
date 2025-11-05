@@ -47,7 +47,8 @@ public class GhostsInput extends RulesInput {
 	@Override
 	public void parseInput() {
 		reset();
-	
+		
+		//Gathers the distance of the closest ppill
 		int pacman = game.getPacmanCurrentNodeIndex();
 		this.minPacmanDistancePPill = Double.MAX_VALUE;
 		for(int ppill: game.getActivePowerPillsIndices()) {
@@ -223,7 +224,7 @@ public class GhostsInput extends RulesInput {
 			
 			for(int ppillNode : game.getActivePowerPillsIndices()) {
 				double distFromNode = game.getDistance(node, ppillNode, DM.PATH);
-				if(distFromBest >  distFromNode ) {
+				if(distFromBest >  distFromNode  && game.isPowerPillStillAvailable(ppillNode)) {
 					bestNode = node;
 					distFromBest = distFromNode;
 				}
