@@ -24,21 +24,18 @@ public class RandomAction implements RulesAction {
 		if(!game.doesGhostRequireAction(ghost))
 			return MOVE.NEUTRAL;
 		
-	
-    	if(game.getActivePowerPillsIndices().length==0||limitDistance< game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex())) {
+		// If no ppills available or we are to far, we go to PacMan
+    	if(game.getActivePowerPillsIndices().length==0 || limitDistance < game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex())) {
     		return game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(),DM.PATH);
     	}
     	else {
-    		MOVE[] availabeMoves = game.getPossibleMoves(game.getGhostCurrentNodeIndex(ghost));
-        	return availabeMoves[rnd.nextInt(availabeMoves.length)];
+    		MOVE[] availableMoves = game.getPossibleMoves(game.getGhostCurrentNodeIndex(ghost));
+        	return availableMoves[rnd.nextInt(availableMoves.length)];
     	}
 	}
 
 	@Override
-	public void parseFact(Fact actionFact) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void parseFact(Fact actionFact) {}
 
 	@Override
 	public String getActionId() {
