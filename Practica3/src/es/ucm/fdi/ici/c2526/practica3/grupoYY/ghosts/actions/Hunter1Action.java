@@ -27,7 +27,10 @@ public class Hunter1Action implements RulesAction {
 	}
 
 	@Override
-	public void parseFact(Fact actionFact) {}
+	public void parseFact(Fact actionFact) {
+		
+		
+	}
 	
 	@Override
 	public String getActionId() {

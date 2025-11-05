@@ -24,6 +24,9 @@ public class GhostsInput extends RulesInput {
 	
 	private double minPacmanDistancePPill;
 	private double pacmanBestNextNode;
+	private double pacmanDistanceToBestNextNode;
+	
+	private double pacmanRequestAccion;
 	
 	private Map<GHOST,Double> distanceFromGhostToPacman;
 	private Map<GHOST,Double> distanceFromPacmanToGhost;
@@ -42,6 +45,8 @@ public class GhostsInput extends RulesInput {
 		distanceFromPacmanToGhost = new HashMap<>();
 		distanceFromGhostToGhost = new HashMap<>();
 		ghostToIntersection = new HashMap<>();
+		pacmanDistanceToBestNextNode = 100000;
+		pacmanRequestAccion = 0;
 	}
 	
 	@Override
@@ -57,7 +62,7 @@ public class GhostsInput extends RulesInput {
 				this.minPacmanDistancePPill = distance;
 			}
 		}
-		
+		parsePacmanRequestAction();
 		parseDistanceFromGhostToPacman();
 		parseDistanceFromPacManToGhost();
 		parseDistanceGhostToGhost();
@@ -76,7 +81,8 @@ public class GhostsInput extends RulesInput {
 		pacmanData += (String.format("(distanceToSue %f)"			, this.distanceFromPacmanToGhost.get(GHOST.SUE)));
 		pacmanData += (String.format("(closestIntersection %d)"		, (int) this.pacmanBestNextNode));
 		pacmanData += (String.format("(distanceToClosestPPill %d)"	, (int) this.minPacmanDistancePPill));
-		
+		pacmanData += (String.format("(distanceToIntersection %d)" , (int) this.pacmanDistanceToBestNextNode));
+		pacmanData += (String.format("(inCorridor %d)" , (int) this.pacmanRequestAccion));
 		pacmanData += ")";
 		facts.add(pacmanData);
 
@@ -138,7 +144,10 @@ public class GhostsInput extends RulesInput {
 
 		return facts;
 	}
-	
+	private void parsePacmanRequestAction() {
+		if(game.getNeighbouringNodes(game.getPacmanCurrentNodeIndex()).length>2) pacmanRequestAccion = 1;
+		else pacmanRequestAccion = 0;
+	}
 	private void parseDistanceFromGhostToPacman() {
 		distanceFromGhostToPacman = new HashMap<>();
 		for(GHOST g : GHOST.values()) {
@@ -251,6 +260,8 @@ public class GhostsInput extends RulesInput {
 		}
 		
 		pacmanBestNextNode = bestNode;
+		pacmanDistanceToBestNextNode = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), bestNode, game.getPacmanLastMoveMade());
+		
 	}
 	
 }
