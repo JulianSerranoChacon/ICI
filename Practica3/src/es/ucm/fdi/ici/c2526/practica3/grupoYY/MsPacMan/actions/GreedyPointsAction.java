@@ -47,8 +47,8 @@ public class GreedyPointsAction implements RulesAction {
 		// Nothing to parse
 		try {
 
-			Value v = actionFact.getSlotValue("RIGHTCandidate");
-			v = actionFact.getSlotValue("RIGHTCandidate");
+			Value v;
+			v = actionFact.getSlotValue("CandidateRight");
 			if(!Objects.isNull(v)) {
 				String value = v.stringValue(null);
 				boolean moveRight = Boolean.getBoolean(value);
@@ -58,7 +58,7 @@ public class GreedyPointsAction implements RulesAction {
 			}
 			
 			
-			v = actionFact.getSlotValue("LEFTCandidate");
+			v = actionFact.getSlotValue("CandidateLeft");
 			if(!Objects.isNull(v)) {
 				String value = v.stringValue(null);
 				boolean moveLeft = Boolean.getBoolean(value);
@@ -66,7 +66,7 @@ public class GreedyPointsAction implements RulesAction {
 					CandidateMoves.addLast(MOVE.LEFT);	
 				}
 			}
-			v = actionFact.getSlotValue("UPCandidate");
+			v = actionFact.getSlotValue("CandidateUp");
 			if(!Objects.isNull(v)) {
 				String value = v.stringValue(null);
 				boolean moveUp = Boolean.getBoolean(value);
@@ -74,7 +74,7 @@ public class GreedyPointsAction implements RulesAction {
 					CandidateMoves.addLast(MOVE.UP);	
 				}
 			}
-			v = actionFact.getSlotValue("DOWNCandidate");
+			v = actionFact.getSlotValue("CandidateDown");
 			if(!Objects.isNull(v)) {
 				String value = v.stringValue(null);
 				boolean moveDown = Boolean.getBoolean(value);
@@ -83,35 +83,35 @@ public class GreedyPointsAction implements RulesAction {
 				}
 			}
 			
-			v = actionFact.getSlotValue("RIGHTMoveToPpill");
+			v = actionFact.getSlotValue("MoveToPpillRight");
 			if(!Objects.isNull(v))
 				moveToPpill.put(MOVE.RIGHT, Boolean.getBoolean(v.stringValue(null)));
 			
-			v = actionFact.getSlotValue("LEFTMoveToPpill");
+			v = actionFact.getSlotValue("MoveToPpillLeft");
 			if(!Objects.isNull(v))
 				moveToPpill.put(MOVE.LEFT,  Boolean.getBoolean(v.stringValue(null)));
 			
-			v = actionFact.getSlotValue("UPMoveToPpill");
+			v = actionFact.getSlotValue("MoveToPpillUp");
 			if(!Objects.isNull(v))
 				moveToPpill.put(MOVE.UP,  Boolean.getBoolean(v.stringValue(null)));
 			
-			v = actionFact.getSlotValue("DOWNMoveToPpill");
+			v = actionFact.getSlotValue("MoveToPpillDown");
 			if(!Objects.isNull(v))
 				moveToPpill.put(MOVE.DOWN, Boolean.getBoolean(v.stringValue(null)));
 			
-			v = actionFact.getSlotValue("RIGHTMoveToPoints");
+			v = actionFact.getSlotValue("MoveToPointsRight");
 			if(!Objects.isNull(v))
 				moveToPoints.put(MOVE.RIGHT, v.intValue(null));
 			
-			v = actionFact.getSlotValue("LEFTMoveToPoints");
+			v = actionFact.getSlotValue("MoveToPointsLeft");
 			if(!Objects.isNull(v))
 				moveToPoints.put(MOVE.LEFT, v.intValue(null));
 			
-			v = actionFact.getSlotValue("UPMoveToPoints");
+			v = actionFact.getSlotValue("MoveToPointsUp");
 			if(!Objects.isNull(v))
 				moveToPoints.put(MOVE.UP, v.intValue(null));
 			
-			v = actionFact.getSlotValue("DOWNMoveToPoints");
+			v = actionFact.getSlotValue("MoveToPointsDown");
 			if(!Objects.isNull(v))
 				moveToPoints.put(MOVE.DOWN, v.intValue(null));
 			

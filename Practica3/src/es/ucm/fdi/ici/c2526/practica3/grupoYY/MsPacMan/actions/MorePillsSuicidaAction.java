@@ -38,19 +38,19 @@ public class MorePillsSuicidaAction implements RulesAction {
 	public void parseFact(Fact actionFact) {
 		try {
 		// Nothing to parse
-		Value v = actionFact.getSlotValue("RIGHTMoveToPoints");
+		Value v = actionFact.getSlotValue("MoveToPointsRight");
 		if(!Objects.isNull(v))
 			moveToPoints.put(MOVE.RIGHT, v.intValue(null));
 		
-		v = actionFact.getSlotValue("LEFTMoveToPoints");
+		v = actionFact.getSlotValue("MoveToPointsLeft");
 		if(!Objects.isNull(v))
 			moveToPoints.put(MOVE.LEFT, v.intValue(null));
 		
-		v = actionFact.getSlotValue("UPMoveToPoints");
+		v = actionFact.getSlotValue("MoveToPointsUp");
 		if(!Objects.isNull(v))
 			moveToPoints.put(MOVE.UP, v.intValue(null));
 		
-		v = actionFact.getSlotValue("DOWNMoveToPoints");
+		v = actionFact.getSlotValue("MoveToPointsDown");
 		if(!Objects.isNull(v))
 			moveToPoints.put(MOVE.DOWN, v.intValue(null));
 		}catch (JessException e) {

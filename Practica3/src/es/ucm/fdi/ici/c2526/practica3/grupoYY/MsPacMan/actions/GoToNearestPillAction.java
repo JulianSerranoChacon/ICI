@@ -53,8 +53,8 @@ public class GoToNearestPillAction implements RulesAction {
 	public void parseFact(Fact actionFact) {
 		// Nothing to parse
 		try {
-		Value v = actionFact.getSlotValue("RIGHTCandidate");
-		v = actionFact.getSlotValue("RIGHTCandidate");
+		Value v;
+		v = actionFact.getSlotValue("CandidateRight");
 		if(!Objects.isNull(v)) {
 			String value = v.stringValue(null);
 			boolean moveRight = Boolean.getBoolean(value);
@@ -64,7 +64,7 @@ public class GoToNearestPillAction implements RulesAction {
 		}
 		
 		
-		v = actionFact.getSlotValue("LEFTCandidate");
+		v = actionFact.getSlotValue("CandidateLeft");
 		if(!Objects.isNull(v)) {
 			String value = v.stringValue(null);
 			boolean moveLeft = Boolean.getBoolean(value);
@@ -72,7 +72,7 @@ public class GoToNearestPillAction implements RulesAction {
 				CandidateMoves.addLast(MOVE.LEFT);	
 			}
 		}
-		v = actionFact.getSlotValue("UPCandidate");
+		v = actionFact.getSlotValue("CandidateUp");
 		if(!Objects.isNull(v)) {
 			String value = v.stringValue(null);
 			boolean moveUp = Boolean.getBoolean(value);
@@ -80,7 +80,7 @@ public class GoToNearestPillAction implements RulesAction {
 				CandidateMoves.addLast(MOVE.UP);	
 			}
 		}
-		v = actionFact.getSlotValue("DOWNCandidate");
+		v = actionFact.getSlotValue("CandidateDown");
 		if(!Objects.isNull(v)) {
 			String value = v.stringValue(null);
 			boolean moveDown = Boolean.getBoolean(value);

@@ -89,8 +89,8 @@ public class HideAction implements RulesAction {
 	public void parseFact(Fact actionFact) {
 		try {
 			// Nothing to parse
-			Value v = actionFact.getSlotValue("RIGHTCandidate");
-			v = actionFact.getSlotValue("RIGHTCandidate");
+			Value v;
+			v = actionFact.getSlotValue("CandidateRight");
 			if(!Objects.isNull(v)) {
 				String value = v.stringValue(null);
 				boolean moveRight = Boolean.getBoolean(value);
@@ -100,7 +100,7 @@ public class HideAction implements RulesAction {
 			}
 			
 			
-			v = actionFact.getSlotValue("LEFTCandidate");
+			v = actionFact.getSlotValue("CandidateLeft");
 			if(!Objects.isNull(v)) {
 				String value = v.stringValue(null);
 				boolean moveLeft = Boolean.getBoolean(value);
@@ -108,7 +108,7 @@ public class HideAction implements RulesAction {
 					CandidateMoves.addLast(MOVE.LEFT);	
 				}
 			}
-			v = actionFact.getSlotValue("UPCandidate");
+			v = actionFact.getSlotValue("CandidateUp");
 			if(!Objects.isNull(v)) {
 				String value = v.stringValue(null);
 				boolean moveUp = Boolean.getBoolean(value);
@@ -116,7 +116,7 @@ public class HideAction implements RulesAction {
 					CandidateMoves.addLast(MOVE.UP);	
 				}
 			}
-			v = actionFact.getSlotValue("DOWNCandidate");
+			v = actionFact.getSlotValue("CandidateDown");
 			if(!Objects.isNull(v)) {
 				String value = v.stringValue(null);
 				boolean moveDown = Boolean.getBoolean(value);
@@ -124,19 +124,19 @@ public class HideAction implements RulesAction {
 					CandidateMoves.addLast(MOVE.DOWN);	
 				}
 			}
-			v = actionFact.getSlotValue("RIGHTMoveToNode");
+			v = actionFact.getSlotValue("MoveToNodeRight");
 			if(!Objects.isNull(v))
 				MoveToNode.put(MOVE.RIGHT, v.intValue(null));
 			
-			v = actionFact.getSlotValue("LEFTMoveToNode");
+			v = actionFact.getSlotValue("MoveToNodeLeft");
 			if(!Objects.isNull(v))
 				MoveToNode.put(MOVE.LEFT, v.intValue(null));
 			
-			v = actionFact.getSlotValue("UPMoveToNode");
+			v = actionFact.getSlotValue("MoveToNodeUp");
 			if(!Objects.isNull(v))
 				MoveToNode.put(MOVE.UP, v.intValue(null));
 			
-			v = actionFact.getSlotValue("DOWNMoveToNode");
+			v = actionFact.getSlotValue("MoveToNodeDown");
 			if(!Objects.isNull(v))
 				MoveToNode.put(MOVE.DOWN, v.intValue(null));
 		}
