@@ -290,7 +290,7 @@
 	(assert
 		(
 			ACTION 
-				(id Goes nearest pill action) 
+				(id Goesnearestpillaction) 
 				(info "Soy un greedy") 
 				(priority 0)
 				(CandidateLeft ?lc)
@@ -313,7 +313,7 @@
 	(assert
 		(
 			ACTION 
-				(id Greedy Points Action) 
+				(id GreedyPointsAction) 
 				(info "A por más puntos") 
 				(priority 1)
 				(CandidateLeft ?lc)
@@ -343,7 +343,7 @@
 	(assert
 		(
 			ACTION 
-				(id Hide From One Action) 
+				(id HideFromOneAction) 
 				(info "Huyo de un fantasma") 
 				(priority 2)
 				(CandidateLeft ?lc)
@@ -367,7 +367,7 @@
 	(assert
 		(
 			ACTION 
-				(id Go PPill Action) 
+				(id GoPPillAction) 
 				(info "IntentoAcercarmeAunaPPIL") 
 				(priority 3)
 				(CandidateLeft ?lc)
@@ -396,7 +396,7 @@
 	(assert
 		(
 			ACTION 
-				(id Eat PPill Action) 
+				(id EatPPillAction) 
 				(info "Me he comido una PPIl") 
 				(priority 4)
 				(CandidateLeft ?lc)
@@ -421,7 +421,7 @@
 	(assert
 		(
 			ACTION 
-				(id Hunt Action) 
+				(id HuntAction) 
 				(info "voy a comer") 
 				(priority 5)
 				(CandidateLeft ?lc)
@@ -444,7 +444,7 @@
 	(assert
 		(
 			ACTION 
-				(id PPill Suicida) 
+				(id PPillSuicida) 
 				(info "Intento huir a la powerPPil") 
 				(priority 6)
 				(MoveToPpillLeft ?lpp)
@@ -467,7 +467,7 @@
 	(assert
 		(
 			ACTION 
-				(id Go pills suicida action) 
+				(id Gopillssuicidaaction) 
 				(info "A pillar la mayor cantidad de puntos que pueda") 
 				(priority 7)
 				(MoveToPointsLeft ?lp)
@@ -490,7 +490,7 @@
 	(assert
 		(
 			ACTION 
-				(id Random Action) 
+				(id RandomAction) 
 				(info "Todo al verde") 
 				(priority 8)
 		)
@@ -507,7 +507,7 @@
 	(assert
 		(
 			ACTION 
-				(id Only move possible action) 
+				(id Onlymovepossibleaction) 
 				(info "Solo tengo un movimiento posible") 
 				(priority 19)
 				(CandidateLeft ?lc)
