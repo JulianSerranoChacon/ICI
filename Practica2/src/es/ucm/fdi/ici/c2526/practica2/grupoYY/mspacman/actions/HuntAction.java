@@ -2,7 +2,6 @@ package es.ucm.fdi.ici.c2526.practica2.grupoYY.mspacman.actions;
 
 import es.ucm.fdi.ici.Action;
 import es.ucm.fdi.ici.c2526.practica2.grupoYY.PacmanInfo;
-import es.ucm.fdi.ici.c2526.practica2.grupoYY.ghosts.GhostsInput;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;

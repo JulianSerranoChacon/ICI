@@ -1,32 +1,32 @@
 ;FACTS ASSERTED BY GAME INPUT
 (deftemplate BLINKY
-	(slot edible (type SYMBOL))
-	(slot minDistancePacMan (type NUMBER))
-	(slot minDistancePpil (type NUMBER))
+	(slot edible (type SYMBOL)(default false))
+	(slot minDistancePacMan (type NUMBER)(default 100000))
+	(slot minDistancePpil (type NUMBER)(default 100000))
 	(slot estoyCercaYsoyPeligroso (type SYMBOL) (default false))
 	(slot llegoAntesAPPil (type SYMBOL)(default false))
 )
 	
 (deftemplate INKY
-	(slot edible (type SYMBOL))
-	(slot minDistancePacMan (type NUMBER))
-	(slot minDistancePpil (type NUMBER))
+	(slot edible (type SYMBOL)(default false))
+	(slot minDistancePacMan (type NUMBER)(default 100000))
+	(slot minDistancePpil (type NUMBER)(default 100000))
 	(slot estoyCercaYsoyPeligroso (type SYMBOL) (default false)) 
 	(slot llegoAntesAPPil (type SYMBOL)(default false))
 )
 	
 (deftemplate PINKY
-	(slot edible (type SYMBOL))
-	(slot minDistancePacMan (type NUMBER))
-	(slot minDistancePpil (type NUMBER))
+	(slot edible (type SYMBOL)(default false))
+	(slot minDistancePacMan (type NUMBER)(default 100000))
+	(slot minDistancePpil (type NUMBER)(default 100000))
 	(slot estoyCercaYsoyPeligroso (type SYMBOL) (default false)) 
 	(slot llegoAntesAPPil (type SYMBOL)(default false))
 )
 
 (deftemplate SUE
-	(slot edible (type SYMBOL))
-	(slot minDistancePacMan (type NUMBER))
-	(slot minDistancePpil (type NUMBER))
+	(slot edible (type SYMBOL)(default false))
+	(slot minDistancePacMan (type NUMBER)(default 100000))
+	(slot minDistancePpil (type NUMBER)(default 100000))
 	(slot estoyCercaYsoyPeligroso (type SYMBOL) (default false))
 	(slot llegoAntesAPPil (type SYMBOL)(default false))
 )
