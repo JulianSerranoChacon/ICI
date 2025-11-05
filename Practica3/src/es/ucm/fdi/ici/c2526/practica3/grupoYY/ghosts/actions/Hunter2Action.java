@@ -16,7 +16,7 @@ public class Hunter2Action implements RulesAction  {
 	
     private GHOST ghost;
 	private GHOST hunter1;
-    
+    private int targetNode = 0;
 	public Hunter2Action(GHOST ghost) {
 		this.ghost = ghost;
 	}
@@ -25,38 +25,38 @@ public class Hunter2Action implements RulesAction  {
 	public MOVE execute(Game game) {
 		if(!game.doesGhostRequireAction(ghost))
 			return MOVE.NEUTRAL;
-		
-		//Get possible moves of ghost
-		MOVE[] possibleMoves = game.getPossibleMoves(game.getGhostCurrentNodeIndex(ghost), game.getGhostLastMoveMade(ghost));
-		//Move that hunter 1 will do to go to pacman
-		MOVE moveHunter1 = game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(),DM.PATH);
-		//Saves return moves
-		MOVE moveToReturn =game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH);
-		
-		//Distances
-		double minDistance = Double.MAX_VALUE;
-		double distanceBetweenHunters = game.getDistance(game.getGhostCurrentNodeIndex(ghost), game.getGhostCurrentNodeIndex(hunter1), DM.PATH);
-		
-		for(MOVE m : possibleMoves) { 
-			if(minDistance > game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), m)) {
-				//If both hunters are to close, the second hunter must not take the closest Move to PacMan
-				if(distanceBetweenHunters < DISTANCE_LIMIT && m != moveHunter1) {
-    				minDistance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), m);
-    				moveToReturn = m;
-	    		}
+		//En teoria esto evita q compruebe el camino por el que viene pacman si no meter un .oposite al movimiento
+	int[] targetNodeNb = game.getNeighbouringNodes(
+			targetNode, game.getApproximateNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(),
+					targetNode, game.getPacmanLastMoveMade(), DM.PATH));
+		int nearInterNodeIndex = targetNode;
+		int distantToNearInterNode = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), nearInterNodeIndex,
+				game.getGhostLastMoveMade(ghost));
+		int[] nextNodesNb;
+		for(int i = 0; i< targetNodeNb.length;i++) {
+			
+			MOVE MOVEtoNb = game.getNextMoveTowardsTarget(targetNode,targetNodeNb[i],DM.PATH);
+			nextNodesNb = game.getNeighbouringNodes(targetNodeNb[i], MOVEtoNb);
+			while(nextNodesNb.length==1) {
+				nextNodesNb = game.getNeighbouringNodes(nextNodesNb[0], MOVEtoNb);
+			}
+			int aux = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), nextNodesNb[0], game.getGhostLastMoveMade(ghost));
+			if(aux < distantToNearInterNode ) {
+				nearInterNodeIndex = nextNodesNb[0];
+				distantToNearInterNode  = aux;
 			}
 		}
 		
-		if(moveToReturn == game.getNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(),game.getGhostLastMoveMade(ghost) ,DM.PATH)) {
-			return game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(),game.getGhostLastMoveMade(ghost) ,DM.PATH);
-		}
-		
-		return moveToReturn;
+		return game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), nearInterNodeIndex, game.getGhostLastMoveMade(ghost),DM.PATH);
 	}
 	
 	@Override
 	public void parseFact(Fact actionFact) {
 		try {
+			Value target = actionFact.getSlotValue("intersection");
+			if(!Objects.isNull(target)) {
+				targetNode =  target.intValue(null);
+			}
 			Value hunter1Role = actionFact.getSlotValue("extraGhost");
 			if(!Objects.isNull(hunter1Role)) {
 				String strategyValue = hunter1Role.stringValue(null);

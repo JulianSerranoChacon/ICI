@@ -81,8 +81,9 @@ public class GhostsInput extends RulesInput {
 		pacmanData += (String.format("(distanceToSue %f)"			, this.distanceFromPacmanToGhost.get(GHOST.SUE)));
 		pacmanData += (String.format("(closestIntersection %d)"		, (int) this.pacmanBestNextNode));
 		pacmanData += (String.format("(distanceToClosestPPill %d)"	, (int) this.minPacmanDistancePPill));
-		pacmanData += (String.format("(distanceToIntersection %d)" , (int) this.pacmanDistanceToBestNextNode));
 		pacmanData += (String.format("(inCorridor %d)" , (int) this.pacmanRequestAccion));
+		pacmanData += (String.format("(distanceToIntersection %d)" , (int) this.pacmanDistanceToBestNextNode));
+
 		pacmanData += ")";
 		facts.add(pacmanData);
 

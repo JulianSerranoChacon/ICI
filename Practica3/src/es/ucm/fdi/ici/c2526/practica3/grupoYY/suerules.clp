@@ -453,6 +453,7 @@
 
 (defrule SUESecondNearestToMsPacman
 	(declare (salience 14))
+	(MSPACMAN 	(closestIntersection 	?closestintersection))
 	(ROLES (hunter1 ?h1) (hunter2 ?h2))
 	(test (neq ?h1 NONE))
 	(test (eq ?h2 SUE))
@@ -462,6 +463,7 @@
 			(id SUEHunter2) 
 			(info "Soy Hunter2") 
 			(extraGhost ?h1) 
+			(intersection ?closestintersection) 
 			(priority 14)
 		)
 	)
