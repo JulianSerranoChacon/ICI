@@ -148,7 +148,7 @@ public class HideAction implements RulesAction {
 
 	@Override
 	public String getActionId() {
-		return "Basic Action";
+		return "Hide Action";
 	}
 
 }

@@ -1,12 +1,11 @@
 package es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions;
 
-import java.util.Map.Entry;
 import java.util.List;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 
-import es.ucm.fdi.ici.rules.*;
+import es.ucm.fdi.ici.rules.RulesAction;
 import jess.Fact;
 import jess.JessException;
 import jess.Value;
@@ -86,19 +85,19 @@ public class GreedyPointsAction implements RulesAction {
 			
 			v = actionFact.getSlotValue("RIGHTMoveToPpill");
 			if(!Objects.isNull(v))
-				moveToPpill.put(MOVE.RIGHT, v.stringValue(null) == "true");
+				moveToPpill.put(MOVE.RIGHT, Boolean.getBoolean(v.stringValue(null)));
 			
 			v = actionFact.getSlotValue("LEFTMoveToPpill");
 			if(!Objects.isNull(v))
-				moveToPpill.put(MOVE.LEFT, v.stringValue(null) == "true");
+				moveToPpill.put(MOVE.LEFT,  Boolean.getBoolean(v.stringValue(null)));
 			
 			v = actionFact.getSlotValue("UPMoveToPpill");
 			if(!Objects.isNull(v))
-				moveToPpill.put(MOVE.UP, v.stringValue(null) == "true");
+				moveToPpill.put(MOVE.UP,  Boolean.getBoolean(v.stringValue(null)));
 			
 			v = actionFact.getSlotValue("DOWNMoveToPpill");
 			if(!Objects.isNull(v))
-				moveToPpill.put(MOVE.DOWN,v.stringValue(null) == "true");
+				moveToPpill.put(MOVE.DOWN, Boolean.getBoolean(v.stringValue(null)));
 			
 			v = actionFact.getSlotValue("RIGHTMoveToPoints");
 			if(!Objects.isNull(v))
