@@ -51,7 +51,7 @@ public class GreedyPointsAction implements RulesAction {
 			v = actionFact.getSlotValue("CandidateRight");
 			if(!Objects.isNull(v)) {
 				String value = v.stringValue(null);
-				boolean moveRight = Boolean.getBoolean(value);
+				boolean moveRight = Boolean.parseBoolean(value);
 				if(moveRight) {
 					CandidateMoves.addLast(MOVE.RIGHT);	
 				}
@@ -61,7 +61,7 @@ public class GreedyPointsAction implements RulesAction {
 			v = actionFact.getSlotValue("CandidateLeft");
 			if(!Objects.isNull(v)) {
 				String value = v.stringValue(null);
-				boolean moveLeft = Boolean.getBoolean(value);
+				boolean moveLeft = Boolean.parseBoolean(value);
 				if(moveLeft) {
 					CandidateMoves.addLast(MOVE.LEFT);	
 				}
@@ -69,7 +69,7 @@ public class GreedyPointsAction implements RulesAction {
 			v = actionFact.getSlotValue("CandidateUp");
 			if(!Objects.isNull(v)) {
 				String value = v.stringValue(null);
-				boolean moveUp = Boolean.getBoolean(value);
+				boolean moveUp = Boolean.parseBoolean(value);
 				if(moveUp) {
 					CandidateMoves.addLast(MOVE.UP);	
 				}
@@ -77,7 +77,7 @@ public class GreedyPointsAction implements RulesAction {
 			v = actionFact.getSlotValue("CandidateDown");
 			if(!Objects.isNull(v)) {
 				String value = v.stringValue(null);
-				boolean moveDown = Boolean.getBoolean(value);
+				boolean moveDown = Boolean.parseBoolean(value);
 				if(moveDown) {
 					CandidateMoves.addLast(MOVE.DOWN);	
 				}
