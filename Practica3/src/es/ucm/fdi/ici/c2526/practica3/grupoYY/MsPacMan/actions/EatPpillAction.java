@@ -47,7 +47,7 @@ public class EatPpillAction implements RulesAction {
 		// Nothing to parse
 		try {
 		
-		Value v = actionFact.getSlotValue("goToPillMove");
+		Value v = actionFact.getSlotValue("goPillMove");
 		if(!Objects.isNull(v)) {
 			moveToPpill = MOVE.valueOf(v.stringValue(null));
 		}
