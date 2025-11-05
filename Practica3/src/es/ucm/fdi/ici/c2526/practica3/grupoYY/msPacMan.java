@@ -33,28 +33,28 @@ public class msPacMan  extends PacmanController  {
 		
 		map = new HashMap<String,RulesAction>();
 		//Fill Actions
-		RulesAction act = new EatPpillAction(); 
-		map.put(act.getActionId(), act);
-		act = new GoToNearestPillAction();
-		map.put(act.getActionId(), act);
-		act = new GoToPpillAction();
-		map.put(act.getActionId(), act);
-		act = new GreedyPointsAction();
-		map.put(act.getActionId(), act);
-		act = new HideAction();
-		map.put(act.getActionId(), act);
-		act = new HuntAction();
-		map.put(act.getActionId(), act);
-		act = new HideFromOneAction();
-		map.put(act.getActionId(), act);
-		act = new MorePillsSuicidaAction();
-		map.put(act.getActionId(), act);
-		act = new MoveAction();
-		map.put(act.getActionId(), act);
-		act = new PPillSuicidaAction();
-		map.put(act.getActionId(), act);
-		act = new RandomAction();
-		map.put(act.getActionId(), act);
+		RulesAction act1 = new EatPpillAction(); 
+		map.put(act1.getActionId(), act1);
+		RulesAction act2 = new GoToNearestPillAction();
+		map.put(act2.getActionId(), act2);
+		RulesAction act3 = new GoToPpillAction();
+		map.put(act3.getActionId(), act3);
+		RulesAction act4 = new GreedyPointsAction();
+		map.put(act4.getActionId(), act4);
+		RulesAction act5 = new HideAction();
+		map.put(act5.getActionId(), act5);
+		RulesAction act6 = new HuntAction();
+		map.put(act6.getActionId(), act6);
+		RulesAction act7 = new HideFromOneAction();
+		map.put(act7.getActionId(), act7);
+		RulesAction act8 = new MorePillsSuicidaAction();
+		map.put(act8.getActionId(), act8);
+		RulesAction act9 = new MoveAction();
+		map.put(act9.getActionId(), act9);
+		RulesAction act10 = new PPillSuicidaAction();
+		map.put(act10.getActionId(), act10);
+		RulesAction act11 = new RandomAction();
+		map.put(act11.getActionId(), act11);
 
 		String rulesFile = String.format("%s%srules.clp", RULES_PATH, "MsPacMan");
 		MsPacManRuleEngine = new RuleEngine("MsPacMan",rulesFile,map);		
@@ -66,8 +66,7 @@ public class msPacMan  extends PacmanController  {
     	input.parseInput();
     	MsPacManRuleEngine.reset();
     	MsPacManRuleEngine.assertFacts(input.getFacts());
-    	MOVE move = MsPacManRuleEngine.run(game);
-    	return move;
+    	return MsPacManRuleEngine.run(game);
     }
 
 }

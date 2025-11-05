@@ -348,7 +348,7 @@ public class MsPacManInput extends RulesInput {
 	
 	private void setNearestPPill() {
 		int[] ppills = game.getActivePowerPillsIndices();
-        closestPPill = -1; // no Ppill active
+        closestPPill = Integer.MAX_VALUE; // no Ppill active
         minDistancePpill = Double.MAX_VALUE;
 	    if (!(game.getNumberOfActivePowerPills() == 0)) {
 	        for (int pill : ppills) {
@@ -414,7 +414,8 @@ public class MsPacManInput extends RulesInput {
 	
 
 	double getPacManDistance(GHOST g, DM dm){
-		return game.getDistance( game.getGhostCurrentNodeIndex(g),game.getPacmanCurrentNodeIndex(),game.getGhostLastMoveMade(g), dm);
+		double distance =game.getDistance( game.getGhostCurrentNodeIndex(g),game.getPacmanCurrentNodeIndex(),game.getGhostLastMoveMade(g), dm); 
+		return distance == -1? Integer.MAX_VALUE: distance;
 	}
 	
 	//method to not repeat the same line
