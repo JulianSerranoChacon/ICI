@@ -6,6 +6,8 @@
 	(slot distanceToInky 			(type float) (default 1000000))
 	(slot distanceToSue 			(type float) (default 1000000))
 	(slot closestIntersection 		(type integer) (default 1000000))
+	(slot distanceToIntersection	(type float) (default 1000000))
+	(slot inCorridor				(type integer) (default 0))
 	(slot distanceToClosestPPill 	(type float) (default 1000000))	
 )
 
@@ -373,8 +375,24 @@
 )
 
 ;; PERSECUCION ;;
-(defrule ShieldInky
+(defrule killPacman 
 	(declare (salience 17))
+	(MSPACMAN (inCorridor ?c distanceToIntersection ?i))
+	(BLINKY (distanceToIntersection ?d))
+	(test (= ?c 1))
+	(test (<= ?d (?i - 2)))
+	=>
+	(assert 
+		(ACTION 
+			(id BLINKYHunter1) 
+			(info "Soy cazador1")  
+			(priority 17) 
+		)
+	)
+)
+
+(defrule ShieldInky
+	(declare (salience 16))
 	(INKY (myShield ?i))
 	(test (eq ?i BLINKY))
 	=>
@@ -383,13 +401,13 @@
 			(id BLINKYrunToTheEdible) 
 			(info "me vuelvo escudero") 
 			(extraGhost INKY) 
-			(priority 17)
+			(priority 16)
 		)
 	)
 )
 
 (defrule ShieldPinky
-	(declare (salience 17))
+	(declare (salience 16))
 	(PINKY (myShield ?p))
 	(test (eq ?p BLINKY))
 	=>
@@ -398,13 +416,13 @@
 			(id BLINKYrunToTheEdible) 
 			(info "me vuelvo escudero") 
 			(extraGhost PINKY) 
-			(priority 17)
+			(priority 16)
 		)
 	)
 )
 
 (defrule ShieldSue
-	(declare (salience 17))
+	(declare (salience 16))
 	(SUE (myShield ?s))
 	(test (eq ?s BLINKY))
 	=>
@@ -413,7 +431,7 @@
 			(id BLINKYrunToTheEdible) 
 			(info "me vuelvo escudero") 
 			(extraGhost SUE) 
-			(priority 17)
+			(priority 16)
 		)
 	)
 )
