@@ -1,28 +1,20 @@
 package es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Map.Entry;
 import java.util.List;
+import java.util.Objects;
 
-import es.ucm.fdi.ici.rules.*;
+import es.ucm.fdi.ici.rules.RulesAction;
 import jess.Fact;
 import jess.JessException;
 import jess.Value;
-import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
 public class EatPpillAction implements RulesAction {
 
-	private Map<GHOST, Integer> distances;
-	private int pacManDistance;
-	private boolean caminoInmediato;
 	MOVE moveToPpill;
 	private List<MOVE> CandidateMoves;
 	public EatPpillAction() {
-		distances = new HashMap<>();
 	}
 	
 	@Override

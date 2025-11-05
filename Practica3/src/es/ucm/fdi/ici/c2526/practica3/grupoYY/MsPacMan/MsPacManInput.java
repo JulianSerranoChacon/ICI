@@ -415,7 +415,9 @@ public class MsPacManInput extends RulesInput {
 	
 	//method to not repeat the same line
 	double getGhostDistance(GHOST g, DM dm){
-		double distance =game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(g),game.getGhostLastMoveMade(g), dm);
+		double distance = -1;
+		if(game.getGhostLairTime(g) <= 0)
+			distance = game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(g),game.getGhostLastMoveMade(g), dm);
 		return distance == -1? Integer.MAX_VALUE: distance;
 	}
 	

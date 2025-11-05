@@ -38,19 +38,19 @@ public class PPillSuicidaAction implements RulesAction {
 		try {
 			Value v = actionFact.getSlotValue("MoveToPpillRight");
 			if(!Objects.isNull(v))
-				moveToPpill.put(MOVE.RIGHT, v.stringValue(null) == "true");
+				moveToPpill.put(MOVE.RIGHT, Boolean.getBoolean(v.stringValue(null)));
 			
 			v = actionFact.getSlotValue("MoveToPpillLeft");
 			if(!Objects.isNull(v))
-				moveToPpill.put(MOVE.LEFT, v.stringValue(null) == "true");
+				moveToPpill.put(MOVE.LEFT,  Boolean.getBoolean(v.stringValue(null)));
 			
 			v = actionFact.getSlotValue("MoveToPpillUp");
 			if(!Objects.isNull(v))
-				moveToPpill.put(MOVE.UP, v.stringValue(null) == "true");
+				moveToPpill.put(MOVE.UP,  Boolean.getBoolean(v.stringValue(null)));
 			
 			v = actionFact.getSlotValue("MoveToPpillDown");
 			if(!Objects.isNull(v))
-				moveToPpill.put(MOVE.DOWN, v.stringValue(null) == "true");
+				moveToPpill.put(MOVE.DOWN,  Boolean.getBoolean(v.stringValue(null)));
 			
 		}
 		catch (JessException e) {

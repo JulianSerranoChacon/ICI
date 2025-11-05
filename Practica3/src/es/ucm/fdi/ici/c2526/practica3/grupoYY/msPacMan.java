@@ -14,7 +14,6 @@ import es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions.MorePillsSuicidaA
 import es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions.MoveAction;
 import es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions.PPillSuicidaAction;
 import es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions.RandomAction;
-import es.ucm.fdi.ici.c2526.practica3.grupoYY.MsPacMan.actions.RunAwayAction;
 import es.ucm.fdi.ici.rules.RuleEngine;
 import es.ucm.fdi.ici.rules.RulesAction;
 import es.ucm.fdi.ici.rules.RulesInput;
@@ -55,8 +54,6 @@ public class msPacMan  extends PacmanController  {
 		act = new PPillSuicidaAction();
 		map.put(act.getActionId(), act);
 		act = new RandomAction();
-		map.put(act.getActionId(), act);
-		act = new RunAwayAction();
 		map.put(act.getActionId(), act);
 
 		String rulesFile = String.format("%s%srules.clp", RULES_PATH, "MsPacMan");
