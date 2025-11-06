@@ -57,17 +57,17 @@
 	
 	(slot goToPillMove (type SYMBOL) (default false))
 	
-	(slot RIGHTCandidate (type SYMBOL) (default true))
-	(slot LEFTCandidate (type SYMBOL)(default true))
-	(slot UPCandidate (type SYMBOL)(default true))
-	(slot DOWNCandidate (type SYMBOL)(default true))
+	(slot RIGHTCandidate (type SYMBOL) (default false))
+	(slot LEFTCandidate (type SYMBOL)(default false))
+	(slot UPCandidate (type SYMBOL)(default false))
+	(slot DOWNCandidate (type SYMBOL)(default false))
 	
 	(slot ClosestPpil (type NUMBER) (default 0))
 	
-	(slot RIGHTMoveToPpill (type SYMBOL)(default true))
-	(slot LEFTMoveToPpill (type SYMBOL)(default true))
-	(slot UPMoveToPpill (type SYMBOL)(default true))
-	(slot DOWNMoveToPpill (type SYMBOL)(default true))
+	(slot RIGHTMoveToPpill (type SYMBOL)(default false))
+	(slot LEFTMoveToPpill (type SYMBOL)(default false))
+	(slot UPMoveToPpill (type SYMBOL)(default false))
+	(slot DOWNMoveToPpill (type SYMBOL)(default false))
 	
 	(slot RIGHTMoveToPoints (type NUMBER)(default 100000))
 	(slot LEFTMoveToPoints (type NUMBER)(default 100000))
@@ -189,15 +189,14 @@
 	(MSPACMAN (numDangerGhosts ?d) (minDistancePpill ?md)) 
 	(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
 	(RIGHTMoveToNode ?rn) (LEFTMoveToNode ?ln) (UPMoveToNode ?un) (DOWNMoveToNode ?dn)
-	(test (> ?d  0)) 
-	(test (> ?md 50))
+	(test and((> ?d  0)) ((> ?md 50)))
 	=>
 	(assert
 		(
 			ACTION 
 			(id HideAction) 
 			(info " ") 
-			(priority 10)
+			(priority 15)
 			(CandidateLeft ?lc)
 			(CandidateRight ?rc)
 			(CandidateUp ?uc)
@@ -238,14 +237,14 @@
 		(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
 		(ClosestPpil ?cpp)
 	)
-	(test (> ?n 1)) (test(> ?md 50))
+	(test (> ?n 1)) (test(< ?md 50))
 	=>
 	(assert
 		(
 			ACTION 
 				(id GoPPillAction) 
 				(info " ") 
-				(priority 12)
+				(priority 8)
 				(CandidateLeft ?lc)
 				(CandidateRight ?rc)
 				(CandidateUp ?uc)
@@ -264,7 +263,7 @@
 	 (goToPillMove ?gpm)
 
 	)
-	(test(eq ?b true))  
+	(test( ?b true))  
 	(test(> ?n 1))  
 	(test( <= ?m 50)) ;50 puesto a ojo
 
@@ -360,7 +359,7 @@
 	) 
 	(test(= ?v 0)) 
 	(test(= ?p 0)) 
-	(test(eq ?b false))
+	(test(?b false))
 	=>
 	(assert
 		(

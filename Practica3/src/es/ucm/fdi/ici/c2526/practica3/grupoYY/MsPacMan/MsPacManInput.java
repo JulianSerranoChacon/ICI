@@ -31,7 +31,7 @@ public class MsPacManInput extends RulesInput {
 	private Map<MOVE, Boolean> isCandidateMove;
 	private int closestPPill; //Index of the closer PPIL of PacMan
 	private double minDistancePpill; //PacMan distance to Closer PPil
-	private final double dangerDistance = 30; //tentative, subject to change 
+	private final double dangerDistance = 50; //tentative, subject to change 
 	private final double hideDistance = 30; //tentative, subject to change 
 	private boolean hayPillCaminoInmediato;
 	private double tiempoDesdePpill = -1; //Time since PacMan eat the PPIL
@@ -110,6 +110,7 @@ public class MsPacManInput extends RulesInput {
 		setGhostEdible();
 		setNextIntersections();
 		setNearestPPill();
+		setGhostsEatable();
 	}
 	
 	//Tenemos que rellenar con los datos que usan las reglas de PacMan para moverse
@@ -155,7 +156,6 @@ public class MsPacManInput extends RulesInput {
 		
 		pacmanData += (String.format("(distanceToEatSUE %d)",  (int)timeToEat(GHOST.SUE)));
 		
-		//TODO: parametizar
 		pacmanData += (String.format("(dangerDistanceGhost %d)", (int)dangerDistance));
 		
 		for(MOVE m: MOVE.values()) {
@@ -248,10 +248,8 @@ public class MsPacManInput extends RulesInput {
 			if (game.isGhostEdible(g)) {
 				ghostEdible.put(g, true);
 				tiempoDesdePpill = Constants.EDIBLE_TIME - game.getGhostEdibleTime(g);
-				if(game.getDistance(game.getPacmanCurrentNodeIndex(),game.getGhostCurrentNodeIndex(g), DM.MANHATTAN) <= this.timeToEat(g)) {
-					this.numEateableGhosts++;
-				}
-			} else {
+			} 
+			else {
 				ghostEdible.put(g, false);
 				if(game.getDistance(game.getGhostCurrentNodeIndex(g), game.getPacmanCurrentNodeIndex(), DM.MANHATTAN) <= this.dangerDistance) {
 					this.numDangerGhost++;
@@ -360,9 +358,10 @@ public class MsPacManInput extends RulesInput {
 	        }
 	        if(closestPPill != -1) {
 		        setGhostDistanceToPPIL(); //Once the ppil is chosen we set the distance to the ghost to this PPIL
-		        if(this.minDistancePpill > this.BLINKYMinDistanceToPpill || this.minDistancePpill > this.INKYMinDistanceToPpill  ||
-		        		this.minDistancePpill > this.PINKYMinDistanceToPpill || this.minDistancePpill > this.SUEMinDistanceToPpill ) {
-		        	this.llegoAntesAPPill = false;
+		        for(GHOST g : GHOST.values()) {
+		        	if(this.ghostReachUs(closestPPill)) {
+		        		this.llegoAntesAPPill = false;
+		        	}
 		        }
 	        }
 	    }
@@ -390,6 +389,13 @@ public class MsPacManInput extends RulesInput {
 			
 		}
 	}
+	private void setGhostsEatable() {
+		for(GHOST g : GHOST.values()) {
+			if(game.isGhostEdible(g) && ghostReachable(g)) {
+				this.numEateableGhosts++;
+			}
+		}
+	}
 	// We discard candidates when the ghost that is NOT EDIBLE, is CLOSER TO NODE
 	// and is MOVING IN THAT DIRECTION.
 	private Boolean ghostReachUs(int interNode) {
@@ -406,7 +412,7 @@ public class MsPacManInput extends RulesInput {
 	}
 	
 	// Speed of ghosts is halved
-	private boolean ghostReachable(GHOST ghost) {
+	private boolean ghostReachable(GHOST ghost) { 
 		if(game.getGhostLairTime(ghost) > 0) {
 			return false;
 		}
