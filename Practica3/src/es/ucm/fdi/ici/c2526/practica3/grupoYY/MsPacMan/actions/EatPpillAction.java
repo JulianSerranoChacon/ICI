@@ -62,7 +62,7 @@ public class EatPpillAction implements RulesAction {
 			boolean moveLeft = Boolean.parseBoolean(value);
 			if(moveLeft) {
 				CandidateMoves.addLast(MOVE.LEFT);	
-			}
+			} 
 		}
 		v = actionFact.getSlotValue("CandidateUp");
 		if(!Objects.isNull(v)) {

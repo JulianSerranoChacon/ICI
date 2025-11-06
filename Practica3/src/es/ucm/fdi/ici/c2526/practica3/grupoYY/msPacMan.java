@@ -60,9 +60,7 @@ public class msPacMan  extends PacmanController  {
 		String rulesFile = String.format("%s%srules.clp", RULES_PATH, "MsPacMan");
 		MsPacManRuleEngine = new RuleEngine("MsPacMan",rulesFile,map);	
 		ConsoleRuleEngineObserver observer = new ConsoleRuleEngineObserver("MsPacMan", true);
-		ConsoleRuleEngineObserver observer1 = new ConsoleRuleEngineObserver("BLINKY", true);
 		MsPacManRuleEngine.addObserver(observer);
-		MsPacManRuleEngine.addObserver(observer1);
 	}
 	
 	@Override

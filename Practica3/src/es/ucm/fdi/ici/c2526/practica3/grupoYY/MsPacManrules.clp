@@ -2,7 +2,7 @@
 (deftemplate BLINKY
 	(slot edible (type SYMBOL)(default false))
 	(slot minDistancePacMan (type NUMBER)(default 100000))
-	(slot minDistancePpil (type NUMBER)(default 100000))
+	(slot minDistancePpill (type NUMBER)(default 100000))
 	(slot estoyCercaYsoyPeligroso (type SYMBOL) (default false))
 	(slot llegoAntesAPPil (type SYMBOL)(default false))
 )
@@ -10,7 +10,7 @@
 (deftemplate INKY
 	(slot edible (type SYMBOL)(default false))
 	(slot minDistancePacMan (type NUMBER)(default 100000))
-	(slot minDistancePpil (type NUMBER)(default 100000))
+	(slot minDistancePpill (type NUMBER)(default 100000))
 	(slot estoyCercaYsoyPeligroso (type SYMBOL) (default false)) 
 	(slot llegoAntesAPPil (type SYMBOL)(default false))
 )
@@ -18,7 +18,7 @@
 (deftemplate PINKY
 	(slot edible (type SYMBOL)(default false))
 	(slot minDistancePacMan (type NUMBER)(default 100000))
-	(slot minDistancePpil (type NUMBER)(default 100000))
+	(slot minDistancePpill (type NUMBER)(default 100000))
 	(slot estoyCercaYsoyPeligroso (type SYMBOL) (default false)) 
 	(slot llegoAntesAPPil (type SYMBOL)(default false))
 )
@@ -26,7 +26,7 @@
 (deftemplate SUE
 	(slot edible (type SYMBOL)(default false))
 	(slot minDistancePacMan (type NUMBER)(default 100000))
-	(slot minDistancePpil (type NUMBER)(default 100000))
+	(slot minDistancePpill (type NUMBER)(default 100000))
 	(slot estoyCercaYsoyPeligroso (type SYMBOL) (default false))
 	(slot llegoAntesAPPil (type SYMBOL)(default false))
 )
@@ -34,7 +34,7 @@
 (deftemplate MSPACMAN 
  	(slot voyGreedy (type SYMBOL) (default true)) 
 	(slot hayPillEnCaminoInmediato (type SYMBOL) (default false)) 
-    (slot minDistancePPill (type NUMBER) (default 100000)) 
+    (slot minDistancePpill (type NUMBER) (default 100000)) 
 	(slot variosCaminos (type NUMBER) (default 1))
 	(slot quedanPPils (type SYMBOL) (default false))
 	(slot tiempoDesdePpil (type NUMBER) (default 0))
@@ -109,195 +109,11 @@
 
 ) 
 
-;TEMPLATES ASIGNADOS EN EL CLP
-
-; Compruebo cuantos fantasmas cercanos no comestibles hay
-;BLINKY
-(defrule BlinkyNoComestibleYCerca
-	(declare (salience 50))
-	(MSPACMAN (dangerDistanceGhost ?d) (numDangerGhosts ?n))
-	?b <- (BLINKY (edible ?be) (minDistancePacMan ?bd)) 
-	(test (?be false)) (test (?bd <= ?d))
-	=>
-	 (modify ?b (estoyCercaYsoyPeligroso true))
-)
-;Añado a Blinky a peligroso si es que este lo es
-(defrule BlinkySeConsideraPeligroso
-	(declare (salience 30))
-	?m <- (MSPACMAN (numDangerGhosts ?n))
-	(BLINKY (estoyCercaYsoyPeligroso true))
-	=>
-	(modify ?m (numDangerGhosts (?n + 1)))
-)
-
-;INKY
-(defrule InkyNoComestibleYCerca
-    (declare (salience 50))
-	(MSPACMAN (dangerDistanceGhost ?d))
-	?b <- (INKY (edible ?be) (minDistancePacMan ?bd)) 
-	(test (?be false)) (test (?bd <= ?d))
-	=>
-	(modify ?b (estoyCercaYsoyPeligroso true))
-)
-;Añado a Inky a peligroso si es que este lo es
-(defrule InkySeConsideraPeligroso
-	(declare (salience 30))
-	?m <- (MSPACMAN (numDangerGhosts ?n))
-	(INKY (estoyCercaYsoyPeligroso true))
-	=>
-	(modify ?m (numDangerGhosts (?n + 1)))
-)
-
-;PINKY
-(defrule Pinky
-	(declare (salience 50))
-	(MSPACMAN (dangerDistanceGhost ?d))
-	?b <- (PINKY (edible ?be) (minDistancePacMan ?bd)) 
-	(test (?be false)) (test (?bd <= ?d))
-	=>
-	(modify ?b (estoyCercaYsoyPeligroso true))
-)
-;Añado a Pinky a peligroso si es que este lo es
-(defrule PinkySeConsideraPeligroso
-	(declare (salience 30))
-	?m <- (MSPACMAN (numDangerGhosts ?n))
-	(PINKY (estoyCercaYsoyPeligroso true))
-	=>
-	(modify ?m (numDangerGhosts (?n + 1)))
-)
-
-;SUE
-(defrule SueNoComestibleYCerca
-	(declare (salience 50))
-	(MSPACMAN (dangerDistanceGhost ?d))
-	?b <- (SUE (edible ?be) (minDistancePacMan ?bd)) 
-	(test (?be false)) (test (?bd <= ?d))
-	=>
-	(modify ?b (estoyCercaYsoyPeligroso true))
-)
-;Añado a Sue a peligroso si es que este lo es
-(defrule SueSeConsideraPeligroso
-	(declare (salience 30))
-	?m <- (MSPACMAN (numDangerGhosts ?n))
-	(SUE (estoyCercaYsoyPeligroso true))
-	=>
-	(modify ?m (numDangerGhosts (?n + 1)))
-)
-
-
-;COMPROBACION DE QUIEN LLEGA ANTES A LA PPIL
-;BLINKY
-(defrule BlinkyHaciaPPil
-	(declare (salience 50))
-	(MSPACMAN (minDistancePPill ?md))
-	?b <- (BLINKY (edible ?e) (minDistancePpil ?bd))
-	(test (?e false)) (test(?bd < ?md))
-	=>
-	(modify ?b (llegoAntesAPPil true))
-)
-
-;Informo a PacMan de que no llega a la PPIL
-(defrule BlinkySeComeLaPPil
-	(declare (salience 30))
-	?m <- (MSPACMAN (llegoAntesAPPil))
-	(BLINKY (llegoAntesAPPil true))
-	=>
-	(modify ?m (llegoAntesAPPil false))
-)
-;INKY 	
-(defrule InkyHaciaPPil
-	(declare (salience 50))
-	(MSPACMAN (minDistancePPill ?md))
-	?b <- (INKY (edible ?e) (minDistancePpil ?bd))
-	(test (?e false)) (test(?bd < ?md))
-	=>
-	(modify ?b (llegoAntesAPPil true))
-)
-
-;Informo a PacMan de que no llega a la PPIL
-(defrule InkySeComeLaPPil
-	(declare (salience 30))
-	?m <- (MSPACMAN (llegoAntesAPPil))
-	(INKY (llegoAntesAPPil true))
-	=>
-	(modify ?m (llegoAntesAPPil false))
-)
-;PINKY
-(defrule PinkyHaciaPPil
-	(declare (salience 50))
-	(MSPACMAN (minDistancePPill ?md))
-	?b <- (PINKY (edible ?e) (minDistancePpil ?bd))
-	(test (?e false)) (test(?bd < ?md))
-	=>
-	(modify ?b (llegoAntesAPPil true))
-)
-
-;Informo a PacMan de que no llega a la PPIL
-(defrule PinkySeComeLaPPil
-	(declare (salience 30))
-	?m <- (MSPACMAN (llegoAntesAPPil))
-	(PINKY (llegoAntesAPPil true))
-	=>
-	(modify ?m (llegoAntesAPPil false))
-)
-;SUE
-(defrule SueHaciaPPil
-	(declare (salience 50))
-	(MSPACMAN (minDistancePPill ?md))
-	?b <- (SUE (edible ?e) (minDistancePpil ?bd))
-	(test (?e false)) (test(?bd < ?md))
-	=>
-	(modify ?b (llegoAntesAPPil true))
-)
-
-;Informo a PacMan de que no llega a la PPIL
-(defrule SueSeComeLaPPil
-	(declare (salience 30))
-	?m <- (MSPACMAN (llegoAntesAPPil))
-	(SUE (llegoAntesAPPil true))
-	=>
-	(modify ?m (llegoAntesAPPil false))
-)
-
-
-;COMPROBACIÓN DE CUANTOS FANTASMAS COMESTIBLES HAY
-;Blinky
-(defrule BlinkySePuedeComer
-	?m <- (MSPACMAN (numEatableGhost ?n) (distanceToBLINKY ?d) (distanceToEatBLINKY ?de))
-	(BLINKY (edible ?e))
-	(test(?e true)) (test(?d <= ?de))
-	=>
-	(modify ?m (numEatableGhost (?n + 1)))
-)
-;Inky
-(defrule InkySePuedeComer
-	?m <- (MSPACMAN (numEatableGhost ?n) (distanceToINKY ?d) (distanceToEatINKY ?de))
-	(INKY (edible ?e))
-	(test(?e true)) (test(?d <= ?de))
-	=>
-	(modify ?m (numEatableGhost (?n + 1)))
-)
-;Pinky
-(defrule PinkySePuedeComer
-	?m <- (MSPACMAN (numEatableGhost ?n) (distanceToPINKY ?d) (distanceToEatPINKY ?de))
-	(PINKY (edible ?e))
-	(test(?e true)) (test(?d <= ?de))
-	=>
-	(modify ?m (numEatableGhost (?n + 1)))
-)
-;Sue
-(defrule SueSePuedeComer
-	?m <- (MSPACMAN (numEatableGhost ?n) (distanceToSUE ?d) (distanceToEatSUE ?de))
-	(SUE (edible ?e))
-	(test(?e true)) (test(?d <= ?de))
-	=>
-	(modify ?m (numEatableGhost (?n + 1)))
-)
-
 ;RULES 
 
 ;Si solo se puede mover a un lado da igual todo lo demás debemos ir a ese camino
 (defrule MSPacManSoloUnMovimiento
+(declare (salience 2))
 	( MSPACMAN 
 		(variosCaminos ?v )
 		(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
@@ -320,6 +136,7 @@
 
 ; Comienzo siempre en ir a comer pills, luego iré viendo que tengo que hacer realmente
 (defrule MSPacManMoveToClosestPill
+	(declare (salience 0))
 	( MSPACMAN 
 		(voyGreedy true) 
 		(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
@@ -341,6 +158,7 @@
 
 ; Si hay pills inmediatas voy a por ellas
 (defrule MSPacManGetMorePoints
+	(declare (salience 1))
 	( MSPACMAN
 		(hayPillEnCaminoInmediato true) 	
 		(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
@@ -371,16 +189,32 @@
 )
 
 (defrule MSPacManEscapeFromAll
-	(MSPACMAN (numDangerGhosts ?d) (minDistancePpil ?md)) 
-	(test (?d > 0)) (test (> ?md 50))
+	(declare (salience 10))
+	(MSPACMAN (numDangerGhosts ?d) (minDistancePpill ?md)) 
+	(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
+	(RIGHTMoveToNode ?rn) (LEFTMoveToNode ?ln) (UPMoveToNode ?un) (DOWNMoveToNode ?dn)
+	(test (> ?d  0)) 
+	(test (> ?md 50))
 	=>
 	(assert
 		(
-			ACTION (id HideAction) (info "Huyo En general") (priority 10)
+			ACTION 
+			(id HideAction) 
+			(info "Huyo En general") 
+			(priority 10)
+			(CandidateLeft ?lc)
+			(CandidateRight ?rc)
+			(CandidateUp ?uc)
+			(CandidateDown ?dc)
+			(MoveToNodeLeft ?ln)
+			(MoveToNodeRight ?rn)
+			(MoveToNodeUp ?un)
+			(MoveToNodeDown ?dn)
 		)
 	)
 )
 (defrule MSPacManEscapeFromOne
+	(declare (salience 8))
     ( MSPACMAN 
         (numDangerGhosts ?n)
         (RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
@@ -392,7 +226,7 @@
             ACTION 
                 (id HideFromOneAction) 
                 (info "Huyo de un fantasma") 
-                (priority 8)
+                (priority 11)
                 (CandidateLeft ?lc)
                 (CandidateRight ?rc)
                 (CandidateUp ?uc)
@@ -404,8 +238,9 @@
 ; Si hay muchos fantasmas cerca de mi, intento comerme la PPIL
 
 (defrule MSPacManTryPPIL
+	(declare (salience 11))
 	( MSPACMAN 
-		(numDangerGhosts ?n) (minDistancePpil ?md)
+		(numDangerGhosts ?n) (minDistancePpill ?md)
 		(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
 		(ClosestPpil ?cpp)
 	)
@@ -416,7 +251,7 @@
 			ACTION 
 				(id GoPPillAction) 
 				(info "IntentoAcercarmeAunaPPIL") 
-				(priority 11)
+				(priority 12)
 				(CandidateLeft ?lc)
 				(CandidateRight ?rc)
 				(CandidateUp ?uc)
@@ -429,8 +264,9 @@
 ; Si tengo muchos fantasmas persiguiendome y llego a la powerPill voy a por ella
 
 (defrule MSPacManEatPPIL
+	(declare (salience 4))
 	( MSPACMAN
-	 (llegoAntesAPPil ?b) (numDangerGhosts ?n) (minDistancePPill ?m)
+	 (llegoAntesAPPil ?b) (numDangerGhosts ?n) (minDistancePpill ?m)
 	 (RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
 	 (goToPillMove ?gpm)
 
@@ -445,7 +281,7 @@
 			ACTION 
 				(id EatPPillAction) 
 				(info "Me he comido una PPIl") 
-				(priority 4)
+				(priority 14)
 				(CandidateLeft ?lc)
 				(CandidateRight ?rc)
 				(CandidateUp ?uc)
@@ -457,6 +293,7 @@
 
 ; Si hay fantasmas comestibles cerca y no hay fantasmas no comestibles cerca me voy a comerlos 
 (defrule MSPacManStartsFollowing
+	(declare (salience 69))
 	( MSPACMAN 
 		(numDangerGhosts ?nd) 
 		(numEatableGhost ?ne) 
@@ -470,7 +307,7 @@
 			ACTION 
 				(id HuntAction) 
 				(info "voy a comer") 
-				(priority 5)
+				(priority 69)
 				(CandidateLeft ?lc)
 				(CandidateRight ?rc)
 				(CandidateUp ?uc)
@@ -482,6 +319,7 @@
 ;Si no hay caminos disponibles intento ir a por la PPIL
 ;FALTA COMPROBAR SI LLEGO A COMERLA
 (defrule MSPacManStartSuicida
+	(declare (salience 6))
 	( MSPACMAN 
 		(variosCaminos ?v)
 		(RIGHTMoveToPpill ?rpp) (LEFTMoveToPpill ?lpp) (UPMoveToPpill ?upp) (DOWNMoveToPpill ?dpp)
@@ -504,6 +342,7 @@
 
 ; Si no hay caminos disponibles, ni PPILS pero hay pils accesibles, me muevo a esas pills
 (defrule MSPacManPillsSuicida
+	(declare (salience 7))
 	( MSPACMAN 
 		(variosCaminos ?v) (quedanPPils ?p)
 		(RIGHTMoveToPoints ?rp) (LEFTMoveToPoints ?lp) (UPMoveToPoints ?up) (DOWNMoveToPoints ?dp)
@@ -527,6 +366,7 @@
 
 ;Si no hay caminos disponibles, ni PPILS, ni PILLS me muevo random
 (defrule MSPacManRandom
+	(declare (salience 8))
 	( MSPACMAN 
 		(variosCaminos ?v) (quedanPPils ?p) (hayPillEnCaminoInmediato ?b)
 	) 

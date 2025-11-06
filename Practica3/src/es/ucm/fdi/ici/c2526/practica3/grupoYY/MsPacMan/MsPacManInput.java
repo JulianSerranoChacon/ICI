@@ -121,7 +121,7 @@ public class MsPacManInput extends RulesInput {
 		String pacmanData = "(MSPACMAN ";
 		pacmanData += (String.format("(hayPillEnCaminoInmediato %s)",hayPillCaminoInmediato));
 
-		pacmanData += (String.format("(minDistancePPill %s)", minDistancePpill));
+		pacmanData += (String.format("(minDistancePpill %s)", minDistancePpill));
 
 		pacmanData += (String.format("(variosCaminos %d)", isCandidateMove.size()));
 
@@ -357,8 +357,8 @@ public class MsPacManInput extends RulesInput {
 	
 	private void setNearestPPill() {
 		int[] ppills = game.getActivePowerPillsIndices();
-        closestPPill = Integer.MAX_VALUE; // no Ppill active
-        minDistancePpill = Double.MAX_VALUE;
+        closestPPill = 0; // no Ppill active
+        minDistancePpill = 60;
 	    if (!(game.getNumberOfActivePowerPills() == 0)) {
 	        for (int pill : ppills) {
 	            double aux = game.getDistance(game.getPacmanCurrentNodeIndex(), pill, DM.PATH);
@@ -424,7 +424,7 @@ public class MsPacManInput extends RulesInput {
 
 	double getPacManDistance(GHOST g, DM dm){
 		double distance =game.getDistance( game.getGhostCurrentNodeIndex(g),game.getPacmanCurrentNodeIndex(),game.getGhostLastMoveMade(g), dm); 
-		return distance == -1? Integer.MAX_VALUE: distance;
+		return distance == -1? 0: distance;
 	}
 	
 	//method to not repeat the same line
@@ -432,13 +432,13 @@ public class MsPacManInput extends RulesInput {
 		double distance = -1;
 		if(game.getGhostLairTime(g) <= 0)
 			distance = game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(g),game.getGhostLastMoveMade(g), dm);
-		return distance == -1? Integer.MAX_VALUE: distance;
+		return distance == -1? 0: distance;
 	}
 	
 	private double timeToEat(GHOST ghost) {
 		if(game.getGhostLairTime(ghost) <= 0)
 			return game.getShortestPathDistance(game.getPacManInitialNodeIndex(), game.getGhostCurrentNodeIndex(ghost), game.getPacmanLastMoveMade()) - 2;
-		return Integer.MAX_VALUE;
+		return 0;
 	}
 
 	// GETTERS // 
