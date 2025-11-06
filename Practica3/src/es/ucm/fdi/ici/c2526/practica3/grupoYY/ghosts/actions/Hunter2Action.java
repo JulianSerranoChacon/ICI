@@ -1,71 +1,147 @@
 package es.ucm.fdi.ici.c2526.practica3.grupoYY.ghosts.actions;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import es.ucm.fdi.ici.rules.RulesAction;
 import jess.Fact;
-import jess.JessException;
-import jess.Value;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
 public class Hunter2Action implements RulesAction  {
-	private static final int DISTANCE_LIMIT = 90; //Limit distance between Ghosts in the same road
+	private GHOST ghost;
 	
-    private GHOST ghost;
-	private GHOST hunter1;
-    private int targetNode = 0;
 	public Hunter2Action(GHOST ghost) {
 		this.ghost = ghost;
 	}
-
+	
 	@Override
 	public MOVE execute(Game game) {
 		if(!game.doesGhostRequireAction(ghost))
 			return MOVE.NEUTRAL;
-		//En teoria esto evita q compruebe el camino por el que viene pacman si no meter un .oposite al movimiento
-	int[] targetNodeNb = game.getNeighbouringNodes(
-			targetNode, game.getApproximateNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(),
-					targetNode, game.getPacmanLastMoveMade(), DM.PATH));
-		int nearInterNodeIndex = targetNode;
-		int distantToNearInterNode = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), nearInterNodeIndex,
-				game.getGhostLastMoveMade(ghost));
-		int[] nextNodesNb;
-		for(int i = 0; i< targetNodeNb.length;i++) {
-			
-			MOVE MOVEtoNb = game.getNextMoveTowardsTarget(targetNode,targetNodeNb[i],DM.PATH);
-			nextNodesNb = game.getNeighbouringNodes(targetNodeNb[i], MOVEtoNb);
-			while(nextNodesNb.length==1) {
-				nextNodesNb = game.getNeighbouringNodes(nextNodesNb[0], MOVEtoNb);
-			}
-			int aux = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), nextNodesNb[0], game.getGhostLastMoveMade(ghost));
-			if(aux < distantToNearInterNode ) {
-				nearInterNodeIndex = nextNodesNb[0];
-				distantToNearInterNode  = aux;
+		
+		//Gather candidate nodes
+		List<Integer> candidateNodes = getCandidateNodes(game);
+		
+		int bestNode = game.getPacmanCurrentNodeIndex(); int bestPacmanDistance = Integer.MAX_VALUE; boolean found = false;
+		//We go through all junctions near pacman
+		for(int n : candidateNodes) {
+			if(game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), n, game.getGhostLastMoveMade(ghost)) 
+					<= game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), n, game.getPacmanLastMoveMade())
+				&& bestPacmanDistance > game.getShortestPathDistance(n, game.getPacmanCurrentNodeIndex())) {
+				bestNode = n;
+				bestPacmanDistance = game.getShortestPathDistance(n, game.getPacmanCurrentNodeIndex());
+				found = true;
 			}
 		}
 		
-		return game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), nearInterNodeIndex, game.getGhostLastMoveMade(ghost),DM.PATH);
+		if(found) {
+			return game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), bestNode, game.getGhostLastMoveMade(ghost), DM.PATH);
+		}
+		
+		List<Integer> secondCandidates = getSecondCandidates(game, candidateNodes);
+		
+		bestNode = game.getPacmanCurrentNodeIndex(); double bestDistance = Double.MAX_VALUE;
+		if(game.getNumberOfActivePowerPills() != 0) {
+			for(int n : secondCandidates) {
+				for(int ppillNode : game.getActivePowerPillsIndices()) {
+					if(game.isPowerPillStillAvailable(ppillNode) 
+							&& bestDistance > game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), n, game.getGhostLastMoveMade(ghost))) {
+						bestNode = n;
+						bestDistance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghost), n, game.getGhostLastMoveMade(ghost));
+					}
+				}
+			}
+		}
+		else {
+			for(int n : secondCandidates) {
+				if(bestPacmanDistance > game.getShortestPathDistance(n, game.getPacmanCurrentNodeIndex())) {
+					bestNode = n;
+					bestPacmanDistance = game.getShortestPathDistance(n, game.getPacmanCurrentNodeIndex());
+				}
+			}
+		}
+		
+		return game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), bestNode, game.getGhostLastMoveMade(ghost), DM.PATH);
+	}
+	
+	private List<Integer> getCandidateNodes(Game game){
+		//Auxiliar variables
+		int node = game.getPacmanCurrentNodeIndex();
+		Set<Integer> visited = new HashSet<>();
+		//Variables that keep the junction
+		List<Integer> candidateNodes = new ArrayList<>();
+		
+		//Pacman possible moves (BFS profundidad 1)
+		for (MOVE m : game.getPossibleMoves(game.getPacmanCurrentNodeIndex(), game.getPacmanLastMoveMade())) {
+			// Get node
+			node = game.getNeighbour(game.getPacmanCurrentNodeIndex(), m);
+			MOVE dirToMove = m;
+
+			while (!game.isJunction(node)) {
+				// If the node is one corner
+				if (game.getNeighbour(node, dirToMove) == -1) {
+					int[] possibleNodes = game.getNeighbouringNodes(node);
+					for (int i : possibleNodes) {
+						if (!visited.contains(i) && i != -1) {
+							dirToMove = game.getMoveToMakeToReachDirectNeighbour(node, i);
+							node = i;
+						}
+					}
+				} 
+				else {
+					node = game.getNeighbour(node, dirToMove);
+				}
+				visited.add(node);
+			}
+			candidateNodes.add(node);
+		}
+		
+		return candidateNodes;
+	}
+	
+	private List<Integer> getSecondCandidates(Game game, List<Integer> candidateNodes){
+		//Pacman possible moves (BFS profundidad 2)
+		//Auxiliar variables
+		int node = game.getPacmanCurrentNodeIndex();
+		Set<Integer> visited = new HashSet<>();
+		//Solution
+		List<Integer> secondCandidates = new ArrayList<>();
+		
+		for (int n : candidateNodes) {
+			node = n;
+			secondCandidates.add(node);
+			for(MOVE m : game.getPossibleMoves(n)) {
+				MOVE dirToMove = m;
+				while (!game.isJunction(node)) {
+					// If the node is one corner
+					if (game.getNeighbour(node, dirToMove) == -1) {
+						int[] possibleNodes = game.getNeighbouringNodes(node);
+						for (int i : possibleNodes) {
+							if (!visited.contains(i) && i != -1) {
+								dirToMove = game.getMoveToMakeToReachDirectNeighbour(node, i);
+								node = i;
+							}
+						}
+					} 
+					else {
+						node = game.getNeighbour(node, dirToMove);
+					}
+					visited.add(node);
+				}
+			}
+			secondCandidates.add(node);
+		}
+		
+		return secondCandidates;
 	}
 	
 	@Override
-	public void parseFact(Fact actionFact) {
-		try {
-			Value target = actionFact.getSlotValue("intersection");
-			if(!Objects.isNull(target)) {
-				targetNode =  target.intValue(null);
-			}
-			Value hunter1Role = actionFact.getSlotValue("extraGhost");
-			if(!Objects.isNull(hunter1Role)) {
-				String strategyValue = hunter1Role.stringValue(null);
-				hunter1 = GHOST.valueOf(strategyValue);
-			}
-		} catch (JessException e) {
-			e.printStackTrace();
-		}
-	}
+	public void parseFact(Fact actionFact) {}
 
 	@Override
 	public String getActionId() {
