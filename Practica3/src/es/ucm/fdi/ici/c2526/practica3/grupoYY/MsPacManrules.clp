@@ -57,17 +57,17 @@
 	
 	(slot goToPillMove (type SYMBOL) (default false))
 	
-	(slot RIGHTCandidate (type SYMBOL) (default false))
-	(slot LEFTCandidate (type SYMBOL)(default false))
-	(slot UPCandidate (type SYMBOL)(default false))
-	(slot DOWNCandidate (type SYMBOL)(default false))
+	(slot RIGHTCandidate (type SYMBOL) (default true))
+	(slot LEFTCandidate (type SYMBOL)(default true))
+	(slot UPCandidate (type SYMBOL)(default true))
+	(slot DOWNCandidate (type SYMBOL)(default true))
 	
 	(slot ClosestPpil (type NUMBER) (default 0))
 	
-	(slot RIGHTMoveToPpill (type SYMBOL)(default false))
-	(slot LEFTMoveToPpill (type SYMBOL)(default false))
-	(slot UPMoveToPpill (type SYMBOL)(default false))
-	(slot DOWNMoveToPpill (type SYMBOL)(default false))
+	(slot RIGHTMoveToPpill (type SYMBOL)(default true))
+	(slot LEFTMoveToPpill (type SYMBOL)(default true))
+	(slot UPMoveToPpill (type SYMBOL)(default true))
+	(slot DOWNMoveToPpill (type SYMBOL)(default true))
 	
 	(slot RIGHTMoveToPoints (type NUMBER)(default 100000))
 	(slot LEFTMoveToPoints (type NUMBER)(default 100000))

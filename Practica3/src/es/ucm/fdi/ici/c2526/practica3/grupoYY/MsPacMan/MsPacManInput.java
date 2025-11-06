@@ -106,8 +106,8 @@ public class MsPacManInput extends RulesInput {
 	public void parseInput() {
 		reset();
 		finishLevel = game.getNumberOfActivePowerPills() == 0 ? true : false;
-		setGhostEdible();
 		setGhostLastMove();
+		setGhostEdible();
 		setNextIntersections();
 		setNearestPPill();
 	}
@@ -115,6 +115,7 @@ public class MsPacManInput extends RulesInput {
 	//Tenemos que rellenar con los datos que usan las reglas de PacMan para moverse
 	@Override
 	public Collection<String> getFacts(){
+		parseInput();
 		Vector<String> facts = new Vector<String>();
 		
 		//MISSPACMAN
@@ -128,7 +129,7 @@ public class MsPacManInput extends RulesInput {
 		
 		pacmanData += (String.format("(quedanPPils %d)", (int)game.getNumberOfActivePowerPills()));
 		
-		pacmanData += (String.format("(tiempoDesdePpil %d)", (int)tiempoDesdePpill));
+		pacmanData += (String.format("(tiempoDesdePpil %d)", (int)tiempoDesdePpill)); 
 
 		pacmanData += (String.format("(distanceToBLINKY %d)", (int)distanceToBlinky));
 				
@@ -136,6 +137,8 @@ public class MsPacManInput extends RulesInput {
 		pacmanData += (String.format("(distanceToINKY %d)", (int)distanceToINKY));
 
 
+		pacmanData += (String.format("(llegoAntesAPPil %s)", this.llegoAntesAPPill));
+		
 		pacmanData += (String.format("(distanceToPINKY %d)", (int)distanceToPINKY));
 		
 		pacmanData += (String.format("(numDangerGhosts %d)", this.numDangerGhost));
@@ -267,13 +270,6 @@ public class MsPacManInput extends RulesInput {
 		List<MOVE> cM = new ArrayList<>();
 		Set<Integer> auxSet = new HashSet<>();
 		int node = game.getPacmanCurrentNodeIndex();
-		
-//		for(MOVE m : MOVE.values()) {
-//			isCandidateMove.put(m,false);
-//			moveToPpill.put(m, false);
-//			moveToPoints.put(m,0);
-//			moveToNode.put(m, 100000);
-//		}
 
 		for (MOVE m : game.getPossibleMoves(game.getPacmanCurrentNodeIndex(), game.getPacmanLastMoveMade())) {
 			// Reset everything
@@ -293,8 +289,6 @@ public class MsPacManInput extends RulesInput {
 				// Check if there is a power pill between the intersections
 				if (game.getPowerPillIndex(node) != -1 && game.isPowerPillStillAvailable(game.getPowerPillIndex(node))) {
 					pPill = true;
-					hayPillCaminoInmediato = true;
-					minDistancePpill = game.getDistance(game.getPacmanCurrentNodeIndex(), game.getPowerPillIndex(node), DM.PATH);
 				}
 
 				// Checks if a ghost
@@ -326,9 +320,7 @@ public class MsPacManInput extends RulesInput {
 			moveToGhost.put(m, ghostInPath);
 			moveToNode.put(m, node);
 			moveToPpill.put(m, pPill);
-			if (count != 0) {
-				moveToPoints.put(m, count);
-			}
+			if (count != 0) moveToPoints.put(m, count);
 		}
 		
 		candidateMoves = cM;
@@ -336,10 +328,9 @@ public class MsPacManInput extends RulesInput {
 		if(candidateMoves.size() > 1) {
 			candidateMoves = filterData();
 		}
-		
-		for(MOVE m: candidateMoves)
-			isCandidateMove.put(m, true);
-		
+		for(MOVE c : candidateMoves) {
+			this.isCandidateMove.put(c, true);
+		}
 	}
 	
 	private List<MOVE> filterData() {
@@ -350,14 +341,14 @@ public class MsPacManInput extends RulesInput {
 				&& !moveToGhost.get(game.getApproximateNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), moveToNode.get(m), game.getPacmanLastMoveMade(), DM.PATH))) {
 				aux.add(m);
 			}
-		}
+		}  
 
 		return aux;
 	}
 	
 	private void setNearestPPill() {
 		int[] ppills = game.getActivePowerPillsIndices();
-        closestPPill = 0; // no Ppill active
+        closestPPill = -1; // no Ppill active
         minDistancePpill = 60;
 	    if (!(game.getNumberOfActivePowerPills() == 0)) {
 	        for (int pill : ppills) {
@@ -367,7 +358,16 @@ public class MsPacManInput extends RulesInput {
 	                minDistancePpill = game.getDistance(game.getPacmanCurrentNodeIndex(), pill, DM.PATH);
 	            }
 	        }
-	        setGhostDistanceToPPIL(); //Once the ppil is chosen we set the distance to the ghost to this PPIL
+	        if(closestPPill != -1) {
+		        setGhostDistanceToPPIL(); //Once the ppil is chosen we set the distance to the ghost to this PPIL
+		        if(this.minDistancePpill > this.BLINKYMinDistanceToPpill || this.minDistancePpill > this.INKYMinDistanceToPpill  ||
+		        		this.minDistancePpill > this.PINKYMinDistanceToPpill || this.minDistancePpill > this.SUEMinDistanceToPpill ) {
+		        	this.llegoAntesAPPill = false;
+		        }
+	        }
+	    }
+	    else {
+	    	this.llegoAntesAPPill = false;
 	    }
 	}
 
@@ -375,16 +375,16 @@ public class MsPacManInput extends RulesInput {
 		for(GHOST g: GHOST.values()) {
 			switch(g) {
 			case BLINKY:
-				BLINKYMinDistanceToPpill = game.getDistance(game.getGhostCurrentNodeIndex(g), closestPPill, DM.PATH);
+				BLINKYMinDistanceToPpill = game.getDistance(game.getGhostCurrentNodeIndex(g), closestPPill, DM.MANHATTAN);
 				break;
 			case INKY:
-				INKYMinDistanceToPpill = game.getDistance(game.getGhostCurrentNodeIndex(g), closestPPill, DM.PATH);
+				INKYMinDistanceToPpill = game.getDistance(game.getGhostCurrentNodeIndex(g), closestPPill, DM.MANHATTAN);
 				break;
 			case PINKY:
-				PINKYMinDistanceToPpill = game.getDistance(game.getGhostCurrentNodeIndex(g), closestPPill, DM.PATH);
+				PINKYMinDistanceToPpill = game.getDistance(game.getGhostCurrentNodeIndex(g), closestPPill, DM.MANHATTAN);
 				break;
 			case SUE:
-				SUEMinDistanceToPpill = game.getDistance(game.getGhostCurrentNodeIndex(g), closestPPill, DM.PATH);
+				SUEMinDistanceToPpill = game.getDistance(game.getGhostCurrentNodeIndex(g), closestPPill, DM.MANHATTAN);
 				break;
 			}
 			
