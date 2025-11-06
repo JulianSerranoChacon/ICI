@@ -121,7 +121,7 @@ public class MsPacManInput extends RulesInput {
 		String pacmanData = "(MSPACMAN ";
 		pacmanData += (String.format("(hayPillEnCaminoInmediato %s)",hayPillCaminoInmediato));
 
-		pacmanData += (String.format("(minDistancePpill %s)", minDistancePpill));
+		pacmanData += (String.format("(minDistancePpill %d)", (int)minDistancePpill));
 
 		pacmanData += (String.format("(variosCaminos %d)", isCandidateMove.size()));
 

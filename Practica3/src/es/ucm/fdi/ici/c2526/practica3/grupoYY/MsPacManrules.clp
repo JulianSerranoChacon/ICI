@@ -113,7 +113,6 @@
 
 ;Si solo se puede mover a un lado da igual todo lo demás debemos ir a ese camino
 (defrule MSPacManSoloUnMovimiento
-(declare (salience 2))
 	( MSPACMAN 
 		(variosCaminos ?v )
 		(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
@@ -124,7 +123,7 @@
 		(
 			ACTION 
 				(id Onlymovepossibleaction) 
-				(info "Solo tengo un movimiento posible") 
+				(info " ") 
 				(priority 2)
 				(CandidateLeft ?lc)
 				(CandidateRight ?rc)
@@ -136,7 +135,6 @@
 
 ; Comienzo siempre en ir a comer pills, luego iré viendo que tengo que hacer realmente
 (defrule MSPacManMoveToClosestPill
-	(declare (salience 0))
 	( MSPACMAN 
 		(voyGreedy true) 
 		(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
@@ -146,7 +144,7 @@
 		(
 			ACTION 
 				(id Goesnearestpillaction) 
-				(info "Soy un greedy") 
+				(info " ") 
 				(priority 0)
 				(CandidateLeft ?lc)
 				(CandidateRight ?rc)
@@ -158,7 +156,6 @@
 
 ; Si hay pills inmediatas voy a por ellas
 (defrule MSPacManGetMorePoints
-	(declare (salience 1))
 	( MSPACMAN
 		(hayPillEnCaminoInmediato true) 	
 		(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
@@ -170,7 +167,7 @@
 		(
 			ACTION
 				(id GreedyPointsAction) 
-				(info "A por más puntos") 
+				(info "") 
 				(priority 1)
 				(CandidateLeft ?lc)
 				(CandidateRight ?rc)
@@ -189,7 +186,6 @@
 )
 
 (defrule MSPacManEscapeFromAll
-	(declare (salience 10))
 	(MSPACMAN (numDangerGhosts ?d) (minDistancePpill ?md)) 
 	(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
 	(RIGHTMoveToNode ?rn) (LEFTMoveToNode ?ln) (UPMoveToNode ?un) (DOWNMoveToNode ?dn)
@@ -200,7 +196,7 @@
 		(
 			ACTION 
 			(id HideAction) 
-			(info "Huyo En general") 
+			(info " ") 
 			(priority 10)
 			(CandidateLeft ?lc)
 			(CandidateRight ?rc)
@@ -214,7 +210,6 @@
 	)
 )
 (defrule MSPacManEscapeFromOne
-	(declare (salience 8))
     ( MSPACMAN 
         (numDangerGhosts ?n)
         (RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
@@ -225,7 +220,7 @@
         (
             ACTION 
                 (id HideFromOneAction) 
-                (info "Huyo de un fantasma") 
+                (info " ") 
                 (priority 11)
                 (CandidateLeft ?lc)
                 (CandidateRight ?rc)
@@ -238,7 +233,6 @@
 ; Si hay muchos fantasmas cerca de mi, intento comerme la PPIL
 
 (defrule MSPacManTryPPIL
-	(declare (salience 11))
 	( MSPACMAN 
 		(numDangerGhosts ?n) (minDistancePpill ?md)
 		(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
@@ -250,7 +244,7 @@
 		(
 			ACTION 
 				(id GoPPillAction) 
-				(info "IntentoAcercarmeAunaPPIL") 
+				(info " ") 
 				(priority 12)
 				(CandidateLeft ?lc)
 				(CandidateRight ?rc)
@@ -264,14 +258,13 @@
 ; Si tengo muchos fantasmas persiguiendome y llego a la powerPill voy a por ella
 
 (defrule MSPacManEatPPIL
-	(declare (salience 4))
 	( MSPACMAN
 	 (llegoAntesAPPil ?b) (numDangerGhosts ?n) (minDistancePpill ?m)
 	 (RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
 	 (goToPillMove ?gpm)
 
 	)
-	(test(?b true))  
+	(test(eq ?b true))  
 	(test(> ?n 1))  
 	(test( <= ?m 50)) ;50 puesto a ojo
 
@@ -280,7 +273,7 @@
 		(
 			ACTION 
 				(id EatPPillAction) 
-				(info "Me he comido una PPIl") 
+				(info " ") 
 				(priority 14)
 				(CandidateLeft ?lc)
 				(CandidateRight ?rc)
@@ -293,20 +286,18 @@
 
 ; Si hay fantasmas comestibles cerca y no hay fantasmas no comestibles cerca me voy a comerlos 
 (defrule MSPacManStartsFollowing
-	(declare (salience 69))
 	( MSPACMAN 
 		(numDangerGhosts ?nd) 
 		(numEatableGhost ?ne) 
 		(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
 	)
-	(test (= ?nd 0)) 
-	(test (> ?ne 0))
+	(test (= ?nd 0)) (test (> ?ne 0))
 	=>
 	(assert
 		(
 			ACTION 
 				(id HuntAction) 
-				(info "voy a comer") 
+				(info " ") 
 				(priority 69)
 				(CandidateLeft ?lc)
 				(CandidateRight ?rc)
@@ -319,7 +310,6 @@
 ;Si no hay caminos disponibles intento ir a por la PPIL
 ;FALTA COMPROBAR SI LLEGO A COMERLA
 (defrule MSPacManStartSuicida
-	(declare (salience 6))
 	( MSPACMAN 
 		(variosCaminos ?v)
 		(RIGHTMoveToPpill ?rpp) (LEFTMoveToPpill ?lpp) (UPMoveToPpill ?upp) (DOWNMoveToPpill ?dpp)
@@ -330,7 +320,7 @@
 		(
 			ACTION 
 				(id PPillSuicida) 
-				(info "Intento huir a la powerPPil") 
+				(info " ") 
 				(priority 6)
 				(MoveToPpillLeft ?lpp)
 				(MoveToPpillRight ?rpp)
@@ -342,7 +332,6 @@
 
 ; Si no hay caminos disponibles, ni PPILS pero hay pils accesibles, me muevo a esas pills
 (defrule MSPacManPillsSuicida
-	(declare (salience 7))
 	( MSPACMAN 
 		(variosCaminos ?v) (quedanPPils ?p)
 		(RIGHTMoveToPoints ?rp) (LEFTMoveToPoints ?lp) (UPMoveToPoints ?up) (DOWNMoveToPoints ?dp)
@@ -354,7 +343,7 @@
 		(
 			ACTION 
 				(id Gopillssuicidaaction) 
-				(info "A pillar la mayor cantidad de puntos que pueda") 
+				(info " ") 
 				(priority 7)
 				(MoveToPointsLeft ?lp)
 				(MoveToPointsRight ?rp)
@@ -366,19 +355,18 @@
 
 ;Si no hay caminos disponibles, ni PPILS, ni PILLS me muevo random
 (defrule MSPacManRandom
-	(declare (salience 8))
 	( MSPACMAN 
 		(variosCaminos ?v) (quedanPPils ?p) (hayPillEnCaminoInmediato ?b)
 	) 
 	(test(= ?v 0)) 
 	(test(= ?p 0)) 
-	(test(?b false))
+	(test(eq ?b false))
 	=>
 	(assert
 		(
 			ACTION 
 				(id RandomAction) 
-				(info "Todo al verde") 
+				(info " ") 
 				(priority 8)
 		)
 	)
