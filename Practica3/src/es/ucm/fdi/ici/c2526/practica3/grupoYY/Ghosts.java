@@ -31,8 +31,8 @@ public class Ghosts  extends GhostController  {
 	
 	
 	public Ghosts() {
-		setName("Ghosts XX");
-		setTeam("Team XX");
+		setName("Ghostsing");
+		setTeam("Team 06");
 		
 		map = new HashMap<String,RulesAction>();
 		//Fill Actions
