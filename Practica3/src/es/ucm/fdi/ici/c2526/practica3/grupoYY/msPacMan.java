@@ -29,8 +29,8 @@ public class msPacMan  extends PacmanController  {
 	
 	
 	public msPacMan() {
-		setName("PapiPacMan");
-		setTeam("Team GH");
+		setName("RandomJuegaMejor");
+		setTeam("Team 06");
 		
 		map = new HashMap<String,RulesAction>();
 		//Fill Actions
@@ -59,8 +59,6 @@ public class msPacMan  extends PacmanController  {
 
 		String rulesFile = String.format("%s%srules.clp", RULES_PATH, "MsPacMan");
 		MsPacManRuleEngine = new RuleEngine("MsPacMan",rulesFile,map);	
-		ConsoleRuleEngineObserver observer = new ConsoleRuleEngineObserver("MsPacMan", true);
-		MsPacManRuleEngine.addObserver(observer);
 	}
 	
 	@Override
