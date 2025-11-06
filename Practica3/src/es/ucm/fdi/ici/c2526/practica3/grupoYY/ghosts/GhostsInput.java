@@ -197,6 +197,9 @@ public class GhostsInput extends RulesInput {
 			distanceFromGhostToGhost.put(g, auxMap);
 		}
 	}
+	
+	//We gather the most tactical position that pacman could go to
+	//That is the node nearest to the PPill, so the jailer goes to secure that position
 	private void parseGhostToIntersection() {
 		Set<Integer> auxSet = new HashSet<>();
 		Map<Integer, Integer> nodeToPoints = new HashMap<>();
@@ -232,6 +235,7 @@ public class GhostsInput extends RulesInput {
 				auxSet.add(node);
 			}
 			
+			//Consider the best option amongst all gathered
 			for(int ppillNode : game.getActivePowerPillsIndices()) {
 				double distFromNode = game.getDistance(node, ppillNode, DM.PATH);
 				if(distFromBest >  distFromNode  && game.isPowerPillStillAvailable(ppillNode)) {
@@ -245,6 +249,7 @@ public class GhostsInput extends RulesInput {
 			}
 		}
 		
+		//if no ppills active, we try to secure the intersection that would give pacman more points
 		if(game.getActivePowerPillsIndices().length == 0) {
 			int maxPoints = 0;
 			for(Map.Entry<Integer, Integer> points : nodeToPoints.entrySet()) {
@@ -255,11 +260,13 @@ public class GhostsInput extends RulesInput {
 			}
 		}
 		
+		//we assign the distance to that intersection to all ghosts
 		for(GHOST g : GHOST.values()) {
 			double auxDistance = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(g), bestNode, game.getGhostLastMoveMade(g));
 			ghostToIntersection.put(g, auxDistance);
 		}
 		
+		//We fill the necessary data
 		pacmanBestNextNode = bestNode;
 		pacmanDistanceToBestNextNode = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), bestNode, game.getPacmanLastMoveMade());
 		

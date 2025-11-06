@@ -24,6 +24,7 @@ public class RunToEscuderoAction implements RulesAction {
         	return MOVE.NEUTRAL;
         }
         
+        //Ghost goes towards the shield that it has been assigned
         return game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getGhostCurrentNodeIndex(escudero), game.getGhostLastMoveMade(ghost), DM.PATH);
 	}
 	

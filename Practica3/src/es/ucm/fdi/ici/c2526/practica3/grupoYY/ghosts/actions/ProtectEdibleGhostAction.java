@@ -24,6 +24,7 @@ public class ProtectEdibleGhostAction implements RulesAction {
         	return MOVE.NEUTRAL;
         }
         
+        //Goes to the shieldee position
         return game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getGhostCurrentNodeIndex(ghostToCover), game.getGhostLastMoveMade(ghost), DM.PATH);
 	}
 	

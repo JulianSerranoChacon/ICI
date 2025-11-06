@@ -23,7 +23,7 @@ public class JailerAction implements RulesAction{
 	public MOVE execute(Game game) {    
 		if(!game.doesGhostRequireAction(ghost))
 			return MOVE.NEUTRAL;
-		
+		//Moves toward the computed intersection.
     	MOVE moveToReturn = game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost),targetNode,game.getGhostLastMoveMade(ghost) ,DM.PATH);
     	
     	return moveToReturn;
