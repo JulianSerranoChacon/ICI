@@ -309,7 +309,7 @@
 			ACTION 
 				(id Onlymovepossibleaction) 
 				(info "Solo tengo un movimiento posible") 
-				(priority 19)
+				(priority 2)
 				(CandidateLeft ?lc)
 				(CandidateRight ?rc)
 				(CandidateUp ?uc)
@@ -370,8 +370,16 @@
 	)
 )
 
-(watch facts)
-
+(defrule MSPacManEscapeFromAll
+	(MSPACMAN (numDangerGhosts ?d) (minDistancePpil ?md)) 
+	(test (?d > 0)) (test (> ?md 50))
+	=>
+	(assert
+		(
+			ACTION (id HideAction) (info "Huyo En general") (priority 10)
+		)
+	)
+)
 (defrule MSPacManEscapeFromOne
     ( MSPACMAN 
         (numDangerGhosts ?n)
@@ -384,7 +392,7 @@
             ACTION 
                 (id HideFromOneAction) 
                 (info "Huyo de un fantasma") 
-                (priority 2)
+                (priority 8)
                 (CandidateLeft ?lc)
                 (CandidateRight ?rc)
                 (CandidateUp ?uc)
@@ -397,18 +405,18 @@
 
 (defrule MSPacManTryPPIL
 	( MSPACMAN 
-		(numDangerGhosts ?n)
+		(numDangerGhosts ?n) (minDistancePpil ?md)
 		(RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
 		(ClosestPpil ?cpp)
 	)
-	(test (> ?n 1))
+	(test (> ?n 1)) (test(> ?md 50))
 	=>
 	(assert
 		(
 			ACTION 
 				(id GoPPillAction) 
 				(info "IntentoAcercarmeAunaPPIL") 
-				(priority 3)
+				(priority 11)
 				(CandidateLeft ?lc)
 				(CandidateRight ?rc)
 				(CandidateUp ?uc)
