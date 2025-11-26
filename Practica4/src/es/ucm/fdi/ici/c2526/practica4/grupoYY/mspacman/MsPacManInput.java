@@ -1,7 +1,6 @@
 package es.ucm.fdi.ici.c2526.practica4.grupoYY.mspacman;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -65,11 +64,38 @@ public class MsPacManInput extends CBRInput {
 	@Override
 	public CBRQuery getQuery() {
 		MsPacManDescription description = new MsPacManDescription();
-		description.setEdibleGhost(edible);
-		description.setNearestGhost(nearestGhost);
-		description.setNearestPPill(nearestPPill);
 		description.setScore(score);
 		description.setTime(time);
+		
+		//Pill related info
+		description.setNumPPills(numPPills);
+		description.setNearestPPill(nearestPPill);
+		description.setNearestPill(nearestPill);
+		
+		//Ghost menacing pacman info
+		
+		description.setGhostToPacman1(ghostToPacman1);
+		description.setGhostToPacman2(ghostToPacman2);
+		description.setGhostToPacman3(ghostToPacman3);
+		description.setGhostToPacman4(ghostToPacman4);
+		
+		description.setPacmanMove(pacmanMove);
+		description.setGhostToPacman1Movement(ghostToPacman1Movement);
+		description.setGhostToPacman2Movement(ghostToPacman2Movement);
+		description.setGhostToPacman3Movement(ghostToPacman3Movement);
+		description.setGhostToPacman4Movement(ghostToPacman4Movement);
+		
+		//Ghosts edible by pacman
+		
+		description.setPacmanToGhost1(pacmanToGhost1);
+		description.setPacmanToGhost2(pacmanToGhost2);
+		description.setPacmanToGhost3(pacmanToGhost3);
+		description.setPacmanToGhost4(pacmanToGhost4);
+		
+		description.setGhostEdibleTime1(ghostEdibleTime1);
+		description.setGhostEdibleTime2(ghostEdibleTime2);
+		description.setGhostEdibleTime3(ghostEdibleTime3);
+		description.setGhostEdibleTime4(ghostEdibleTime4);
 		
 		CBRQuery query = new CBRQuery();
 		query.setDescription(description);
