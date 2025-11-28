@@ -258,7 +258,7 @@
 
 (defrule MSPacManEatPPIL
 	( MSPACMAN
-	 (llegoAntesAPPil ?b) (numDangerGhosts ?n) (minDistancePpill ?m)
+	 (llegoAntesAPPil true) (numDangerGhosts ?n) (minDistancePpill ?m)
 	 (RIGHTCandidate ?rc) (LEFTCandidate ?lc) (UPCandidate ?uc) (DOWNCandidate ?dc)
 	 (goToPillMove ?gpm)
 

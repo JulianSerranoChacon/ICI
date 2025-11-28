@@ -28,21 +28,21 @@ public class MsPacManInput extends CBRInput {
 	Integer nearestPPill;
 	Integer nearestPill;
 	
-	Double[] ghostToPacman = new Double[4];
+	vectorCBR<Double> ghostToPacman = new vectorCBR<Double>(4);
 	/*
 	Double  ghostToPacman1;
 	Double  ghostToPacman2;
 	Double  ghostToPacman3;
 	Double  ghostToPacman4;
 	*/
-	Double[] pacmanToGhost = new Double[4];
+	vectorCBR<Double> pacmanToGhost = new vectorCBR<Double>(4);
 	/*
 	Double  pacmanToGhost1;
 	Double  pacmanToGhost2;
 	Double  pacmanToGhost3;
 	Double  pacmanToGhost4;
 	*/
-	Integer[] ghostEdibleTime = new Integer[4];
+	vectorCBR<Integer> ghostEdibleTime = new vectorCBR<Integer>(4);
 	/*
 	Integer  ghostEdibleTime1;
 	Integer  ghostEdibleTime2;
@@ -81,11 +81,10 @@ public class MsPacManInput extends CBRInput {
 		
 		//Ghost menacing pacman info
 		
-		description.setGhostToPacman1(ghostToPacman1);
-		description.setGhostToPacman2(ghostToPacman2);
-		description.setGhostToPacman3(ghostToPacman3);
-		description.setGhostToPacman4(ghostToPacman4);
-		
+		for(int i = 0; i < 4;++i) {
+			description.setGhostToPacman(i,ghostToPacman.getElement(i));
+		}
+	
 		description.setPacmanMove(pacmanMove);
 		description.setGhostToPacman1Movement(ghostToPacman1Movement);
 		description.setGhostToPacman2Movement(ghostToPacman2Movement);
@@ -94,15 +93,13 @@ public class MsPacManInput extends CBRInput {
 		
 		//Ghosts edible by pacman
 		
-		description.setPacmanToGhost1(pacmanToGhost1);
-		description.setPacmanToGhost2(pacmanToGhost2);
-		description.setPacmanToGhost3(pacmanToGhost3);
-		description.setPacmanToGhost4(pacmanToGhost4);
+		for(int i = 0; i < 4;++i) {
+			description.setPacmanToGhost(i,pacmanToGhost.getElement(i));
+		}
 		
-		description.setGhostEdibleTime1(ghostEdibleTime1);
-		description.setGhostEdibleTime2(ghostEdibleTime2);
-		description.setGhostEdibleTime3(ghostEdibleTime3);
-		description.setGhostEdibleTime4(ghostEdibleTime4);
+		for(int i = 0; i < 4;++i) {
+			description.setGhostEdibleTime(i,ghostEdibleTime.getElement(i));
+		}
 		
 		CBRQuery query = new CBRQuery();
 		query.setDescription(description);
@@ -179,10 +176,10 @@ public class MsPacManInput extends CBRInput {
 		distances.sort(Comparator.comparingDouble(gd -> gd.distance));
 
 		// Obtener los valores ordenados de los fantasmas
-		ghostToPacman1 = distances.get(0).distance;
-		ghostToPacman2 = distances.get(1).distance;
-		ghostToPacman3 = distances.get(2).distance;
-		ghostToPacman4 = distances.get(3).distance;
+		ghostToPacman.setElement(0,distances.get(0).distance);
+		ghostToPacman.setElement(1,distances.get(1).distance);
+		ghostToPacman.setElement(2,distances.get(2).distance);
+		ghostToPacman.setElement(3,distances.get(3).distance);
 		pacmanMove = game.getPacmanLastMoveMade().toString();
 		ghostToPacman1Movement = distances.get(0).move;
 		ghostToPacman2Movement = distances.get(1).move;
@@ -215,15 +212,15 @@ public class MsPacManInput extends CBRInput {
 		ghostDistances.sort(Comparator.comparingDouble(gd -> gd.distance));
 
 		// Obtener los 4 más cercanos
-		ghostEdibleTime1 = ghostDistances.get(0).ghost_time;
-		ghostEdibleTime2 = ghostDistances.get(1).ghost_time;
-		ghostEdibleTime3 = ghostDistances.get(2).ghost_time;
-		ghostEdibleTime4 = ghostDistances.get(3).ghost_time;
+		ghostEdibleTime.setElement(0,ghostDistances.get(0).ghost_time);
+		ghostEdibleTime.setElement(1,ghostDistances.get(1).ghost_time);
+		ghostEdibleTime.setElement(2,ghostDistances.get(2).ghost_time);
+		ghostEdibleTime.setElement(3,ghostDistances.get(3).ghost_time);
 
-		pacmanToGhost1 = ghostDistances.get(0).distance;
-		pacmanToGhost2 = ghostDistances.get(1).distance;
-		pacmanToGhost3 = ghostDistances.get(2).distance;
-		pacmanToGhost4 = ghostDistances.get(3).distance;
+		pacmanToGhost.setElement(0,ghostDistances.get(0).distance);
+		pacmanToGhost.setElement(1,ghostDistances.get(1).distance);
+		pacmanToGhost.setElement(2,ghostDistances.get(2).distance);
+		pacmanToGhost.setElement(3,ghostDistances.get(3).distance);
 	}
 	
 }

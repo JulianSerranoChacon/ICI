@@ -15,20 +15,28 @@ public class MsPacManDescription implements CaseComponent {
 	Integer nearestPPill;
 	Integer nearestPill;
 	
+	
+	vectorCBR<Double> ghostToPacman = new vectorCBR<Double>(4);
+	/*
 	Double  ghostToPacman1;
 	Double  ghostToPacman2;
 	Double  ghostToPacman3;
 	Double  ghostToPacman4;
-	
+	*/
+	vectorCBR<Double> pacmanToGhost = new vectorCBR<Double>(4);
+	/*
 	Double  pacmanToGhost1;
 	Double  pacmanToGhost2;
 	Double  pacmanToGhost3;
 	Double  pacmanToGhost4;
-	
+	*/
+	vectorCBR<Integer> ghostEdibleTime = new vectorCBR<Integer>(4);
+	/*
 	Integer  ghostEdibleTime1;
 	Integer  ghostEdibleTime2;
 	Integer  ghostEdibleTime3;
 	Integer  ghostEdibleTime4;
+	*/
 	
 	String pacmanMove;
 	String  ghostToPacman1Movement;
@@ -89,100 +97,28 @@ public class MsPacManDescription implements CaseComponent {
 		this.nearestPill = nearestPill;
 	}
 
-	public Double getGhostToPacman1() {
-		return ghostToPacman1;
+	public Double getGhostToPacman(int index) {
+		return ghostToPacman.getElement(index);
 	}
 
-	public void setGhostToPacman1(Double ghostToPacman1) {
-		this.ghostToPacman1 = ghostToPacman1;
+	public void setGhostToPacman(int index,Double ghostToPacmand) {
+		this.ghostToPacman.setElement(index, ghostToPacmand);
 	}
 
-	public Double getGhostToPacman2() {
-		return ghostToPacman2;
+	public Double getPacmanToGhost(int index) {
+		return pacmanToGhost.getElement(index);
 	}
 
-	public void setGhostToPacman2(Double ghostToPacman2) {
-		this.ghostToPacman2 = ghostToPacman2;
+	public void setPacmanToGhost(int index,Double pacmanToGhostd) {
+		this.pacmanToGhost.setElement(index, pacmanToGhostd);
 	}
 
-	public Double getGhostToPacman3() {
-		return ghostToPacman3;
+	public Integer getGhostEdibleTime(int index) {
+		return ghostEdibleTime.getElement(index);
 	}
 
-	public void setGhostToPacman3(Double ghostToPacman3) {
-		this.ghostToPacman3 = ghostToPacman3;
-	}
-
-	public Double getGhostToPacman4() {
-		return ghostToPacman4;
-	}
-
-	public void setGhostToPacman4(Double ghostToPacman4) {
-		this.ghostToPacman4 = ghostToPacman4;
-	}
-
-	public Double getPacmanToGhost1() {
-		return pacmanToGhost1;
-	}
-
-	public void setPacmanToGhost1(Double pacmanToGhost1) {
-		this.pacmanToGhost1 = pacmanToGhost1;
-	}
-
-	public Double getPacmanToGhost2() {
-		return pacmanToGhost2;
-	}
-
-	public void setPacmanToGhost2(Double pacmanToGhost2) {
-		this.pacmanToGhost2 = pacmanToGhost2;
-	}
-
-	public Double getPacmanToGhost3() {
-		return pacmanToGhost3;
-	}
-
-	public void setPacmanToGhost3(Double pacmanToGhost3) {
-		this.pacmanToGhost3 = pacmanToGhost3;
-	}
-
-	public Double getPacmanToGhost4() {
-		return pacmanToGhost4;
-	}
-
-	public void setPacmanToGhost4(Double pacmanToGhost4) {
-		this.pacmanToGhost4 = pacmanToGhost4;
-	}
-
-	public Integer getGhostEdibleTime1() {
-		return ghostEdibleTime1;
-	}
-
-	public void setGhostEdibleTime1(Integer ghostEdibleTime1) {
-		this.ghostEdibleTime1 = ghostEdibleTime1;
-	}
-
-	public Integer getGhostEdibleTime2() {
-		return ghostEdibleTime2;
-	}
-
-	public void setGhostEdibleTime2(Integer ghostEdibleTime2) {
-		this.ghostEdibleTime2 = ghostEdibleTime2;
-	}
-
-	public Integer getGhostEdibleTime3() {
-		return ghostEdibleTime3;
-	}
-
-	public void setGhostEdibleTime3(Integer ghostEdibleTime3) {
-		this.ghostEdibleTime3 = ghostEdibleTime3;
-	}
-
-	public Integer getGhostEdibleTime4() {
-		return ghostEdibleTime4;
-	}
-
-	public void setGhostEdibleTime4(Integer ghostEdibleTime4) {
-		this.ghostEdibleTime4 = ghostEdibleTime4;
+	public void setGhostEdibleTime(int index,Integer ghostEdibleTime) {
+		this.ghostEdibleTime.setElement(index, ghostEdibleTime);
 	}
 
 	public String getPacmanMove() {
@@ -241,20 +177,11 @@ public class MsPacManDescription implements CaseComponent {
 	            + ", nearestPPill=" + nearestPPill
 	            + ", nearestPill=" + nearestPill
 
-	            + ", ghostToPacman1=" + ghostToPacman1
-	            + ", ghostToPacman2=" + ghostToPacman2
-	            + ", ghostToPacman3=" + ghostToPacman3
-	            + ", ghostToPacman4=" + ghostToPacman4
+	            + ", ghostToPacman=" + ghostToPacman.toString()
 
-	            + ", pacmanToGhost1=" + pacmanToGhost1
-	            + ", pacmanToGhost2=" + pacmanToGhost2
-	            + ", pacmanToGhost3=" + pacmanToGhost3
-	            + ", pacmanToGhost4=" + pacmanToGhost4
+	            + ", pacmanToGhost1=" + pacmanToGhost.toString()
 
-	            + ", ghostEdibleTime1=" + ghostEdibleTime1
-	            + ", ghostEdibleTime2=" + ghostEdibleTime2
-	            + ", ghostEdibleTime3=" + ghostEdibleTime3
-	            + ", ghostEdibleTime4=" + ghostEdibleTime4
+	            + ", ghostEdibleTime1=" + ghostEdibleTime.toString()
 
 	            + ", pacmanMove=" + pacmanMove
 	            + ", ghostToPacman1Movement=" + ghostToPacman1Movement
