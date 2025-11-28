@@ -72,7 +72,7 @@ public class MsPacManStorageManager {
 		}
 		this.buffer.removeAllElements();
 	}
-
+	
 	public int getPendingCases() {
 		return this.buffer.size();
 	}
