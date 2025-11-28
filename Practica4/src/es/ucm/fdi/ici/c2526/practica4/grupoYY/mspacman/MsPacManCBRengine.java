@@ -100,11 +100,13 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 	{
 		// This simple implementation only uses 1NN
 		// Consider using kNNs with majority voting
+		// TODO: It is 5 cases we are consulting
 		RetrievalResult first = SelectCases.selectTopKRR(eval, 1).iterator().next();
 		CBRCase mostSimilarCase = first.get_case();
 		double similarity = first.getEval();
-		
-		
+		mostSimilarCase.getDescription();
+		//TODO: Do the majority voting between cases
+		//TODO: Implement when we want random --> because not similar or not enough.
 		if(Math.random()<.2) {
 		ArrayList<CBRCase> toforget = new ArrayList<CBRCase>();
 		toforget.add(mostSimilarCase);

@@ -50,6 +50,8 @@ public class MsPacManStorageManager {
 		int currentScore = game.getScore();
 		int resultValue = currentScore - oldScore;
 		
+		//TODO: Alter points if dead, ate ghosts...
+		
 		MsPacManResult result = (MsPacManResult)bCase.getResult();
 		result.setScore(resultValue);	
 	}
@@ -60,6 +62,9 @@ public class MsPacManStorageManager {
 		//Alternatively we could store all them when game finishes in close() method
 		
 		//here you should also check if the case must be stored into persistence (too similar to existing ones, etc.)
+		
+		//TODO: Si hay similares mezclar, sino añadir si se cumple los valores de similitud y puntuaje (puntuaje a revisar)
+		//TODO: Traer los K más similares y guardarlos en un buffer desde cbr.cycle()
 		
 		StoreCasesMethod.storeCase(this.caseBase, bCase);
 	}
