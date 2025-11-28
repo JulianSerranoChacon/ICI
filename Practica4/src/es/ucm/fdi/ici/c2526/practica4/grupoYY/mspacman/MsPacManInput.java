@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import antlr.collections.impl.Vector;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRQuery;
 import es.ucm.fdi.ici.cbr.CBRInput;
 import pacman.game.Constants.DM;
@@ -27,21 +28,27 @@ public class MsPacManInput extends CBRInput {
 	Integer nearestPPill;
 	Integer nearestPill;
 	
+	Double[] ghostToPacman = new Double[4];
+	/*
 	Double  ghostToPacman1;
 	Double  ghostToPacman2;
 	Double  ghostToPacman3;
 	Double  ghostToPacman4;
-	
+	*/
+	Double[] pacmanToGhost = new Double[4];
+	/*
 	Double  pacmanToGhost1;
 	Double  pacmanToGhost2;
 	Double  pacmanToGhost3;
 	Double  pacmanToGhost4;
-	
+	*/
+	Integer[] ghostEdibleTime = new Integer[4];
+	/*
 	Integer  ghostEdibleTime1;
 	Integer  ghostEdibleTime2;
 	Integer  ghostEdibleTime3;
 	Integer  ghostEdibleTime4;
-	
+	*/
 	String pacmanMove;
 	String  ghostToPacman1Movement;
 	String  ghostToPacman2Movement;
