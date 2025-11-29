@@ -98,38 +98,23 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 
 	private MOVE reuse(Collection<RetrievalResult> eval)
 	{
-		// This simple implementation only uses 1NN
-		// Consider using kNNs with majority voting
-		// TODO: It is 5 cases we are consulting
-		RetrievalResult first = SelectCases.selectTopKRR(eval, 1).iterator().next();
-		CBRCase mostSimilarCase = first.get_case();
-		double similarity = first.getEval();
-		mostSimilarCase.getDescription();
+		// kNNs with majority voting
+		RetrievalResult first = SelectCases.selectTopKRR(eval, 5).iterator().next();
+		
+		//Truncar la lista para conservar casos que cumplen con el umbral
+		
+		//Si tamaño = 0 --> Aleatorio
+		
+		//Si tamaño > 0 --> Opciones
+		// 1. Escoger por mayoría
+		// 2. Escoger aleatorio
+		// 3. Escoger por descarte
+		
+		//Hacemos fuzzy logic --> dependiendo del resultado hacemos aleatorio, descarte o mayoría
+		
 		//TODO: Do the majority voting between cases
 		//TODO: Implement when we want random --> because not similar or not enough.
-		if(Math.random()<.2) {
-		ArrayList<CBRCase> toforget = new ArrayList<CBRCase>();
-		toforget.add(mostSimilarCase);
-		this.caseBase.forgetCases(toforget);
-		System.out.println(mostSimilarCase.getID());
-		}
 		
-		MsPacManResult result = (MsPacManResult) mostSimilarCase.getResult();
-		MsPacManSolution solution = (MsPacManSolution) mostSimilarCase.getSolution();
-		
-		//Now compute a solution for the query
-		
-		//Here, it simply takes the action of the 1NN
-		MOVE action = solution.getAction();
-		
-		//But if not enough similarity or bad case, choose another move randomly
-		if((similarity<0.7)||(result.getScore()<100)) {
-			int index = (int)Math.floor(Math.random()*4);
-			if(MOVE.values()[index]==action) 
-				index= (index+1)%4;
-			action = MOVE.values()[index];
-		}
-		return action;
 	}
 	
 	
