@@ -1,10 +1,14 @@
 package es.ucm.fdi.ici.c2526.practica4.grupoYY.mspacman;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Objects;
 import java.util.Vector;
 
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRCase;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRCaseBase;
 import es.ucm.fdi.gaia.jcolibri.method.retain.StoreCasesMethod;
+import es.ucm.fdi.gaia.jcolibri.method.retrieve.RetrievalResult;
 import pacman.game.Game;
 
 public class MsPacManStorageManager {
@@ -17,20 +21,29 @@ public class MsPacManStorageManager {
 	{
 		private int numLives;
 		private int numPills;
+		private Collection<RetrievalResult> eval;
 
-		public Info(int numLives, int numPills) {
+		public Info(int numLives, int numPills, Collection<RetrievalResult> eval) {
 			this.numLives = numLives;
 			this.numPills = numPills;
+			this.eval = eval;
 		}
 	}
 	
+	//Constante de tiempo
+	private final static int TIME_WINDOW = 3;
+	
+	//Constante de recuerdo
+	private static final double UMBRAL_MUY_SIMILAR = 0.85;
+	private static final double UMBRAL_ALEATORIO = 0.75;
+	private static final double UMBRAL_NO_RECORDAR = 0.85;
+	
+	//Constantes de revision
 	private final static Integer PENALIZACION_MUERTE = 500;
 	private final static Integer PENALIZACION_PPILL = 500;
 	private final static Integer RECOMPENSA_FANTASMAS = 500;
-
 	private final static Integer SCORE_FANTASMA_COMIDO = 200;
-
-	private final static int TIME_WINDOW = 3;
+	
 	
 	public MsPacManStorageManager()
 	{
@@ -46,11 +59,11 @@ public class MsPacManStorageManager {
 		this.caseBase = caseBase;
 	}
 	
-	public void reviseAndRetain(CBRCase newCase)
+	public void reviseAndRetain(CBRCase newCase, Collection<RetrievalResult> eval)
 	{			
 		this.buffer.add(newCase);
 		//We can keep extra information of the game that would be unnecesary in a case.
-		this.bufferInfo.add(new Info(game.getPacmanNumberOfLivesRemaining(), game.getNumberOfActivePowerPills()));
+		this.bufferInfo.add(new Info(game.getPacmanNumberOfLivesRemaining(), game.getNumberOfActivePowerPills(), eval));
 		
 		//Buffer not full yet.
 		if(this.buffer.size()<TIME_WINDOW)
@@ -60,7 +73,7 @@ public class MsPacManStorageManager {
 		CBRCase bCase = this.buffer.remove(0);
 		Info infoCase = this.bufferInfo.remove(0);
 		reviseCase(bCase, infoCase);
-		retainCase(bCase);
+		retainCase(bCase, infoCase.eval);
 		
 	}
 	
@@ -92,7 +105,7 @@ public class MsPacManStorageManager {
 		result.setScore(resultValue);	
 	}
 	
-	private void retainCase(CBRCase bCase)
+	private void retainCase(CBRCase bCase, Collection<RetrievalResult> eval)
 	{
 		//Store the old case right now into the case base
 		//Alternatively we could store all them when game finishes in close() method
@@ -102,15 +115,51 @@ public class MsPacManStorageManager {
 		//TODO: Si hay similares mezclar, sino añadir si se cumple los valores de similitud y puntuaje (puntuaje a revisar)
 		//TODO: Traer los K más similares y guardarlos en un buffer desde cbr.cycle()
 		
-		StoreCasesMethod.storeCase(this.caseBase, bCase);
+		//Options:
+		
+		
+		//If there is no other cases to compare it to, then there needs to be added
+		if(Objects.isNull(eval)) {
+			StoreCasesMethod.storeCase(this.caseBase, bCase);			
+		}
+		
+		//Obtenemos los casos muy similares
+		Double maxSimilarity = Double.MIN_VALUE;
+		Collection<RetrievalResult> list = new ArrayList<>();
+		for(RetrievalResult cbrCase : eval) {
+			if(UMBRAL_MUY_SIMILAR  <= cbrCase.getEval()) {
+				list.add(cbrCase);
+			}
+			
+			if(maxSimilarity < cbrCase.getEval()) {
+				maxSimilarity = cbrCase.getEval();
+			}
+		}
+		
+		//1. Not store it
+		if (maxSimilarity >= UMBRAL_NO_RECORDAR) {
+			return;
+		}
+		
+		//2. Store it
+		//Si la mayor similitud es menor que nuestra constante, se añade directamente
+		if(maxSimilarity < UMBRAL_ALEATORIO) {
+			StoreCasesMethod.storeCase(this.caseBase, bCase);			
+			return;
+		}
+		
+		//3. Do a mix of similar cases
+		//TODO: ¿Como creas un caso mezcla de los otros dos?
+		//Probablemente necesitemos input para hacer esto
 	}
 
 	public void close() {
 		//TODO: ¿Cuando salvo la información, lo hago con el método habitual o usamos otro distinto?
+		//TODO: ¿Y con retain, hacemos tambien lo mismo?
 		for(int i = 0; i < buffer.size(); i++)
 		{
 			reviseCase(buffer.get(i), bufferInfo.get(i));
-			retainCase(buffer.get(i));
+			retainCase(buffer.get(i), bufferInfo.get(i).eval);
 		}
 		this.buffer.removeAllElements();
 		this.bufferInfo.removeAllElements();

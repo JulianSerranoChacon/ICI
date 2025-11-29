@@ -88,19 +88,21 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 
 	@Override
 	public void cycle(CBRQuery query) throws ExecutionException {
+		Collection<RetrievalResult> eval = null;
+		
 		if(caseBase.getCases().isEmpty()) {
 			this.action = MOVE.NEUTRAL;
 		}
 		else {
 			//Compute retrieve
-			Collection<RetrievalResult> eval = NNScoringMethod.evaluateSimilarity(caseBase.getCases(), query, simConfig);
+			eval = NNScoringMethod.evaluateSimilarity(caseBase.getCases(), query, simConfig);
 			//Compute reuse
 			this.action = reuse(eval);
 		}
 		
 		//Compute revise & retain
 		CBRCase newCase = createNewCase(query);
-		this.storageManager.reviseAndRetain(newCase);
+		this.storageManager.reviseAndRetain(newCase, eval);
 		
 	}
 
