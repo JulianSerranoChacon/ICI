@@ -3,6 +3,10 @@ package es.ucm.fdi.ici.c2526.practica4.grupoYY.mspacman;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import es.ucm.fdi.gaia.jcolibri.cbraplications.StandardCBRApplication;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.Attribute;
@@ -34,6 +38,10 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 	
 	
 	final static String TEAM = "grupoYY";  //Cuidado!! poner el grupo aquí
+	
+	private final static Double UMBRAL_SIMILITUD = 0.7;
+	private final static Double UMBRAL_ALEATORIO = 0.5;
+	private final static Double UMBRAL_CONTRADECIR = 0.5;
 	
 	
 	final static String CONNECTOR_FILE_PATH = "es/ucm/fdi/ici/c2425/practica5/"+TEAM+"/mspacman/plaintextconfig.xml";
@@ -99,22 +107,67 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 	private MOVE reuse(Collection<RetrievalResult> eval)
 	{
 		// kNNs with majority voting
-		RetrievalResult first = SelectCases.selectTopKRR(eval, 5).iterator().next();
+		Collection<RetrievalResult> cases = SelectCases.selectTopKRR(eval, 5);
 		
 		//Truncar la lista para conservar casos que cumplen con el umbral
+		Collection<RetrievalResult> list = new ArrayList<>();
+		for(RetrievalResult cbrCase : cases) {
+			if(cbrCase.getEval() < UMBRAL_SIMILITUD) {
+				list.add(cbrCase);
+			}
+		}
 		
 		//Si tamaño = 0 --> Aleatorio
-		
-		//Si tamaño > 0 --> Opciones
-		// 1. Escoger por mayoría
-		// 2. Escoger aleatorio
-		// 3. Escoger por descarte
-		
-		//Hacemos fuzzy logic --> dependiendo del resultado hacemos aleatorio, descarte o mayoría
-		
 		//TODO: Do the majority voting between cases
 		//TODO: Implement when we want random --> because not similar or not enough.
-		
+		//TODO: No se si queremos que random sea una de las posibilidades a hacer, por eso el -1 en el valor aleatorio
+		if(list.isEmpty()) {
+			MOVE[] availableMoves = MOVE.values(); Random rnd = new Random();
+        	return availableMoves[rnd.nextInt(availableMoves.length - 1)];
+		}
+		//Si tamaño > 0 --> Opciones
+		else {
+			Map<MOVE, Double> dirToScore = new HashMap<>();
+			MOVE bestMove = MOVE.NEUTRAL; Double bestScore = Double.MIN_VALUE;
+			List<MOVE> isNotCandidate = new ArrayList<>();
+			
+			for(MOVE m : MOVE.values()) {
+				isNotCandidate.add(m);
+			}
+			
+			for(RetrievalResult cbrCase : cases) {
+				MsPacManResult scoreCase = (MsPacManResult) cbrCase.get_case().getResult(); 
+				MsPacManSolution moveCase = (MsPacManSolution) cbrCase.get_case().getSolution(); 
+				
+				if(scoreCase.getScore() * cbrCase.getEval() < dirToScore.get(moveCase.getAction())) {
+					dirToScore.replace(moveCase.getAction(), scoreCase.getScore() * cbrCase.getEval());
+					if(bestScore < dirToScore.get(moveCase.getAction())) {
+						bestScore = dirToScore.get(moveCase.getAction());
+						bestMove = moveCase.getAction();
+					}
+				}
+				
+				isNotCandidate.remove(moveCase.getAction());
+			}
+			
+			// 3. Escoger por descarte
+			if(bestScore < UMBRAL_CONTRADECIR && isNotCandidate.size() > 0) {
+				Random rnd = new Random();
+	        	return isNotCandidate.get(rnd.nextInt(isNotCandidate.size() - 1));
+			}
+			// 2. Escoger aleatorio
+			else if(bestScore < UMBRAL_ALEATORIO) {
+				MOVE[] availableMoves = MOVE.values(); Random rnd = new Random();
+	        	return availableMoves[rnd.nextInt(availableMoves.length - 1)];
+			}
+			// 1. Escoger por mayoría
+			else if(bestMove != MOVE.NEUTRAL){
+				return bestMove;
+			}			
+			
+			MOVE[] availableMoves = MOVE.values(); Random rnd = new Random();
+        	return availableMoves[rnd.nextInt(availableMoves.length - 1)];
+		}		
 	}
 	
 	
