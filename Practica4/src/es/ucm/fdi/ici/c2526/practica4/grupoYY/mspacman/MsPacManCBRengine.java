@@ -39,7 +39,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 	
 	final static String TEAM = "grupoYY";  //Cuidado!! poner el grupo aquí
 	
-	private final static Double UMBRAL_SIMILITUD = 0.7;
+	private final static Double UMBRAL_SIMILITUD = 0.7; // umbral de similitud propuesto para empezar a considerar casos similares
 	private final static Double UMBRAL_ALEATORIO = 0.5;
 	private final static Double UMBRAL_CONTRADECIR = 0.5;
 	
@@ -110,47 +110,50 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 	{
 		// kNNs with majority voting
 		Collection<RetrievalResult> cases = SelectCases.selectTopKRR(eval, 5);
-		
 		//Truncar la lista para conservar casos que cumplen con el umbral
 		Collection<RetrievalResult> list = new ArrayList<>();
+		Map<MOVE, Double> dirToScore = new HashMap<>();
+		MOVE bestMove = MOVE.NEUTRAL; Double bestScore = Double.MIN_VALUE;
+		List<MOVE> isNotCandidate = new ArrayList<>();
+
+		for(MOVE m : MOVE.values()) {
+				isNotCandidate.add(m);
+		}
+
 		for(RetrievalResult cbrCase : cases) {
 			if(cbrCase.getEval() < UMBRAL_SIMILITUD) {
 				list.add(cbrCase);
-			}
-		}
-		
-		//Si tamaño = 0 --> Aleatorio
-		//TODO: Do the majority voting between cases
-		//TODO: Implement when we want random --> because not similar or not enough.
-		//TODO: No se si queremos que random sea una de las posibilidades a hacer, por eso el -1 en el valor aleatorio
-		if(list.isEmpty()) {
-			MOVE[] availableMoves = MOVE.values(); Random rnd = new Random();
-        	return availableMoves[rnd.nextInt(availableMoves.length - 1)];
-		}
-		//Si tamaño > 0 --> Opciones
-		else {
-			Map<MOVE, Double> dirToScore = new HashMap<>();
-			MOVE bestMove = MOVE.NEUTRAL; Double bestScore = Double.MIN_VALUE;
-			List<MOVE> isNotCandidate = new ArrayList<>();
-			
-			for(MOVE m : MOVE.values()) {
-				isNotCandidate.add(m);
-			}
-			
-			for(RetrievalResult cbrCase : cases) {
+
 				MsPacManResult scoreCase = (MsPacManResult) cbrCase.get_case().getResult(); 
 				MsPacManSolution moveCase = (MsPacManSolution) cbrCase.get_case().getSolution(); 
-				
-				if(scoreCase.getScore() * cbrCase.getEval() < dirToScore.get(moveCase.getAction())) {
-					dirToScore.replace(moveCase.getAction(), scoreCase.getScore() * cbrCase.getEval());
-					if(bestScore < dirToScore.get(moveCase.getAction())) {
-						bestScore = dirToScore.get(moveCase.getAction());
+				double weight = scoreCase.getScore() * cbrCase.getEval();
+
+				if(weight > dirToScore.get(moveCase.getAction())) {
+					dirToScore.replace(moveCase.getAction(), weight);
+					if(bestScore < weight) {
+						bestScore = weight;
 						bestMove = moveCase.getAction();
 					}
 				}
 				
 				isNotCandidate.remove(moveCase.getAction());
+			
 			}
+		}
+		
+		//Si tamaño = 0 --> Aleatorio
+		if(list.isEmpty()) {
+			MOVE[] availableMoves = MOVE.values(); Random rnd = new Random();
+			return availableMoves[rnd.nextInt(availableMoves.length - 1)];
+		}
+
+		//TODO: Do the majority voting between cases
+		//TODO: Implement when we want random --> because not similar or not enough.
+		//TODO: No se si queremos que random sea una de las posibilidades a hacer, por eso el -1 en el valor aleatorio
+		//Si tamaño > 0 --> Opciones
+
+
+		else {
 			
 			// 3. Escoger por descarte
 			if(bestScore < UMBRAL_CONTRADECIR && isNotCandidate.size() > 0) {
