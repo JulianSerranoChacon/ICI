@@ -18,53 +18,23 @@ public class MsPacManInput extends CBRInput {
 		
 	}
 	
-	Integer nearestGhost;
-	Boolean edible;
 	Integer score;
-	Integer time;
-	
-	//New variables
 	Integer numPPills;
 	Integer nearestPPill;
 	Integer nearestPill;
-	
 	vectorCBR<Double> ghostToPacman = new vectorCBR<Double>(4);
-	/*
-	Double  ghostToPacman1;
-	Double  ghostToPacman2;
-	Double  ghostToPacman3;
-	Double  ghostToPacman4;
-	*/
 	vectorCBR<Double> pacmanToGhost = new vectorCBR<Double>(4);
-	/*
-	Double  pacmanToGhost1;
-	Double  pacmanToGhost2;
-	Double  pacmanToGhost3;
-	Double  pacmanToGhost4;
-	*/
 	vectorCBR<Integer> ghostEdibleTime = new vectorCBR<Integer>(4);
-	/*
-	Integer  ghostEdibleTime1;
-	Integer  ghostEdibleTime2;
-	Integer  ghostEdibleTime3;
-	Integer  ghostEdibleTime4;
-	*/
-	String pacmanMove;
-	String  ghostToPacman1Movement;
-	String  ghostToPacman2Movement;
-	String  ghostToPacman3Movement;
-	String  ghostToPacman4Movement;
-	
+	String pacmanLastMove;
+	vectorCBR<String> ghostLastMoves = new vectorCBR<String>(4);
 	
 	@Override
 	public void parseInput() {
-		computeNearestGhost(game);
-		computeGhostsToPacmanDist(game);
-		computeNearestPPill(game);
-		computeNearestPill(game);
 		computeGhostsToPacmanDist(game);
 		computePacmanToGhostsDist(game);
-		time = game.getTotalTime();
+		computeNearestPPill(game);
+		computeNearestPill(game);
+		numPPills = game.getNumberOfActivePowerPills();
 		score = game.getScore();
 	}
 
@@ -72,8 +42,6 @@ public class MsPacManInput extends CBRInput {
 	public CBRQuery getQuery() {
 		MsPacManDescription description = new MsPacManDescription();
 		description.setScore(score);
-		description.setTime(time);
-		
 		//Pill related info
 		description.setNumPPills(numPPills);
 		description.setNearestPPill(nearestPPill);
@@ -84,12 +52,13 @@ public class MsPacManInput extends CBRInput {
 		for(int i = 0; i < 4;++i) {
 			description.setGhostToPacman(i,ghostToPacman.getElement(i));
 		}
+		
+		for(int i = 0; i < 4;++i) {
+			description.setGhostLastMoves(i,ghostLastMoves.getElement(i));
+		}
 	
-		description.setPacmanMove(pacmanMove);
-		description.setGhostToPacman1Movement(ghostToPacman1Movement);
-		description.setGhostToPacman2Movement(ghostToPacman2Movement);
-		description.setGhostToPacman3Movement(ghostToPacman3Movement);
-		description.setGhostToPacman4Movement(ghostToPacman4Movement);
+		description.setPacmanLastMove(pacmanLastMove);
+		
 		
 		//Ghosts edible by pacman
 		
@@ -106,26 +75,7 @@ public class MsPacManInput extends CBRInput {
 		return query;
 	}
 	
-	private void computeNearestGhost(Game game) {
-		nearestGhost = Integer.MAX_VALUE;
-		edible = false;
-		GHOST nearest = null;
-		for(GHOST g: GHOST.values()) {
-			int pos = game.getGhostCurrentNodeIndex(g);
-			int distance; 
-			if(pos != -1) 
-				distance = (int)game.getDistance(game.getPacmanCurrentNodeIndex(), pos, DM.PATH);
-			else
-				distance = Integer.MAX_VALUE;
-			if(distance < nearestGhost)
-			{
-				nearestGhost = distance;
-				nearest = g;
-			}
-		}
-		if(nearest!=null)
-			edible = game.isGhostEdible(nearest);
-	}
+	
 	
 	private void computeNearestPPill(Game game) {
 		nearestPPill = Integer.MAX_VALUE;
@@ -133,7 +83,7 @@ public class MsPacManInput extends CBRInput {
 		
 		for(int pos: game.getPowerPillIndices()) {
 			int distance = (int)game.getDistance(game.getPacmanCurrentNodeIndex(), pos, DM.PATH);
-			if(distance < nearestGhost && game.isPowerPillStillAvailable(pos))
+			if(distance < pacmanToGhost.getElement(0) && game.isPowerPillStillAvailable(pos))
 				this.nearestPPill = distance;
 		}
 	}
@@ -146,7 +96,7 @@ public class MsPacManInput extends CBRInput {
 		//TODO: maybe is too expensive for just a pill but bfs does not look great either
 		for(int pos: game.getPillIndices()) {
 			int distance = (int)game.getDistance(game.getPacmanCurrentNodeIndex(), pos, DM.PATH);
-			if(distance < nearestGhost && game.isPillStillAvailable(pos))
+			if(distance < pacmanToGhost.getElement(0) && game.isPillStillAvailable(pos))
 				this.nearestPill = distance;
 		}
 	}
@@ -180,11 +130,11 @@ public class MsPacManInput extends CBRInput {
 		ghostToPacman.setElement(1,distances.get(1).distance);
 		ghostToPacman.setElement(2,distances.get(2).distance);
 		ghostToPacman.setElement(3,distances.get(3).distance);
-		pacmanMove = game.getPacmanLastMoveMade().toString();
-		ghostToPacman1Movement = distances.get(0).move;
-		ghostToPacman2Movement = distances.get(1).move;
-		ghostToPacman3Movement = distances.get(2).move;
-		ghostToPacman4Movement = distances.get(3).move;
+		pacmanLastMove = game.getPacmanLastMoveMade().toString();
+		ghostLastMoves.setElement(0, distances.get(0).move);
+		ghostLastMoves.setElement(1, distances.get(1).move);
+		ghostLastMoves.setElement(2, distances.get(2).move);
+		ghostLastMoves.setElement(3, distances.get(3).move);
 
 	}
 	

@@ -6,46 +6,16 @@ import es.ucm.fdi.gaia.jcolibri.cbrcore.CaseComponent;
 public class MsPacManDescription implements CaseComponent {
 
 	Integer id;
-	
 	Integer score;
-	Integer time;
-	
-	//New variables
 	Integer numPPills;
 	Integer nearestPPill;
 	Integer nearestPill;
-	
-	
 	vectorCBR<Double> ghostToPacman = new vectorCBR<Double>(4);
-	/*
-	Double  ghostToPacman1;
-	Double  ghostToPacman2;
-	Double  ghostToPacman3;
-	Double  ghostToPacman4;
-	*/
 	vectorCBR<Double> pacmanToGhost = new vectorCBR<Double>(4);
-	/*
-	Double  pacmanToGhost1;
-	Double  pacmanToGhost2;
-	Double  pacmanToGhost3;
-	Double  pacmanToGhost4;
-	*/
 	vectorCBR<Integer> ghostEdibleTime = new vectorCBR<Integer>(4);
-	/*
-	Integer  ghostEdibleTime1;
-	Integer  ghostEdibleTime2;
-	Integer  ghostEdibleTime3;
-	Integer  ghostEdibleTime4;
-	*/
+	String pacmanLastMove;
+	vectorCBR<String> ghostLastMoves = new vectorCBR<String>(4);
 	
-	String pacmanMove;
-	String  ghostToPacman1Movement;
-	String  ghostToPacman2Movement;
-	String  ghostToPacman3Movement;
-	String  ghostToPacman4Movement;
-
-
-
 
 	public Integer getId() {
 		return id;
@@ -61,14 +31,6 @@ public class MsPacManDescription implements CaseComponent {
 
 	public void setScore(Integer score) {
 		this.score = score;
-	}
-
-	public Integer getTime() {
-		return time;
-	}
-
-	public void setTime(Integer time) {
-		this.time = time;
 	}
 
 	public Integer getNearestPPill() {
@@ -121,44 +83,20 @@ public class MsPacManDescription implements CaseComponent {
 		this.ghostEdibleTime.setElement(index, ghostEdibleTime);
 	}
 
-	public String getPacmanMove() {
-		return pacmanMove;
+	public String getPacmanLastMove() {
+		return pacmanLastMove;
 	}
 
-	public void setPacmanMove(String pacmanMove) {
-		this.pacmanMove = pacmanMove;
+	public void setPacmanLastMove(String pacmanMove) {
+		this.pacmanLastMove = pacmanMove;
 	}
 
-	public String getGhostToPacman1Movement() {
-		return ghostToPacman1Movement;
+	public String getGhostLastMove(int index) {
+		return ghostLastMoves.getElement(index);
 	}
 
-	public void setGhostToPacman1Movement(String ghostToPacman1Movement) {
-		this.ghostToPacman1Movement = ghostToPacman1Movement;
-	}
-
-	public String getGhostToPacman2Movement() {
-		return ghostToPacman2Movement;
-	}
-
-	public void setGhostToPacman2Movement(String ghostToPacman2Movement) {
-		this.ghostToPacman2Movement = ghostToPacman2Movement;
-	}
-
-	public String getGhostToPacman3Movement() {
-		return ghostToPacman3Movement;
-	}
-
-	public void setGhostToPacman3Movement(String ghostToPacman3Movement) {
-		this.ghostToPacman3Movement = ghostToPacman3Movement;
-	}
-
-	public String getGhostToPacman4Movement() {
-		return ghostToPacman4Movement;
-	}
-
-	public void setGhostToPacman4Movement(String ghostToPacman4Movement) {
-		this.ghostToPacman4Movement = ghostToPacman4Movement;
+	public void setGhostLastMoves(int index, String lastMove ) {
+		ghostLastMoves.setElement(index, lastMove);
 	}
 
 	@Override
@@ -171,63 +109,21 @@ public class MsPacManDescription implements CaseComponent {
 	    return "MsPacManDescription ["
 	            + "id=" + id
 	            + ", score=" + score
-	            + ", time=" + time
-
 	            + ", numPPills=" + numPPills
 	            + ", nearestPPill=" + nearestPPill
 	            + ", nearestPill=" + nearestPill
 
 	            + ", ghostToPacman=" + ghostToPacman.toString()
 
-	            + ", pacmanToGhost1=" + pacmanToGhost.toString()
+	            + ", pacmanToGhost=" + pacmanToGhost.toString()
 
-	            + ", ghostEdibleTime1=" + ghostEdibleTime.toString()
+	            + ", ghostEdibleTime=" + ghostEdibleTime.toString()
 
-	            + ", pacmanMove=" + pacmanMove
-	            + ", ghostToPacman1Movement=" + ghostToPacman1Movement
-	            + ", ghostToPacman2Movement=" + ghostToPacman2Movement
-	            + ", ghostToPacman3Movement=" + ghostToPacman3Movement
-	            + ", ghostToPacman4Movement=" + ghostToPacman4Movement
+	            + ", pacmanMove=" + pacmanLastMove
+	            + ", ghostLastMoves=" + ghostLastMoves.toString()
+	            
 	            + "]";
 	}
 
-
-//TODO: In case we want it stored with ; instead of ,
-
-//	@Override
-//	public String toString() {
-//	    return "MsPacManDescription ["
-//	            + "id=" + id
-//	            + "; score=" + score
-//	            + "; time=" + time
-//
-//	            + "; numPPills=" + numPPills
-//	            + "; nearestPPill=" + nearestPPill
-//	            + "; nearestPill=" + nearestPill
-//
-//	            + "; ghostToPacman1=" + ghostToPacman1
-//	            + "; ghostToPacman2=" + ghostToPacman2
-//	            + "; ghostToPacman3=" + ghostToPacman3
-//	            + "; ghostToPacman4=" + ghostToPacman4
-//
-//	            + "; pacmanToGhost1=" + pacmanToGhost1
-//	            + "; pacmanToGhost2=" + pacmanToGhost2
-//	            + "; pacmanToGhost3=" + pacmanToGhost3
-//	            + "; pacmanToGhost4=" + pacmanToGhost4
-//
-//	            + "; ghostEdibleTime1=" + ghostEdibleTime1
-//	            + "; ghostEdibleTime2=" + ghostEdibleTime2
-//	            + "; ghostEdibleTime3=" + ghostEdibleTime3
-//	            + "; ghostEdibleTime4=" + ghostEdibleTime4
-//
-//	            + "; pacmanMove=" + pacmanMove
-//	            + "; ghostToPacman1Movement=" + ghostToPacman1Movement
-//	            + "; ghostToPacman2Movement=" + ghostToPacman2Movement
-//	            + "; ghostToPacman3Movement=" + ghostToPacman3Movement
-//	            + "; ghostToPacman4Movement=" + ghostToPacman4Movement
-//	            + "]";
-//	}
-
-	
 
 }
