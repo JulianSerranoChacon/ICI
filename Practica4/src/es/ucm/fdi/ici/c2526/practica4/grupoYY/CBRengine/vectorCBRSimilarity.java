@@ -20,7 +20,15 @@ public class vectorCBRSimilarity implements LocalSimilarityFunction {
 	 * @return result of apply the similarity function.
 	 */
 	public double compute(Object o1, Object o2) throws NoApplicableSimilarityFunctionException {
+		if ((o1 == null) || (o2 == null))
+			return 0;
+		if (!(o1 instanceof  vectorCBR<?>))
+			throw new NoApplicableSimilarityFunctionException(this.getClass(), o1.getClass());
+		if (!(o2 instanceof  vectorCBR<?>))
+			throw new NoApplicableSimilarityFunctionException(this.getClass(), o2.getClass());
+		
 		double sim = 0;
+		
 		String[] s1 = o1.toString().split("#");
 		String[] s2 = o2.toString().split("#");
 		
