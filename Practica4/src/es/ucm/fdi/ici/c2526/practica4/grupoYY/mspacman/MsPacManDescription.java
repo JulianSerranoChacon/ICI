@@ -1,5 +1,7 @@
 package es.ucm.fdi.ici.c2526.practica4.grupoYY.mspacman;
 
+
+
 import es.ucm.fdi.gaia.jcolibri.cbrcore.Attribute;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CaseComponent;
 
@@ -59,28 +61,28 @@ public class MsPacManDescription implements CaseComponent {
 		this.nearestPill = nearestPill;
 	}
 
-	public Double getGhostToPacman(int index) {
-		return ghostToPacman.getElement(index);
+	public vectorCBR<Double> getGhostToPacman() {
+		return ghostToPacman;
 	}
 
-	public void setGhostToPacman(int index,Double ghostToPacmand) {
-		this.ghostToPacman.setElement(index, ghostToPacmand);
+	public void setGhostToPacman(vectorCBR<Double> ghostToPacmand) {
+		this.ghostToPacman = ghostToPacmand;
 	}
 
-	public Double getPacmanToGhost(int index) {
-		return pacmanToGhost.getElement(index);
+	public vectorCBR<Double> getPacmanToGhost() {
+		return pacmanToGhost;
 	}
 
-	public void setPacmanToGhost(int index,Double pacmanToGhostd) {
-		this.pacmanToGhost.setElement(index, pacmanToGhostd);
+	public void setPacmanToGhost(vectorCBR<Double>pacmanToGhostd) {
+		this.pacmanToGhost = pacmanToGhostd;
 	}
 
-	public Integer getGhostEdibleTime(int index) {
-		return ghostEdibleTime.getElement(index);
+	public  vectorCBR<Integer> getGhostEdibleTime() {
+		return ghostEdibleTime;
 	}
 
-	public void setGhostEdibleTime(int index,Integer ghostEdibleTime) {
-		this.ghostEdibleTime.setElement(index, ghostEdibleTime);
+	public void setGhostEdibleTime(vectorCBR<Integer>ghostEdibleTime) {
+		this.ghostEdibleTime = ghostEdibleTime;
 	}
 
 	public String getPacmanLastMove() {
@@ -91,12 +93,12 @@ public class MsPacManDescription implements CaseComponent {
 		this.pacmanLastMove = pacmanMove;
 	}
 
-	public String getGhostLastMove(int index) {
-		return ghostLastMoves.getElement(index);
+	public vectorCBR<String> getGhostLastMoves() {
+		return ghostLastMoves;
 	}
 
-	public void setGhostLastMoves(int index, String lastMove ) {
-		ghostLastMoves.setElement(index, lastMove);
+	public void setGhostLastMoves( vectorCBR<String> lastMove ) {
+		ghostLastMoves = lastMove;
 	}
 
 	@Override

@@ -13,21 +13,21 @@ import pacman.game.Game;
 
 public class MsPacManInput extends CBRInput {
 
-	public MsPacManInput(Game game) {
-		super(game);
-		
-	}
 	
 	Integer score;
 	Integer numPPills;
 	Integer nearestPPill;
 	Integer nearestPill;
-	vectorCBR<Double> ghostToPacman = new vectorCBR<Double>(4);
-	vectorCBR<Double> pacmanToGhost = new vectorCBR<Double>(4);
-	vectorCBR<Integer> ghostEdibleTime = new vectorCBR<Integer>(4);
+	vectorCBR<Double> ghostToPacman;
+	vectorCBR<Double> pacmanToGhost;
+	vectorCBR<Integer> ghostEdibleTime;
 	String pacmanLastMove;
-	vectorCBR<String> ghostLastMoves = new vectorCBR<String>(4);
+	vectorCBR<String> ghostLastMoves;
 	
+	public MsPacManInput(Game game) {
+		super(game);
+	}
+		
 	@Override
 	public void parseInput() {
 		computeGhostsToPacmanDist(game);
@@ -49,26 +49,15 @@ public class MsPacManInput extends CBRInput {
 		
 		//Ghost menacing pacman info
 		
-		for(int i = 0; i < 4;++i) {
-			description.setGhostToPacman(i,ghostToPacman.getElement(i));
-		}
+		description.setGhostToPacman(ghostToPacman);
 		
-		for(int i = 0; i < 4;++i) {
-			description.setGhostLastMoves(i,ghostLastMoves.getElement(i));
-		}
-	
+		description.setGhostLastMoves(ghostLastMoves);
+			
 		description.setPacmanLastMove(pacmanLastMove);
 		
+		description.setPacmanToGhost(pacmanToGhost);
 		
-		//Ghosts edible by pacman
-		
-		for(int i = 0; i < 4;++i) {
-			description.setPacmanToGhost(i,pacmanToGhost.getElement(i));
-		}
-		
-		for(int i = 0; i < 4;++i) {
-			description.setGhostEdibleTime(i,ghostEdibleTime.getElement(i));
-		}
+		description.setGhostEdibleTime(ghostEdibleTime);
 		
 		CBRQuery query = new CBRQuery();
 		query.setDescription(description);
@@ -111,7 +100,8 @@ public class MsPacManInput extends CBRInput {
 		        this.distance = distance;
 		    }
 		}
-		
+		ghostToPacman = new vectorCBR<Double>(4);
+		ghostLastMoves = new vectorCBR<String>(4);
 		List<GhostDistance> distances = new ArrayList<>();
 
 		for (GHOST g : GHOST.values()) {
@@ -149,6 +139,8 @@ public class MsPacManInput extends CBRInput {
 		    }
 		}
 
+		ghostEdibleTime = new vectorCBR<Integer>(4);
+		pacmanToGhost = new vectorCBR<Double>(4);
 		List<GhostDistance> ghostDistances = new ArrayList<>();
 		for (GHOST g : GHOST.values()) {
 			double dist = game.getGhostLairTime(g) <= 0
