@@ -14,7 +14,7 @@ public class MsPacManDescription implements CaseComponent {
 	Integer nearestPill;
 	vectorCBR<Double> ghostToPacman = new vectorCBR<Double>(4);
 	vectorCBR<Double> pacmanToGhost = new vectorCBR<Double>(4);
-	vectorCBR<Integer> ghostEdibleTime = new vectorCBR<Integer>(4);
+	vectorCBR<Double> ghostEdibleTime = new vectorCBR<Double>(4);
 	String pacmanLastMove;
 	vectorCBR<String> ghostLastMoves = new vectorCBR<String>(4);
 	
@@ -77,11 +77,11 @@ public class MsPacManDescription implements CaseComponent {
 		this.pacmanToGhost = pacmanToGhostd;
 	}
 
-	public  vectorCBR<Integer> getGhostEdibleTime() {
+	public  vectorCBR<Double> getGhostEdibleTime() {
 		return ghostEdibleTime;
 	}
 
-	public void setGhostEdibleTime(vectorCBR<Integer>ghostEdibleTime) {
+	public void setGhostEdibleTime(vectorCBR<Double>ghostEdibleTime) {
 		this.ghostEdibleTime = ghostEdibleTime;
 	}
 
