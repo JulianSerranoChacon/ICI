@@ -20,7 +20,7 @@ public class MsPacManInput extends CBRInput {
 	Integer nearestPill;
 	vectorCBR<Double> ghostToPacman;
 	vectorCBR<Double> pacmanToGhost;
-	vectorCBR<Integer> ghostEdibleTime;
+	vectorCBR<Double> ghostEdibleTime;
 	String pacmanLastMove;
 	vectorCBR<String> ghostLastMoves;
 	
@@ -130,7 +130,7 @@ public class MsPacManInput extends CBRInput {
 	
 	private void computePacmanToGhostsDist(Game game) {
 		class GhostDistance {
-		    int ghost_time;
+		    double ghost_time;
 		    double distance;
 
 		    GhostDistance(int ghost_time, double distance) {
@@ -139,7 +139,7 @@ public class MsPacManInput extends CBRInput {
 		    }
 		}
 
-		ghostEdibleTime = new vectorCBR<Integer>(4);
+		ghostEdibleTime = new vectorCBR<Double>(4);
 		pacmanToGhost = new vectorCBR<Double>(4);
 		List<GhostDistance> ghostDistances = new ArrayList<>();
 		for (GHOST g : GHOST.values()) {
