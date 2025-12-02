@@ -20,6 +20,7 @@ import es.ucm.fdi.gaia.jcolibri.util.FileIO;
 import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.Average;
 import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.CachedLinearCaseBase;
 import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.CustomPlainTextConnector;
+import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.MoveLocalSimilarityFuntion;
 import pacman.game.Constants.MOVE;
 
 public class MsPacManCBRengine implements StandardCBRApplication {
@@ -71,7 +72,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 	//	simConfig.addMapping(new Attribute("ghostToPacman",MsPacManDescription.class), new Interval(650)); //TODO create the vectorCBR<Interval> comparator
 	//	simConfig.addMapping(new Attribute("pacmanToGhost",MsPacManDescription.class), new Interval(650)); //TODO create the vectorCBR<Interval> comparator
 	//	simConfig.addMapping(new Attribute("ghostEdibleTime",MsPacManDescription.class), new Interval(650)); //TODO create the vectorCBR<Interval> comparator
-	//	simConfig.addMapping(new Attribute("pacmanLastMove",MsPacManDescription.class), new Interval(0)); //TODO create the boolComparator/String????? comparator
+		simConfig.addMapping(new Attribute("pacmanLastMove",MsPacManDescription.class), new MoveLocalSimilarityFuntion()); //TODO create the boolComparator/String????? comparator
 	//	simConfig.addMapping(new Attribute("ghostLastMoves",MsPacManDescription.class), new Interval(650)); //TODO create the vectorCBR<String/Bool????> comparator
 		
 	}
