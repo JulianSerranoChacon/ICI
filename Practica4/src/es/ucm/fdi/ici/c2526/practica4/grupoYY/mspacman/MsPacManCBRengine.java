@@ -21,6 +21,8 @@ import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.Average;
 import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.CachedLinearCaseBase;
 import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.CustomPlainTextConnector;
 import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.IntervalVectorCBR;
+import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.EqualNumLocalSimilarityFuntion;
+import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.MoveLocalSimilarityFuntion;
 import pacman.game.Constants.MOVE;
 
 public class MsPacManCBRengine implements StandardCBRApplication {
@@ -66,13 +68,13 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		simConfig = new NNConfig();
 		simConfig.setDescriptionSimFunction(new Average());
 		simConfig.addMapping(new Attribute("score",MsPacManDescription.class), new Interval(15000));
-		simConfig.addMapping(new Attribute("numPPills",MsPacManDescription.class), new Interval(0)); //TODO change to BoolComparator
+		simConfig.addMapping(new Attribute("numPPills",MsPacManDescription.class), new EqualNumLocalSimilarityFuntion()); 
 		simConfig.addMapping(new Attribute("nearestPPill",MsPacManDescription.class), new Interval(650));
 		simConfig.addMapping(new Attribute("nearestPill",MsPacManDescription.class), new Interval(650)); //TODO assign only if PPILLS = 0
 		simConfig.addMapping(new Attribute("ghostToPacman",MsPacManDescription.class), new IntervalVectorCBR(650)); //TODO create the vectorCBR<Interval> comparator
 		simConfig.addMapping(new Attribute("pacmanToGhost",MsPacManDescription.class),  new IntervalVectorCBR(650)); //TODO create the vectorCBR<Interval> comparator
 		simConfig.addMapping(new Attribute("ghostEdibleTime",MsPacManDescription.class),  new IntervalVectorCBR(650)); //TODO create the vectorCBR<Interval> comparator
-	//	simConfig.addMapping(new Attribute("pacmanLastMove",MsPacManDescription.class), new Interval(0)); //TODO create the boolComparator/String????? comparator
+		simConfig.addMapping(new Attribute("pacmanLastMove",MsPacManDescription.class), new Interval(0)); //TODO create the boolComparator/String????? comparator
 	//	simConfig.addMapping(new Attribute("ghostLastMoves",MsPacManDescription.class), new Interval(650)); //TODO create the vectorCBR<String/Bool????> comparator
 		
 	}
