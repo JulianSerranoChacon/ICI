@@ -4,9 +4,11 @@ import java.util.Vector;
 import java.util.function.Function;
 
 public class vectorCBR<T> {
-	Vector<T> _v;
+	Vector<T> _v = new Vector<T>();
 	vectorCBR(int size){
-		_v = new Vector<T>(size);
+		for(int i = 0; i < size; ++i) {
+			_v.add(i, null);
+		}
 	}
 	//Parse vector values into String 
 	public String toString(){
