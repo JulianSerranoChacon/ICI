@@ -144,29 +144,19 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 				bestMove = weight.getKey();
 			}
 		}
-
-		// tenemos los pesos medios de cada movimiento
 		
 		//Opciones: 
 		
 		//1.Caso aleatorio entre posibles contrarios
 		Random rnd = new Random();
-		//Es el equivalente semantico a jugar a la ruleta rusa y me encanta :) (PS: Soy Javi)
 		if(bestScore < UMBRAL_SCORE_MINIMO) {
-			MOVE finalMove = null;
-			for(MOVE m : MOVE.values()) {
-				if(!dirToScore.containsKey(finalMove) && finalMove == null) {
-					finalMove = m;
-				}
-				else if(!dirToScore.containsKey(finalMove) && rnd.nextDouble() > 0.5) {
-					finalMove = m;
-				}
-			}
-			
-			return finalMove;
+			MOVE finalMove;
+			do {
+				finalMove = MOVE.values()[rnd.nextInt() % MOVE.values().length];
+			} while (dirToScore.containsKey(finalMove));
 		}
 		
-		//3.Mejor caso
+		//2.Mejor caso
 		return bestMove;
 	}
 	
