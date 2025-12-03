@@ -89,7 +89,7 @@ public class MsPacManStorageManager {
 		
 		//Penalizamos el uso inapropiado de la Power Pills
 		if(game.getNumberOfActivePowerPills() < infoCase.numPills && resultValue / SCORE_FANTASMA_COMIDO < 1) {
-			resultValue -= PENALIZACION_PPILL;
+			resultValue -= PENALIZACION_PPILL; // quizas es un castigo muy severo para pretender que pacman se coma un fantasma en 3 intercepciones
 		}
 		//Recompensamos comer fantasmas
 		else {

@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import es.ucm.fdi.gaia.jcolibri.cbraplications.StandardCBRApplication;
@@ -109,16 +110,11 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 	private MOVE reuse(Collection<RetrievalResult> eval)
 	{
 		// kNNs with majority voting
-		Collection<RetrievalResult> cases = SelectCases.selectTopKRR(eval, 5);
+		Collection<RetrievalResult> cases = SelectCases.selectTopKRR(eval, 8);
 		//Truncar la lista para conservar casos que cumplen con el umbral
 		Collection<RetrievalResult> list = new ArrayList<>();
-		Map<MOVE, Double> dirToScore = new HashMap<>();
+		Map<MOVE, double[]> dirToScore = new HashMap<>();
 		MOVE bestMove = MOVE.NEUTRAL; Double bestScore = Double.MIN_VALUE;
-		List<MOVE> isNotCandidate = new ArrayList<>();
-
-		for(MOVE m : MOVE.values()) {
-				isNotCandidate.add(m);
-		}
 
 		for(RetrievalResult cbrCase : cases) {
 			if(cbrCase.getEval() < UMBRAL_SIMILITUD) {
@@ -126,18 +122,14 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 
 				MsPacManResult scoreCase = (MsPacManResult) cbrCase.get_case().getResult(); 
 				MsPacManSolution moveCase = (MsPacManSolution) cbrCase.get_case().getSolution(); 
-				double weight = scoreCase.getScore() * cbrCase.getEval();
+				double weight = scoreCase.getScore() * cbrCase.getEval() * cbrCase.getEval();
 
-				if(weight > dirToScore.get(moveCase.getAction())) {
-					dirToScore.replace(moveCase.getAction(), weight);
-					if(bestScore < weight) {
-						bestScore = weight;
-						bestMove = moveCase.getAction();
-					}
+				if (!dirToScore.containsKey(moveCase.getAction())) {
+					dirToScore.put(moveCase.getAction(), new double[] {weight, 1});
+				} 
+				else {
+					dirToScore.replace(moveCase.getAction(), new double[] {dirToScore.get(moveCase.getAction())[0] + weight, dirToScore.get(moveCase.getAction())[1] + 1});
 				}
-				
-				isNotCandidate.remove(moveCase.getAction());
-			
 			}
 		}
 		
@@ -146,33 +138,21 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 			MOVE[] availableMoves = MOVE.values(); Random rnd = new Random();
 			return availableMoves[rnd.nextInt(availableMoves.length - 1)];
 		}
-
-		//TODO: Do the majority voting between cases
-		//TODO: Implement when we want random --> because not similar or not enough.
-		//TODO: No se si queremos que random sea una de las posibilidades a hacer, por eso el -1 en el valor aleatorio
-		//Si tamaño > 0 --> Opciones
-
-
-		else {
-			
-			// 3. Escoger por descarte
-			if(bestScore < UMBRAL_CONTRADECIR && isNotCandidate.size() > 0) {
-				Random rnd = new Random();
-	        	return isNotCandidate.get(rnd.nextInt(isNotCandidate.size() - 1));
+		
+		for (Entry<MOVE, double[]> weight : dirToScore.entrySet()) {
+			weight.getValue()[0] = weight.getValue()[0] / weight.getValue()[1];
+			if (weight.getValue()[0] > bestScore) {
+				bestScore = weight.getValue()[0];
+				bestMove = weight.getKey();
 			}
-			// 2. Escoger aleatorio
-			else if(bestScore < UMBRAL_ALEATORIO) {
-				MOVE[] availableMoves = MOVE.values(); Random rnd = new Random();
-	        	return availableMoves[rnd.nextInt(availableMoves.length - 1)];
-			}
-			// 1. Escoger por mayoría
-			else if(bestMove != MOVE.NEUTRAL){
-				return bestMove;
-			}			
-			
-			MOVE[] availableMoves = MOVE.values(); Random rnd = new Random();
-        	return availableMoves[rnd.nextInt(availableMoves.length - 1)];
-		}		
+		}
+
+		// tenemos los pesos medios de cada movimiento
+
+		if (bestScore < 50) {
+			//movimiento a una direccion nueva
+		}
+
 	}
 	
 	
