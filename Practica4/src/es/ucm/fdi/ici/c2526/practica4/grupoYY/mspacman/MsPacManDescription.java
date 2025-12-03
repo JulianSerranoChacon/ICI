@@ -12,9 +12,9 @@ public class MsPacManDescription implements CaseComponent {
 	Integer numPPills;
 	Integer nearestPPill;
 	Integer nearestPill;
-	vectorCBR<Double> ghostToPacman = new vectorCBR<Double>(4);
-	vectorCBR<Double> pacmanToGhost = new vectorCBR<Double>(4);
-	vectorCBR<Double> ghostEdibleTime = new vectorCBR<Double>(4);
+	vectorCBRDouble ghostToPacman = new vectorCBRDouble(4);
+	vectorCBRDouble pacmanToGhost = new vectorCBRDouble(4);
+	vectorCBRDouble ghostEdibleTime = new vectorCBRDouble(4);
 	String pacmanLastMove;
 	vectorCBR ghostLastMoves = new vectorCBR(4);
 	
@@ -61,27 +61,27 @@ public class MsPacManDescription implements CaseComponent {
 		this.nearestPill = nearestPill;
 	}
 
-	public vectorCBR<Double> getGhostToPacman() {
+	public vectorCBRDouble getGhostToPacman() {
 		return ghostToPacman;
 	}
 
-	public void setGhostToPacman(vectorCBR<Double> ghostToPacmand) {
+	public void setGhostToPacman(vectorCBRDouble ghostToPacmand) {
 		this.ghostToPacman = ghostToPacmand;
 	}
 
-	public vectorCBR<Double> getPacmanToGhost() {
+	public vectorCBRDouble getPacmanToGhost() {
 		return pacmanToGhost;
 	}
 
-	public void setPacmanToGhost(vectorCBR<Double>pacmanToGhostd) {
+	public void setPacmanToGhost(vectorCBRDouble pacmanToGhostd) {
 		this.pacmanToGhost = pacmanToGhostd;
 	}
 
-	public  vectorCBR<Double> getGhostEdibleTime() {
+	public  vectorCBRDouble getGhostEdibleTime() {
 		return ghostEdibleTime;
 	}
 
-	public void setGhostEdibleTime(vectorCBR<Double>ghostEdibleTime) {
+	public void setGhostEdibleTime(vectorCBRDouble ghostEdibleTime) {
 		this.ghostEdibleTime = ghostEdibleTime;
 	}
 
@@ -93,7 +93,7 @@ public class MsPacManDescription implements CaseComponent {
 		this.pacmanLastMove = pacmanMove;
 	}
 
-	public vectorCBR<String> getGhostLastMoves() {
+	public vectorCBR getGhostLastMoves() {
 		return ghostLastMoves;
 	}
 

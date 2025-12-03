@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import antlr.collections.impl.Vector;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRQuery;
 import es.ucm.fdi.ici.cbr.CBRInput;
 import pacman.game.Constants.DM;
@@ -18,9 +17,9 @@ public class MsPacManInput extends CBRInput {
 	Integer numPPills;
 	Integer nearestPPill;
 	Integer nearestPill;
-	vectorCBR<Double> ghostToPacman;
-	vectorCBR<Double> pacmanToGhost;
-	vectorCBR<Double> ghostEdibleTime;
+	vectorCBRDouble ghostToPacman;
+	vectorCBRDouble pacmanToGhost;
+	vectorCBRDouble ghostEdibleTime;
 	String pacmanLastMove;
 	vectorCBR ghostLastMoves;
 	
@@ -100,7 +99,7 @@ public class MsPacManInput extends CBRInput {
 		        this.distance = distance;
 		    }
 		}
-		ghostToPacman = new vectorCBR<Double>(4);
+		ghostToPacman = new vectorCBRDouble(4);
 		ghostLastMoves = new vectorCBR(4);
 		List<GhostDistance> distances = new ArrayList<>();
 
@@ -139,8 +138,8 @@ public class MsPacManInput extends CBRInput {
 		    }
 		}
 
-		ghostEdibleTime = new vectorCBR<Double>(4);
-		pacmanToGhost = new vectorCBR<Double>(4);
+		ghostEdibleTime = new vectorCBRDouble(4);
+		pacmanToGhost = new vectorCBRDouble(4);
 		List<GhostDistance> ghostDistances = new ArrayList<>();
 		for (GHOST g : GHOST.values()) {
 			double dist = game.getGhostLairTime(g) <= 0

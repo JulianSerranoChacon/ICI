@@ -1,10 +1,8 @@
 package es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine;
 
-import java.lang.reflect.Array;
-
 import es.ucm.fdi.gaia.jcolibri.exception.NoApplicableSimilarityFunctionException;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.LocalSimilarityFunction;
-import es.ucm.fdi.ici.c2526.practica4.grupoYY.mspacman.vectorCBR;
+import es.ucm.fdi.ici.c2526.practica4.grupoYY.mspacman.vectorCBRDouble;
 
 public class IntervalVectorCBR implements LocalSimilarityFunction{
 
@@ -16,13 +14,13 @@ public class IntervalVectorCBR implements LocalSimilarityFunction{
 	public double compute(Object o1, Object o2) throws NoApplicableSimilarityFunctionException {
 		if ((o1 == null) || (o2 == null))
 			return 0;
-		if (!(o1 instanceof vectorCBR))
+		if (!(o1 instanceof vectorCBRDouble))
 			throw new NoApplicableSimilarityFunctionException(this.getClass(), o1.getClass());
-		if (!(o2 instanceof vectorCBR))
+		if (!(o2 instanceof vectorCBRDouble))
 			throw new NoApplicableSimilarityFunctionException(this.getClass(), o2.getClass());
 		
-		vectorCBR<Double> i1 = (vectorCBR<Double>) o1;
-		vectorCBR<Double> i2 = (vectorCBR<Double>) o2;
+		vectorCBRDouble i1 = (vectorCBRDouble) o1;
+		vectorCBRDouble i2 = (vectorCBRDouble) o2;
 		
 		double sol = 0.0;
 		
@@ -47,11 +45,11 @@ public class IntervalVectorCBR implements LocalSimilarityFunction{
 		if((o1==null)&&(o2==null))
 			return true;
 		else if(o1==null)
-			return o2 instanceof vectorCBR;
+			return o2 instanceof vectorCBRDouble;
 		else if(o2==null)
-			return o1 instanceof vectorCBR;
+			return o1 instanceof vectorCBRDouble;
 		else
-			return (o1 instanceof vectorCBR)&&(o2 instanceof vectorCBR);
+			return (o1 instanceof vectorCBRDouble)&&(o2 instanceof vectorCBRDouble);
 	}
 
 }

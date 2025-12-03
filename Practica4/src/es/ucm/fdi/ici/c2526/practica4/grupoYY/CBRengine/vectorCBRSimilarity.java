@@ -22,9 +22,9 @@ public class vectorCBRSimilarity implements LocalSimilarityFunction {
 	public double compute(Object o1, Object o2) throws NoApplicableSimilarityFunctionException {
 		if ((o1 == null) || (o2 == null))
 			return 0;
-		if (!(o1 instanceof  vectorCBR<?>))
+		if (!(o1 instanceof  vectorCBR))
 			throw new NoApplicableSimilarityFunctionException(this.getClass(), o1.getClass());
-		if (!(o2 instanceof  vectorCBR<?>))
+		if (!(o2 instanceof  vectorCBR))
 			throw new NoApplicableSimilarityFunctionException(this.getClass(), o2.getClass());
 		
 		double sim = 0;
@@ -47,10 +47,10 @@ public class vectorCBRSimilarity implements LocalSimilarityFunction {
 		if((o1==null)&&(o2==null))
 			return true;
 		else if(o1==null)
-			return o2 instanceof vectorCBR<?>;
+			return o2 instanceof vectorCBR;
 		else if(o2==null)
-			return o1 instanceof vectorCBR<?>;
+			return o1 instanceof vectorCBR;
 		else
-			return (o1 instanceof vectorCBR<?>)&&(o2 instanceof vectorCBR<?>);
+			return (o1 instanceof vectorCBR)&&(o2 instanceof vectorCBR);
 	}
 }
