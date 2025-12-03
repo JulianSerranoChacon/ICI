@@ -42,7 +42,7 @@ public class vectorCBR implements TypeAdaptor {
 		_v.set(index, value);
 	}
 	//Get the index value
-	public T getElement(int index) {
+	public String getElement(int index) {
 		return _v.get(index);
 	}
 	@Override
