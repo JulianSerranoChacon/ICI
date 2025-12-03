@@ -101,6 +101,7 @@ public class MsPacManDescription implements CaseComponent {
 		ghostLastMoves = lastMove;
 	}
 
+	
 	@Override
 	public Attribute getIdAttribute() {
 		return new Attribute("id", MsPacManDescription.class);
