@@ -47,6 +47,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 	
 	final static String CONNECTOR_FILE_PATH = "es/ucm/fdi/ici/c2425/practica5/"+TEAM+"/mspacman/plaintextconfig.xml";
 	final static String CASE_BASE_PATH = "cbrdata"+File.separator+TEAM+File.separator+"mspacman"+File.separator;
+	private static final Double UMBRAL_SCORE_MINIMO = 40.00;
 
 	
 	public MsPacManCBRengine(MsPacManStorageManager storageManager)
@@ -107,19 +108,16 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		
 	}
 
-	private MOVE reuse(Collection<RetrievalResult> eval)
-	{
+	private MOVE reuse(Collection<RetrievalResult> eval) {
 		// kNNs with majority voting
 		Collection<RetrievalResult> cases = SelectCases.selectTopKRR(eval, 8);
-		//Truncar la lista para conservar casos que cumplen con el umbral
-		Collection<RetrievalResult> list = new ArrayList<>();
+
 		Map<MOVE, double[]> dirToScore = new HashMap<>();
 		MOVE bestMove = MOVE.NEUTRAL; Double bestScore = Double.MIN_VALUE;
 
 		for(RetrievalResult cbrCase : cases) {
+			//Truncar la lista con 0,7
 			if(cbrCase.getEval() < UMBRAL_SIMILITUD) {
-				list.add(cbrCase);
-
 				MsPacManResult scoreCase = (MsPacManResult) cbrCase.get_case().getResult(); 
 				MsPacManSolution moveCase = (MsPacManSolution) cbrCase.get_case().getSolution(); 
 				double weight = scoreCase.getScore() * cbrCase.getEval() * cbrCase.getEval();
@@ -134,7 +132,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		}
 		
 		//Si tamaño = 0 --> Aleatorio
-		if(list.isEmpty()) {
+		if(dirToScore.isEmpty()) {
 			MOVE[] availableMoves = MOVE.values(); Random rnd = new Random();
 			return availableMoves[rnd.nextInt(availableMoves.length - 1)];
 		}
@@ -148,11 +146,28 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		}
 
 		// tenemos los pesos medios de cada movimiento
-
-		if (bestScore < 50) {
-			//movimiento a una direccion nueva
+		
+		//Opciones: 
+		
+		//1.Caso aleatorio entre posibles contrarios
+		Random rnd = new Random();
+		//Es el equivalente semantico a jugar a la ruleta rusa y me encanta :) (PS: Soy Javi)
+		if(bestScore < UMBRAL_SCORE_MINIMO) {
+			MOVE finalMove = null;
+			for(MOVE m : MOVE.values()) {
+				if(!dirToScore.containsKey(finalMove) && finalMove == null) {
+					finalMove = m;
+				}
+				else if(!dirToScore.containsKey(finalMove) && rnd.nextDouble() > 0.5) {
+					finalMove = m;
+				}
+			}
+			
+			return finalMove;
 		}
-
+		
+		//3.Mejor caso
+		return bestMove;
 	}
 	
 	

@@ -37,7 +37,7 @@ public class MsPacManStorageManager {
 	
 	//Constante de recuerdo
 	private static final double UMBRAL_CONSERVAR = 0.75;
-	private static final int UMBRAL_NO_CONSERVAR = 5;
+	private static final int UMBRAL_CASOS_NO_CONSERVAR = 5;
 	private static final double UMBRAL_CASO_SUFICIENTE_SIMILAR = 0.85;
 	
 	//Constantes de revision	
@@ -93,6 +93,7 @@ public class MsPacManStorageManager {
 	
 		//Con ppill
 		if(infoCase.numPills > 0) {
+			
 			//Fantasmas comidos -> Recompensamos comer fantasmas
 			if (finalScore / SCORE_FANTASMA_COMIDO < 1){
 				//Empiricamente el numero de fantasmas
@@ -162,12 +163,15 @@ public class MsPacManStorageManager {
 			StoreCasesMethod.storeCase(this.caseBase, bCase);			
 		}
 		
+		//Get case resolution
+		MsPacManSolution bCaseSolution = (MsPacManSolution) bCase.getResult();
+		MsPacManResult bCaseResult = (MsPacManResult) bCase.getSolution();
+		
 		//Obtenemos los casos muy similares
-		Double maxSimilarity = Double.MIN_VALUE;
-		int countCasesAbove = 0;
-		MsPacManSolution result = (MsPacManSolution) bCase.getResult();
-		RetrievalResult mostSimilar = null; 
-		Double maxSimCase = Double.MIN_VALUE;
+		Double maxSimilarity = Double.MIN_VALUE; Integer countCasesAbove = 0;
+		//Obtenemos el caso mas parecido 
+		RetrievalResult mostSimilar = null; Double maxSimCase = Double.MIN_VALUE;
+		
 		for(RetrievalResult cbrCase : eval) {
 			MsPacManSolution cbrResult =(MsPacManSolution) cbrCase.get_case().getSolution();
 			
@@ -179,7 +183,7 @@ public class MsPacManStorageManager {
 				countCasesAbove++;
 			}
 			
-			if(result.getAction() == cbrResult.getAction() && maxSimCase < cbrCase.getEval()) {
+			if(bCaseSolution.getAction() == cbrResult.getAction() && maxSimCase < cbrCase.getEval()) {
 				maxSimCase = cbrCase.getEval();
 				mostSimilar = cbrCase;
 			}
@@ -187,7 +191,7 @@ public class MsPacManStorageManager {
 		
 		// 1. Not store it
 		// Varios valores muy similar --> Casos muy similares entre si
-		if (countCasesAbove >= UMBRAL_NO_CONSERVAR) {
+		if (countCasesAbove >= UMBRAL_CASOS_NO_CONSERVAR) {
 			return;
 		}
 		
@@ -208,8 +212,15 @@ public class MsPacManStorageManager {
 			aux.add(mostSimilar.get_case());
 			caseBase.forgetCases(aux);
 			
-			//New case 
+			//New "Frankenstein" case
+			//TODO: conservar el numero de veces que esto sucede --> (n/10 + 0.8) * resultMostSimilar + (0.2 - n/10) * bCaseResult
+			MsPacManResult mostSimilarResult =(MsPacManResult) mostSimilar.get_case().getResult();
+			Integer newScore = (int) Math.round(0.8 * mostSimilarResult.getScore() + 0.2 * bCaseResult.getScore());
 			
+			//TODO: Cambiar input tb si lo veis necesario
+			
+			bCaseResult.setScore(newScore);
+			StoreCasesMethod.storeCase(this.caseBase, bCase);
 		}
 		
 	}
