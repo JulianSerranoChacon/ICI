@@ -3,6 +3,8 @@ import pacman.Executor;
 import pacman.controllers.GhostController;
 import pacman.controllers.PacmanController;
 
+import pacman.game.util.Stats;
+
 public class ExecutorTest {
 
     public static void main(String[] args) {
@@ -17,7 +19,13 @@ public class ExecutorTest {
         
         System.out.println( 
             executor.runGame(pacMan, ghosts, 2) //last parameter defines speed
-        );     
+        );    
+        /*Stats stats[] = executor.runExperiment(pacMan, ghosts, 100, "triaje 1");//last parameter defines speed
+        for (Stats stat : stats) {
+            System.out.println( 
+                stat.toString()
+            ); 
+        }*/
     }
 	
 }
