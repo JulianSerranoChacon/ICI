@@ -9,6 +9,8 @@ import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRCase;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRCaseBase;
 import es.ucm.fdi.gaia.jcolibri.method.retain.StoreCasesMethod;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.RetrievalResult;
+import pacman.game.Constants.DM;
+import pacman.game.Constants.GHOST;
 import pacman.game.Game;
 
 public class MsPacManStorageManager {
@@ -34,16 +36,17 @@ public class MsPacManStorageManager {
 	private final static int TIME_WINDOW = 3;
 	
 	//Constante de recuerdo
-	private static final double UMBRAL_MUY_SIMILAR = 0.85;
-	private static final double UMBRAL_ALEATORIO = 0.75;
-	private static final double UMBRAL_NO_RECORDAR = 0.85;
+	private static final double UMBRAL_CONSERVAR = 0.75;
+	private static final int UMBRAL_NO_CONSERVAR = 5;
+	private static final double UMBRAL_CASO_SUFICIENTE_SIMILAR = 0.85;
 	
-	//Constantes de revision
-	private final static Integer PENALIZACION_MUERTE = 500;
-	private final static Integer PENALIZACION_PPILL = 500;
-	private final static Integer RECOMPENSA_FANTASMAS = 500;
+	//Constantes de revision	
 	private final static Integer SCORE_FANTASMA_COMIDO = 200;
-	
+	private final static Integer RECOMPENSA_FANTASMA_DEBIL_CERCA = 30;
+	private final static Integer RECOMPENSA_FANTASMAS = 30;
+	private final static Double RECOMPENSA_PILL_COMIDA = 3.05;
+	private final static Integer PENALIZACION_PPILL = -50;
+	private final static Integer PENALIZACION_MUERTE = -75;
 	
 	public MsPacManStorageManager()
 	{
@@ -80,29 +83,68 @@ public class MsPacManStorageManager {
 	private void reviseCase(CBRCase bCase, Info infoCase) {
 		MsPacManDescription description = (MsPacManDescription)bCase.getDescription();
 		
-		//Base score
+		//Base score -> this intersection
 		int oldScore = description.getScore();
 		int currentScore = game.getScore();
-		int resultValue = currentScore - oldScore;
+		int finalScore = currentScore - oldScore;
 		
-		//TODO: Alter points if dead, ate ghosts...
-		
-		//Penalizamos el uso inapropiado de la Power Pills
-		if(game.getNumberOfActivePowerPills() < infoCase.numPills && resultValue / SCORE_FANTASMA_COMIDO < 1) {
-			resultValue -= PENALIZACION_PPILL; // quizas es un castigo muy severo para pretender que pacman se coma un fantasma en 3 intercepciones
-		}
-		//Recompensamos comer fantasmas
-		else {
-			resultValue += (resultValue / SCORE_FANTASMA_COMIDO) * RECOMPENSA_FANTASMAS;
-		}
+		//Final pill
+		int value = 0;
+	
+		//Con ppill
+		if(infoCase.numPills > 0) {
+			//Fantasmas comidos -> Recompensamos comer fantasmas
+			if (finalScore / SCORE_FANTASMA_COMIDO < 1){
+				//Empiricamente el numero de fantasmas
+				int num_fantasmas = 0; int score = finalScore;
+				for(int i = SCORE_FANTASMA_COMIDO; score > 0; i *= 2) {
+					score -= i;
+					if(score > 0) {
+						num_fantasmas++;
+					}
+				}
+				
+				value += num_fantasmas * RECOMPENSA_FANTASMAS;
+			}
 			
+			// TODO: Supervivencia --> alomejor aquí cuenta menos que abajo + si muere maybe no sumar esto
+			for(GHOST g : GHOST.values()) {
+				
+			}
+			
+			// Caza 
+			int num_ghost_reachable = 0;
+			for(GHOST g : GHOST.values()) {
+				if(ghostReachable(game, g)) {
+					num_ghost_reachable++;
+				}
+			}
+			value += RECOMPENSA_FANTASMA_DEBIL_CERCA * num_ghost_reachable;
+			
+			//Penalizamos el uso inapropiado de la Power Pills
+			if(game.getNumberOfActivePowerPills() < infoCase.numPills && num_ghost_reachable == 0) {
+				finalScore -= PENALIZACION_PPILL;
+			}
+		}
+		//Sin ppill
+		else {
+			
+			// TODO: Supervivencia --> alomejor aquí cuenta menos que abajo + si muere maybe no sumar esto
+			for(GHOST g : GHOST.values()) {
+				
+			}
+			
+			//Consideramos las pills comidas 
+			value += Math.round(RECOMPENSA_PILL_COMIDA * finalScore);
+		}
+		
 		//Penalizamos la muerte quitando parte del resultado
 		if(game.getPacmanNumberOfLivesRemaining() < infoCase.numLives) {
-			resultValue -= PENALIZACION_MUERTE;
+			value -= PENALIZACION_MUERTE;
 		}
 		
 		MsPacManResult result = (MsPacManResult)bCase.getResult();
-		result.setScore(resultValue);	
+        result.setScore(value);	
 	}
 	
 	private void retainCase(CBRCase bCase, Collection<RetrievalResult> eval)
@@ -113,11 +155,8 @@ public class MsPacManStorageManager {
 		//here you should also check if the case must be stored into persistence (too similar to existing ones, etc.)
 		
 		//TODO: Si hay similares mezclar, sino añadir si se cumple los valores de similitud y puntuaje (puntuaje a revisar)
-		//TODO: Traer los K más similares y guardarlos en un buffer desde cbr.cycle()
-		
-		//Options:
-		
-		
+
+		//Options:		
 		//If there is no other cases to compare it to, then there needs to be added
 		if(Objects.isNull(eval)) {
 			StoreCasesMethod.storeCase(this.caseBase, bCase);			
@@ -125,32 +164,54 @@ public class MsPacManStorageManager {
 		
 		//Obtenemos los casos muy similares
 		Double maxSimilarity = Double.MIN_VALUE;
-		Collection<RetrievalResult> list = new ArrayList<>();
+		int countCasesAbove = 0;
+		MsPacManSolution result = (MsPacManSolution) bCase.getResult();
+		RetrievalResult mostSimilar = null; 
+		Double maxSimCase = Double.MIN_VALUE;
 		for(RetrievalResult cbrCase : eval) {
-			if(UMBRAL_MUY_SIMILAR  <= cbrCase.getEval()) {
-				list.add(cbrCase);
-			}
+			MsPacManSolution cbrResult =(MsPacManSolution) cbrCase.get_case().getSolution();
 			
 			if(maxSimilarity < cbrCase.getEval()) {
 				maxSimilarity = cbrCase.getEval();
 			}
+			
+			if(UMBRAL_CASO_SUFICIENTE_SIMILAR <= cbrCase.getEval()) {
+				countCasesAbove++;
+			}
+			
+			if(result.getAction() == cbrResult.getAction() && maxSimCase < cbrCase.getEval()) {
+				maxSimCase = cbrCase.getEval();
+				mostSimilar = cbrCase;
+			}
 		}
 		
-		//1. Not store it
-		if (maxSimilarity >= UMBRAL_NO_RECORDAR) {
+		// 1. Not store it
+		// Varios valores muy similar --> Casos muy similares entre si
+		if (countCasesAbove >= UMBRAL_NO_CONSERVAR) {
 			return;
 		}
 		
-		//2. Store it
-		//Si la mayor similitud es menor que nuestra constante, se añade directamente
-		if(maxSimilarity < UMBRAL_ALEATORIO) {
+		// 2. Store it
+		// Si la mayor similitud es menor que nuestra constante, se añade directamente
+		if(maxSimilarity < UMBRAL_CONSERVAR) {
 			StoreCasesMethod.storeCase(this.caseBase, bCase);			
 			return;
 		}
 		
 		//3. Do a mix of similar cases
-		//TODO: ¿Como creas un caso mezcla de los otros dos?
-		//Probablemente necesitemos input para hacer esto
+		if(Objects.isNull(maxSimCase)) {
+			StoreCasesMethod.storeCase(this.caseBase, bCase);			
+		}
+		else {
+			//Forget previous case
+			Collection<CBRCase> aux = new ArrayList<CBRCase>();
+			aux.add(mostSimilar.get_case());
+			caseBase.forgetCases(aux);
+			
+			//New case 
+			
+		}
+		
 	}
 
 	public void close() {
@@ -164,7 +225,26 @@ public class MsPacManStorageManager {
 		this.buffer.removeAllElements();
 		this.bufferInfo.removeAllElements();
 	}
-
+	
+	private boolean ghostReachable(Game game, GHOST ghost) {
+		//return 2 * game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghost), game.getPacmanLastMoveMade(), DM.PATH) 
+		//		<= game.getGhostEdibleTime(ghost);
+		
+		if(game.getGhostLairTime(ghost) > 0) {
+			return false;
+		}
+		
+		double distanceToGhostPosition = game.getDistance(game.getPacmanCurrentNodeIndex(),
+				game.getGhostCurrentNodeIndex(ghost), game.getPacmanLastMoveMade(), DM.PATH);
+		
+		if (game.getGhostLastMoveMade(ghost) != game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost),
+				game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH)) {
+			return game.getGhostEdibleTime(ghost) >= 2 * distanceToGhostPosition;
+		}
+		
+		return game.getGhostEdibleTime(ghost) >= distanceToGhostPosition;
+	}
+	
 	public int getPendingCases() {
 		return this.buffer.size();
 	}
