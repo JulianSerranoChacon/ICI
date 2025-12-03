@@ -22,7 +22,7 @@ public class MsPacManInput extends CBRInput {
 	vectorCBR<Double> pacmanToGhost;
 	vectorCBR<Double> ghostEdibleTime;
 	String pacmanLastMove;
-	vectorCBR<String> ghostLastMoves;
+	vectorCBR ghostLastMoves;
 	
 	public MsPacManInput(Game game) {
 		super(game);
@@ -101,7 +101,7 @@ public class MsPacManInput extends CBRInput {
 		    }
 		}
 		ghostToPacman = new vectorCBR<Double>(4);
-		ghostLastMoves = new vectorCBR<String>(4);
+		ghostLastMoves = new vectorCBR(4);
 		List<GhostDistance> distances = new ArrayList<>();
 
 		for (GHOST g : GHOST.values()) {

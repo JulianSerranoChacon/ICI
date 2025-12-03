@@ -16,7 +16,7 @@ public class MsPacManDescription implements CaseComponent {
 	vectorCBR<Double> pacmanToGhost = new vectorCBR<Double>(4);
 	vectorCBR<Double> ghostEdibleTime = new vectorCBR<Double>(4);
 	String pacmanLastMove;
-	vectorCBR<String> ghostLastMoves = new vectorCBR<String>(4);
+	vectorCBR ghostLastMoves = new vectorCBR(4);
 	
 
 	public Integer getId() {
@@ -97,7 +97,7 @@ public class MsPacManDescription implements CaseComponent {
 		return ghostLastMoves;
 	}
 
-	public void setGhostLastMoves( vectorCBR<String> lastMove ) {
+	public void setGhostLastMoves( vectorCBR lastMove ) {
 		ghostLastMoves = lastMove;
 	}
 

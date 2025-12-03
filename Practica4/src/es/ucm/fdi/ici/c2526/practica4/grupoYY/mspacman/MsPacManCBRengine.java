@@ -75,7 +75,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		simConfig.addMapping(new Attribute("pacmanToGhost",MsPacManDescription.class),  new IntervalVectorCBR(650)); //TODO create the vectorCBR<Interval> comparator
 		simConfig.addMapping(new Attribute("ghostEdibleTime",MsPacManDescription.class),  new IntervalVectorCBR(650)); //TODO create the vectorCBR<Interval> comparator
 		simConfig.addMapping(new Attribute("pacmanLastMove",MsPacManDescription.class), new MoveLocalSimilarityFuntion()); //TODO create the boolComparator/String????? comparator
-	//	simConfig.addMapping(new Attribute("ghostLastMoves",MsPacManDescription.class), new Interval(650)); //TODO create the vectorCBR<String/Bool????> comparator
+		simConfig.addMapping(new Attribute("ghostLastMoves",MsPacManDescription.class), new Interval(650)); //TODO create the vectorCBR<String/Bool????> comparator
 		
 	}
 
