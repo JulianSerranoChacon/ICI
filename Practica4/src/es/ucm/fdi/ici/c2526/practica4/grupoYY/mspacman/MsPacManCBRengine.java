@@ -13,7 +13,6 @@ import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.RetrievalResult;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNConfig;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNScoringMethod;
-import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.local.Equal;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.local.Interval;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.selection.SelectCases;
 import es.ucm.fdi.gaia.jcolibri.util.FileIO;
@@ -23,6 +22,7 @@ import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.CustomPlainTextConnector
 import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.IntervalVectorCBR;
 import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.EqualNumLocalSimilarityFuntion;
 import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.MoveLocalSimilarityFuntion;
+import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.vectorCBRSimilarity;
 import pacman.game.Constants.MOVE;
 
 public class MsPacManCBRengine implements StandardCBRApplication {
@@ -71,11 +71,11 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		simConfig.addMapping(new Attribute("numPPills",MsPacManDescription.class), new EqualNumLocalSimilarityFuntion()); 
 		simConfig.addMapping(new Attribute("nearestPPill",MsPacManDescription.class), new Interval(650));
 		simConfig.addMapping(new Attribute("nearestPill",MsPacManDescription.class), new Interval(650)); //TODO assign only if PPILLS = 0
-		simConfig.addMapping(new Attribute("ghostToPacman",MsPacManDescription.class), new IntervalVectorCBR(650)); //TODO create the vectorCBR<Interval> comparator
-		simConfig.addMapping(new Attribute("pacmanToGhost",MsPacManDescription.class),  new IntervalVectorCBR(650)); //TODO create the vectorCBR<Interval> comparator
-		simConfig.addMapping(new Attribute("ghostEdibleTime",MsPacManDescription.class),  new IntervalVectorCBR(650)); //TODO create the vectorCBR<Interval> comparator
-		simConfig.addMapping(new Attribute("pacmanLastMove",MsPacManDescription.class), new MoveLocalSimilarityFuntion()); //TODO create the boolComparator/String????? comparator
-	//	simConfig.addMapping(new Attribute("ghostLastMoves",MsPacManDescription.class), new Interval(650)); //TODO create the vectorCBR<String/Bool????> comparator
+		simConfig.addMapping(new Attribute("ghostToPacman",MsPacManDescription.class), new IntervalVectorCBR(650)); 
+		simConfig.addMapping(new Attribute("pacmanToGhost",MsPacManDescription.class),  new IntervalVectorCBR(650)); 
+		simConfig.addMapping(new Attribute("ghostEdibleTime",MsPacManDescription.class),  new IntervalVectorCBR(650)); 
+		simConfig.addMapping(new Attribute("pacmanLastMove",MsPacManDescription.class), new MoveLocalSimilarityFuntion()); 
+		simConfig.addMapping(new Attribute("ghostLastMoves",MsPacManDescription.class), new vectorCBRSimilarity()); 
 		
 	}
 
