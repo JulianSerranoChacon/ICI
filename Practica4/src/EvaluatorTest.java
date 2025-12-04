@@ -6,7 +6,7 @@ import org.knowm.xchart.QuickChart;
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
 
-import es.ucm.fdi.ici.c2526.practica5.grupoYY.MsPacMan;
+import es.ucm.fdi.ici.c2526.practica4.grupoYY.MsPacMan;
 import pacman.Executor;
 import pacman.controllers.GhostController;
 import pacman.controllers.PacmanController;

@@ -211,6 +211,9 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		return this.action;
 	}
 
+	public int caseBaseSize() {
+		return caseBase.caseBaseSize();
+	}
 	@Override
 	public void postCycle() throws ExecutionException {
 		this.storageManager.close();

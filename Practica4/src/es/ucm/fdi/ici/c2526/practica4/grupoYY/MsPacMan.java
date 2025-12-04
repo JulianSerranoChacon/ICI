@@ -1,5 +1,5 @@
 package es.ucm.fdi.ici.c2526.practica4.grupoYY;
-
+import es.ucm.fdi.ici.cbr.PacManCBRController;
 import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
 import es.ucm.fdi.ici.c2526.practica4.grupoYY.mspacman.MsPacManCBRengine;
 import es.ucm.fdi.ici.c2526.practica4.grupoYY.mspacman.MsPacManInput;
@@ -8,7 +8,7 @@ import pacman.controllers.PacmanController;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
-public class MsPacMan extends PacmanController {
+public class MsPacMan extends PacmanController implements PacManCBRController {
 
 	MsPacManCBRengine cbrEngine;
 	MsPacManStorageManager storageManager;
@@ -62,6 +62,13 @@ public class MsPacMan extends PacmanController {
 			e.printStackTrace();
 		}
 		return MOVE.NEUTRAL;
+	}
+
+	@Override
+	public long getCaseBaseSize() {
+	
+	   return cbrEngine.caseBaseSize();
+	
 	}
 
 }

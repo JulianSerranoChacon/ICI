@@ -154,6 +154,11 @@ public class CachedLinearCaseBase implements CBRCaseBase {
 		}
 		nextId += cases.size();
 	}
+	public int caseBaseSize() {
+		int aux = 0;
+		for(int i = 0; i< workingCaseArray.size();i++) aux += workingCaseArray.get(i).size();
+		return aux;
+	}
 
 }
 
