@@ -148,7 +148,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 			//Compute retrieve
 			eval = NNScoringMethod.evaluateSimilarity(caseBase.getCases(), query, simConfig);
 			//Compute reuse
-			this.action = reuse(eval);
+			this.action = reuse(eval, query);
 		}
 		
 		//Compute revise & retain
@@ -157,10 +157,17 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		
 	}
 
-	private MOVE reuse(Collection<RetrievalResult> eval) {
+	private MOVE reuse(Collection<RetrievalResult> eval, CBRQuery query) {
+		//Generate a random number generator for future randomness
+		Random rnd = new Random();
+		
 		// kNNs with majority voting
 		Collection<RetrievalResult> cases = SelectCases.selectTopKRR(eval, 8);
 
+		//Obtain pacman last move (we do not want to do an illegal move)
+		MsPacManDescription currCase = (MsPacManDescription) query.getDescription();
+		MOVE lastMove = MOVE.valueOf(currCase.getPacmanLastMove());
+		
 		Map<MOVE, double[]> dirToScore = new HashMap<>();
 		MOVE bestMove = MOVE.NEUTRAL; Double bestScore = Double.MIN_VALUE;
 
@@ -182,8 +189,12 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		
 		//Si tamaño = 0 --> Aleatorio
 		if(dirToScore.isEmpty()) {
-			MOVE[] availableMoves = MOVE.values(); Random rnd = new Random();
-			return availableMoves[rnd.nextInt(availableMoves.length - 1)];
+			// MOVE[] availableMoves = MOVE.values(); Random rnd = new Random(); We are not doing this because it may return the move we did before
+			MOVE finalMove;
+			do {
+				finalMove = MOVE.values()[rnd.nextInt(5) % MOVE.values().length];
+			} while (lastMove == finalMove);
+			return finalMove;
 		}
 		
 		for (Entry<MOVE, double[]> weight : dirToScore.entrySet()) {
@@ -197,12 +208,11 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		//Opciones: 
 		
 		//1.Caso aleatorio entre posibles contrarios
-		Random rnd = new Random();
 		if(bestScore < UMBRAL_SCORE_MINIMO) {
 			MOVE finalMove;
 			do {
-				finalMove = MOVE.values()[rnd.nextInt() % MOVE.values().length];
-			} while (dirToScore.containsKey(finalMove));
+				finalMove = MOVE.values()[rnd.nextInt(5) % MOVE.values().length];
+			} while (dirToScore.containsKey(finalMove) || lastMove == finalMove);
 		}
 		
 		//2.Mejor caso
