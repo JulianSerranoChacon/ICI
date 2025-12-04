@@ -110,32 +110,39 @@ public class CachedLinearCaseBase implements CBRCaseBase {
 		MsPacManDescription mMsDescription = (MsPacManDescription)aux.getDescription();
 		String lastMove = mMsDescription.getPacmanLastMove();
 		if(mMsDescription.getNumPPills() != 0) {
-			//quedan ppills
-			if(lastMove == "UP") {
-				workingCaseArray.get(0).add(aux);
-			}
-			else if (lastMove == "DOWN") {
-				workingCaseArray.get(1).add(aux);
-			} else if(lastMove == "LEFT") {
-				workingCaseArray.get(2).add(aux);
-			}else {
-				workingCaseArray.get(3).add(aux);
-			}
-			
-		}
-		else {
-			//no quedan
-			if(lastMove == "UP") {
-				workingCaseArray.get(4).add(aux);
-			}
-			else if (lastMove == "DOWN") {
-				workingCaseArray.get(5).add(aux);
-			} else if(lastMove == "LEFT") {
-				workingCaseArray.get(6).add(aux);
-			}else {
-				workingCaseArray.get(7).add(aux);
-			}
-		}
+            //quedan ppills
+            if("UP".equals(lastMove)) {
+                workingCaseArray.get(0).add(aux);
+            }
+            else if ("DOWN".equals(lastMove)) {
+                
+                workingCaseArray.get(1).add(aux);
+            } else if("LEFT".equals(lastMove)) {
+            
+                workingCaseArray.get(2).add(aux);
+            }else {
+                
+                workingCaseArray.get(3).add(aux);
+            }
+
+        }
+        else {
+            //no quedan
+            if("UP".equals(lastMove)) {
+               
+                workingCaseArray.get(4).add(aux);
+            }
+            else if ("DOWN".equals(lastMove)) {
+              
+                workingCaseArray.get(5).add(aux);
+            } else if("LEFT".equals(lastMove)) {
+               
+                workingCaseArray.get(6).add(aux);
+            }else {
+                
+                workingCaseArray.get(7).add(aux);
+            }
+        }
 	}
 	/**
 	 * Learns cases that are only saved when closing the Case Base.
