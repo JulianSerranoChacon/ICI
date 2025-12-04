@@ -88,6 +88,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 	@Override
 	public void cycle(CBRQuery query) throws ExecutionException {
 		if(caseBase.getCases().isEmpty()) {
+			//query.getDescription() TODO Hacer que se pueda pillar el valor del query para comprobar cual es el CSV que tenemos que pillar
 			this.action = MOVE.NEUTRAL;
 		}
 		else {
