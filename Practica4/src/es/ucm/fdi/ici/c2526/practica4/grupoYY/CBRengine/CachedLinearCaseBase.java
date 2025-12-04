@@ -22,10 +22,10 @@ import es.ucm.fdi.ici.c2526.practica4.grupoYY.mspacman.MsPacManDescription;
 public class CachedLinearCaseBase implements CBRCaseBase {
 
 	private Connector connector;
-	private Collection<java.util.ArrayList<CBRCase>> originalCases;
+	private Collection<CBRCase> originalCases;
 	//private java.util.ArrayList<CBRCase> workingCases;
 	//LAS CUATRO PRIMERAS LISTAS SON LAS DE CUANDO HAY PPILLS 
-	private java.util.ArrayList< java.util.ArrayList<CBRCase>> workingCaseArray; //TODO parsear esto a Array de ArrayList (Cada elemento del array equivale a un CSV distinto)
+	private java.util.ArrayList< java.util.ArrayList<CBRCase>> workingCaseArray; 
 	private Collection<CBRCase> casesToRemove;
 	
 	private Integer nextId;
@@ -38,7 +38,8 @@ public class CachedLinearCaseBase implements CBRCaseBase {
 		for(int i = 0; i< workingCaseArray.size();i++) {
 			workingCaseArray.get(i).removeAll(casesToRemove); //quizas no funcione TODO
 		}
-		Collection<CBRCase> casesToStore = new ArrayList<>(workingCaseArray); //TODO crear metodo para pasar toda la estructura a una lista
+		Collection<CBRCase> casesToStore = new ArrayList<>(); 
+		for(int i = 0; i< workingCaseArray.size(); i++) casesToStore.addAll(workingCaseArray.get(i));
 		casesToStore.removeAll(originalCases);
 
 		connector.storeCases(casesToStore);
@@ -76,7 +77,9 @@ public class CachedLinearCaseBase implements CBRCaseBase {
 	public void init(Connector connector) throws InitializingException {
 		this.connector = connector;
 		originalCases = this.connector.retrieveAllCases();	
-		workingCaseArray = new java.util.ArrayList< java.util.ArrayList<CBRCase>>(originalCases);
+		workingCaseArray = new java.util.ArrayList<java.util.ArrayList<CBRCase>>();
+		for(CBRCase aux : originalCases) addCaseToBase(aux);
+		
 		casesToRemove = new ArrayList<>();
 		boolean allListEmpty = true;
 	
@@ -96,42 +99,45 @@ public class CachedLinearCaseBase implements CBRCaseBase {
 		return nextId;
 	}
 	
+	
+	private void addCaseToBase(CBRCase aux){
+		MsPacManDescription mMsDescription = (MsPacManDescription)aux.getDescription();
+		String lastMove = mMsDescription.getPacmanLastMove();
+		if(mMsDescription.getNumPPills() != 0) {
+			//quedan ppills
+			if(lastMove == "UP") {
+				workingCaseArray.get(0).add(aux);
+			}
+			else if (lastMove == "DOWN") {
+				workingCaseArray.get(1).add(aux);
+			} else if(lastMove == "LEFT") {
+				workingCaseArray.get(2).add(aux);
+			}else {
+				workingCaseArray.get(3).add(aux);
+			}
+			
+		}
+		else {
+			//no quedan
+			if(lastMove == "UP") {
+				workingCaseArray.get(4).add(aux);
+			}
+			else if (lastMove == "DOWN") {
+				workingCaseArray.get(5).add(aux);
+			} else if(lastMove == "LEFT") {
+				workingCaseArray.get(6).add(aux);
+			}else {
+				workingCaseArray.get(7).add(aux);
+			}
+		}
+	}
 	/**
 	 * Learns cases that are only saved when closing the Case Base.
 	 */
 	public void learnCases(Collection<CBRCase> cases) {
 		//Miramos los casos uno a uno de la coleccion que nos entra y lo metemos en su lista correspondiente
 		for(CBRCase aux : cases) {
-			MsPacManDescription mMsDescription = (MsPacManDescription)aux.getDescription();
-			String lastMove = mMsDescription.getPacmanLastMove();
-			if(mMsDescription.getNumPPills() != 0) {
-				//quedan ppills
-				if(lastMove == "UP") {
-					workingCaseArray.get(0).add(aux);
-				}
-				else if (lastMove == "DOWN") {
-					workingCaseArray.get(1).add(aux);
-				} else if(lastMove == "LEFT") {
-					workingCaseArray.get(2).add(aux);
-				}else {
-					workingCaseArray.get(3).add(aux);
-				}
-				
-			}
-			else {
-				//no quedan
-				if(lastMove == "UP") {
-					workingCaseArray.get(4).add(aux);
-				}
-				else if (lastMove == "DOWN") {
-					workingCaseArray.get(5).add(aux);
-				} else if(lastMove == "LEFT") {
-					workingCaseArray.get(6).add(aux);
-				}else {
-					workingCaseArray.get(7).add(aux);
-				}
-			}
-			
+			addCaseToBase(aux);
 		}
 		nextId += cases.size();
 	}
