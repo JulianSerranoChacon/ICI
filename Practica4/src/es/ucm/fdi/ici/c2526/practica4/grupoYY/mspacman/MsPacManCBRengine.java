@@ -1,10 +1,8 @@
 package es.ucm.fdi.ici.c2526.practica4.grupoYY.mspacman;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -24,8 +22,8 @@ import es.ucm.fdi.gaia.jcolibri.util.FileIO;
 import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.Average;
 import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.CachedLinearCaseBase;
 import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.CustomPlainTextConnector;
-import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.IntervalVectorCBR;
 import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.EqualNumLocalSimilarityFuntion;
+import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.IntervalVectorCBR;
 import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.MoveLocalSimilarityFuntion;
 import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.vectorCBRSimilarity;
 import pacman.game.Constants.MOVE;
@@ -43,12 +41,12 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 	
 	final static String TEAM = "grupoYY";  //Cuidado!! poner el grupo aquí
 	
-	private final static Double UMBRAL_SIMILITUD = 0.7; // umbral de similitud propuesto para empezar a considerar casos similares
-	private final static Double UMBRAL_ALEATORIO = 0.5;
-	private final static Double UMBRAL_CONTRADECIR = 0.5;
+	
 	
 	final static String CONNECTOR_FILE_PATH = "es/ucm/fdi/ici/c2526/practica4/"+TEAM+"/mspacman/plaintextconfig.xml";
 	final static String CASE_BASE_PATH = "cbrdata"+File.separator+TEAM+File.separator+"mspacman"+File.separator;
+	
+	private final static Double UMBRAL_SIMILITUD = 0.7; // umbral de similitud propuesto para empezar a considerar casos similares
 	private static final Double UMBRAL_SCORE_MINIMO = 40.00;
 
 	

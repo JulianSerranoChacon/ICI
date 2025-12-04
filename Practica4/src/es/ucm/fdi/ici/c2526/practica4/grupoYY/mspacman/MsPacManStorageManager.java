@@ -165,8 +165,9 @@ public class MsPacManStorageManager {
 		}
 		
 		//Get case resolution
-		MsPacManSolution bCaseSolution = (MsPacManSolution) bCase.getResult();
-		MsPacManResult bCaseResult = (MsPacManResult) bCase.getSolution();
+		//Result es score, solution es accion
+		MsPacManSolution bCaseSolution = (MsPacManSolution) bCase.getSolution();
+		MsPacManResult bCaseResult = (MsPacManResult) bCase.getResult();
 		
 		//Obtenemos los casos muy similares
 		Double maxSimilarity = Double.MIN_VALUE; Integer countCasesAbove = 0;
@@ -174,7 +175,7 @@ public class MsPacManStorageManager {
 		RetrievalResult mostSimilar = null; Double maxSimCase = Double.MIN_VALUE;
 		
 		for(RetrievalResult cbrCase : eval) {
-			MsPacManSolution cbrResult =(MsPacManSolution) cbrCase.get_case().getSolution();
+			MsPacManSolution cbrSolution =(MsPacManSolution) cbrCase.get_case().getSolution();
 			
 			if(maxSimilarity < cbrCase.getEval()) {
 				maxSimilarity = cbrCase.getEval();
@@ -184,7 +185,7 @@ public class MsPacManStorageManager {
 				countCasesAbove++;
 			}
 			
-			if(bCaseSolution.getAction() == cbrResult.getAction() && maxSimCase < cbrCase.getEval()) {
+			if(bCaseSolution.getAction() == cbrSolution.getAction() && maxSimCase < cbrCase.getEval()) {
 				maxSimCase = cbrCase.getEval();
 				mostSimilar = cbrCase;
 			}
