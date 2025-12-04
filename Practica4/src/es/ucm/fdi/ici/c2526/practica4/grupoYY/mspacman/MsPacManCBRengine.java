@@ -3,6 +3,11 @@ package es.ucm.fdi.ici.c2526.practica4.grupoYY.mspacman;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Random;
 
 import es.ucm.fdi.gaia.jcolibri.cbraplications.StandardCBRApplication;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.Attribute;
@@ -38,9 +43,13 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 	
 	final static String TEAM = "grupoYY";  //Cuidado!! poner el grupo aquí
 	
+	private final static Double UMBRAL_SIMILITUD = 0.7; // umbral de similitud propuesto para empezar a considerar casos similares
+	private final static Double UMBRAL_ALEATORIO = 0.5;
+	private final static Double UMBRAL_CONTRADECIR = 0.5;
 	
 	final static String CONNECTOR_FILE_PATH = "es/ucm/fdi/ici/c2526/practica4/"+TEAM+"/mspacman/plaintextconfig.xml";
 	final static String CASE_BASE_PATH = "cbrdata"+File.separator+TEAM+File.separator+"mspacman"+File.separator;
+	private static final Double UMBRAL_SCORE_MINIMO = 40.00;
 
 	
 	public MsPacManCBRengine(MsPacManStorageManager storageManager)
@@ -131,55 +140,75 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 	public void cycle(CBRQuery query) throws ExecutionException {
 		
 		caseBase.setActListIndex(getCaseList(query));
+		Collection<RetrievalResult> eval = null;
+		
 		if(caseBase.getCases().isEmpty()) {
 			//query.getDescription() 
 			this.action = MOVE.NEUTRAL;
 		}
 		else {
 			//Compute retrieve
-			Collection<RetrievalResult> eval = NNScoringMethod.evaluateSimilarity(caseBase.getCases(), query, simConfig);
+			eval = NNScoringMethod.evaluateSimilarity(caseBase.getCases(), query, simConfig);
 			//Compute reuse
 			this.action = reuse(eval);
 		}
 		
 		//Compute revise & retain
 		CBRCase newCase = createNewCase(query);
-		this.storageManager.reviseAndRetain(newCase);
+		this.storageManager.reviseAndRetain(newCase, eval);
 		
 	}
 
-	private MOVE reuse(Collection<RetrievalResult> eval)
-	{
-		// This simple implementation only uses 1NN
-		// Consider using kNNs with majority voting
-		RetrievalResult first = SelectCases.selectTopKRR(eval, 1).iterator().next();
-		CBRCase mostSimilarCase = first.get_case();
-		double similarity = first.getEval();
-		
-		
-		if(Math.random()<.2) {
-		ArrayList<CBRCase> toforget = new ArrayList<CBRCase>();
-		toforget.add(mostSimilarCase);
-		this.caseBase.forgetCases(toforget);
-		System.out.println(mostSimilarCase.getID());
+	private MOVE reuse(Collection<RetrievalResult> eval) {
+		// kNNs with majority voting
+		Collection<RetrievalResult> cases = SelectCases.selectTopKRR(eval, 8);
+
+		Map<MOVE, double[]> dirToScore = new HashMap<>();
+		MOVE bestMove = MOVE.NEUTRAL; Double bestScore = Double.MIN_VALUE;
+
+		for(RetrievalResult cbrCase : cases) {
+			//Truncar la lista con 0,7
+			if(cbrCase.getEval() < UMBRAL_SIMILITUD) {
+				MsPacManResult scoreCase = (MsPacManResult) cbrCase.get_case().getResult(); 
+				MsPacManSolution moveCase = (MsPacManSolution) cbrCase.get_case().getSolution(); 
+				double weight = scoreCase.getScore() * cbrCase.getEval() * cbrCase.getEval();
+
+				if (!dirToScore.containsKey(moveCase.getAction())) {
+					dirToScore.put(moveCase.getAction(), new double[] {weight, 1});
+				} 
+				else {
+					dirToScore.replace(moveCase.getAction(), new double[] {dirToScore.get(moveCase.getAction())[0] + weight, dirToScore.get(moveCase.getAction())[1] + 1});
+				}
+			}
 		}
 		
-		MsPacManResult result = (MsPacManResult) mostSimilarCase.getResult();
-		MsPacManSolution solution = (MsPacManSolution) mostSimilarCase.getSolution();
-		
-		//Now compute a solution for the query
-		
-		//Here, it simply takes the action of the 1NN
-		MOVE action = solution.getAction();
-		
-		//But if not enough similarity or bad case, choose another move randomly
-		if((similarity<0.7)||(result.getScore()<100)) {
-			int index = (int)Math.floor(Math.random()*4);
-			if(MOVE.values()[index]==action) 
-				index= (index+1)%4;
-			action = MOVE.values()[index];
+		//Si tamaño = 0 --> Aleatorio
+		if(dirToScore.isEmpty()) {
+			MOVE[] availableMoves = MOVE.values(); Random rnd = new Random();
+			return availableMoves[rnd.nextInt(availableMoves.length - 1)];
 		}
-		return action;
+		
+		for (Entry<MOVE, double[]> weight : dirToScore.entrySet()) {
+			weight.getValue()[0] = weight.getValue()[0] / weight.getValue()[1];
+			if (weight.getValue()[0] > bestScore) {
+				bestScore = weight.getValue()[0];
+				bestMove = weight.getKey();
+			}
+		}
+		
+		//Opciones: 
+		
+		//1.Caso aleatorio entre posibles contrarios
+		Random rnd = new Random();
+		if(bestScore < UMBRAL_SCORE_MINIMO) {
+			MOVE finalMove;
+			do {
+				finalMove = MOVE.values()[rnd.nextInt() % MOVE.values().length];
+			} while (dirToScore.containsKey(finalMove));
+		}
+		
+		//2.Mejor caso
+		return bestMove;
 	}
 	
 	
