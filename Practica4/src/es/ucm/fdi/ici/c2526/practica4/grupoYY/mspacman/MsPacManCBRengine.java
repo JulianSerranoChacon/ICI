@@ -85,9 +85,53 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		return caseBase;
 	}
 
+	
+	//Get the CSV where this new case will be part 
+	public int getCaseList(CBRQuery query) {
+		MsPacManDescription msDescription = (MsPacManDescription)query.getDescription();
+		int index = 0;
+		String lastPacManMove = msDescription.getPacmanLastMove();
+		
+		//Follow the representaiton of the CachedLinearCaseBase (0,1,2,3 if PPILS) (4,5,6,7 if NOTPPILS) --> (Up,Down,Left,Right) of the lastMove
+		if(msDescription.getNumPPills() != 0) { //If ppils > 0
+			switch(lastPacManMove) { 
+			case("UP"):
+				index = 0;
+				break;
+			case("DOWN"):
+				index = 1;
+				break;
+			case("LEFT"):
+				index = 2;
+				break;
+			case("RIGHT"):
+				index = 3;
+				break;
+			}
+		}
+		else {
+			switch(lastPacManMove) {
+			case("UP"):
+				index = 4;
+				break;
+			case("DOWN"):
+				index = 5;
+				break;
+			case("LEFT"):
+				index = 6;
+				break;
+			case("RIGHT"):
+				index = 7;
+				break;
+			}
+		}
+		return index;
+	}
 	@Override
 	public void cycle(CBRQuery query) throws ExecutionException {
-		if(caseBase.getCases().isEmpty()) {
+		
+		int index = getCaseList(query);
+		if(caseBase.getCases(index).isEmpty()) {
 			//query.getDescription() TODO Hacer que se pueda pillar el valor del query para comprobar cual es el CSV que tenemos que pillar
 			this.action = MOVE.NEUTRAL;
 		}

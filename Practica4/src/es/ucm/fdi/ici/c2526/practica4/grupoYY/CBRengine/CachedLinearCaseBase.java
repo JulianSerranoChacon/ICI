@@ -57,9 +57,9 @@ public class CachedLinearCaseBase implements CBRCaseBase {
 	/**
 	 * Returns working cases.
 	 */
-	public Collection<CBRCase> getCases() {
+	public Collection<CBRCase> getCases(int index) {
 		
-		return workingCaseArray;
+		return workingCaseArray.get(index);
 	}
 
 	/**
