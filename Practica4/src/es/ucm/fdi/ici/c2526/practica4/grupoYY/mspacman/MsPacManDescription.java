@@ -1,22 +1,23 @@
 package es.ucm.fdi.ici.c2526.practica4.grupoYY.mspacman;
 
+
+
 import es.ucm.fdi.gaia.jcolibri.cbrcore.Attribute;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CaseComponent;
 
 public class MsPacManDescription implements CaseComponent {
 
 	Integer id;
-	
 	Integer score;
-	Integer time;
+	Integer numPPills;
 	Integer nearestPPill;
-	Integer nearestGhost;
-	Boolean edibleGhost;
+	Integer nearestPill;
+	vectorCBRDouble ghostToPacman = new vectorCBRDouble(4);
+	vectorCBRDouble pacmanToGhost = new vectorCBRDouble(4);
+	vectorCBRDouble ghostEdibleTime = new vectorCBRDouble(4);
+	String pacmanLastMove;
+	vectorCBR ghostLastMoves = new vectorCBR(4);
 	
-	
-
-
-
 
 	public Integer getId() {
 		return id;
@@ -34,14 +35,6 @@ public class MsPacManDescription implements CaseComponent {
 		this.score = score;
 	}
 
-	public Integer getTime() {
-		return time;
-	}
-
-	public void setTime(Integer time) {
-		this.time = time;
-	}
-
 	public Integer getNearestPPill() {
 		return nearestPPill;
 	}
@@ -49,23 +42,66 @@ public class MsPacManDescription implements CaseComponent {
 	public void setNearestPPill(Integer nearestPPill) {
 		this.nearestPPill = nearestPPill;
 	}
-
-	public Integer getNearestGhost() {
-		return nearestGhost;
+	
+	// NEW ATRIBUTES //
+	
+	public Integer getNumPPills() {
+		return numPPills;
 	}
 
-	public void setNearestGhost(Integer nearestGhost) {
-		this.nearestGhost = nearestGhost;
+	public void setNumPPills(Integer numPPills) {
+		this.numPPills = numPPills;
 	}
 
-	public Boolean getEdibleGhost() {
-		return edibleGhost;
+	public Integer getNearestPill() {
+		return nearestPill;
 	}
 
-	public void setEdibleGhost(Boolean edibleGhost) {
-		this.edibleGhost = edibleGhost;
+	public void setNearestPill(Integer nearestPill) {
+		this.nearestPill = nearestPill;
 	}
 
+	public vectorCBRDouble getGhostToPacman() {
+		return ghostToPacman;
+	}
+
+	public void setGhostToPacman(vectorCBRDouble ghostToPacmand) {
+		this.ghostToPacman = ghostToPacmand;
+	}
+
+	public vectorCBRDouble getPacmanToGhost() {
+		return pacmanToGhost;
+	}
+
+	public void setPacmanToGhost(vectorCBRDouble pacmanToGhostd) {
+		this.pacmanToGhost = pacmanToGhostd;
+	}
+
+	public  vectorCBRDouble getGhostEdibleTime() {
+		return ghostEdibleTime;
+	}
+
+	public void setGhostEdibleTime(vectorCBRDouble ghostEdibleTime) {
+		this.ghostEdibleTime = ghostEdibleTime;
+	}
+
+	public String getPacmanLastMove() {
+		return pacmanLastMove;
+	}
+
+	public void setPacmanLastMove(String pacmanMove) {
+		this.pacmanLastMove = pacmanMove;
+	}
+
+	public vectorCBR getGhostLastMoves() {
+		return ghostLastMoves;
+	}
+
+	public void setGhostLastMoves( vectorCBR lastMove ) {
+		ghostLastMoves = lastMove;
+	}
+
+	
 	@Override
 	public Attribute getIdAttribute() {
 		return new Attribute("id", MsPacManDescription.class);
@@ -73,12 +109,24 @@ public class MsPacManDescription implements CaseComponent {
 
 	@Override
 	public String toString() {
-		return "MsPacManDescription [id=" + id + ", score=" + score + ", time=" + time + ", nearestPPill="
-				+ nearestPPill + ", nearestGhost=" + nearestGhost + ", edibleGhost=" + edibleGhost + "]";
+	    return "MsPacManDescription ["
+	            + "id=" + id
+	            + ", score=" + score
+	            + ", numPPills=" + numPPills
+	            + ", nearestPPill=" + nearestPPill
+	            + ", nearestPill=" + nearestPill
+
+	            + ", ghostToPacman=" + ghostToPacman.toString()
+
+	            + ", pacmanToGhost=" + pacmanToGhost.toString()
+
+	            + ", ghostEdibleTime=" + ghostEdibleTime.toString()
+
+	            + ", pacmanMove=" + pacmanLastMove
+	            + ", ghostLastMoves=" + ghostLastMoves.toString()
+	            
+	            + "]";
 	}
 
-
-	
-	
 
 }

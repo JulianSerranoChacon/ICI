@@ -5,10 +5,14 @@
 	<DescriptionMappings>
 		<Map>id</Map>
 		<Map>score</Map>
-		<Map>time</Map>
+		<Map>numPPills</Map>
 		<Map>nearestPPill</Map>		
-		<Map>nearestGhost</Map>		
-		<Map>edibleGhost</Map>		
+		<Map>nearestPill</Map>
+		<Map>ghostToPacman</Map>
+		<Map>pacmanToGhost</Map>
+		<Map>ghostEdibleTime</Map>		
+		<Map>pacmanLastMove</Map>	
+		<Map>ghostLastMoves</Map>	
 	</DescriptionMappings>
 	<SolutionClassName>es.ucm.fdi.ici.c2526.practica4.grupoYY.mspacman.MsPacManSolution</SolutionClassName>
 	<SolutionMappings>

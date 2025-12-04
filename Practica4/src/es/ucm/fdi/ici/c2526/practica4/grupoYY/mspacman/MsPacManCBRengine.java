@@ -13,13 +13,16 @@ import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.RetrievalResult;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNConfig;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNScoringMethod;
-import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.local.Equal;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.local.Interval;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.selection.SelectCases;
 import es.ucm.fdi.gaia.jcolibri.util.FileIO;
 import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.Average;
 import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.CachedLinearCaseBase;
 import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.CustomPlainTextConnector;
+import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.IntervalVectorCBR;
+import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.EqualNumLocalSimilarityFuntion;
+import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.MoveLocalSimilarityFuntion;
+import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.vectorCBRSimilarity;
 import pacman.game.Constants.MOVE;
 
 public class MsPacManCBRengine implements StandardCBRApplication {
@@ -65,10 +68,14 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		simConfig = new NNConfig();
 		simConfig.setDescriptionSimFunction(new Average());
 		simConfig.addMapping(new Attribute("score",MsPacManDescription.class), new Interval(15000));
-		simConfig.addMapping(new Attribute("time",MsPacManDescription.class), new Interval(4000));
+		simConfig.addMapping(new Attribute("numPPills",MsPacManDescription.class), new EqualNumLocalSimilarityFuntion()); 
 		simConfig.addMapping(new Attribute("nearestPPill",MsPacManDescription.class), new Interval(650));
-		simConfig.addMapping(new Attribute("nearestGhost",MsPacManDescription.class), new Interval(650));
-		simConfig.addMapping(new Attribute("edibleGhost",MsPacManDescription.class), new Equal());
+		simConfig.addMapping(new Attribute("nearestPill",MsPacManDescription.class), new Interval(650)); //TODO assign only if PPILLS = 0
+		simConfig.addMapping(new Attribute("ghostToPacman",MsPacManDescription.class), new IntervalVectorCBR(650)); 
+		simConfig.addMapping(new Attribute("pacmanToGhost",MsPacManDescription.class),  new IntervalVectorCBR(650)); 
+		simConfig.addMapping(new Attribute("ghostEdibleTime",MsPacManDescription.class),  new IntervalVectorCBR(650)); 
+		simConfig.addMapping(new Attribute("pacmanLastMove",MsPacManDescription.class), new MoveLocalSimilarityFuntion()); 
+		simConfig.addMapping(new Attribute("ghostLastMoves",MsPacManDescription.class), new vectorCBRSimilarity()); 
 		
 	}
 
@@ -78,9 +85,54 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		return caseBase;
 	}
 
+	
+	//Get the CSV where this new case will be part 
+	public int getCaseList(CBRQuery query) {
+		MsPacManDescription msDescription = (MsPacManDescription)query.getDescription();
+		int index = 0;
+		String lastPacManMove = msDescription.getPacmanLastMove();
+		
+		//Follow the representaiton of the CachedLinearCaseBase (0,1,2,3 if PPILS) (4,5,6,7 if NOTPPILS) --> (Up,Down,Left,Right) of the lastMove
+		if(msDescription.getNumPPills() != 0) { //If ppils > 0
+			switch(lastPacManMove) { 
+			case("UP"):
+				index = 0;
+				break;
+			case("DOWN"):
+				index = 1;
+				break;
+			case("LEFT"):
+				index = 2;
+				break;
+			case("RIGHT"):
+				index = 3;
+				break;
+			}
+		}
+		else {
+			switch(lastPacManMove) {
+			case("UP"):
+				index = 4;
+				break;
+			case("DOWN"):
+				index = 5;
+				break;
+			case("LEFT"):
+				index = 6;
+				break;
+			case("RIGHT"):
+				index = 7;
+				break;
+			}
+		}
+		return index;
+	}
 	@Override
 	public void cycle(CBRQuery query) throws ExecutionException {
+		
+		caseBase.setActListIndex(getCaseList(query));
 		if(caseBase.getCases().isEmpty()) {
+			//query.getDescription() 
 			this.action = MOVE.NEUTRAL;
 		}
 		else {
@@ -159,6 +211,9 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		return this.action;
 	}
 
+	public int caseBaseSize() {
+		return caseBase.caseBaseSize();
+	}
 	@Override
 	public void postCycle() throws ExecutionException {
 		this.storageManager.close();
