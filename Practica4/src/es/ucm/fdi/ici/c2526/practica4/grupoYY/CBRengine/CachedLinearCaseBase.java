@@ -21,13 +21,14 @@ import es.ucm.fdi.ici.c2526.practica4.grupoYY.mspacman.MsPacManDescription;
  */
 public class CachedLinearCaseBase implements CBRCaseBase {
 
+	private int TOTAL_LIST = 8;
 	private Connector connector;
 	private Collection<CBRCase> originalCases;
 	//private java.util.ArrayList<CBRCase> workingCases;
 	//LAS CUATRO PRIMERAS LISTAS SON LAS DE CUANDO HAY PPILLS 
 	private java.util.ArrayList< java.util.ArrayList<CBRCase>> workingCaseArray; 
 	private Collection<CBRCase> casesToRemove;
-	
+	private int actListIndex = 0;
 	private Integer nextId;
 	
 	/**
@@ -58,9 +59,13 @@ public class CachedLinearCaseBase implements CBRCaseBase {
 	/**
 	 * Returns working cases.
 	 */
-	public Collection<CBRCase> getCases(int index) {
+	public void setActListIndex(int i) {
+		actListIndex = i;
+	}
+	
+	public Collection<CBRCase> getCases() {
 		
-		return workingCaseArray.get(index);
+		return workingCaseArray.get(actListIndex);
 	}
 
 	/**
@@ -78,6 +83,7 @@ public class CachedLinearCaseBase implements CBRCaseBase {
 		this.connector = connector;
 		originalCases = this.connector.retrieveAllCases();	
 		workingCaseArray = new java.util.ArrayList<java.util.ArrayList<CBRCase>>();
+		for(int i = 0; i < TOTAL_LIST;i++) workingCaseArray.add(new java.util.ArrayList<CBRCase>());
 		for(CBRCase aux : originalCases) addCaseToBase(aux);
 		
 		casesToRemove = new ArrayList<>();
