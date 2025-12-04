@@ -204,7 +204,7 @@ public class MsPacManStorageManager {
 		}
 		
 		//3. Do a mix of similar cases
-		if(Objects.isNull(maxSimCase)) {
+		if(Objects.isNull(mostSimilar)) {
 			StoreCasesMethod.storeCase(this.caseBase, bCase);			
 		}
 		else {

@@ -1,8 +1,6 @@
 package es.ucm.fdi.ici.c2526.practica4.grupoYY.mspacman;
 
 import java.util.Vector;
-import java.util.function.Function;
-
 import es.ucm.fdi.gaia.jcolibri.connector.TypeAdaptor;
 
 public class vectorCBR implements TypeAdaptor {
