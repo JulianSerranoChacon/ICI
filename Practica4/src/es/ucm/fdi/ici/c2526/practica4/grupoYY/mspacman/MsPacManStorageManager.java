@@ -161,7 +161,8 @@ public class MsPacManStorageManager {
 		//Options:		
 		//If there is no other cases to compare it to, then there needs to be added
 		if(Objects.isNull(eval)) {
-			StoreCasesMethod.storeCase(this.caseBase, bCase);			
+			StoreCasesMethod.storeCase(this.caseBase, bCase);
+			return;
 		}
 		
 		//Get case resolution
