@@ -127,7 +127,7 @@ public class MsPacManStorageManager {
 			}
 			
 			if(!distGhostNotEdible.isEmpty()) {
-				int median = distGhostNotEdible.get(distGhostNotEdible.size()/2 + 1);
+				int median = distGhostNotEdible.get(distGhostNotEdible.size()/2);
 				if(median > description.getNearestPPill() || median < UMBRAL_DISTANCIA_DEFENSA) {
 					value += RECOMPENSA_ALEJADO_FANTASMA;
 				}
@@ -163,7 +163,7 @@ public class MsPacManStorageManager {
 			}
 			
 			if(!distGhostNotEdible.isEmpty()) {
-				int median = distGhostNotEdible.get(distGhostNotEdible.size()/2 + 1);
+				int median = distGhostNotEdible.get(distGhostNotEdible.size()/2);
 				if(median < UMBRAL_DISTANCIA_DEFENSA) {
 					value += RECOMPENSA_ALEJADO_FANTASMA;
 				}
