@@ -36,20 +36,22 @@ public class MsPacManStorageManager {
 	//Constante de tiempo
 	private final static int TIME_WINDOW = 3;
 	
-	//Constante de recuerdo
+	//Constante de recuerdo // 
 	private static final double UMBRAL_CONSERVAR = 0.75;
 	private static final int UMBRAL_CASOS_NO_CONSERVAR = 5;
 	private static final double UMBRAL_CASO_SUFICIENTE_SIMILAR = 0.85;
 	
-	//Constantes de revision	
+	//Constantes de revision //	
+	private static final Integer UMBRAL_DISTANCIA_DEFENSA = 45;
 	private final static Integer SCORE_FANTASMA_COMIDO = 200;
+	//Recompensas
 	private final static Integer RECOMPENSA_FANTASMA_DEBIL_CERCA = 30;
 	private final static Integer RECOMPENSA_FANTASMAS = 30;
-	private final static Double RECOMPENSA_PILL_COMIDA = 3.05;
+	private final static Double  RECOMPENSA_PILL_COMIDA = 3.05;
+	private static final Integer RECOMPENSA_ALEJADO_FANTASMA = 60;
+	//Penalizaciones
 	private final static Integer PENALIZACION_PPILL = -50;
 	private final static Integer PENALIZACION_MUERTE = -75;
-	private static final Integer UMBRAL_DISTANCIA_DEFENSA = 45;
-	private static final Integer RECOMPENSA_ALEJADO_FANTASMA = 60;
 	
 	public MsPacManStorageManager()
 	{
@@ -142,7 +144,7 @@ public class MsPacManStorageManager {
 			
 			//Penalizamos el uso inapropiado de la Power Pills
 			if(game.getNumberOfActivePowerPills() < infoCase.numPills && num_ghost_reachable == 0) {
-				finalScore -= PENALIZACION_PPILL;
+				value += PENALIZACION_PPILL;
 			}
 		}
 		//Sin ppill
@@ -173,7 +175,7 @@ public class MsPacManStorageManager {
 		
 		//Penalizamos la muerte quitando parte del resultado
 		if(game.getPacmanNumberOfLivesRemaining() < infoCase.numLives) {
-			value -= PENALIZACION_MUERTE;
+			value += PENALIZACION_MUERTE;
 		}
 		
 		MsPacManResult result = (MsPacManResult)bCase.getResult();
