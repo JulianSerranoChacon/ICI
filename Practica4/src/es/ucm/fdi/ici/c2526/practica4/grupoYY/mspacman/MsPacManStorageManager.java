@@ -41,6 +41,7 @@ public class MsPacManStorageManager {
 	private static final Double UMBRAL_CONSERVAR = 0.85;
 	private static final Integer UMBRAL_CASOS_NO_CONSERVAR = 3;
 	private static final Double UMBRAL_CASO_SUFICIENTE_SIMILAR = 0.90;
+
 	
 	//Constantes de revision //	
 	private static final Integer UMBRAL_DISTANCIA_DEFENSA = 45;
@@ -249,6 +250,12 @@ public class MsPacManStorageManager {
 			}
 		}
 		
+		// 2. Store it
+				// Si la mayor similitud es menor que nuestra constante, se añade directamente
+				if(maxSimilarity > UMBRAL_CONSERVAR) {
+					StoreCasesMethod.storeCase(this.caseBase, bCase);			
+					return;
+				}
 		// 1. Not store it
 		// Varios valores muy similar --> Casos muy similares entre si
 		if (countCasesAbove >= UMBRAL_CASOS_NO_CONSERVAR) {
@@ -270,7 +277,7 @@ public class MsPacManStorageManager {
 			//Forget previous case
 			Collection<CBRCase> aux = new ArrayList<CBRCase>();
 			aux.add(mostSimilar.get_case());
-			caseBase.forgetCases(aux);
+	//		caseBase.forgetCases(aux);
 			
 			//New "Frankenstein" case
 			//TODO: conservar el numero de veces que esto sucede --> (n/10 + 0.8) * resultMostSimilar + (0.2 - n/10) * bCaseResult

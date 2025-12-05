@@ -18,7 +18,7 @@ public class ExecutorTest {
         GhostController ghosts = new AggressiveGhosts();
         
         System.out.println( 
-            executor.runGame(pacMan, ghosts, 2) //last parameter defines speed
+            executor.runGame(pacMan, ghosts, 30) //last parameter defines speed
         );    
         /*Stats stats[] = executor.runExperiment(pacMan, ghosts, 100, "triaje 1");//last parameter defines speed
         for (Stats stat : stats) {

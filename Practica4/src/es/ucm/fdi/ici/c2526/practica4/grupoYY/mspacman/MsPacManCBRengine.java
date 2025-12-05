@@ -26,6 +26,7 @@ import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.EqualNumLocalSimilarityF
 import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.IntervalVectorCBR;
 import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.MoveLocalSimilarityFuntion;
 import es.ucm.fdi.ici.c2526.practica4.grupoYY.CBRengine.vectorCBRSimilarity;
+import pacman.game.Constants;
 import pacman.game.Constants.MOVE;
 
 public class MsPacManCBRengine implements StandardCBRApplication {
@@ -47,7 +48,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 	final static String CASE_BASE_PATH = "cbrdata"+File.separator+TEAM+File.separator+"mspacman"+File.separator;
 	
 	private final static Double UMBRAL_SIMILITUD = 0.7; // umbral de similitud propuesto para empezar a considerar casos similares
-	private static final Double UMBRAL_SCORE_MINIMO = 40.00;
+	private static final Double UMBRAL_SCORE_MINIMO = 20.00;
 
 	
 	public MsPacManCBRengine(MsPacManStorageManager storageManager)
@@ -74,14 +75,11 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		
 		simConfig = new NNConfig();
 		simConfig.setDescriptionSimFunction(new Average());
-		simConfig.addMapping(new Attribute("score",MsPacManDescription.class), new Interval(15000));
-		simConfig.addMapping(new Attribute("numPPills",MsPacManDescription.class), new EqualNumLocalSimilarityFuntion()); 
 		simConfig.addMapping(new Attribute("nearestPPill",MsPacManDescription.class), new Interval(650));
-		simConfig.addMapping(new Attribute("nearestPill",MsPacManDescription.class), new Interval(650)); //TODO assign only if PPILLS = 0
+		simConfig.addMapping(new Attribute("nearestPill",MsPacManDescription.class), new Interval(650));
 		simConfig.addMapping(new Attribute("ghostToPacman",MsPacManDescription.class), new IntervalVectorCBR(650)); 
 		simConfig.addMapping(new Attribute("pacmanToGhost",MsPacManDescription.class),  new IntervalVectorCBR(650)); 
-		simConfig.addMapping(new Attribute("ghostEdibleTime",MsPacManDescription.class),  new IntervalVectorCBR(650)); 
-		simConfig.addMapping(new Attribute("pacmanLastMove",MsPacManDescription.class), new MoveLocalSimilarityFuntion()); 
+		simConfig.addMapping(new Attribute("ghostEdibleTime",MsPacManDescription.class),  new IntervalVectorCBR(Constants.EDIBLE_TIME)); 
 		simConfig.addMapping(new Attribute("ghostLastMoves",MsPacManDescription.class), new vectorCBRSimilarity()); 
 		
 	}
@@ -139,13 +137,34 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		
 		caseBase.setActListIndex(getCaseList(query));
 		Collection<RetrievalResult> eval = null;
-		
+	
 		if(caseBase.getCases().isEmpty()) {
-			//query.getDescription() 
-			this.action = MOVE.NEUTRAL;
+			Random rnd = new Random();
+			String lastMoveName = ((MsPacManDescription)query.getDescription()).getPacmanLastMove();
+			MOVE lastMove = MOVE.UP;
+			switch(lastMoveName) {
+			case("UP"):
+				lastMove = MOVE.UP;
+				break;
+			case("DOWN"):
+				lastMove = MOVE.DOWN;
+				break;
+			case("LEFT"):
+				lastMove = MOVE.LEFT;
+				break;
+			case("RIGHT"):
+				lastMove = MOVE.RIGHT;
+				break;
+			}
+			MOVE finalMove;
+			
+			finalMove = MOVE.values()[rnd.nextInt(4)]; //TODO REVISE
+			
+			this.action =  finalMove;
 		}
 		else {
 			//Compute retrieve
+			
 			eval = NNScoringMethod.evaluateSimilarity(caseBase.getCases(), query, simConfig);
 			//Compute reuse
 			this.action = reuse(eval, query);
@@ -170,10 +189,12 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		
 		Map<MOVE, double[]> dirToScore = new HashMap<>();
 		MOVE bestMove = MOVE.NEUTRAL; Double bestScore = Double.MIN_VALUE;
-
+		
 		for(RetrievalResult cbrCase : cases) {
 			//Truncar la lista con 0,7
-			if(cbrCase.getEval() < UMBRAL_SIMILITUD) {
+
+			if(cbrCase.getEval() > UMBRAL_SIMILITUD) {
+			
 				MsPacManResult scoreCase = (MsPacManResult) cbrCase.get_case().getResult(); 
 				MsPacManSolution moveCase = (MsPacManSolution) cbrCase.get_case().getSolution(); 
 				double weight = scoreCase.getScore() * cbrCase.getEval() * cbrCase.getEval();
@@ -192,8 +213,8 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 			// MOVE[] availableMoves = MOVE.values(); Random rnd = new Random(); We are not doing this because it may return the move we did before
 			MOVE finalMove;
 			do {
-				finalMove = MOVE.values()[rnd.nextInt(5) % MOVE.values().length];
-			} while (lastMove == finalMove);
+				finalMove = MOVE.values()[rnd.nextInt(4)];
+			} while (lastMove.opposite() == finalMove);
 			return finalMove;
 		}
 		
@@ -211,8 +232,9 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		if(bestScore < UMBRAL_SCORE_MINIMO) {
 			MOVE finalMove;
 			do {
-				finalMove = MOVE.values()[rnd.nextInt(5) % MOVE.values().length];
-			} while (dirToScore.containsKey(finalMove) || lastMove == finalMove);
+				finalMove = MOVE.values()[rnd.nextInt(4)];
+			} while (dirToScore.size()<3&&(dirToScore.containsKey(finalMove) || lastMove.opposite() == finalMove));
+			return finalMove;
 		}
 		
 		//2.Mejor caso

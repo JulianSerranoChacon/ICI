@@ -23,7 +23,7 @@ public class EvaluatorTest {
         PacmanController pacMan = new MsPacMan();
         GhostController ghosts = new AggressiveGhosts();
         
-        int trials = 50;
+        int trials = 300;
         
 		ArrayList<?>[] stats = executor.runCBRExperiment(pacMan, ghosts, trials, pacMan.getClass().getName()+ " - " + ghosts.getClass().getName());;
 		System.out.println("Scores: " + stats[0] ); 
