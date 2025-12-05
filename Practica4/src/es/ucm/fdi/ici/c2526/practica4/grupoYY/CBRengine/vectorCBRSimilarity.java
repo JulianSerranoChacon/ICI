@@ -33,7 +33,7 @@ public class vectorCBRSimilarity implements LocalSimilarityFunction {
 		String[] s2 = o2.toString().split("#");
 		
 		for(int i = 0; i < Math.min(s1.length, s2.length);i++) {
-			if(s1[i] == s2[i]) {
+			if(s1[i].equals(s2[i])) {
 				sim++;
 			}
 		}

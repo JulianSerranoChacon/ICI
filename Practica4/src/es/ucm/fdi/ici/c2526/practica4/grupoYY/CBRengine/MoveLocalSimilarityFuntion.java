@@ -12,7 +12,7 @@ public class MoveLocalSimilarityFuntion implements LocalSimilarityFunction{
 	public double compute(Object caseObject, Object queryObject) throws NoApplicableSimilarityFunctionException {
 		if ((caseObject == null) || (queryObject == null))
 			return 0;
-		if(caseObject.toString() == queryObject.toString()) return 1;
+		if(caseObject.toString().equals(queryObject.toString())) return 1;
 		return 0;
 	}
 
@@ -20,7 +20,7 @@ public class MoveLocalSimilarityFuntion implements LocalSimilarityFunction{
 	public boolean isApplicable(Object caseObject, Object queryObject) {
 		if ((caseObject == null) || (queryObject == null))
 			return false;
-		return (caseObject.toString() == queryObject.toString());
+		return (caseObject.toString().equals(queryObject.toString()));
 	}
 
 }
