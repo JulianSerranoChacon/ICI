@@ -25,7 +25,7 @@ public final class AggressiveGhosts extends GhostController {
         {
             if (game.doesGhostRequireAction(ghost))        //if it requires an action
             {
-                    myMoves.put(ghost, game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghost),
+                    myMoves.put(ghost, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost),
                             game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH));
 
             }
