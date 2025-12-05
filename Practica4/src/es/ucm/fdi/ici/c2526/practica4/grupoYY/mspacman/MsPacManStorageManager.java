@@ -2,6 +2,7 @@ package es.ucm.fdi.ici.c2526.practica4.grupoYY.mspacman;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
 
@@ -47,6 +48,8 @@ public class MsPacManStorageManager {
 	private final static Double RECOMPENSA_PILL_COMIDA = 3.05;
 	private final static Integer PENALIZACION_PPILL = -50;
 	private final static Integer PENALIZACION_MUERTE = -75;
+	private static final Integer UMBRAL_DISTANCIA_DEFENSA = 45;
+	private static final Integer RECOMPENSA_ALEJADO_FANTASMA = 60;
 	
 	public MsPacManStorageManager()
 	{
@@ -109,15 +112,29 @@ public class MsPacManStorageManager {
 				value += num_fantasmas * RECOMPENSA_FANTASMAS;
 			}
 			
-			// TODO: Supervivencia --> alomejor aquí cuenta menos que abajo + si muere maybe no sumar esto
+			// Supervivencia 
+			// Hacemos la mediana de la distancia de los fantasmas
+			// Recompensamos a Pacman si esta mas cerca de la PPill o si esta bastante lejos del fantasma
+			List<Integer> distGhostNotEdible = new ArrayList<>();
 			for(GHOST g : GHOST.values()) {
+				if(game.isGhostEdible(g)) {
+					continue;
+				}
 				
+				distGhostNotEdible.add(game.getShortestPathDistance(game.getGhostCurrentNodeIndex(g), game.getPacmanCurrentNodeIndex()));
+			}
+			
+			if(!distGhostNotEdible.isEmpty()) {
+				int median = distGhostNotEdible.get(distGhostNotEdible.size()/2 + 1);
+				if(median > description.getNearestPPill() || median < UMBRAL_DISTANCIA_DEFENSA) {
+					value += RECOMPENSA_ALEJADO_FANTASMA;
+				}
 			}
 			
 			// Caza 
 			int num_ghost_reachable = 0;
 			for(GHOST g : GHOST.values()) {
-				if(ghostReachable(game, g)) {
+				if(game.isGhostEdible(g) && ghostReachable(game, g)) {
 					num_ghost_reachable++;
 				}
 			}
@@ -131,9 +148,23 @@ public class MsPacManStorageManager {
 		//Sin ppill
 		else {
 			
-			// TODO: Supervivencia --> alomejor aquí cuenta menos que abajo + si muere maybe no sumar esto
+			// Supervivencia 
+			// Hacemos la mediana de la distancia de los fantasmas
+			// Recompensamos a Pacman si esta mas cerca de la PPill o si esta bastante lejos del fantasma
+			List<Integer> distGhostNotEdible = new ArrayList<>();
 			for(GHOST g : GHOST.values()) {
+				if(game.isGhostEdible(g)) {
+					continue;
+				}
 				
+				distGhostNotEdible.add(game.getShortestPathDistance(game.getGhostCurrentNodeIndex(g), game.getPacmanCurrentNodeIndex()));
+			}
+			
+			if(!distGhostNotEdible.isEmpty()) {
+				int median = distGhostNotEdible.get(distGhostNotEdible.size()/2 + 1);
+				if(median < UMBRAL_DISTANCIA_DEFENSA) {
+					value += RECOMPENSA_ALEJADO_FANTASMA;
+				}
 			}
 			
 			//Consideramos las pills comidas 
@@ -167,6 +198,7 @@ public class MsPacManStorageManager {
 		
 		//Get case resolution
 		//Result es score, solution es accion
+		MsPacManDescription bCaseDesc = (MsPacManDescription) bCase.getDescription();
 		MsPacManSolution bCaseSolution = (MsPacManSolution) bCase.getSolution();
 		MsPacManResult bCaseResult = (MsPacManResult) bCase.getResult();
 		
@@ -218,10 +250,39 @@ public class MsPacManStorageManager {
 			//New "Frankenstein" case
 			//TODO: conservar el numero de veces que esto sucede --> (n/10 + 0.8) * resultMostSimilar + (0.2 - n/10) * bCaseResult
 			MsPacManResult mostSimilarResult =(MsPacManResult) mostSimilar.get_case().getResult();
+			MsPacManDescription mostSimilarDesc = (MsPacManDescription) mostSimilar.get_case().getDescription();
 			Integer newScore = (int) Math.round(0.8 * mostSimilarResult.getScore() + 0.2 * bCaseResult.getScore());
 			
-			//TODO: Cambiar input tb si lo veis necesario
+			// Media de las distancias y de los tiempos de comestible
+			double new_case;
+			double most_similar_case;
+			for(int i = 0; i < 4; i++){
+				//Dist ghost to pacman
+				new_case = bCaseDesc.getGhostToPacman().getElement(i);
+				most_similar_case = mostSimilarDesc.getGhostToPacman().getElement(i);
+				mostSimilarDesc.getGhostToPacman().setElement(i,  (double) Math.round(0.8 * new_case + 0.2 * most_similar_case));
+				
+				//Dist pacman to ghost
+				new_case = bCaseDesc.getPacmanToGhost().getElement(i);
+				most_similar_case = mostSimilarDesc.getPacmanToGhost().getElement(i);
+				mostSimilarDesc.getPacmanToGhost().setElement(i,  (double) Math.round(0.8 * new_case + 0.2 * most_similar_case));
+				
+				//Edible values
+				new_case = bCaseDesc.getGhostEdibleTime().getElement(i);
+				most_similar_case = mostSimilarDesc.getGhostEdibleTime().getElement(i);
+				mostSimilarDesc.getGhostEdibleTime().setElement(i,  (double) Math.round(0.8 * new_case + 0.2 * most_similar_case));
+			}
 			
+			new_case = bCaseDesc.getNearestPPill();
+			most_similar_case = mostSimilarDesc.getNearestPPill();
+			mostSimilarDesc.setNearestPPill( (int)Math.round(0.8 * new_case + 0.2 * most_similar_case));
+			
+			new_case = bCaseDesc.getNearestPill();
+			most_similar_case = mostSimilarDesc.getNearestPill();
+			mostSimilarDesc.setNearestPill( (int)Math.round(0.8 * new_case + 0.2 * most_similar_case));
+			
+			// Nppills, ppillmascercana, pillmascercana y Movimientos se mantienen 
+					
 			bCaseResult.setScore(newScore);
 			StoreCasesMethod.storeCase(this.caseBase, bCase);
 		}
