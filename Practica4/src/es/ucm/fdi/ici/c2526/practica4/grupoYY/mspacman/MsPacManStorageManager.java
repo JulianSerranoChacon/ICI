@@ -37,9 +37,9 @@ public class MsPacManStorageManager {
 	private final static int TIME_WINDOW = 3;
 	
 	//Constante de recuerdo // 
-	private static final double UMBRAL_CONSERVAR = 0.75;
-	private static final int UMBRAL_CASOS_NO_CONSERVAR = 5;
-	private static final double UMBRAL_CASO_SUFICIENTE_SIMILAR = 0.85;
+	private static final Double UMBRAL_CONSERVAR = 0.85;
+	private static final Double UMBRAL_CASOS_NO_CONSERVAR = 0.90;
+	private static final Double UMBRAL_CASO_SUFICIENTE_SIMILAR = 0.85;
 	
 	//Constantes de revision //	
 	private static final Integer UMBRAL_DISTANCIA_DEFENSA = 45;
