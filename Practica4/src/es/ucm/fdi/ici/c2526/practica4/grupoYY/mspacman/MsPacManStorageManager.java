@@ -2,6 +2,7 @@ package es.ucm.fdi.ici.c2526.practica4.grupoYY.mspacman;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
@@ -38,18 +39,18 @@ public class MsPacManStorageManager {
 	
 	//Constante de recuerdo // 
 	private static final Double UMBRAL_CONSERVAR = 0.85;
-	private static final Double UMBRAL_CASOS_NO_CONSERVAR = 0.90;
-	private static final Double UMBRAL_CASO_SUFICIENTE_SIMILAR = 0.85;
+	private static final Integer UMBRAL_CASOS_NO_CONSERVAR = 3;
+	private static final Double UMBRAL_CASO_SUFICIENTE_SIMILAR = 0.90;
 	
 	//Constantes de revision //	
 	private static final Integer UMBRAL_DISTANCIA_DEFENSA = 45;
 	private final static Integer SCORE_FANTASMA_COMIDO = 200;
 	//Recompensas
-	private final static Integer RECOMPENSA_FANTASMA_DEBIL_CERCA = 30;
-	private final static Integer RECOMPENSA_FANTASMAS = 30;
+	private final static Integer RECOMPENSA_FANTASMA_DEBIL_CERCA = 25;
 	private final static Double  RECOMPENSA_PILL_COMIDA = 3.05;
 	private static final Integer RECOMPENSA_ALEJADO_FANTASMA = 60;
 	//Penalizaciones
+	private static final Integer PENALIZANDO_ALEJADO_FANTASMA = -30;
 	private final static Integer PENALIZACION_PPILL = -50;
 	private final static Integer PENALIZACION_MUERTE = -75;
 	
@@ -111,7 +112,23 @@ public class MsPacManStorageManager {
 					}
 				}
 				
-				value += num_fantasmas * RECOMPENSA_FANTASMAS;
+				switch(num_fantasmas) {
+				case 0: 
+					value += 0;
+					break;
+				case 1:
+					value += 20;
+					break;
+				case 2:
+					value += 40;
+					break;
+				case 3:
+					value += 70;
+					break;
+				case 4:
+					value += 100;
+					break;
+				}
 			}
 			
 			// Supervivencia 
@@ -126,10 +143,15 @@ public class MsPacManStorageManager {
 				distGhostNotEdible.add(game.getShortestPathDistance(game.getGhostCurrentNodeIndex(g), game.getPacmanCurrentNodeIndex()));
 			}
 			
+			
+			
 			if(!distGhostNotEdible.isEmpty()) {
-				int median = distGhostNotEdible.get(distGhostNotEdible.size()/2);
-				if(median > description.getNearestPPill() || median < UMBRAL_DISTANCIA_DEFENSA) {
+				Collections.sort(distGhostNotEdible);
+				if(distGhostNotEdible.get(0) > description.getNearestPPill() || distGhostNotEdible.get(0) >= UMBRAL_DISTANCIA_DEFENSA) {
 					value += RECOMPENSA_ALEJADO_FANTASMA;
+				}
+				else {
+					value += PENALIZANDO_ALEJADO_FANTASMA;
 				}
 			}
 			
@@ -163,9 +185,12 @@ public class MsPacManStorageManager {
 			}
 			
 			if(!distGhostNotEdible.isEmpty()) {
-				int median = distGhostNotEdible.get(distGhostNotEdible.size()/2);
-				if(median < UMBRAL_DISTANCIA_DEFENSA) {
+				Collections.sort(distGhostNotEdible);
+				if(distGhostNotEdible.get(0) > description.getNearestPPill() || distGhostNotEdible.get(0) >= UMBRAL_DISTANCIA_DEFENSA) {
 					value += RECOMPENSA_ALEJADO_FANTASMA;
+				}
+				else {
+					value += PENALIZANDO_ALEJADO_FANTASMA;
 				}
 			}
 			
@@ -189,8 +214,6 @@ public class MsPacManStorageManager {
 		
 		//here you should also check if the case must be stored into persistence (too similar to existing ones, etc.)
 		
-		//TODO: Si hay similares mezclar, sino añadir si se cumple los valores de similitud y puntuaje (puntuaje a revisar)
-
 		//Options:		
 		//If there is no other cases to compare it to, then there needs to be added
 		if(Objects.isNull(eval)) {
@@ -239,7 +262,7 @@ public class MsPacManStorageManager {
 			return;
 		}
 		
-		//3. Do a mix of similar cases
+		//3. Do a mix of similar cases --> Only if similarity is above 0.85
 		if(Objects.isNull(mostSimilar)) {
 			StoreCasesMethod.storeCase(this.caseBase, bCase);			
 		}
@@ -288,7 +311,6 @@ public class MsPacManStorageManager {
 			bCaseResult.setScore(newScore);
 			StoreCasesMethod.storeCase(this.caseBase, bCase);
 		}
-		
 	}
 
 	public void close() {
