@@ -40,7 +40,7 @@ public class MsPacManStorageManager {
 	//Constante de recuerdo // 
 	private static final Double UMBRAL_CONSERVAR = 0.87;
 	private static final Double UMBRAL_CASO_SUFICIENTE_SIMILAR = 0.90;
-	private static final Integer NUM_CASOS_NO_CONSERVAR = 3;
+	private static final Integer NUM_CASOS_NO_CONSERVAR = 5;
 	private static final Integer minMediocre = -35;
 	private static final Integer maxMediocre = 35;
 	
@@ -273,14 +273,16 @@ public class MsPacManStorageManager {
 		RetrievalResult mediocreRR = null;
 		
 		//Obtenemos los casos muy similares
-		Double maxSimilarity = Double.MIN_VALUE; Integer countCasesAbove = 0;
+		Double maxSimilarity = Double.MIN_VALUE; Integer countCasesAbove = 0; Double medianSimilarity = 0.00;
 		//Obtenemos el caso mas parecido 
 		RetrievalResult mostSimilar = null; Double maxSimCase = Double.MIN_VALUE;
 		
 		for(RetrievalResult cbrCase : eval) {
 			MsPacManSolution cbrSolution =(MsPacManSolution) cbrCase.get_case().getSolution();
 			MsPacManResult cbrResult = (MsPacManResult) cbrCase.get_case().getResult();
-
+			
+			medianSimilarity += cbrCase.getEval();
+			
 			// get biggest similarity
 			if(maxSimilarity < cbrCase.getEval()) {
 				maxSimilarity = cbrCase.getEval();
@@ -303,7 +305,9 @@ public class MsPacManStorageManager {
 				mediocreRR = cbrCase;
 			}
 		}
-
+		
+		medianSimilarity /= eval.size();
+		
 		// 1. Not store it
 		// Varios valores muy similar --> Casos muy similares entre si
 		if (countCasesAbove >= NUM_CASOS_NO_CONSERVAR) {
@@ -312,7 +316,8 @@ public class MsPacManStorageManager {
 		
 		// 2. Store it
 		// Si la mayor similitud es menor que nuestra constante, se añade directamente
-		else if(maxSimilarity < UMBRAL_CONSERVAR) {
+		
+		else if(maxSimilarity < UMBRAL_CONSERVAR || medianSimilarity <= 0.99) {
 			StoreCasesMethod.storeCase(this.caseBase, bCase);			
 		}
 		

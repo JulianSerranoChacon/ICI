@@ -159,28 +159,17 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		
 		caseBase.setActListIndex(getCaseList(query));
 		Collection<RetrievalResult> eval = null;
-	
+		Collection<RetrievalResult> cases = null;
+		
 		if(caseBase.getCases().isEmpty()) {
 			Random rnd = new Random();
-			String lastMoveName = ((MsPacManDescription)query.getDescription()).getPacmanLastMove();
-			MOVE lastMove = MOVE.UP;
-			switch(lastMoveName) {
-			case("UP"):
-				lastMove = MOVE.UP;
-				break;
-			case("DOWN"):
-				lastMove = MOVE.DOWN;
-				break;
-			case("LEFT"):
-				lastMove = MOVE.LEFT;
-				break;
-			case("RIGHT"):
-				lastMove = MOVE.RIGHT;
-				break;
-			}
-			MOVE finalMove;
+			MsPacManDescription currCase = (MsPacManDescription) query.getDescription();
+			MOVE lastMove = MOVE.valueOf(currCase.getPacmanLastMove());
 			
-			finalMove = MOVE.values()[rnd.nextInt(4)]; //TODO REVISE
+			MOVE finalMove;
+			do {
+				finalMove = MOVE.values()[rnd.nextInt(4)];
+			} while (lastMove.opposite() == finalMove);
 			
 			this.action =  finalMove;
 		}
@@ -188,22 +177,21 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 			//Compute retrieve
 			
 			eval = NNScoringMethod.evaluateSimilarity(caseBase.getCases(), query, simConfig);
+			// kNNs with majority voting
+			cases = SelectCases.selectTopKRR(eval, 8);
 			//Compute reuse
-			this.action = reuse(eval, query);
+			this.action = reuse(cases, query);
 		}
 		
 		//Compute revise & retain
 		CBRCase newCase = createNewCase(query);
-		this.storageManager.reviseAndRetain(newCase, eval);
+		this.storageManager.reviseAndRetain(newCase, cases);
 		
 	}
 
-	private MOVE reuse(Collection<RetrievalResult> eval, CBRQuery query) {
+	private MOVE reuse(Collection<RetrievalResult> cases, CBRQuery query) {
 		//Generate a random number generator for future randomness
 		Random rnd = new Random();
-		
-		// kNNs with majority voting
-		Collection<RetrievalResult> cases = SelectCases.selectTopKRR(eval, 8);
 
 		//Obtain pacman last move (we do not want to do an illegal move)
 		MsPacManDescription currCase = (MsPacManDescription) query.getDescription();
