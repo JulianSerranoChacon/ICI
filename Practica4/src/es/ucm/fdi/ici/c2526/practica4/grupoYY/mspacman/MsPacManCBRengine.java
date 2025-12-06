@@ -80,9 +80,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		simConfig.addMapping(new Attribute("ghostToPacman",MsPacManDescription.class), new IntervalVectorCBR(650)); 
 		simConfig.addMapping(new Attribute("pacmanToGhost",MsPacManDescription.class),  new IntervalVectorCBR(650)); 
 		simConfig.addMapping(new Attribute("ghostEdibleTime",MsPacManDescription.class),  new IntervalVectorCBR(Constants.EDIBLE_TIME)); 
-		simConfig.addMapping(new Attribute("pacmanNode",MsPacManDescription.class), new Interval(500));
 		simConfig.addMapping(new Attribute("ghostLastMoves",MsPacManDescription.class), new vectorCBRSimilarity()); 
-
 		
 	}
 
@@ -227,7 +225,6 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 				bestMove = weight.getKey();
 			}
 		}
-		
 		//Opciones: 
 		
 		//1.Caso aleatorio entre posibles contrarios
@@ -235,7 +232,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 			MOVE finalMove;
 			do {
 				finalMove = MOVE.values()[rnd.nextInt(4)];
-			} while (dirToScore.size()<3&&(dirToScore.containsKey(finalMove) || lastMove.opposite() == finalMove));
+			} while (dirToScore.size()<3 && (dirToScore.containsKey(finalMove) || lastMove.opposite() == finalMove));
 			return finalMove;
 		}
 		
