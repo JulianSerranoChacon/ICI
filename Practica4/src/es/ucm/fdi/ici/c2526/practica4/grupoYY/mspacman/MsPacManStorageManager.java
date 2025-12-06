@@ -144,6 +144,7 @@ public class MsPacManStorageManager {
 				}
 				
 				toPacmanFromNotEdible.add(game.getShortestPathDistance(game.getGhostCurrentNodeIndex(g), game.getPacmanCurrentNodeIndex()));
+				toNotEdibleFromPacman.add(game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(g)));
 			}
 			
 			
