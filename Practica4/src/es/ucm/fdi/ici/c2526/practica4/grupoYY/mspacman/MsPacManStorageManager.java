@@ -53,7 +53,7 @@ public class MsPacManStorageManager {
 	private static final Integer RECOMPENSA_ALEJADO_FANTASMA = 60;
 	//Penalizaciones
 	private static final Integer PENALIZANDO_ALEJADO_FANTASMA = -30;
-	private final static Integer PENALIZACION_PPILL = -50;
+	private final static Integer PENALIZACION_PPILL = -75;
 	private final static Integer PENALIZACION_MUERTE = -75;
 	
 	public MsPacManStorageManager()
@@ -97,16 +97,20 @@ public class MsPacManStorageManager {
 		int currentScore = game.getScore();
 		int finalScore = currentScore - oldScore;
 		
+		if (finalScore < 0) {
+			finalScore = currentScore;
+		}
+		
 		//Final pill
 		int value = 0;
-	
+		
 		//Con ppill
 		if(infoCase.numPills > 0) {
 			
 			//Fantasmas comidos -> Recompensamos comer fantasmas
-			if (finalScore / SCORE_FANTASMA_COMIDO < 1){
-				//Empiricamente el numero de fantasmas
-				int num_fantasmas = 0; int score = finalScore;
+			//Empiricamente el numero de fantasmas
+			int num_fantasmas = 0; int score = finalScore;
+			if (finalScore >= SCORE_FANTASMA_COMIDO){
 				for(int i = SCORE_FANTASMA_COMIDO; score > 0; i *= 2) {
 					score -= i;
 					if(score > 0) {
@@ -167,12 +171,46 @@ public class MsPacManStorageManager {
 			value += RECOMPENSA_FANTASMA_DEBIL_CERCA * num_ghost_reachable;
 			
 			//Penalizamos el uso inapropiado de la Power Pills
-			if(game.getNumberOfActivePowerPills() < infoCase.numPills && num_ghost_reachable == 0) {
+			if(game.getNumberOfActivePowerPills() < infoCase.numPills && num_ghost_reachable == 0 && num_fantasmas < 2) {
 				value += PENALIZACION_PPILL;
 			}
 		}
 		//Sin ppill
 		else {
+			
+			//Fantasmas comidos -> Recompensamos comer fantasmas
+			if (finalScore >= SCORE_FANTASMA_COMIDO){
+				//Empiricamente el numero de fantasmas
+				int num_fantasmas = 0;
+				for(int i = SCORE_FANTASMA_COMIDO; finalScore > 0; i *= 2) {
+					finalScore -= i;
+					if(finalScore > 0) {
+						num_fantasmas++;
+					}
+					else {
+						finalScore += i;
+						break;
+					}
+				}
+				
+				switch(num_fantasmas) {
+				case 0: 
+					value += 0;
+					break;
+				case 1:
+					value += 20;
+					break;
+				case 2:
+					value += 40;
+					break;
+				case 3:
+					value += 70;
+					break;
+				case 4:
+					value += 100;
+					break;
+				}
+			}
 			
 			// Supervivencia 
 			// Hacemos la mediana de la distancia de los fantasmas
@@ -197,7 +235,7 @@ public class MsPacManStorageManager {
 			}
 			
 			//Consideramos las pills comidas 
-			value += Math.round(RECOMPENSA_PILL_COMIDA * finalScore);
+			value += Math.round(RECOMPENSA_PILL_COMIDA * finalScore/10);
 		}
 		
 		//Penalizamos la muerte quitando parte del resultado
