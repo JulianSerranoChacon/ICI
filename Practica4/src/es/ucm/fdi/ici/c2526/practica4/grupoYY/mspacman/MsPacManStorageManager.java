@@ -340,7 +340,7 @@ public class MsPacManStorageManager {
 			// Nppills, ppillmascercana, pillmascercana y Movimientos se mantienen 
 					
 			bCaseResult.setScore(newScore);
-			StoreCasesMethod.storeCase(this.caseBase, bCase);
+			StoreCasesMethod.storeCase(this.caseBase, mostSimilar.get_case());
 		}
 		
 	}
