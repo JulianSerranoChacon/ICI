@@ -40,7 +40,7 @@ public class MsPacManStorageManager {
 	//Constante de recuerdo // 
 	private static final Double UMBRAL_CONSERVAR = 0.87;
 	private static final Double UMBRAL_CASO_SUFICIENTE_SIMILAR = 0.90;
-	private static final Integer NUM_CASOS_NO_CONSERVAR = 5;
+	private static final Integer NUM_CASOS_NO_CONSERVAR = 3;
 	private static final Integer minMediocre = -35;
 	private static final Integer maxMediocre = 35;
 	
@@ -50,10 +50,10 @@ public class MsPacManStorageManager {
 	//Recompensas
 	private final static Integer RECOMPENSA_FANTASMA_DEBIL_CERCA = 25;
 	private final static Double  RECOMPENSA_PILL_COMIDA = 3.05;
-	private static final Integer RECOMPENSA_ALEJADO_FANTASMA = 60;
+	private static final Integer RECOMPENSA_ALEJADO_FANTASMA = 15;
 	//Penalizaciones
 	private static final Integer PENALIZANDO_ALEJADO_FANTASMA = -30;
-	private final static Integer PENALIZACION_PPILL = -75;
+	private final static Integer PENALIZACION_PPILL = -50;
 	private final static Integer PENALIZACION_MUERTE = -75;
 	
 	public MsPacManStorageManager()
@@ -97,20 +97,16 @@ public class MsPacManStorageManager {
 		int currentScore = game.getScore();
 		int finalScore = currentScore - oldScore;
 		
-		if (finalScore < 0) {
-			finalScore = currentScore;
-		}
-		
 		//Final pill
 		int value = 0;
-		
+	
 		//Con ppill
 		if(infoCase.numPills > 0) {
 			
 			//Fantasmas comidos -> Recompensamos comer fantasmas
-			//Empiricamente el numero de fantasmas
-			int num_fantasmas = 0; int score = finalScore;
-			if (finalScore >= SCORE_FANTASMA_COMIDO){
+			if (finalScore / SCORE_FANTASMA_COMIDO < 1){
+				//Empiricamente el numero de fantasmas
+				int num_fantasmas = 0; int score = finalScore;
 				for(int i = SCORE_FANTASMA_COMIDO; score > 0; i *= 2) {
 					score -= i;
 					if(score > 0) {
@@ -140,24 +136,27 @@ public class MsPacManStorageManager {
 			// Supervivencia 
 			// Hacemos la mediana de la distancia de los fantasmas
 			// Recompensamos a Pacman si esta mas cerca de la PPill o si esta bastante lejos del fantasma
-			List<Integer> distGhostNotEdible = new ArrayList<>();
+			List<Integer> toPacmanFromNotEdible = new ArrayList<>();
+			List<Integer> toNotEdibleFromPacman = new ArrayList<>();
 			for(GHOST g : GHOST.values()) {
 				if(game.isGhostEdible(g)) {
 					continue;
 				}
 				
-				distGhostNotEdible.add(game.getShortestPathDistance(game.getGhostCurrentNodeIndex(g), game.getPacmanCurrentNodeIndex()));
+				toPacmanFromNotEdible.add(game.getShortestPathDistance(game.getGhostCurrentNodeIndex(g), game.getPacmanCurrentNodeIndex()));
 			}
 			
 			
 			
-			if(!distGhostNotEdible.isEmpty()) {
-				Collections.sort(distGhostNotEdible);
-				if(distGhostNotEdible.get(0) > description.getNearestPPill() || distGhostNotEdible.get(0) >= UMBRAL_DISTANCIA_DEFENSA) {
-					value += RECOMPENSA_ALEJADO_FANTASMA;
-				}
-				else {
-					value += PENALIZANDO_ALEJADO_FANTASMA;
+			if(!toPacmanFromNotEdible.isEmpty()) {
+
+				for (int i = 0; i < toPacmanFromNotEdible.size(); i++) {
+					if(toPacmanFromNotEdible.get(i) > description.getNearestPPill() || toPacmanFromNotEdible.get(i) >= UMBRAL_DISTANCIA_DEFENSA) {
+						value += RECOMPENSA_ALEJADO_FANTASMA;
+					}
+					else if (toPacmanFromNotEdible.get(i) <= toNotEdibleFromPacman.get(i)) {
+						value += PENALIZANDO_ALEJADO_FANTASMA;
+					}
 				}
 			}
 			
@@ -171,71 +170,41 @@ public class MsPacManStorageManager {
 			value += RECOMPENSA_FANTASMA_DEBIL_CERCA * num_ghost_reachable;
 			
 			//Penalizamos el uso inapropiado de la Power Pills
-			if(game.getNumberOfActivePowerPills() < infoCase.numPills && num_ghost_reachable == 0 && num_fantasmas < 2) {
+			if(game.getNumberOfActivePowerPills() < infoCase.numPills && num_ghost_reachable == 0) {
 				value += PENALIZACION_PPILL;
 			}
 		}
 		//Sin ppill
 		else {
 			
-			//Fantasmas comidos -> Recompensamos comer fantasmas
-			if (finalScore >= SCORE_FANTASMA_COMIDO){
-				//Empiricamente el numero de fantasmas
-				int num_fantasmas = 0;
-				for(int i = SCORE_FANTASMA_COMIDO; finalScore > 0; i *= 2) {
-					finalScore -= i;
-					if(finalScore > 0) {
-						num_fantasmas++;
-					}
-					else {
-						finalScore += i;
-						break;
-					}
-				}
-				
-				switch(num_fantasmas) {
-				case 0: 
-					value += 0;
-					break;
-				case 1:
-					value += 20;
-					break;
-				case 2:
-					value += 40;
-					break;
-				case 3:
-					value += 70;
-					break;
-				case 4:
-					value += 100;
-					break;
-				}
-			}
-			
 			// Supervivencia 
 			// Hacemos la mediana de la distancia de los fantasmas
 			// Recompensamos a Pacman si esta mas cerca de la PPill o si esta bastante lejos del fantasma
-			List<Integer> distGhostNotEdible = new ArrayList<>();
+			List<Integer> toPacmanFromNotEdible = new ArrayList<>();
+			List<Integer> toNotEdibleFromPacman = new ArrayList<>();
 			for(GHOST g : GHOST.values()) {
-				if(game.isGhostEdible(g)) {
+				if(game.isGhostEdible(g) || game.getGhostLairTime(g)>0) {
 					continue;
 				}
 				
-				distGhostNotEdible.add(game.getShortestPathDistance(game.getGhostCurrentNodeIndex(g), game.getPacmanCurrentNodeIndex()));
+				toPacmanFromNotEdible.add(game.getShortestPathDistance(game.getGhostCurrentNodeIndex(g), game.getPacmanCurrentNodeIndex()));
+				toNotEdibleFromPacman.add(game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(g)));
 			}
 			
-			if(!distGhostNotEdible.isEmpty()) {
-				Collections.sort(distGhostNotEdible);
-				if(distGhostNotEdible.get(0) > description.getNearestPPill() || distGhostNotEdible.get(0) >= UMBRAL_DISTANCIA_DEFENSA) {
-					value += RECOMPENSA_ALEJADO_FANTASMA;
-				}
-				else {
-					value += PENALIZANDO_ALEJADO_FANTASMA;
+			if(!toPacmanFromNotEdible.isEmpty()) {
+
+				for (int i = 0; i < toPacmanFromNotEdible.size(); i++) {
+					if(toPacmanFromNotEdible.get(i) > description.getNearestPPill() || toPacmanFromNotEdible.get(i) >= UMBRAL_DISTANCIA_DEFENSA) {
+						value += RECOMPENSA_ALEJADO_FANTASMA;
+					}
+					else if (toPacmanFromNotEdible.get(i) > toNotEdibleFromPacman.get(i)) {
+						value += PENALIZANDO_ALEJADO_FANTASMA;
+					}
 				}
 			}
 			
 			//Consideramos las pills comidas 
-			value += Math.round(RECOMPENSA_PILL_COMIDA * finalScore/10);
+			value += Math.round(RECOMPENSA_PILL_COMIDA * finalScore);
 		}
 		
 		//Penalizamos la muerte quitando parte del resultado
@@ -273,16 +242,14 @@ public class MsPacManStorageManager {
 		RetrievalResult mediocreRR = null;
 		
 		//Obtenemos los casos muy similares
-		Double maxSimilarity = Double.MIN_VALUE; Integer countCasesAbove = 0; Double medianSimilarity = 0.00;
+		Double maxSimilarity = Double.MIN_VALUE; Integer countCasesAbove = 0;
 		//Obtenemos el caso mas parecido 
 		RetrievalResult mostSimilar = null; Double maxSimCase = Double.MIN_VALUE;
 		
 		for(RetrievalResult cbrCase : eval) {
 			MsPacManSolution cbrSolution =(MsPacManSolution) cbrCase.get_case().getSolution();
 			MsPacManResult cbrResult = (MsPacManResult) cbrCase.get_case().getResult();
-			
-			medianSimilarity += cbrCase.getEval();
-			
+
 			// get biggest similarity
 			if(maxSimilarity < cbrCase.getEval()) {
 				maxSimilarity = cbrCase.getEval();
@@ -305,9 +272,7 @@ public class MsPacManStorageManager {
 				mediocreRR = cbrCase;
 			}
 		}
-		
-		medianSimilarity /= eval.size();
-		
+
 		// 1. Not store it
 		// Varios valores muy similar --> Casos muy similares entre si
 		if (countCasesAbove >= NUM_CASOS_NO_CONSERVAR) {
@@ -316,8 +281,7 @@ public class MsPacManStorageManager {
 		
 		// 2. Store it
 		// Si la mayor similitud es menor que nuestra constante, se añade directamente
-		
-		else if(maxSimilarity < UMBRAL_CONSERVAR || medianSimilarity <= 0.99) {
+		else if(maxSimilarity < UMBRAL_CONSERVAR) {
 			StoreCasesMethod.storeCase(this.caseBase, bCase);			
 		}
 		
