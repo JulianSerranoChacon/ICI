@@ -15,8 +15,10 @@ public class MsPacManDescription implements CaseComponent {
 	vectorCBRDouble ghostToPacman = new vectorCBRDouble(4);
 	vectorCBRDouble pacmanToGhost = new vectorCBRDouble(4);
 	vectorCBRDouble ghostEdibleTime = new vectorCBRDouble(4);
+	Integer pacmanNode;
 	String pacmanLastMove;
 	vectorCBR ghostLastMoves = new vectorCBR(4);
+	
 	
 
 	public Integer getId() {
@@ -89,6 +91,12 @@ public class MsPacManDescription implements CaseComponent {
 		return pacmanLastMove;
 	}
 
+	public Integer getPacmanNode() {
+		return this.pacmanNode;
+	}
+	public void setPacmanNode(Integer pacmanNode) {
+		this.pacmanNode = pacmanNode;
+	}
 	public void setPacmanLastMove(String pacmanMove) {
 		this.pacmanLastMove = pacmanMove;
 	}
@@ -121,7 +129,8 @@ public class MsPacManDescription implements CaseComponent {
 	            + ", pacmanToGhost=" + pacmanToGhost.toString()
 
 	            + ", ghostEdibleTime=" + ghostEdibleTime.toString()
-
+	            + ", pacmanNode=" + pacmanNode
+	            
 	            + ", pacmanMove=" + pacmanLastMove
 	            + ", ghostLastMoves=" + ghostLastMoves.toString()
 	            

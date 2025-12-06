@@ -20,6 +20,7 @@ public class MsPacManInput extends CBRInput {
 	vectorCBRDouble ghostToPacman;
 	vectorCBRDouble pacmanToGhost;
 	vectorCBRDouble ghostEdibleTime;
+	Integer pacmanNode;
 	String pacmanLastMove;
 	vectorCBR ghostLastMoves;
 	
@@ -34,6 +35,7 @@ public class MsPacManInput extends CBRInput {
 		computeNearestPPill(game);
 		computeNearestPill(game);
 		numPPills = game.getNumberOfActivePowerPills();
+		pacmanNode = game.getPacmanCurrentNodeIndex();
 		score = game.getScore();
 	}
 
@@ -55,6 +57,8 @@ public class MsPacManInput extends CBRInput {
 		description.setPacmanLastMove(pacmanLastMove);
 		
 		description.setPacmanToGhost(pacmanToGhost);
+		
+		description.setPacmanNode(pacmanNode);
 		
 		description.setGhostEdibleTime(ghostEdibleTime);
 		
