@@ -72,15 +72,37 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		connector.setCaseBaseFile(CASE_BASE_PATH, opponent+".csv");
 		
 		this.storageManager.setCaseBase(caseBase);
-		
+		Attribute aux;
 		simConfig = new NNConfig();
 		simConfig.setDescriptionSimFunction(new Average());
-		simConfig.addMapping(new Attribute("nearestPPill",MsPacManDescription.class), new Interval(650));
-		simConfig.addMapping(new Attribute("nearestPill",MsPacManDescription.class), new Interval(650));
-		simConfig.addMapping(new Attribute("ghostToPacman",MsPacManDescription.class), new IntervalVectorCBR(650)); 
-		simConfig.addMapping(new Attribute("pacmanToGhost",MsPacManDescription.class),  new IntervalVectorCBR(650)); 
-		simConfig.addMapping(new Attribute("ghostEdibleTime",MsPacManDescription.class),  new IntervalVectorCBR(Constants.EDIBLE_TIME)); 
-		simConfig.addMapping(new Attribute("ghostLastMoves",MsPacManDescription.class), new vectorCBRSimilarity()); 
+
+		aux = new Attribute("nearestPPill",MsPacManDescription.class);
+		simConfig.addMapping(aux, new Interval(650));
+		simConfig.setWeight(aux,0.05);
+		
+		aux = new Attribute("nearestPill",MsPacManDescription.class);
+		simConfig.addMapping(aux, new Interval(650));
+		simConfig.setWeight(aux,0.05);
+		
+		aux = new Attribute("ghostToPacman",MsPacManDescription.class);
+		simConfig.addMapping(aux , new IntervalVectorCBR(650)); 
+		simConfig.setWeight(aux,0.05);
+		
+		aux = new Attribute("pacmanToGhost",MsPacManDescription.class);
+		simConfig.addMapping(aux,  new IntervalVectorCBR(650)); 
+		simConfig.setWeight(aux,0.05);
+		
+		aux = new Attribute("ghostEdibleTime",MsPacManDescription.class);
+		simConfig.addMapping(aux,  new IntervalVectorCBR(Constants.EDIBLE_TIME)); 
+		simConfig.setWeight(aux,0.3);
+		
+		aux = new Attribute("pacmanNode",MsPacManDescription.class);
+		simConfig.addMapping(aux, new Interval(500));
+		simConfig.setWeight(aux,0.3);
+		
+		aux = new Attribute("ghostLastMoves",MsPacManDescription.class);
+		simConfig.addMapping(aux, new vectorCBRSimilarity()); 
+		simConfig.setWeight(aux,0.2);
 		
 	}
 
