@@ -274,14 +274,13 @@ public class MsPacManStorageManager {
 		
 		// 2. Store it
 		// Si la mayor similitud es menor que nuestra constante, se añade directamente
-		if(maxSimilarity < UMBRAL_CONSERVAR) {
+		else if(maxSimilarity < UMBRAL_CONSERVAR) {
 			StoreCasesMethod.storeCase(this.caseBase, bCase);			
-			return;
 		}
 		
 		
 		//3. Replace bad RR
-		if (mediocreRR != null && mediocreScore <= maxMediocre && mediocreScore >= minMediocre) {
+		else if (mediocreRR != null && mediocreScore <= maxMediocre && mediocreScore >= minMediocre) {
 			Collection<CBRCase> aux = new ArrayList<CBRCase>();
 			aux.add(mediocreRR.get_case());
 			caseBase.forgetCases(aux);
@@ -293,7 +292,7 @@ public class MsPacManStorageManager {
 		}
 		
 		//4. Do a mix of similar cases --> Only if similarity is above 0.85
-		if(Objects.isNull(mostSimilar)) {
+		else if(Objects.isNull(mostSimilar)) {
 			StoreCasesMethod.storeCase(this.caseBase, bCase);			
 		}
 		// New "Frankenstein" case
