@@ -250,9 +250,6 @@ public class MsPacManStorageManager {
 		if(game.getPacmanNumberOfLivesRemaining() < infoCase.numLives) {
 			value += PENALIZACION_MUERTE;
 		}
-		//if(value < -250 || value> 900) {
-		//	int ar  = 1; 
-		//}
 		MsPacManResult result = (MsPacManResult)bCase.getResult();
         result.setScore(value);	
 	}
