@@ -243,15 +243,16 @@ public class MsPacManStorageManager {
 			}
 			
 			//Consideramos las pills comidas 
-			value += Math.round(RECOMPENSA_PILL_COMIDA * finalScore);
+			value += Math.round(RECOMPENSA_PILL_COMIDA * finalScore/10);
 		}
 		
 		//Penalizamos la muerte quitando parte del resultado
 		if(game.getPacmanNumberOfLivesRemaining() < infoCase.numLives) {
 			value += PENALIZACION_MUERTE;
 		}
-		
-		
+		//if(value < -250 || value> 900) {
+		//	int ar  = 1; 
+		//}
 		MsPacManResult result = (MsPacManResult)bCase.getResult();
         result.setScore(value);	
 	}
