@@ -36,7 +36,7 @@ public class MsPacManStorageManager {
 	}
 	
 	//Constante de tiempo
-	private final static int TIME_WINDOW = 10;
+	private final static int TIME_WINDOW = 3;
 	
 	//Constante de recuerdo // 
 	private static final Double UMBRAL_CONSERVAR = 0.87;
@@ -51,7 +51,7 @@ public class MsPacManStorageManager {
 	private static final Integer UMBRAL_DISTANCIA_DEFENSA = 45;
 	private final static Integer SCORE_FANTASMA_COMIDO = 200;
 	//Recompensas
-	private final static Integer RECOMPENSA_FANTASMA_DEBIL_CERCA = 100;
+	private final static Integer RECOMPENSA_FANTASMA_DEBIL_CERCA = 25;
 	private final static Double  RECOMPENSA_PILL_COMIDA = 3.05;
 	private static final Integer RECOMPENSA_ALEJADO_FANTASMA = 15;
 	//Penalizaciones
