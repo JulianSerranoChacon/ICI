@@ -40,7 +40,9 @@ public class MsPacManStorageManager {
 	//Constante de recuerdo // 
 	private static final Double UMBRAL_CONSERVAR = 0.87;
 	private static final Double UMBRAL_CASO_SUFICIENTE_SIMILAR = 0.90;
-	private static final Integer NUM_CASOS_NO_CONSERVAR = 3;
+	private static final Double UMBRAL_CASO_NO_SUFICIENTE_SIMILAR = 0.75;
+	private static final Integer NUM_CASOS_NO_CONSERVAR = 5;
+	private static final Integer NUM_CASOS_CONSERVAR = 4;
 	private static final Integer minMediocre = -35;
 	private static final Integer maxMediocre = 35;
 	
@@ -136,7 +138,6 @@ public class MsPacManStorageManager {
 			}
 			
 			// Supervivencia 
-			// Hacemos la mediana de la distancia de los fantasmas
 			// Recompensamos a Pacman si esta mas cerca de la PPill o si esta bastante lejos del fantasma
 			List<Integer> toPacmanFromNotEdible = new ArrayList<>();
 			List<Integer> toNotEdibleFromPacman = new ArrayList<>();
@@ -217,7 +218,6 @@ public class MsPacManStorageManager {
 			}
 			
 			// Supervivencia 
-			// Hacemos la mediana de la distancia de los fantasmas
 			// Recompensamos a Pacman si esta mas cerca de la PPill o si esta bastante lejos del fantasma
 			List<Integer> toPacmanFromNotEdible = new ArrayList<>();
 			List<Integer> toNotEdibleFromPacman = new ArrayList<>();
@@ -274,13 +274,13 @@ public class MsPacManStorageManager {
 		MsPacManSolution bCaseSolution = (MsPacManSolution) bCase.getSolution();
 		MsPacManResult bCaseResult = (MsPacManResult) bCase.getResult();
 		
-		
 		//VARIABLES PRUEBA VALORES MEDIOCRES
 		double mediocreScore = 100;		
 		RetrievalResult mediocreRR = null;
 		
 		//Obtenemos los casos muy similares
 		Double maxSimilarity = Double.MIN_VALUE; Integer countCasesAbove = 0;
+		Integer countCasesBelow = 0;
 		//Obtenemos el caso mas parecido 
 		RetrievalResult mostSimilar = null; Double maxSimCase = Double.MIN_VALUE;
 		
@@ -296,6 +296,11 @@ public class MsPacManStorageManager {
 			// count if similar enough
 			if(UMBRAL_CASO_SUFICIENTE_SIMILAR <= cbrCase.getEval()) {
 				countCasesAbove++;
+			}
+			
+			// count if not similar enough
+			if(UMBRAL_CASO_NO_SUFICIENTE_SIMILAR >= cbrCase.getEval()) {
+				countCasesBelow++;
 			}
 			
 			// update most similar
@@ -319,13 +324,14 @@ public class MsPacManStorageManager {
 		
 		// 2. Store it
 		// Si la mayor similitud es menor que nuestra constante, se añade directamente
-		else if(maxSimilarity < UMBRAL_CONSERVAR) {
+		else if(maxSimilarity < UMBRAL_CONSERVAR || countCasesBelow >= NUM_CASOS_CONSERVAR) {
 			StoreCasesMethod.storeCase(this.caseBase, bCase);			
 		}
 		
 		
 		//3. Replace bad RR
 		else if (mediocreRR != null && mediocreScore <= maxMediocre && mediocreScore >= minMediocre) {
+			//Forget the case
 			Collection<CBRCase> aux = new ArrayList<CBRCase>();
 			aux.add(mediocreRR.get_case());
 			caseBase.forgetCases(aux);
@@ -336,13 +342,13 @@ public class MsPacManStorageManager {
 			}
 		}
 		
-		//4. Do a mix of similar cases --> Only if similarity is above 0.85
+		//4. Do a mix of similar cases
 		else if(Objects.isNull(mostSimilar)) {
 			StoreCasesMethod.storeCase(this.caseBase, bCase);			
 		}
 		// New "Frankenstein" case
 		else {
-		/*	//Forget previous case
+			//Forget previous case
 			Collection<CBRCase> aux = new ArrayList<CBRCase>();
 			aux.add(mostSimilar.get_case());
 			caseBase.forgetCases(aux);
@@ -383,9 +389,8 @@ public class MsPacManStorageManager {
 			
 			// Nppills, ppillmascercana, pillmascercana y Movimientos se mantienen 
 					
-			bCaseResult.setScore(newScore);
+			mostSimilarResult.setScore(newScore);
 			StoreCasesMethod.storeCase(this.caseBase, mostSimilar.get_case());
-			*/
 		}
 		
 	}
