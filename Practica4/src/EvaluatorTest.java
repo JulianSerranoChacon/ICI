@@ -21,7 +21,7 @@ public class EvaluatorTest {
                 .build();
 
         PacmanController pacMan = new MsPacMan();
-        GhostController ghosts = new AggressiveGhosts();
+        GhostController ghosts = new es.ucm.fdi.ici.c2526.practica1.grupoB.Ghosts();
         
         int trials = 500;
         

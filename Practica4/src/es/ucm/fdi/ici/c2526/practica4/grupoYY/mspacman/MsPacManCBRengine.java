@@ -94,11 +94,11 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		
 		aux = new Attribute("ghostEdibleTime",MsPacManDescription.class);
 		simConfig.addMapping(aux,  new IntervalVectorCBR(Constants.EDIBLE_TIME)); 
-		simConfig.setWeight(aux,0.3);
+		simConfig.setWeight(aux,0.2);
 		
 		aux = new Attribute("pacmanNode",MsPacManDescription.class);
 		simConfig.addMapping(aux, new Interval(500));
-		simConfig.setWeight(aux,0.3);
+		simConfig.setWeight(aux,0.4);
 		
 		aux = new Attribute("ghostLastMoves",MsPacManDescription.class);
 		simConfig.addMapping(aux, new vectorCBRSimilarity()); 

@@ -104,7 +104,7 @@ public class MsPacManStorageManager {
 		if(infoCase.numPills > 0) {
 			
 			//Fantasmas comidos -> Recompensamos comer fantasmas
-			if (finalScore / SCORE_FANTASMA_COMIDO < 1){
+			if (finalScore >= SCORE_FANTASMA_COMIDO){
 				//Empiricamente el numero de fantasmas
 				int num_fantasmas = 0; int score = finalScore;
 				for(int i = SCORE_FANTASMA_COMIDO; score > 0; i *= 2) {
@@ -175,8 +175,39 @@ public class MsPacManStorageManager {
 				value += PENALIZACION_PPILL;
 			}
 		}
+	
+		
 		//Sin ppill
 		else {
+			
+			if (finalScore >= SCORE_FANTASMA_COMIDO){
+				//Empiricamente el numero de fantasmas
+				int num_fantasmas = 0; int score = finalScore;
+				for(int i = SCORE_FANTASMA_COMIDO; score > 0; i *= 2) {
+					score -= i;
+					if(score > 0) {
+						num_fantasmas++;
+					}
+				}
+				
+				switch(num_fantasmas) {
+				case 0: 
+					value += 0;
+					break;
+				case 1:
+					value += 20;
+					break;
+				case 2:
+					value += 40;
+					break;
+				case 3:
+					value += 70;
+					break;
+				case 4:
+					value += 100;
+					break;
+				}
+			}
 			
 			// Supervivencia 
 			// Hacemos la mediana de la distancia de los fantasmas
@@ -212,7 +243,9 @@ public class MsPacManStorageManager {
 		if(game.getPacmanNumberOfLivesRemaining() < infoCase.numLives) {
 			value += PENALIZACION_MUERTE;
 		}
-		
+		if(value < -200 || value> 900) {
+			int aad  = 1; 
+		}
 		MsPacManResult result = (MsPacManResult)bCase.getResult();
         result.setScore(value);	
 	}
@@ -305,7 +338,7 @@ public class MsPacManStorageManager {
 		}
 		// New "Frankenstein" case
 		else {
-			//Forget previous case
+		/*	//Forget previous case
 			Collection<CBRCase> aux = new ArrayList<CBRCase>();
 			aux.add(mostSimilar.get_case());
 			caseBase.forgetCases(aux);
@@ -348,6 +381,7 @@ public class MsPacManStorageManager {
 					
 			bCaseResult.setScore(newScore);
 			StoreCasesMethod.storeCase(this.caseBase, mostSimilar.get_case());
+			*/
 		}
 		
 	}
