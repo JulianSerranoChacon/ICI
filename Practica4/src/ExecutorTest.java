@@ -9,13 +9,13 @@ public class ExecutorTest {
 
     public static void main(String[] args) {
         Executor executor = new Executor.Builder()
-                .setTickLimit(1000)
+                .setTickLimit(4000)
                 .setVisual(true)
                 .setScaleFactor(2.5)
                 .build();
 
         PacmanController pacMan = new MsPacMan();
-        GhostController ghosts = new AggressiveGhosts();
+        GhostController ghosts = new es.ucm.fdi.ici.c2526.practica1.grupoB.Ghosts();
         
         System.out.println( 
             executor.runGame(pacMan, ghosts, 30) //last parameter defines speed

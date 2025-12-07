@@ -2,7 +2,6 @@ package es.ucm.fdi.ici.c2526.practica4.grupoYY.mspacman;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
@@ -25,11 +24,13 @@ public class MsPacManStorageManager {
 	{
 		private int numLives;
 		private int numPills;
+		private int numGhostEaten;
 		private Collection<RetrievalResult> eval;
 
-		public Info(int numLives, int numPills, Collection<RetrievalResult> eval) {
+		public Info(int numLives, int numPills, int ghostNotActive, Collection<RetrievalResult> eval) {
 			this.numLives = numLives;
 			this.numPills = numPills;
+			this.numGhostEaten = ghostNotActive;
 			this.eval = eval;
 		}
 	}
@@ -55,8 +56,8 @@ public class MsPacManStorageManager {
 	private static final Integer RECOMPENSA_ALEJADO_FANTASMA = 15;
 	//Penalizaciones
 	private static final Integer PENALIZANDO_ALEJADO_FANTASMA = -30;
-	private final static Integer PENALIZACION_PPILL = -50;
-	private final static Integer PENALIZACION_MUERTE = -75;
+	private final static Integer PENALIZACION_PPILL = -80;
+	private final static Integer PENALIZACION_MUERTE = -60;
 	
 	public MsPacManStorageManager()
 	{
@@ -77,7 +78,7 @@ public class MsPacManStorageManager {
 	{			
 		this.buffer.add(newCase);
 		//We can keep extra information of the game that would be unnecesary in a case.
-		this.bufferInfo.add(new Info(game.getPacmanNumberOfLivesRemaining(), game.getNumberOfActivePowerPills(), eval));
+		this.bufferInfo.add(new Info(game.getPacmanNumberOfLivesRemaining(), game.getNumberOfActivePowerPills(), game.getNumGhostsEaten(),eval));
 		
 		//Buffer not full yet.
 		if(this.buffer.size()<TIME_WINDOW)
@@ -123,16 +124,16 @@ public class MsPacManStorageManager {
 					value += 0;
 					break;
 				case 1:
-					value += 20;
+					value += 45;
 					break;
 				case 2:
-					value += 40;
+					value += 85;
 					break;
 				case 3:
-					value += 70;
+					value += 150;
 					break;
 				case 4:
-					value += 100;
+					value += 250;
 					break;
 				}
 			}
@@ -142,7 +143,7 @@ public class MsPacManStorageManager {
 			List<Integer> toPacmanFromNotEdible = new ArrayList<>();
 			List<Integer> toNotEdibleFromPacman = new ArrayList<>();
 			for(GHOST g : GHOST.values()) {
-				if(game.isGhostEdible(g)) {
+				if(game.isGhostEdible(g) || game.getGhostLairTime(g) > 0) {
 					continue;
 				}
 				
@@ -173,8 +174,9 @@ public class MsPacManStorageManager {
 			}
 			value += RECOMPENSA_FANTASMA_DEBIL_CERCA * num_ghost_reachable;
 			
+			//TODO: REVISE
 			//Penalizamos el uso inapropiado de la Power Pills
-			if(game.getNumberOfActivePowerPills() < infoCase.numPills && num_ghost_reachable == 0) {
+			if(game.getNumberOfActivePowerPills() < infoCase.numPills && infoCase.numGhostEaten > game.getNumGhostsEaten() && finalScore < SCORE_FANTASMA_COMIDO) {
 				value += PENALIZACION_PPILL;
 			}
 		}
@@ -203,16 +205,16 @@ public class MsPacManStorageManager {
 					value += 0;
 					break;
 				case 1:
-					value += 20;
+					value += 45;
 					break;
 				case 2:
-					value += 40;
+					value += 85;
 					break;
 				case 3:
-					value += 70;
+					value += 150;
 					break;
 				case 4:
-					value += 100;
+					value += 250;
 					break;
 				}
 			}
@@ -222,7 +224,7 @@ public class MsPacManStorageManager {
 			List<Integer> toPacmanFromNotEdible = new ArrayList<>();
 			List<Integer> toNotEdibleFromPacman = new ArrayList<>();
 			for(GHOST g : GHOST.values()) {
-				if(game.isGhostEdible(g) || game.getGhostLairTime(g)>0) {
+				if(game.isGhostEdible(g) || game.getGhostLairTime(g) > 0) {
 					continue;
 				}
 				
