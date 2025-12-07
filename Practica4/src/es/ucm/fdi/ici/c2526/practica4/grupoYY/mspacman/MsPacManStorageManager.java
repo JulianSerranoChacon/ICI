@@ -379,9 +379,9 @@ public class MsPacManStorageManager {
 				mostSimilarDesc.getGhostEdibleTime().setElement(i,  (double) Math.round(0.8 * new_case + 0.2 * most_similar_case));
 			}
 			
-			new_case = bCaseDesc.getNearestPPill();
-			most_similar_case = mostSimilarDesc.getNearestPPill();
-			mostSimilarDesc.setNearestPPill( (int)Math.round(0.8 * new_case + 0.2 * most_similar_case));
+			new_case = bCaseDesc.getNearestPill();
+			most_similar_case = mostSimilarDesc.getNearestPill();
+			mostSimilarDesc.setNearestPill( (int)Math.round(0.8 * new_case + 0.2 * most_similar_case));
 			
 			new_case = bCaseDesc.getNearestPill();
 			most_similar_case = mostSimilarDesc.getNearestPill();

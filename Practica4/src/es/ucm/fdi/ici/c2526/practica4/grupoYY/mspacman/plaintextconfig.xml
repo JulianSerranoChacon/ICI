@@ -5,13 +5,13 @@
 	<DescriptionMappings>
 		<Map>id</Map>
 		<Map>score</Map>
-		<Map>numPPills</Map>
-		<Map>nearestPPill</Map>		
+		<Map>numPPills</Map>	
 		<Map>nearestPill</Map>
 		<Map>ghostToPacman</Map>
 		<Map>pacmanToGhost</Map>
 		<Map>ghostEdibleTime</Map>	
 		<Map>pacmanNode</Map>
+		<Map>ghostPosition</Map>	
 		<Map>pacmanLastMove</Map>	
 		<Map>ghostLastMoves</Map>	
 	</DescriptionMappings>

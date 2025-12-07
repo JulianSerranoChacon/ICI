@@ -62,7 +62,7 @@ public class MsPacManInput extends CBRInput {
 		
 		description.setPacmanNode(pacmanNode);
 		
-		description.setGhostPositions(ghostPosition);
+		description.setGhostPosition(ghostPosition);
 		
 		description.setGhostEdibleTime(ghostEdibleTime);
 		
@@ -86,8 +86,11 @@ public class MsPacManInput extends CBRInput {
 	}
 	
 	private void computeGhostPositions(Game game) {
+		int i = 0;
+		ghostPosition = new vectorCBRDouble(4);
 		for (GHOST g : GHOST.values()) {
-			ghostPosition.setElement(0, (double)game.getGhostCurrentNodeIndex(g));
+			ghostPosition.setElement(i, (double)game.getGhostCurrentNodeIndex(g));
+			i++;
 		}
 		
 	}

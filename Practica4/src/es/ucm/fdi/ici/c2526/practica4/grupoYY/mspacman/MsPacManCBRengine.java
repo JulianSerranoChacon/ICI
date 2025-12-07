@@ -196,7 +196,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		//Obtain pacman last move (we do not want to do an illegal move)
 		MsPacManDescription currCase = (MsPacManDescription) query.getDescription();
 		MOVE lastMove = MOVE.valueOf(currCase.getPacmanLastMove());
-		System.out.println(currCase);
+		//System.out.println(currCase);
 		Map<MOVE, double[]> dirToScore = new HashMap<>();
 		MOVE bestMove = MOVE.NEUTRAL; Double bestScore = Double.MIN_VALUE;
 		
@@ -205,7 +205,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 
 			if(cbrCase.getEval() > UMBRAL_SIMILITUD) {
 			
-				System.out.println("CASO PARECIIDO " + cbrCase);
+				//System.out.println("CASO PARECIIDO " + cbrCase);
 				MsPacManResult scoreCase = (MsPacManResult) cbrCase.get_case().getResult(); 
 				MsPacManSolution moveCase = (MsPacManSolution) cbrCase.get_case().getSolution(); 
 				double weight = scoreCase.getScore() * cbrCase.getEval() * cbrCase.getEval();
@@ -234,7 +234,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 			if (weight.getValue()[0] > bestScore) {
 				bestScore = weight.getValue()[0];
 				bestMove = weight.getKey();
-				System.out.println("RESPUESTA " + bestMove + "SCORE " + bestScore);
+				//System.out.println("RESPUESTA " + bestMove + "SCORE " + bestScore);
 			}
 		}
 		

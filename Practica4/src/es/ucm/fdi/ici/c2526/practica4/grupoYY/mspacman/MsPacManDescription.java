@@ -39,10 +39,10 @@ public class MsPacManDescription implements CaseComponent {
 
 	// NEW ATRIBUTES //
 	
-	public vectorCBRDouble getGhostPositions() {
+	public vectorCBRDouble getGhostPosition() {
 		return ghostPosition;
 	}
-	public void setGhostPositions(vectorCBRDouble ghostP) {
+	public void setGhostPosition(vectorCBRDouble ghostP) {
 		ghostPosition = ghostP;
 	}
 	public Integer getNumPPills() {
