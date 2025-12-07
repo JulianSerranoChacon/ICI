@@ -235,9 +235,10 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 				bestMove = weight.getKey();
 			}
 		}
+		
 		//Opciones: 
 		
-		//1.Caso aleatorio entre posibles contrarios
+		//1.Caso aleatorio entre posibles contrarios (si no existe contrarios, es uno aleatorio)
 		if(bestScore < UMBRAL_SCORE_MINIMO) {
 			MOVE finalMove;
 			do {
