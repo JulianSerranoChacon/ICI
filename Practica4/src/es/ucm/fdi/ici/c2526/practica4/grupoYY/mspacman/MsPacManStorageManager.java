@@ -96,6 +96,7 @@ public class MsPacManStorageManager {
 		int oldScore = description.getScore();
 		int currentScore = game.getScore();
 		int finalScore = currentScore - oldScore;
+		
 		//REVISAR SCORES NEGATIVOS
 		if(finalScore < 0 ) finalScore = currentScore;
 		//Final pill
@@ -107,10 +108,10 @@ public class MsPacManStorageManager {
 			//Fantasmas comidos -> Recompensamos comer fantasmas
 			if (finalScore >= SCORE_FANTASMA_COMIDO){
 				//Empiricamente el numero de fantasmas
-				int num_fantasmas = 0; int score = finalScore;
-				for(int i = SCORE_FANTASMA_COMIDO; score > 0; i *= 2) {
-					score -= i;
-					if(score > 0) {
+				int num_fantasmas = 0;
+				for(int i = SCORE_FANTASMA_COMIDO; finalScore > 0; i *= 2) {
+					finalScore -= i;
+					if(finalScore > 0) {
 						num_fantasmas++;
 					}
 				}
@@ -183,11 +184,16 @@ public class MsPacManStorageManager {
 			
 			if (finalScore >= SCORE_FANTASMA_COMIDO){
 				//Empiricamente el numero de fantasmas
-				int num_fantasmas = 0; int score = finalScore;
-				for(int i = SCORE_FANTASMA_COMIDO; score > 0; i *= 2) {
-					score -= i;
-					if(score > 0) {
+				int num_fantasmas = 0;
+				for(int i = SCORE_FANTASMA_COMIDO; finalScore > 0; i *= 2) {
+					finalScore -= i;
+					if(finalScore > 0) {
 						num_fantasmas++;
+					}
+					//If score is negative, we get the score without ghosts and exit the loop
+					else if(finalScore < 0) {
+						finalScore += i;
+						break;
 					}
 				}
 				
@@ -244,9 +250,8 @@ public class MsPacManStorageManager {
 		if(game.getPacmanNumberOfLivesRemaining() < infoCase.numLives) {
 			value += PENALIZACION_MUERTE;
 		}
-		if(value < -200 || value> 900) {
-			int aa  = 1; 
-		}
+		
+		
 		MsPacManResult result = (MsPacManResult)bCase.getResult();
         result.setScore(value);	
 	}
