@@ -75,15 +75,15 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		simConfig.setDescriptionSimFunction(new Average());
 
 		aux = new Attribute("nearestPill",MsPacManDescription.class);
-		simConfig.addMapping(aux, new Interval(650));
+		simConfig.addMapping(aux, new Interval(400));
 		simConfig.setWeight(aux,0.06);
 		
 		aux = new Attribute("ghostToPacman",MsPacManDescription.class);
-		simConfig.addMapping(aux , new IntervalVectorCBR(150)); 
+		simConfig.addMapping(aux , new IntervalVectorCBR(350)); 
 		simConfig.setWeight(aux,0.12);
 		
 		aux = new Attribute("pacmanToGhost",MsPacManDescription.class);
-		simConfig.addMapping(aux,  new IntervalVectorCBR(150)); 
+		simConfig.addMapping(aux,  new IntervalVectorCBR(350)); 
 		simConfig.setWeight(aux,0.12);
 		
 		aux = new Attribute("ghostEdibleTime",MsPacManDescription.class);
@@ -91,11 +91,11 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		simConfig.setWeight(aux,0.15);
 		
 		aux = new Attribute("pacmanNode",MsPacManDescription.class);
-		simConfig.addMapping(aux, new Interval(150));
+		simConfig.addMapping(aux, new Interval(300));
 		simConfig.setWeight(aux,0.2);
 		
 		aux = new Attribute("ghostPosition",MsPacManDescription.class);
-		simConfig.addMapping(aux, new IntervalVectorCBR(500));
+		simConfig.addMapping(aux, new IntervalVectorCBR(250));
 		simConfig.setWeight(aux,0.2);
 		
 		aux = new Attribute("ghostLastMoves",MsPacManDescription.class);
