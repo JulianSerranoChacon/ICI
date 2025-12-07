@@ -96,7 +96,8 @@ public class MsPacManStorageManager {
 		int oldScore = description.getScore();
 		int currentScore = game.getScore();
 		int finalScore = currentScore - oldScore;
-		
+		//REVISAR SCORES NEGATIVOS
+		if(finalScore < 0 ) finalScore = currentScore;
 		//Final pill
 		int value = 0;
 	
@@ -244,7 +245,7 @@ public class MsPacManStorageManager {
 			value += PENALIZACION_MUERTE;
 		}
 		if(value < -200 || value> 900) {
-			int aad  = 1; 
+			int aa  = 1; 
 		}
 		MsPacManResult result = (MsPacManResult)bCase.getResult();
         result.setScore(value);	
