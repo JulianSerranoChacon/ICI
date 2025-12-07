@@ -79,11 +79,11 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		simConfig.setWeight(aux,0.06);
 		
 		aux = new Attribute("ghostToPacman",MsPacManDescription.class);
-		simConfig.addMapping(aux , new IntervalVectorCBR(650)); 
+		simConfig.addMapping(aux , new IntervalVectorCBR(150)); 
 		simConfig.setWeight(aux,0.12);
 		
 		aux = new Attribute("pacmanToGhost",MsPacManDescription.class);
-		simConfig.addMapping(aux,  new IntervalVectorCBR(650)); 
+		simConfig.addMapping(aux,  new IntervalVectorCBR(150)); 
 		simConfig.setWeight(aux,0.12);
 		
 		aux = new Attribute("ghostEdibleTime",MsPacManDescription.class);
@@ -91,7 +91,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		simConfig.setWeight(aux,0.15);
 		
 		aux = new Attribute("pacmanNode",MsPacManDescription.class);
-		simConfig.addMapping(aux, new Interval(500));
+		simConfig.addMapping(aux, new Interval(150));
 		simConfig.setWeight(aux,0.2);
 		
 		aux = new Attribute("ghostPosition",MsPacManDescription.class);
@@ -198,11 +198,12 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		Map<MOVE, double[]> dirToScore = new HashMap<>();
 		MOVE bestMove = MOVE.NEUTRAL; Double bestScore = Double.MIN_VALUE;
 		
+		int ncases = 0;
 		for(RetrievalResult cbrCase : cases) {
 			//Truncar la lista con 0,7
 
 			if(cbrCase.getEval() > UMBRAL_SIMILITUD) {
-			
+				ncases++;
 				//System.out.println("CASO PARECIIDO " + cbrCase);
 				MsPacManResult scoreCase = (MsPacManResult) cbrCase.get_case().getResult(); 
 				MsPacManSolution moveCase = (MsPacManSolution) cbrCase.get_case().getSolution(); 
@@ -217,9 +218,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 			}
 		}
 		
-		//Si tamaño = 0 --> Aleatorio
-		if(dirToScore.isEmpty()) {
-			// MOVE[] availableMoves = MOVE.values(); Random rnd = new Random(); We are not doing this because it may return the move we did before
+		if(ncases < 8) {// MOVE[] availableMoves = MOVE.values(); Random rnd = new Random(); We are not doing this because it may return the move we did before
 			MOVE finalMove;
 			do {
 				finalMove = MOVE.values()[rnd.nextInt(4)];

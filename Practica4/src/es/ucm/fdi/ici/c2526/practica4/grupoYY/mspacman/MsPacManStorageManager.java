@@ -36,7 +36,7 @@ public class MsPacManStorageManager {
 	}
 	
 	//Constante de tiempo
-	private final static int TIME_WINDOW = 3;
+	private final static int TIME_WINDOW = 5;
 	
 	//Constante de recuerdo // 
 	private static final Double UMBRAL_CONSERVAR = 0.87;
