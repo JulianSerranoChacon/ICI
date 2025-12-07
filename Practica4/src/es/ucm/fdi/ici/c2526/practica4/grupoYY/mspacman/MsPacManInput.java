@@ -15,12 +15,12 @@ public class MsPacManInput extends CBRInput {
 	
 	Integer score;
 	Integer numPPills;
-	Integer nearestPPill;
 	Integer nearestPill;
 	vectorCBRDouble ghostToPacman;
 	vectorCBRDouble pacmanToGhost;
 	vectorCBRDouble ghostEdibleTime;
 	Integer pacmanNode;
+	vectorCBRDouble ghostPosition;
 	String pacmanLastMove;
 	vectorCBR ghostLastMoves;
 	
@@ -30,10 +30,13 @@ public class MsPacManInput extends CBRInput {
 		
 	@Override
 	public void parseInput() {
+		computeGhostPositions(game);
 		computeGhostsToPacmanDist(game);
 		computePacmanToGhostsDist(game);
-		computeNearestPPill(game);
-		computeNearestPill(game);
+		if(game.getNumberOfActivePills() != 0) {
+			computeNearestPPill(game);	
+		}
+		else computeNearestPill(game);
 		numPPills = game.getNumberOfActivePowerPills();
 		pacmanNode = game.getPacmanCurrentNodeIndex();
 		score = game.getScore();
@@ -45,7 +48,6 @@ public class MsPacManInput extends CBRInput {
 		description.setScore(score);
 		//Pill related info
 		description.setNumPPills(numPPills);
-		description.setNearestPPill(nearestPPill);
 		description.setNearestPill(nearestPill);
 		
 		//Ghost menacing pacman info
@@ -60,6 +62,8 @@ public class MsPacManInput extends CBRInput {
 		
 		description.setPacmanNode(pacmanNode);
 		
+		description.setGhostPositions(ghostPosition);
+		
 		description.setGhostEdibleTime(ghostEdibleTime);
 		
 		CBRQuery query = new CBRQuery();
@@ -70,17 +74,23 @@ public class MsPacManInput extends CBRInput {
 	
 	
 	private void computeNearestPPill(Game game) {
-		nearestPPill = Integer.MAX_VALUE;
+		nearestPill = Integer.MAX_VALUE;
 		numPPills = game.getNumberOfActivePowerPills();
 		
 		for(int pos: game.getActivePowerPillsIndices()) {
 			
 			int distance = (int)game.getDistance(game.getPacmanCurrentNodeIndex(), pos, DM.PATH);
-			if(distance < this.nearestPPill)
-				this.nearestPPill = distance;
+			if(distance < this.nearestPill)
+				this.nearestPill = distance;
 		}
 	}
 	
+	private void computeGhostPositions(Game game) {
+		for (GHOST g : GHOST.values()) {
+			ghostPosition.setElement(0, (double)game.getGhostCurrentNodeIndex(g));
+		}
+		
+	}
 	// NEW ADDITIONS //
 	
 	private void computeNearestPill(Game game) {

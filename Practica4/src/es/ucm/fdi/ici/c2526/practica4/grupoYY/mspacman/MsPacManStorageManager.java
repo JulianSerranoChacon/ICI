@@ -154,7 +154,7 @@ public class MsPacManStorageManager {
 			if(!toPacmanFromNotEdible.isEmpty()) {
 
 				for (int i = 0; i < toPacmanFromNotEdible.size(); i++) {
-					if(toPacmanFromNotEdible.get(i) > description.getNearestPPill() || toPacmanFromNotEdible.get(i) >= UMBRAL_DISTANCIA_DEFENSA) {
+					if(toPacmanFromNotEdible.get(i) > description.getNearestPill() || toPacmanFromNotEdible.get(i) >= UMBRAL_DISTANCIA_DEFENSA) {
 						value += RECOMPENSA_ALEJADO_FANTASMA;
 					}
 					else if (toPacmanFromNotEdible.get(i) <= toNotEdibleFromPacman.get(i)) {
@@ -233,7 +233,7 @@ public class MsPacManStorageManager {
 			if(!toPacmanFromNotEdible.isEmpty()) {
 
 				for (int i = 0; i < toPacmanFromNotEdible.size(); i++) {
-					if(toPacmanFromNotEdible.get(i) > description.getNearestPPill() || toPacmanFromNotEdible.get(i) >= UMBRAL_DISTANCIA_DEFENSA) {
+					if(toPacmanFromNotEdible.get(i) > description.getNearestPill() || toPacmanFromNotEdible.get(i) >= UMBRAL_DISTANCIA_DEFENSA) {
 						value += RECOMPENSA_ALEJADO_FANTASMA;
 					}
 					else if (toPacmanFromNotEdible.get(i) > toNotEdibleFromPacman.get(i)) {

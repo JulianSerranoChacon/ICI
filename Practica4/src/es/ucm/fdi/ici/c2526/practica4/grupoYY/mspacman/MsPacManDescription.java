@@ -10,12 +10,12 @@ public class MsPacManDescription implements CaseComponent {
 	Integer id;
 	Integer score;
 	Integer numPPills;
-	Integer nearestPPill;
 	Integer nearestPill;
 	vectorCBRDouble ghostToPacman = new vectorCBRDouble(4);
 	vectorCBRDouble pacmanToGhost = new vectorCBRDouble(4);
 	vectorCBRDouble ghostEdibleTime = new vectorCBRDouble(4);
 	Integer pacmanNode;
+	vectorCBRDouble ghostPosition = new vectorCBRDouble(4);
 	String pacmanLastMove;
 	vectorCBR ghostLastMoves = new vectorCBR(4);
 	
@@ -37,16 +37,14 @@ public class MsPacManDescription implements CaseComponent {
 		this.score = score;
 	}
 
-	public Integer getNearestPPill() {
-		return nearestPPill;
-	}
-
-	public void setNearestPPill(Integer nearestPPill) {
-		this.nearestPPill = nearestPPill;
-	}
-	
 	// NEW ATRIBUTES //
 	
+	public vectorCBRDouble getGhostPositions() {
+		return ghostPosition;
+	}
+	public void setGhostPositions(vectorCBRDouble ghostP) {
+		ghostPosition = ghostP;
+	}
 	public Integer getNumPPills() {
 		return numPPills;
 	}
@@ -121,7 +119,6 @@ public class MsPacManDescription implements CaseComponent {
 	            + "id=" + id
 	            + ", score=" + score
 	            + ", numPPills=" + numPPills
-	            + ", nearestPPill=" + nearestPPill
 	            + ", nearestPill=" + nearestPill
 
 	            + ", ghostToPacman=" + ghostToPacman.toString()
@@ -130,6 +127,7 @@ public class MsPacManDescription implements CaseComponent {
 
 	            + ", ghostEdibleTime=" + ghostEdibleTime.toString()
 	            + ", pacmanNode=" + pacmanNode
+	            + ", ghostPosition=" + ghostPosition
 	            
 	            + ", pacmanMove=" + pacmanLastMove
 	            + ", ghostLastMoves=" + ghostLastMoves.toString()
