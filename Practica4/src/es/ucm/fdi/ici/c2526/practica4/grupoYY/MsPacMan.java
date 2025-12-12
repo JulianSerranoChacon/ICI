@@ -72,4 +72,9 @@ public class MsPacMan extends PacmanController implements PacManCBRController {
 	
 	}
 
+	@Override
+	public double getAverageSimmilarity() {
+		return cbrEngine.averageSimmilarity();
+	}
+
 }

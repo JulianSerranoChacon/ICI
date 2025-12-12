@@ -36,6 +36,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 	CustomPlainTextConnector connector;
 	CachedLinearCaseBase caseBase;
 	NNConfig simConfig;
+	private double avgSim;
 	
 	
 	final static String TEAM = "grupoYY";  //Cuidado!! poner el grupo aquí
@@ -52,6 +53,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 	public MsPacManCBRengine(MsPacManStorageManager storageManager)
 	{
 		this.storageManager = storageManager;
+		avgSim = 0;
 	}
 	
 	public void setOpponent(String opponent) {
@@ -229,6 +231,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 	private MOVE reuse(Collection<RetrievalResult> cases, CBRQuery query) {
 		//Generate a random number generator for future randomness
 		Random rnd = new Random();
+		avgSim = 0;
 
 		//Obtain pacman last move (we do not want to do an illegal move)
 		MsPacManDescription currCase = (MsPacManDescription) query.getDescription();
@@ -248,6 +251,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 				MsPacManSolution moveCase = (MsPacManSolution) cbrCase.get_case().getSolution(); 
 				double weight = scoreCase.getScore() * cbrCase.getEval() * cbrCase.getEval();
 
+				avgSim += cbrCase.getEval();
 				if (!dirToScore.containsKey(moveCase.getAction())) {
 					dirToScore.put(moveCase.getAction(), new double[] {weight, 1});
 				} 
@@ -257,6 +261,8 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 			}
 		}
 		
+		avgSim /= cases.size();
+
 		if(ncases < 8) {// MOVE[] availableMoves = MOVE.values(); Random rnd = new Random(); We are not doing this because it may return the move we did before
 			MOVE finalMove;
 			do {
@@ -325,6 +331,10 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 	public void postCycle() throws ExecutionException {
 		this.storageManager.close();
 		this.caseBase.close();
+	}
+
+	public double averageSimmilarity() {
+		return avgSim;
 	}
 
 }
