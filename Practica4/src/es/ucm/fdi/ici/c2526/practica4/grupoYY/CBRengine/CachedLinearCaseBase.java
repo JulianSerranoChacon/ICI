@@ -21,7 +21,7 @@ import es.ucm.fdi.ici.c2526.practica4.grupoYY.mspacman.MsPacManDescription;
  */
 public class CachedLinearCaseBase implements CBRCaseBase {
 
-	private int TOTAL_LIST = 8;
+	private int TOTAL_LIST = 16;
 	private Connector connector;
 	private Collection<CBRCase> originalCases;
 	//private java.util.ArrayList<CBRCase> workingCases;
@@ -111,37 +111,74 @@ public class CachedLinearCaseBase implements CBRCaseBase {
 		String lastMove = mMsDescription.getPacmanLastMove();
 		if(mMsDescription.getNumPPills() != 0) {
             //quedan ppills
-            if("UP".equals(lastMove)) {
-                workingCaseArray.get(0).add(aux);
-            }
-            else if ("DOWN".equals(lastMove)) {
-                
-                workingCaseArray.get(1).add(aux);
-            } else if("LEFT".equals(lastMove)) {
-            
-                workingCaseArray.get(2).add(aux);
-            }else {
-                
-                workingCaseArray.get(3).add(aux);
-            }
-
-        }
+			
+			//Si esta cazando
+			if(!mMsDescription.getHunting()) {
+				
+				   if("UP".equals(lastMove)) {
+		                workingCaseArray.get(0).add(aux);
+		            }
+		            else if ("DOWN".equals(lastMove)) {
+		                
+		                workingCaseArray.get(1).add(aux);
+		            } else if("LEFT".equals(lastMove)) {
+		            
+		                workingCaseArray.get(2).add(aux);
+		            }else {
+		                
+		                workingCaseArray.get(3).add(aux);
+		            }	
+			}
+			else { //No esta cazando
+				  if("UP".equals(lastMove)) {
+		               
+		                workingCaseArray.get(4).add(aux);
+		            }
+		            else if ("DOWN".equals(lastMove)) {
+		              
+		                workingCaseArray.get(5).add(aux);
+		            } else if("LEFT".equals(lastMove)) {
+		               
+		                workingCaseArray.get(6).add(aux);
+		            }else {
+		                
+		                workingCaseArray.get(7).add(aux);
+		            }
+			}
+		}
         else {
-            //no quedan
-            if("UP".equals(lastMove)) {
-               
-                workingCaseArray.get(4).add(aux);
-            }
-            else if ("DOWN".equals(lastMove)) {
-              
-                workingCaseArray.get(5).add(aux);
-            } else if("LEFT".equals(lastMove)) {
-               
-                workingCaseArray.get(6).add(aux);
-            }else {
-                
-                workingCaseArray.get(7).add(aux);
-            }
+        	if(!mMsDescription.getHunting()) {
+				
+				   if("UP".equals(lastMove)) {
+		                workingCaseArray.get(8).add(aux);
+		            }
+		            else if ("DOWN".equals(lastMove)) {
+		                
+		                workingCaseArray.get(9).add(aux);
+		            } else if("LEFT".equals(lastMove)) {
+		            
+		                workingCaseArray.get(10).add(aux);
+		            }else {
+		                
+		                workingCaseArray.get(11).add(aux);
+		            }	
+			}
+			else { //No esta cazando
+				  if("UP".equals(lastMove)) {
+		               
+		                workingCaseArray.get(12).add(aux);
+		            }
+		            else if ("DOWN".equals(lastMove)) {
+		              
+		                workingCaseArray.get(13).add(aux);
+		            } else if("LEFT".equals(lastMove)) {
+		               
+		                workingCaseArray.get(14).add(aux);
+		            }else {
+		                
+		                workingCaseArray.get(15).add(aux);
+		            }
+			}
         }
 	}
 	/**

@@ -117,37 +117,76 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		int index = 0;
 		String lastPacManMove = msDescription.getPacmanLastMove();
 		
-		//Follow the representaiton of the CachedLinearCaseBase (0,1,2,3 if PPILS) (4,5,6,7 if NOTPPILS) --> (Up,Down,Left,Right) of the lastMove
+		//Follow the representaiton of the CachedLinearCaseBase (0,1,2,3 if PPILS and !Hunting)
+		//(4,5,6,7 if PPILS and Hunting) --> (Up,Down,Left,Right) of the lastMove
+		//(8,9,10,11 if NOPPILS and !Hunting) --> (Up,Down,Left,Right) of the lastMove
+		//(12,13,14,15 if NOPPILS and Hunting) --> (Up,Down,Left,Right) of the lastMove
 		if(msDescription.getNumPPills() != 0) { //If ppils > 0
-			switch(lastPacManMove) { 
-			case("UP"):
-				index = 0;
-				break;
-			case("DOWN"):
-				index = 1;
-				break;
-			case("LEFT"):
-				index = 2;
-				break;
-			case("RIGHT"):
-				index = 3;
-				break;
+			if(!msDescription.getHunting()) { //Si no está cazando
+				switch(lastPacManMove) { 
+				case("UP"):
+					index = 0;
+					break;
+				case("DOWN"):
+					index = 1;
+					break;
+				case("LEFT"):
+					index = 2;
+					break;
+				case("RIGHT"):
+					index = 3;
+					break;
+				}	
+			}
+			else { //Si esta cazando
+				switch(lastPacManMove) {  
+				case("UP"):
+					index = 4;
+					break;
+				case("DOWN"):
+					index = 5;
+					break;
+				case("LEFT"):
+					index = 6;
+					break;
+				case("RIGHT"):
+					index = 7;
+					break;
+				}
 			}
 		}
 		else {
-			switch(lastPacManMove) {
-			case("UP"):
-				index = 4;
-				break;
-			case("DOWN"):
-				index = 5;
-				break;
-			case("LEFT"):
-				index = 6;
-				break;
-			case("RIGHT"):
-				index = 7;
-				break;
+			if(!msDescription.getHunting()) { //Si no está cazando
+				switch(lastPacManMove) { 
+				case("UP"):
+					index = 8;
+					break;
+				case("DOWN"):
+					index = 9;
+					break;
+				case("LEFT"):
+					index = 10;
+					break;
+				case("RIGHT"):
+					index = 11;
+					break;
+				}	
+			}
+			else { //Si esta cazando
+				switch(lastPacManMove) {  
+				case("UP"):
+					index = 12;
+					break;
+				case("DOWN"):
+					index = 13;
+					break;
+				case("LEFT"):
+					index = 14;
+					break;
+				case("RIGHT"):
+					index = 15;
+					break;
+				}
 			}
 		}
 		return index;
