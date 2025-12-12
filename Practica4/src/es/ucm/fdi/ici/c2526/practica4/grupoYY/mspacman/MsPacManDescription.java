@@ -11,6 +11,7 @@ public class MsPacManDescription implements CaseComponent {
 	Integer score;
 	Integer numPPills;
 	Integer nearestPill;
+	Boolean hunting;
 	vectorCBRDouble ghostToPacman = new vectorCBRDouble(4);
 	vectorCBRDouble pacmanToGhost = new vectorCBRDouble(4);
 	vectorCBRDouble ghostEdibleTime = new vectorCBRDouble(4);
@@ -61,6 +62,12 @@ public class MsPacManDescription implements CaseComponent {
 		this.nearestPill = nearestPill;
 	}
 
+	public Boolean getHunting() {
+		return this.hunting;
+	}
+	public void setHunting(Boolean _hunt) {
+		this.hunting = _hunt;
+	}
 	public vectorCBRDouble getGhostToPacman() {
 		return ghostToPacman;
 	}
@@ -120,7 +127,8 @@ public class MsPacManDescription implements CaseComponent {
 	            + ", score=" + score
 	            + ", numPPills=" + numPPills
 	            + ", nearestPill=" + nearestPill
-
+	            + ", hunting=" + hunting
+	            
 	            + ", ghostToPacman=" + ghostToPacman.toString()
 
 	            + ", pacmanToGhost=" + pacmanToGhost.toString()

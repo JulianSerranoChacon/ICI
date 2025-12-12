@@ -16,6 +16,7 @@ public class MsPacManInput extends CBRInput {
 	Integer score;
 	Integer numPPills;
 	Integer nearestPill;
+	Boolean hunting;
 	vectorCBRDouble ghostToPacman;
 	vectorCBRDouble pacmanToGhost;
 	vectorCBRDouble ghostEdibleTime;
@@ -33,7 +34,7 @@ public class MsPacManInput extends CBRInput {
 		computeGhostPositions(game);
 		computeGhostsToPacmanDist(game);
 		computePacmanToGhostsDist(game);
-		if(game.getNumberOfActivePills() != 0) {
+		if(game.getNumberOfActivePowerPills() != 0) {
 			computeNearestPPill(game);	
 		}
 		else computeNearestPill(game);
@@ -41,7 +42,6 @@ public class MsPacManInput extends CBRInput {
 		pacmanNode = game.getPacmanCurrentNodeIndex();
 		score = game.getScore();
 	}
-
 	@Override
 	public CBRQuery getQuery() {
 		MsPacManDescription description = new MsPacManDescription();
@@ -49,7 +49,7 @@ public class MsPacManInput extends CBRInput {
 		//Pill related info
 		description.setNumPPills(numPPills);
 		description.setNearestPill(nearestPill);
-		
+		description.setHunting(hunting);
 		//Ghost menacing pacman info
 		
 		description.setGhostToPacman(ghostToPacman);
@@ -156,6 +156,7 @@ public class MsPacManInput extends CBRInput {
 		    }
 		}
 
+		hunting = false;
 		ghostEdibleTime = new vectorCBRDouble(4);
 		pacmanToGhost = new vectorCBRDouble(4);
 		List<GhostDistance> ghostDistances = new ArrayList<>();
@@ -165,11 +166,14 @@ public class MsPacManInput extends CBRInput {
 		            : game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), game.getGhostInitialNodeIndex());
 
 		    ghostDistances.add(new GhostDistance(game.getGhostEdibleTime(g), dist));
+		    if(!hunting && game.getGhostEdibleTime(g) > 10) {
+		    	hunting = true;
+		    }
 		}
 
 		// Ordenar por distancia creciente
 		ghostDistances.sort(Comparator.comparingDouble(gd -> gd.distance));
-
+		
 		// Obtener los 4 más cercanos
 		ghostEdibleTime.setElement(0,ghostDistances.get(0).ghost_time);
 		ghostEdibleTime.setElement(1,ghostDistances.get(1).ghost_time);
