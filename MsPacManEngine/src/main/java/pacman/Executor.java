@@ -345,7 +345,7 @@ public class Executor {
                 scores.add((double)game.getScore());
                 cases.add((double)cbr_controller.getCaseBaseSize());
                 time.add(step_times.getAverage());
-                ticks.add((double)steps);
+                ticks.add((double)cbr_controller.getAverageSimmilarity());
                 i++;
 
                 System.out.println("Game finished: " + i + "   " + description);
