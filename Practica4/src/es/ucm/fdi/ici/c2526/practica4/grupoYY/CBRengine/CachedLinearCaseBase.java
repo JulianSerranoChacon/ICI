@@ -24,8 +24,6 @@ public class CachedLinearCaseBase implements CBRCaseBase {
 	private int TOTAL_LIST = 16;
 	private Connector connector;
 	private Collection<CBRCase> originalCases;
-	//private java.util.ArrayList<CBRCase> workingCases;
-	//LAS CUATRO PRIMERAS LISTAS SON LAS DE CUANDO HAY PPILLS 
 	private java.util.ArrayList< java.util.ArrayList<CBRCase>> workingCaseArray; 
 	private Collection<CBRCase> casesToRemove;
 	private int actListIndex = 0;
@@ -89,10 +87,9 @@ public class CachedLinearCaseBase implements CBRCaseBase {
 		casesToRemove = new ArrayList<>();
 		boolean allListEmpty = true;
 	
-			nextId = 1;
+		nextId = 1;
 		for(int i = 0; i< workingCaseArray.size();i++) {
 			if(!workingCaseArray.get(i).isEmpty()) {
-				//quizas no parsee bien
 				int aux = (int)workingCaseArray.get(i).get(workingCaseArray.get(i).size()-1).getID();
 				if(aux > nextId) nextId = aux+1;
 			}

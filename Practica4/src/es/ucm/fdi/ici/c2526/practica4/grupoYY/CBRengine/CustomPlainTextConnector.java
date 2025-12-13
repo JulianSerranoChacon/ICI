@@ -159,7 +159,6 @@ public class CustomPlainTextConnector implements Connector {
 		try {
 			 Files.createDirectories(Paths.get(path));
 	         File file = new File(this.PROP_FILEPATH);
-	         //System.out.println(file.getAbsolutePath());
 	         if(!file.exists())
 	        	 file.createNewFile();
 	      } catch(Exception e) {

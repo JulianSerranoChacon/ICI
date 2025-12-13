@@ -78,7 +78,6 @@ public class MsPacManInput extends CBRInput {
 		numPPills = game.getNumberOfActivePowerPills();
 		
 		for(int pos: game.getActivePowerPillsIndices()) {
-			
 			int distance = (int)game.getDistance(game.getPacmanCurrentNodeIndex(), pos, DM.PATH);
 			if(distance < this.nearestPill)
 				this.nearestPill = distance;
@@ -99,7 +98,6 @@ public class MsPacManInput extends CBRInput {
 	private void computeNearestPill(Game game) {
 		nearestPill = Integer.MAX_VALUE;
 		
-		//TODO: maybe is too expensive for just a pill but bfs does not look great either
 		for(int pos: game.getPillIndices()) {
 			int distance = (int)game.getDistance(game.getPacmanCurrentNodeIndex(), pos, DM.PATH);
 			if(distance < nearestPill )
