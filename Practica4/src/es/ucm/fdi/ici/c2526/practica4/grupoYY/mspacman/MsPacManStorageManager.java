@@ -2,7 +2,10 @@ package es.ucm.fdi.ici.c2526.practica4.grupoYY.mspacman;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Vector;
 
@@ -10,8 +13,10 @@ import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRCase;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRCaseBase;
 import es.ucm.fdi.gaia.jcolibri.method.retain.StoreCasesMethod;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.RetrievalResult;
+import pacman.game.Constants;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
+import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
 public class MsPacManStorageManager {
@@ -19,6 +24,8 @@ public class MsPacManStorageManager {
 	CBRCaseBase caseBase;
 	Vector<CBRCase> buffer;
 	Vector<Info> bufferInfo;
+	
+	private final static Double UMBRAL_SIMILITUD = 0.7; // umbral de similitud propuesto para empezar a considerar casos similares
 	
 	private class Info
 	{
@@ -39,11 +46,7 @@ public class MsPacManStorageManager {
 	private final static int TIME_WINDOW = 5;
 	
 	//Constante de recuerdo // 
-	private static final Double UMBRAL_CONSERVAR = 0.87;
-	private static final Double UMBRAL_CASO_SUFICIENTE_SIMILAR = 0.90;
-	private static final Double UMBRAL_CASO_NO_SUFICIENTE_SIMILAR = 0.75;
-	private static final Integer NUM_CASOS_NO_CONSERVAR = 5;
-	private static final Integer NUM_CASOS_CONSERVAR = 4;
+	private static final Integer UMBRAL_CONSERVAR = 30;
 	private static final Integer minMediocre = -35;
 	private static final Integer maxMediocre = 35;
 	
@@ -256,145 +259,99 @@ public class MsPacManStorageManager {
         result.setScore(value);	
 	}
 	
-	private void retainCase(CBRCase bCase, Collection<RetrievalResult> eval)
+	private void retainCase(CBRCase bCase, Collection<RetrievalResult> cases)
 	{
-		//Store the old case right now into the case base
-		//Alternatively we could store all them when game finishes in close() method
-		
-		//here you should also check if the case must be stored into persistence (too similar to existing ones, etc.)
-		
 		//Options:		
 		//If there is no other cases to compare it to, then there needs to be added
-		if(Objects.isNull(eval)) {
+		if(Objects.isNull(cases)) {
 			StoreCasesMethod.storeCase(this.caseBase, bCase);
 			return;
 		}
 		
-		//Get case resolution
-		//Result es score, solution es accion
-		MsPacManDescription bCaseDesc = (MsPacManDescription) bCase.getDescription();
-		MsPacManSolution bCaseSolution = (MsPacManSolution) bCase.getSolution();
-		MsPacManResult bCaseResult = (MsPacManResult) bCase.getResult();
+		//Case outcome
+		MsPacManResult scorebCase = (MsPacManResult) bCase.getResult(); 
+		MsPacManSolution movebCase = (MsPacManSolution) bCase.getSolution(); 
 		
-		//VARIABLES PRUEBA VALORES MEDIOCRES
-		double mediocreScore = 100;		
+		//Mediocre case
+		double umbral_diff = UMBRAL_CONSERVAR;		
 		RetrievalResult mediocreRR = null;
 		
-		//Obtenemos los casos muy similares
-		Double maxSimilarity = Double.MIN_VALUE; Integer countCasesAbove = 0;
-		Integer countCasesBelow = 0;
-		//Obtenemos el caso mas parecido 
-		RetrievalResult mostSimilar = null; Double maxSimCase = Double.MIN_VALUE;
-		
-		for(RetrievalResult cbrCase : eval) {
-			MsPacManSolution cbrSolution =(MsPacManSolution) cbrCase.get_case().getSolution();
-			MsPacManResult cbrResult = (MsPacManResult) cbrCase.get_case().getResult();
-
-			// get biggest similarity
-			if(maxSimilarity < cbrCase.getEval()) {
-				maxSimilarity = cbrCase.getEval();
-			}
-			
-			// count if similar enough
-			if(UMBRAL_CASO_SUFICIENTE_SIMILAR <= cbrCase.getEval()) {
-				countCasesAbove++;
-			}
-			
-			// count if not similar enough
-			if(UMBRAL_CASO_NO_SUFICIENTE_SIMILAR >= cbrCase.getEval()) {
-				countCasesBelow++;
-			}
-			
-			// update most similar
-			if(bCaseSolution.getAction() == cbrSolution.getAction() && maxSimCase < cbrCase.getEval()) {
-				maxSimCase = cbrCase.getEval();
-				mostSimilar = cbrCase;
-			}
-			
-			// get mediocre
-			if (Math.abs(cbrResult.getScore()) < mediocreScore) {
-				mediocreScore = cbrResult.getScore();
-				mediocreRR = cbrCase;
+		//Repeat reuse process
+		Map<MOVE, double[]> InitialDirToScore = new HashMap<>();
+		for(RetrievalResult cbrCase : cases) {
+			//Truncar la lista con 0,7
+			if(cbrCase.getEval() > UMBRAL_SIMILITUD) {
+				MsPacManResult scoreCase = (MsPacManResult) cbrCase.get_case().getResult(); 
+				MsPacManSolution moveCase = (MsPacManSolution) cbrCase.get_case().getSolution(); 
+				double weight = scoreCase.getScore() * cbrCase.getEval() * cbrCase.getEval();
+				
+				//Get mediocre case
+				if(movebCase.getAction() == moveCase.getAction() && Math.abs(scoreCase.getScore() - scorebCase.getScore()) > umbral_diff) {
+					umbral_diff = Math.abs(scoreCase.getScore() - scorebCase.getScore());
+					mediocreRR = cbrCase;
+				}
+				
+				if (!InitialDirToScore.containsKey(moveCase.getAction())) {
+					InitialDirToScore.put(moveCase.getAction(), new double[] {weight, 1});
+				} 
+				else {
+					InitialDirToScore.replace(moveCase.getAction(), new double[] {InitialDirToScore.get(moveCase.getAction())[0] + weight, InitialDirToScore.get(moveCase.getAction())[1] + 1});
+				}
 			}
 		}
-
-		// 1. Not store it
-		// Varios valores muy similar --> Casos muy similares entre si
-		if (countCasesAbove >= NUM_CASOS_NO_CONSERVAR) {
-			return;
+		
+		
+		//Add new case and see the change
+		Map<MOVE, double[]> FinalDirToScore = new HashMap<Constants.MOVE, double[]>();
+		for (Map.Entry<MOVE, double[]> entry : InitialDirToScore.entrySet()) {
+		    FinalDirToScore.put(entry.getKey(), entry.getValue().clone() // copia del array
+		    );
+		}
+		if (!FinalDirToScore.containsKey(movebCase.getAction())) {
+			StoreCasesMethod.storeCase(caseBase, bCase);
+		} 
+		else {
+			FinalDirToScore.replace(movebCase.getAction(), new double[] {FinalDirToScore.get(movebCase.getAction())[0] + scorebCase.getScore() * 0.87, FinalDirToScore.get(movebCase.getAction())[1] + 1});
 		}
 		
-		// 2. Store it
-		// Si la mayor similitud es menor que nuestra constante, se añade directamente
-		else if(maxSimilarity < UMBRAL_CONSERVAR || countCasesBelow >= NUM_CASOS_CONSERVAR) {
-			StoreCasesMethod.storeCase(this.caseBase, bCase);			
+		// See our choice initially
+		MOVE initialBestMove = MOVE.NEUTRAL; Double initialBestScore = Double.MIN_VALUE;
+		for (Entry<MOVE, double[]> weight : InitialDirToScore.entrySet()) {
+			weight.getValue()[0] = weight.getValue()[0] / weight.getValue()[1];
+			if (weight.getValue()[0] > initialBestScore) {
+				initialBestScore = weight.getValue()[0];
+				initialBestMove = weight.getKey();
+			}
 		}
 		
+		// See our choice now
+		MOVE finalBestMove = MOVE.NEUTRAL; Double finalBestScore = Double.MIN_VALUE;
+		for (Entry<MOVE, double[]> weight : InitialDirToScore.entrySet()) {
+			weight.getValue()[0] = weight.getValue()[0] / weight.getValue()[1];
+			if (weight.getValue()[0] > finalBestScore) {
+				finalBestScore = weight.getValue()[0];
+				finalBestMove = weight.getKey();
+			}
+		}
 		
-		//3. Replace bad RR
-		else if (mediocreRR != null && mediocreScore <= maxMediocre && mediocreScore >= minMediocre) {
+		//If our choice changes, we need to keep it for future reference
+		if (initialBestMove != finalBestMove) {
+			StoreCasesMethod.storeCase(caseBase, bCase);
+		}
+		//If the difference between now and then is distinguishable we keep
+//		else if (Math.abs(finalBestScore - initialBestScore) > UMBRAL_CONSERVAR){
+//			StoreCasesMethod.storeCase(caseBase, bCase);
+//		}
+		//We exchange it with the mediocre case if necessary
+		else if (!Objects.isNull(mediocreRR)){
 			//Forget the case
 			Collection<CBRCase> aux = new ArrayList<CBRCase>();
 			aux.add(mediocreRR.get_case());
 			caseBase.forgetCases(aux);
 			
 			//Add only if outside of the ratio stablished
-			if(!(bCaseResult.getScore() <= maxMediocre && bCaseResult.getScore() >= minMediocre)) {				
-				StoreCasesMethod.storeCase(caseBase, bCase);
-			}
+			StoreCasesMethod.storeCase(caseBase, bCase);
 		}
-		
-		//4. Do a mix of similar cases
-		else if(Objects.isNull(mostSimilar)) {
-			StoreCasesMethod.storeCase(this.caseBase, bCase);			
-		}
-		// New "Frankenstein" case
-		else {
-			//Forget previous case
-			Collection<CBRCase> aux = new ArrayList<CBRCase>();
-			aux.add(mostSimilar.get_case());
-			caseBase.forgetCases(aux);
-			
-			
-			//TODO: conservar el numero de veces que esto sucede --> (n/10 + 0.8) * resultMostSimilar + (0.2 - n/10) * bCaseResult
-			MsPacManResult mostSimilarResult =(MsPacManResult) mostSimilar.get_case().getResult();
-			MsPacManDescription mostSimilarDesc = (MsPacManDescription) mostSimilar.get_case().getDescription();
-			Integer newScore = (int) Math.round(0.8 * mostSimilarResult.getScore() + 0.2 * bCaseResult.getScore());
-			
-			// Media de las distancias y de los tiempos de comestible
-			double new_case;
-			double most_similar_case;
-			for(int i = 0; i < 4; i++){
-				//Dist ghost to pacman
-				new_case = bCaseDesc.getGhostToPacman().getElement(i);
-				most_similar_case = mostSimilarDesc.getGhostToPacman().getElement(i);
-				mostSimilarDesc.getGhostToPacman().setElement(i,  (double) Math.round(0.8 * new_case + 0.2 * most_similar_case));
-				
-				//Dist pacman to ghost
-				new_case = bCaseDesc.getPacmanToGhost().getElement(i);
-				most_similar_case = mostSimilarDesc.getPacmanToGhost().getElement(i);
-				mostSimilarDesc.getPacmanToGhost().setElement(i,  (double) Math.round(0.8 * new_case + 0.2 * most_similar_case));
-				
-				//Edible values
-				new_case = bCaseDesc.getGhostEdibleTime().getElement(i);
-				most_similar_case = mostSimilarDesc.getGhostEdibleTime().getElement(i);
-				mostSimilarDesc.getGhostEdibleTime().setElement(i,  (double) Math.round(0.8 * new_case + 0.2 * most_similar_case));
-			}
-			
-			new_case = bCaseDesc.getNearestPill();
-			most_similar_case = mostSimilarDesc.getNearestPill();
-			mostSimilarDesc.setNearestPill( (int)Math.round(0.8 * new_case + 0.2 * most_similar_case));
-			
-			new_case = bCaseDesc.getNearestPill();
-			most_similar_case = mostSimilarDesc.getNearestPill();
-			mostSimilarDesc.setNearestPill( (int)Math.round(0.8 * new_case + 0.2 * most_similar_case));
-			
-			// Nppills, ppillmascercana, pillmascercana y Movimientos se mantienen 
-					
-			mostSimilarResult.setScore(newScore);
-			StoreCasesMethod.storeCase(this.caseBase, mostSimilar.get_case());
-		}
-		
 	}
 
 	public void close() {
