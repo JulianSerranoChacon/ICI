@@ -139,16 +139,11 @@ public class Attribute extends es.ucm.fdi.gaia.jcolibri.cbrcore.Attribute {
 		
 			MsPacManDescription d = new MsPacManDescription();
 			d.setId(25);
-			
-			System.out.println(a.getValue(d));
-			
 			a.setValue(d, 30);
 			
-			System.out.println(a.getValue(d));
 		
 		
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

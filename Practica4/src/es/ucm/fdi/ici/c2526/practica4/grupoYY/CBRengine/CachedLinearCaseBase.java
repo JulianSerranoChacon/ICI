@@ -35,7 +35,7 @@ public class CachedLinearCaseBase implements CBRCaseBase {
 	public void close() {
 		//workingCases.removeAll(casesToRemove);
 		for(int i = 0; i< workingCaseArray.size();i++) {
-			workingCaseArray.get(i).removeAll(casesToRemove); //quizas no funcione TODO
+			workingCaseArray.get(i).removeAll(casesToRemove);
 		}
 		Collection<CBRCase> casesToStore = new ArrayList<>(); 
 		for(int i = 0; i< workingCaseArray.size(); i++) casesToStore.addAll(workingCaseArray.get(i));
@@ -66,11 +66,7 @@ public class CachedLinearCaseBase implements CBRCaseBase {
 		return workingCaseArray.get(actListIndex);
 	}
 
-	/**
-	 * TODO.
-	 */
 	public Collection<CBRCase> getCases(CaseBaseFilter filter) {
-		// TODO
 		return null;
 	}
 

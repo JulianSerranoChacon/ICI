@@ -15,7 +15,7 @@ public class MsPacMan extends PacmanController implements PacManCBRController {
 		
 	public MsPacMan()
 	{		
-		setName("Ms.Paguita");
+		setName("MamiPacman");
 		this.storageManager = new MsPacManStorageManager();
 		cbrEngine = new MsPacManCBRengine(storageManager);
 	}
