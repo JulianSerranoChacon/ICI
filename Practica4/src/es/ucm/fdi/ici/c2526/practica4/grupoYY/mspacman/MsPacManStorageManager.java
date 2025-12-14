@@ -177,7 +177,6 @@ public class MsPacManStorageManager {
 			}
 			value += RECOMPENSA_FANTASMA_DEBIL_CERCA * num_ghost_reachable;
 			
-			//TODO: REVISE
 			//Penalizamos el uso inapropiado de la Power Pills
 			if(game.getNumberOfActivePowerPills() < infoCase.numPills && infoCase.numGhostEaten > game.getNumGhostsEaten() && finalScore < SCORE_FANTASMA_COMIDO) {
 				value += PENALIZACION_PPILL;
@@ -263,6 +262,10 @@ public class MsPacManStorageManager {
 	{
 		//Options:		
 		//If there is no other cases to compare it to, then there needs to be added
+		MsPacManResult result = (MsPacManResult)bCase.getResult();
+		if(result.score >= minMediocre && result.score <= maxMediocre) {
+			return;
+		}
 		if(Objects.isNull(cases)) {
 			StoreCasesMethod.storeCase(this.caseBase, bCase);
 			return;
@@ -355,8 +358,6 @@ public class MsPacManStorageManager {
 	}
 
 	public void close() {
-		//TODO: ¿Cuando salvo la información, lo hago con el método habitual o usamos otro distinto?
-		//TODO: ¿Y con retain, hacemos tambien lo mismo?
 		for(int i = 0; i < buffer.size(); i++)
 		{
 			reviseCase(buffer.get(i), bufferInfo.get(i));
